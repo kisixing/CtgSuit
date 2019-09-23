@@ -4,7 +4,7 @@
   "license": "CC0-1.0",
   "private": true,
   "scripts": {
-    "start": "umi dev",
+    "start": "cross-env PORT=1702 umi dev",
     "dev:main": "electron .",
     "build:render": "umi build",
     "test": "umi test",
@@ -26,6 +26,7 @@
   "devDependencies": {
     "babel-eslint": "^9.0.0",
     "concurrently": "^4.1.1",
+    "cross-env": "^6.0.0",
     "electron": "^5.0.8",
     "electron-builder": "^21.1.5",
     "electron-rebuild": "^1.8.5",
