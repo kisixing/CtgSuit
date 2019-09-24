@@ -25,26 +25,41 @@ export default {
             .join('');
           return { name, id, index, age: index };
         });
-      yield put({ type: 'dataHandler', listData });
+      yield put({ type: 'setState', payload: { listData } });
+
+      yield put({ type: 'dataHandler' });
     },
-    *dataHandler({ listData }, { put, call, select }) {
+    *dataHandler(payload, { put, select }) {
       const state = yield select();
       const {
         setting: { listLayout },
-        list: { page },
+        list: { listData },
       } = state;
       const listLen = listData.length;
 
       const pageItemsCount: number = listLayout[0] * listLayout[1];
-      const pageItems = listData.slice(page * pageItemsCount, (page + 1) * pageItemsCount);
       const pageCount: number = Math.round(listLen / pageItemsCount);
       const pageData = new Array(pageCount).fill(0).map((_, index) => {
         if (index === pageCount) {
-          return [1 + index * pageCount, listLen];
+          return [1 + index * pageItemsCount, listLen];
         }
-        return [1 + index * pageCount, (index + 1) * pageCount];
+        return [1 + index * pageItemsCount, (index + 1) * pageItemsCount];
       });
-      yield put({ type: 'setState', payload: { pageData, pageItems } });
+
+      yield put({ type: 'setState', payload: { pageData } });
+      yield put({ type: 'setPageItems', page: 0 });
+    },
+    *setPageItems({ page }, { put, select }) {
+      const state = yield select();
+      const {
+        setting: { listLayout },
+        list: { listData },
+      } = state;
+
+      const pageItemsCount: number = listLayout[0] * listLayout[1];
+      const pageItems = listData.slice(page * pageItemsCount, (page + 1) * pageItemsCount);
+
+      yield put({ type: 'setState', payload: { pageItems, page } });
     },
   },
   reducers: {

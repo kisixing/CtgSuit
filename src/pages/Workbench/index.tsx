@@ -10,10 +10,6 @@ const Home = props => {
   const [loading, setLoading] = useState(true);
   const wrap = useRef(null);
 
-  const list = Array(listLayout[0] * listLayout[1])
-    .fill('')
-    .map((_, index) => index);
-
   const [height, setHeight] = useState(0);
   useEffect(() => {
     dispatch({ type: 'list/getlist' });
@@ -28,7 +24,7 @@ const Home = props => {
   }, []);
 
   const itemSpan = 24 / listLayout[0];
-  const itemHeight = height / listLayout[1] - 38;
+  const itemHeight = height / listLayout[1] - 38 - 38;
   return (
     <div style={{ height: '100%', overflow: 'hidden' }} ref={wrap}>
       <Row>
@@ -38,10 +34,15 @@ const Home = props => {
               <Card
                 title={
                   <div>
-                    姓名：{name} 年龄：{age}
+                    【{index}】姓名：
+                    <span style={{ color: '#000' }}>{name}</span>
+                    <span style={{ margin: '0 10px' }} />
+                    年龄：
+                    <span style={{ color: '#000' }}>{age}</span>
                   </div>
                 }
                 size="small"
+                headStyle={{ background: '#ddd', color: '#888' }}
                 style={{ width: '100%', height: itemHeight }}
                 loading={loading}
                 bodyStyle={{ width: '100%', height: '100%' }}
