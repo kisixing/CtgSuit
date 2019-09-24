@@ -4,7 +4,7 @@
  * @Date: 2019-09-23 20:34:58
  */
 
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Layout, Menu, Icon } from 'antd';
 import router from 'umi/router';
 import Link from 'umi/link';
@@ -12,7 +12,6 @@ import logo from '../assets/logo.png';
 import styles from './BasicLayout.less';
 
 const { Header, Footer, Content } = Layout;
-const { SubMenu } = Menu;
 
 class BasicLayout extends Component {
   constructor(props) {
@@ -24,7 +23,7 @@ class BasicLayout extends Component {
 
   handleMenuClick = e => {
     console.log('click ', e);
-    const { key, item } = e;
+    const { key, /* item */ } = e;
     this.setState({
       current: key,
     });
@@ -78,15 +77,17 @@ class BasicLayout extends Component {
             <h1>胎监</h1>
           </Link>
           <div className={styles.devices}>
-            <div className={styles.wrapper}>
-
-            </div>
-            <div className={styles.title}>子机状态</div>
+            <div className={styles.wrapper}></div>
+            <span className={styles.title}>子机状态</span>
           </div>
           <div className={styles.actionBar}>{this.menus()}</div>
         </Header>
-        <Content>{children}</Content>
-        <Footer className={styles.footer}>Footer</Footer>
+        <Content className={styles.main}>{children}</Content>
+        <Footer className={styles.footer}>
+          <Fragment>
+            Copyright <Icon type="copyright" /> 2019 莲印医疗科技
+          </Fragment>
+        </Footer>
       </Layout>
     );
   }

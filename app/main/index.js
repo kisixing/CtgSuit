@@ -1,62 +1,50 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow, ipcMain } = require('electron')
-const { getPath } = require('./config/window.js')
+const { app, ipcMain } = require('electron');
+const is = require('electron-is');
+const window = require('./config/window.js');
+const menu = require('./config/menu.js');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let mainWindow
-ipcMain.on('msg',(event,msg) => {
+
+ipcMain.on('msg', (event,msg) => {
   console.log('主进程收到消息==>',msg)
   event.sender.send('reply', '这是主进程消息');
 })
 
-function createWindow () {
-  // Create the browser window.
-  mainWindow = new BrowserWindow({
-    width: 1200,
-    height: 800,
-    webPreferences: {
-      javascript: true,
-      plugins: true,
-      nodeIntegration: true, // 是否集成 Nodejs
-      webSecurity: false
-    }
-    // webPreferences: {
-    //   preload: path.join(__dirname, 'preload.js')
-    // }
-  })
-
-  // and load the index.html of the app.
-  mainWindow.loadURL(getPath())
-
-  // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
-
-  // Emitted when the window is closed.
-  mainWindow.on('closed', function () {
-    // Dereference the window object, usually you would store windows
-    // in an array if your app supports multi windows, this is the time
-    // when you should delete the corresponding element.
-    mainWindow = null
-  })
-}
-
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow)
+app.on('ready', function () {
+  // init menus
+  menu.init();
+  // Create the browser window.
+  window.create();
+
+  // 加载 devtools extension
+  if (is.dev()) {
+  }
+})
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
   // On macOS it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform !== 'darwin') app.quit()
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
 })
 
 app.on('activate', function () {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
-  if (mainWindow === null) createWindow()
+  if (window.getCount() === 0) {
+    window.create();
+  }
+})
+
+app.on('quit', function () {
+
 })
 
 // In this file you can include the rest of your app's specific main process

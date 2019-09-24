@@ -8,7 +8,7 @@ import pageRoutes from './routes';
 export default {
   treeShaking: true,
   publicPath: './',
-  history: 'hash',
+  history: 'browser',
   routes: pageRoutes,
   plugins: [
     // ref: https://umijs.org/plugin/umi-plugin-react.html
