@@ -29,6 +29,7 @@ class BasicLayout extends Component {
       current: key,
     });
     if (key === 'Guide') {
+      router.push('/testCtg');
     }
     if (key === 'Archives') {
       router.push('/Archives');
@@ -78,9 +79,7 @@ class BasicLayout extends Component {
             <h1>胎监</h1>
           </Link>
           <div className={styles.devices}>
-            <div className={styles.wrapper}>
-
-            </div>
+            <div className={styles.wrapper}></div>
             <div className={styles.title}>子机状态</div>
           </div>
           <div className={styles.actionBar}>{this.menus()}</div>

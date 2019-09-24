@@ -45,6 +45,12 @@ export default [
         title: '胎监-系统设置',
         component: './Setting/index',
       },
+      {
+        path: '/testCtg',
+        name: 'testCtg',
+        title: '胎监-系统设置',
+        component: './TestCtg',
+      },
       // 异常处理页面
       {
         name: 'exception',
