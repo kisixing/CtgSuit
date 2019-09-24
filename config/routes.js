@@ -28,10 +28,22 @@ export default [
     routes: [
       { path: '/', redirect: '/workbench' },
       {
-        path: '/workbench',
+        path: '/workbench', // Archives
         name: 'workbench',
-        title: '患者列表',
+        title: '胎监-主页',
         component: './Workbench/index',
+      },
+      {
+        path: '/archives',
+        name: 'workbench',
+        title: '胎监-档案管理',
+        component: './Archives/index',
+      },
+      {
+        path: '/setting',
+        name: 'workbench',
+        title: '胎监-系统设置',
+        component: './Setting/index',
       },
       // 异常处理页面
       {

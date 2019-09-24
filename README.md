@@ -36,3 +36,10 @@ Electron example with [umi](https://github.com/umijs/umi/)
 https://github.com/umijs/umi-example-electron
 
 https://github.com/electron/electron-quick-start
+
+## git flow开发规则
+
+```bash
+  # 在分支develop上进行开发
+  git checkout develop
+```

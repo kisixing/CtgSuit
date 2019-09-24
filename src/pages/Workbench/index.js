@@ -4,12 +4,14 @@
  * @Date: 2019-09-23 20:43:29
  */
 
-import React from 'react'
+import React from 'react';
 
-export default function Workbench() {
+function Workbench() {
   return (
     <div>
       首页
     </div>
   )
 }
+
+export default Workbench;
