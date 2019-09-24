@@ -4,7 +4,9 @@ import { Skeleton, Card, Icon, Row, Col } from 'antd';
 import { connect } from 'react-redux';
 import './index.less';
 const Home = props => {
-  const { listLayout = [] } = props;
+  const { listLayout = [], pageItems, dispatch } = props;
+
+  console.log(pageItems);
   const [loading, setLoading] = useState(true);
   const wrap = useRef(null);
 
@@ -14,6 +16,7 @@ const Home = props => {
 
   const [height, setHeight] = useState(0);
   useEffect(() => {
+    dispatch({ type: 'list/getlist' });
     setTimeout(() => {
       setLoading(false);
     }, 1000);
@@ -25,16 +28,21 @@ const Home = props => {
   }, []);
 
   const itemSpan = 24 / listLayout[0];
-  const itemHeight = height / listLayout[1] - 38 - 16;
+  const itemHeight = height / listLayout[1] - 38;
   return (
     <div style={{ height: '100%', overflow: 'hidden' }} ref={wrap}>
-      <Row gutter={4}>
-        {list.map(_ => {
+      <Row>
+        {pageItems.map(({ id, name, age, index }) => {
           return (
-            <Col span={itemSpan} key={_}>
+            <Col span={itemSpan} key={id} style={{ border: '1px solid #999' }}>
               <Card
+                title={
+                  <div>
+                    姓名：{name} 年龄：{age}
+                  </div>
+                }
                 size="small"
-                style={{ width: '100%', marginTop: 16, height: itemHeight }}
+                style={{ width: '100%', height: itemHeight }}
                 loading={loading}
                 bodyStyle={{ width: '100%', height: '100%' }}
                 actions={[
@@ -58,8 +66,9 @@ const Home = props => {
   );
 };
 
-export default connect(({ setting }: any) => {
+export default connect(({ setting, list }: any) => {
   return {
     listLayout: setting.listLayout,
+    pageItems: list.pageItems,
   };
 })(Home);
