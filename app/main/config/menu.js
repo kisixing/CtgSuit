@@ -46,7 +46,7 @@ function init() {
   log.info('(menu) init');
   const menu = Menu.buildFromTemplate(getTemplate());
   // Menu.setApplicationMenu(menu);
-  Menu.setApplicationMenu(null);
+  Menu.setApplicationMenu(menu);
 }
 
 module.exports = {

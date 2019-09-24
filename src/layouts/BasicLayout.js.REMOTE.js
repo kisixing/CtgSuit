@@ -4,7 +4,7 @@
  * @Date: 2019-09-23 20:34:58
  */
 
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { Layout, Menu, Icon, Button } from 'antd';
 import router from 'umi/router';
 import Link from 'umi/link';
@@ -13,6 +13,7 @@ import styles from './BasicLayout.less';
 import { connect } from 'react-redux';
 
 const { Header, Footer, Content } = Layout;
+const { SubMenu } = Menu;
 
 class BasicLayout extends Component {
   constructor(props) {
@@ -24,7 +25,7 @@ class BasicLayout extends Component {
 
   handleMenuClick = e => {
     console.log('click ', e);
-    const { key, /* item */ } = e;
+    const { key, item } = e;
     this.setState({
       current: key,
     });
@@ -101,16 +102,12 @@ class BasicLayout extends Component {
           </div>
           <div className={styles.devices}>
             <div className={styles.wrapper}></div>
-            <span className={styles.title}>子机状态</span>
+            <div className={styles.title}>子机状态</div>
           </div>
           <div className={styles.actionBar}>{this.menus()}</div>
         </Header>
-        <Content className={styles.main}>{children}</Content>
-        <Footer className={styles.footer}>
-          <Fragment>
-            Copyright <Icon type="copyright" /> 2019 莲印医疗科技
-          </Fragment>
-        </Footer>
+        <Content>{children}</Content>
+        <Footer className={styles.footer}>Footer</Footer>
       </Layout>
     );
   }
