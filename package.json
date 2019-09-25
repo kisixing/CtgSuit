@@ -1,5 +1,5 @@
 {
-  "name": "umi-elctron",
+  "name": "ctg-suit",
   "version": "0.0.1",
   "license": "CC0-1.0",
   "private": true,
@@ -49,10 +49,10 @@
     "webpack-chain": "^6.0.0"
   },
   "build": {
-    "productName": "umi-electron",
-    "appId": "umi-electron",
+    "productName": "胎监工作站",
+    "appId": "lian-med-ctgsuit",
     "directories": {
-      "output": "OutputApp"
+      "output": "release"
     },
     "linux": {
       "target": [
@@ -72,7 +72,7 @@
     "node": ">=8.0.0"
   },
   "author": {
-    "name": "Timdan",
-    "email": "tim_zsd@163.com"
+    "name": "Lian-Med",
+    "email": "lian-med@163.com"
   }
 }
