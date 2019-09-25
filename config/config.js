@@ -6,6 +6,9 @@ import slash from 'slash';
 import pageRoutes from './routes';
 
 export default {
+  theme: {
+    'primary-color': '#5c6bc0',
+  },
   treeShaking: true,
   publicPath: './',
   history: 'hash', // 必须配置hash路由

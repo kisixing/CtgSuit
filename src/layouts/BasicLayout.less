@@ -6,23 +6,21 @@
 
 .header {
   display: flex;
-  justify-content: space-between;
   height: @header-height;
   padding: 0 24px;
   color: #fff;
-  background-color: #173f81;
-
+  background-color: @primary-color;
+  :global {
+    .ant-btn-primary {
+      box-shadow: none;
+    }
+  }
   .logo {
     display: flex;
     height: 64px;
 
-    img {
-      width: 108px;
-      padding: 6px;
-    }
-
     h1 {
-      color: #33a59a;
+      color: white;
       font-size: 21px;
       font-weight: bold;
       letter-spacing: 4px;
@@ -51,23 +49,6 @@
     display: flex;
     align-items: center;
     height: 64px;
-  }
-}
-
-.menus {
-  border-bottom: none;
-  background-color: transparent;
-  color: #fff;
-
-  :global{
-    .ant-menu-item {
-      padding: 0 12px;
-      border-bottom: none;
-
-      &:hover {
-        border-bottom: none;
-      }
-    }
   }
 }
 

@@ -42,6 +42,8 @@ const Home = props => {
         <Button
           icon={showSetting ? 'left' : 'right'}
           shape={showSetting ? 'circle' : null}
+          style={{ boxShadow: '#aaa 3px 3px 5px 1px' }}
+          type="primary"
           onClick={() => {
             setShowSetting(!showSetting);
           }}

@@ -22,34 +22,46 @@ class BasicLayout extends Component {
     };
   }
 
-  handleMenuClick = e => {
-    console.log('click ', e);
-    const { key, /* item */ } = e;
+  handleMenuClick = key => {
     this.setState({
       current: key,
     });
-    if (key === 'Guide') {
+    if (key === '操作说明') {
       router.push('/testCtg');
     }
-    if (key === 'Archives') {
+    if (key === '档案管理') {
       router.push('/Archives');
     }
-    if (key === 'Setting') {
+    if (key === '系统设置') {
       router.push('/setting');
     }
-    if (key === 'Logout') {
+    if (key === '退出') {
     }
   };
 
   menus = () => {
     return (
-      <Menu
-        onClick={this.handleMenuClick}
-        selectedKeys={[this.state.current]}
-        mode="horizontal"
-        className={styles.menus}
-      >
-        <Menu.Item key="Guide">
+      <>
+        {[
+          ['操作说明', 'question-circle'],
+          ['档案管理', 'ordered-list'],
+          ['系统设置', 'setting'],
+          ['退出', 'logout'],
+        ].map(([title, icon]) => {
+          return (
+            <Button
+              key={Math.random()}
+              onClick={e => {
+                this.handleMenuClick(title);
+              }}
+              icon={icon}
+              type={this.state.current === title ? 'dashed' : 'primary'}
+            >
+              {title}
+            </Button>
+          );
+        })}
+        {/* <Menu.Item key="Guide">
           <Icon type="question-circle" />
           操作说明
         </Menu.Item>
@@ -64,8 +76,8 @@ class BasicLayout extends Component {
         <Menu.Item key="Logout">
           <Icon type="logout" />
           退出
-        </Menu.Item>
-      </Menu>
+        </Menu.Item> */}
+      </>
     );
   };
 
@@ -74,13 +86,16 @@ class BasicLayout extends Component {
     return (
       <Layout className={styles.container}>
         <Header className={styles.header}>
-          <div
-            style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
-          >
-            <Link to="/" className={styles.logo}>
-              <img alt="logo" src={logo} />
-              <h1>胎监</h1>
-            </Link>
+          <Link to="/" className={styles.logo}>
+            <h1>胎监工作站</h1>
+          </Link>
+          <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+            <div style={{ display: 'flex', flex: 1 }}>
+              <div className={styles.devices}>
+                <div className={styles.wrapper}></div>
+              </div>
+              <div className={styles.actionBar}>{this.menus()}</div>
+            </div>
             <div style={{ display: 'flex', lineHeight: '24px' }}>
               {pageData.map(([left, rigth], index) => {
                 return (
@@ -91,7 +106,7 @@ class BasicLayout extends Component {
                     }}
                     style={{ margin: '4px' }}
                     size="small"
-                    type={page === index ? 'primary' : 'dashed'}
+                    type={page === index ? 'dashed' : 'primary'}
                   >
                     {left}~{rigth}
                   </Button>
@@ -99,11 +114,6 @@ class BasicLayout extends Component {
               })}
             </div>
           </div>
-          <div className={styles.devices}>
-            <div className={styles.wrapper}></div>
-            <span className={styles.title}>子机状态</span>
-          </div>
-          <div className={styles.actionBar}>{this.menus()}</div>
         </Header>
         <Content className={styles.main}>{children}</Content>
         <Footer className={styles.footer}>
