@@ -18,7 +18,7 @@
   .logo {
     display: flex;
     height: 64px;
-
+    flex-shrink: 0;
     h1 {
       color: white;
       font-size: 21px;
@@ -29,26 +29,20 @@
 
   .devices {
     flex: 1;
-    padding: 12px;
-
-    .wrapper {
-      height: 100%;
-      background-color: #ccc;
-      border: 1px solid #fff;
-      border-radius: 5px;
-    }
-
-    .title {
-      position: relative;
-      top: -108px;
-      left: 24px;
-    }
+    display: flex;
+    background-color: #ccc;
+    border-radius: 5px;
+    align-content: flex-start;
+    flex-wrap: wrap;
   }
 
   .actionBar {
+    overflow: hidden;
     display: flex;
-    align-items: center;
-    height: 64px;
+    width: 230px;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-items: right;
   }
 }
 

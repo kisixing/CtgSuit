@@ -43,10 +43,10 @@ class BasicLayout extends Component {
     return (
       <>
         {[
-          ['操作说明', 'question-circle'],
-          ['档案管理', 'ordered-list'],
           ['系统设置', 'setting'],
           ['退出', 'logout'],
+          ['操作说明', 'question-circle'],
+          ['档案管理', 'ordered-list'],
         ].map(([title, icon]) => {
           return (
             <Button
@@ -82,20 +82,46 @@ class BasicLayout extends Component {
   };
 
   render() {
-    const { children, pageData, page, dispatch } = this.props;
+    const { children, pageData, page, dispatch, listData } = this.props;
     return (
       <Layout className={styles.container}>
         <Header className={styles.header}>
           <Link to="/" className={styles.logo}>
             <h1>胎监工作站</h1>
           </Link>
+
           <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-            <div style={{ display: 'flex', flex: 1 }}>
+            <div style={{ display: 'flex', flex: 1, overflow: 'hidden', margin: '6px' }}>
               <div className={styles.devices}>
-                <div className={styles.wrapper}></div>
+                {listData.map(({ index, id, pageIndex, status }) => {
+                  const mapStatusToType = ['danger', 'default', 'primary'];
+                  return (
+                    <Button
+                      key={id}
+                      size="small"
+                      style={{
+                        marginLeft: 4,
+                        marginTop: 4,
+                        padding: 0,
+                        width: 24,
+                        height: 24,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                      type={mapStatusToType[status]}
+                      onClick={() => {
+                        dispatch({ type: 'list/setPageItems', page: pageIndex });
+                      }}
+                    >
+                      {index + 1}
+                    </Button>
+                  );
+                })}
               </div>
               <div className={styles.actionBar}>{this.menus()}</div>
             </div>
+
             <div style={{ display: 'flex', lineHeight: '24px' }}>
               {pageData.map(([left, rigth], index) => {
                 return (
@@ -132,5 +158,6 @@ export default connect(({ list }) => {
   return {
     pageData: list.pageData,
     page: list.page,
+    listData: list.listData,
   };
 })(BasicLayout);
