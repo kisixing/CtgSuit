@@ -2,7 +2,7 @@
 export default {
   namespace: 'setting',
   state: {
-    listLayout: [2, 3],
+    listLayout: [2, 4],
   },
   effects: {},
   reducers: {},
