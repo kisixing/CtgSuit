@@ -8,7 +8,7 @@ import pageRoutes from './routes';
 export default {
   treeShaking: true,
   publicPath: './',
-  history: 'browser',
+  history: 'hash', // 必须配置hash路由
   routes: pageRoutes,
   plugins: [
     // ref: https://umijs.org/plugin/umi-plugin-react.html
