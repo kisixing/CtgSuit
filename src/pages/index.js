@@ -1,5 +1,6 @@
+import { NavLink } from 'umi';
 import styles from './index.css';
-import { NavLink } from 'umi'
+
 export default function() {
   return (
     <div className={styles.normal}>
