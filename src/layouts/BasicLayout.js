@@ -55,7 +55,7 @@ class BasicLayout extends Component {
                 this.handleMenuClick(title);
               }}
               icon={icon}
-              type={this.state.current === title ? 'dashed' : 'primary'}
+              type={this.state.current === title ? 'default' : 'primary'}
             >
               {title}
             </Button>
@@ -132,7 +132,7 @@ class BasicLayout extends Component {
                     }}
                     style={{ margin: '4px' }}
                     size="small"
-                    type={page === index ? 'dashed' : 'primary'}
+                    type={page === index ? 'default' : 'primary'}
                   >
                     {left}~{rigth}
                   </Button>
