@@ -17,7 +17,11 @@ export default {
       {
         antd: true,
         dva: true,
-        dynamicImport: { webpackChunkName: true },
+        dynamicImport: {
+          loadingComponent: './components/PageLoading/index',
+          webpackChunkName: true,
+          level: 3,
+        },
         title: 'umi_electron',
         dll: false,
         routes: {
