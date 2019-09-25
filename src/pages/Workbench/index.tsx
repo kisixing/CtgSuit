@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import L from '@lianmed/lmg';
-import { Skeleton, Card, Icon, Row, Col } from 'antd';
+import { Card, Icon, Row, Col, Button } from 'antd';
 import { connect } from 'react-redux';
 import './index.less';
 const Home = props => {
@@ -24,13 +24,15 @@ const Home = props => {
   }, []);
 
   const itemSpan = 24 / listLayout[0];
-  const itemHeight = height / listLayout[1] - 38 - 38;
+  const outPadding = 4;
+  const itemHeight = (height - outPadding * 2) / listLayout[1] - outPadding * 2 - 2 - 37 * 2;
+  console.log(document.body.getClientRects()[0].height);
   return (
-    <div style={{ height: '100%', overflow: 'hidden' }} ref={wrap}>
-      <Row>
+    <div style={{ height: '100%', overflow: 'hidden', background: '#fff' }} ref={wrap}>
+      <Row style={{ padding: outPadding }}>
         {pageItems.map(({ id, name, age, index }) => {
           return (
-            <Col span={itemSpan} key={id} style={{ border: '1px solid #999' }}>
+            <Col span={itemSpan} key={id} style={{ padding: outPadding }}>
               <Card
                 title={
                   <div>
@@ -42,22 +44,30 @@ const Home = props => {
                   </div>
                 }
                 size="small"
-                headStyle={{ background: '#ddd', color: '#888' }}
-                style={{ width: '100%', height: itemHeight }}
+                headStyle={{ background: 'pink', color: '#888' }}
+                style={{
+                  border: '1px solid #aaa',
+                  overflow: 'hidden',
+                  display: 'flex',
+                  flexDirection: 'column',
+                }}
+                extra={<Button icon="close" size="small" type="link"></Button>}
                 loading={loading}
-                bodyStyle={{ width: '100%', height: '100%' }}
-                actions={[
-                  <Icon type="setting" key="setting" />,
-                  <Icon type="edit" key="edit" />,
-                  <Icon type="ellipsis" key="ellipsis" />,
-                  <Icon type="setting" key="setting" />,
-                  <Icon type="edit" key="edit" />,
-                  <Icon type="ellipsis" key="ellipsis" />,
-                ]}
+                bodyStyle={{
+                  padding: 0,
+                  flex: 1,
+                  height: itemHeight,
+                }}
+                // actions={[
+                //   <Icon type="setting" key="setting" />,
+                //   <Icon type="edit" key="edit" />,
+                //   <Icon type="ellipsis" key="ellipsis" />,
+                //   <Icon type="setting" key="setting" />,
+                //   <Icon type="edit" key="edit" />,
+                //   <Icon type="ellipsis" key="ellipsis" />,
+                // ]}
               >
-                <Skeleton loading={loading} avatar active>
-                  <L data={null}></L>
-                </Skeleton>
+                <L data={null}></L>
               </Card>
             </Col>
           );

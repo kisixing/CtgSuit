@@ -4,6 +4,7 @@
   "license": "CC0-1.0",
   "private": true,
   "scripts": {
+    "start:dev":"concurrently --kill-others 'yarn start' 'yarn run dev:main'  ",
     "start": "cross-env PORT=1702 umi dev",
     "dev:main": "electron .",
     "build:render": "umi build",
@@ -14,21 +15,20 @@
     "pack-linux": "npm run build:render && npm run rebuild && electron-builder build --linux ",
     "dist": "electron-builder",
     "precommit": "lint-staged",
-    "update:lianmed":"shx rm -rf  node_modules/@lianmed && yarn"
-
+    "update:lianmed": "shx rm -rf  node_modules/@lianmed && yarn"
   },
   "main": "./app/main/index.js",
   "dependencies": {
+    "@lianmed/lmg": "NenX/lianmed_lmg.git",
     "antd": "^3.19.5",
     "dva": "^2.6.0-beta.6",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "umi-request": "^1.2.2",
-    "@lianmed/lmg":"NenX/lianmed_lmg.git"
+    "umi-request": "^1.2.2"
   },
   "devDependencies": {
     "babel-eslint": "^9.0.0",
-    "concurrently": "^4.1.1",
+    "concurrently": "^4.1.2",
     "cross-env": "^6.0.0",
     "electron": "^5.0.8",
     "electron-builder": "^21.1.5",
