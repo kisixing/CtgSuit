@@ -6,23 +6,21 @@
 
 .header {
   display: flex;
-  justify-content: space-between;
   height: @header-height;
   padding: 0 24px;
   color: #fff;
-  background-color: #173f81;
-
+  background-color: @primary-color;
+  :global {
+    .ant-btn-primary {
+      box-shadow: none;
+    }
+  }
   .logo {
     display: flex;
     height: 64px;
-
-    img {
-      width: 108px;
-      padding: 6px;
-    }
-
+    flex-shrink: 0;
     h1 {
-      color: #33a59a;
+      color: white;
       font-size: 21px;
       font-weight: bold;
       letter-spacing: 4px;
@@ -31,43 +29,21 @@
 
   .devices {
     flex: 1;
-    padding: 12px;
-
-    .wrapper {
-      height: 100%;
-      background-color: #ccc;
-      border: 1px solid #fff;
-      border-radius: 5px;
-    }
-
-    .title {
-      position: relative;
-      top: -108px;
-      left: 24px;
-    }
+    display: flex;
+    background-color: #ccc;
+    border-radius: 5px;
+    align-content: flex-start;
+    flex-wrap: wrap;
   }
 
   .actionBar {
+    margin-left: 10px;
+    overflow: hidden;
     display: flex;
-    align-items: center;
-    height: 64px;
-  }
-}
-
-.menus {
-  border-bottom: none;
-  background-color: transparent;
-  color: #fff;
-
-  :global{
-    .ant-menu-item {
-      padding: 0 12px;
-      border-bottom: none;
-
-      &:hover {
-        border-bottom: none;
-      }
-    }
+    width: 230px;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-items: right;
   }
 }
 

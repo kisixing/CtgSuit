@@ -4,7 +4,7 @@ export default {
   state: {
     listData: [], //所有数据
     pageData: [], //[[1,4],[5,8]]
-    page: 0, //当前页码
+    page: null, //当前页码
     pageItems: [], //[listItem,...]
   },
   effects: {
@@ -12,7 +12,7 @@ export default {
       //   const res = yield call(getList, { name: 'zsd', age: '14' });
       //   console.log('res', res);
 
-      const listData = Array(40)
+      const rawData = Array(40)
         .fill('')
         .map((_, index) => {
           let id = Math.random()
@@ -23,13 +23,27 @@ export default {
               return String.fromCodePoint(parseInt(id.slice(_ * 4, (_ + 1) * 4), 16));
             })
             .join('');
-          return { name, id, index, age: index };
+          return { name, id, age: index, status: Math.round((Math.random() * 2) % 3) };
         });
-      yield put({ type: 'setState', payload: { listData } });
 
-      yield put({ type: 'dataHandler' });
+      yield put({ type: 'dataHandler', rawData });
     },
-    *dataHandler(payload, { put, select }) {
+    *dataHandler({ rawData }, { put, select }) {
+      const state = yield select();
+      const {
+        setting: { listLayout },
+      } = state;
+      const pageItemsCount: number = listLayout[0] * listLayout[1];
+
+      const listData = rawData.map((_, index) => {
+        return { ..._, index, pageIndex: Math.floor(index / pageItemsCount) };
+      });
+
+      yield put({ type: 'setState', payload: { listData } });
+      yield put({ type: 'setPageData' });
+      yield put({ type: 'setPageItems', page: 0 });
+    },
+    *setPageData(payload, { put, select }) {
       const state = yield select();
       const {
         setting: { listLayout },
@@ -47,15 +61,14 @@ export default {
       });
 
       yield put({ type: 'setState', payload: { pageData } });
-      yield put({ type: 'setPageItems', page: 0 });
     },
     *setPageItems({ page }, { put, select }) {
       const state = yield select();
       const {
         setting: { listLayout },
-        list: { listData },
+        list: { listData, page: oldPage },
       } = state;
-
+      if (page === oldPage) return;
       const pageItemsCount: number = listLayout[0] * listLayout[1];
       const pageItems = listData.slice(page * pageItemsCount, (page + 1) * pageItemsCount);
 

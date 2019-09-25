@@ -11,6 +11,7 @@ import router from 'umi/router';
 import Link from 'umi/link';
 import store from 'store';
 import { app, ipcRenderer } from 'electron';
+import config from '@/utils/config';
 
 import logo from '../assets/logo.png';
 import styles from './BasicLayout.less';
@@ -25,22 +26,20 @@ class BasicLayout extends Component {
     };
   }
 
-  handleMenuClick = e => {
-    console.log('click ', e);
-    const { key, /* item */ } = e;
+  handleMenuClick = key => {
     this.setState({
       current: key,
     });
-    if (key === 'Guide') {
+    if (key === '操作说明') {
       router.push('/testCtg');
     }
-    if (key === 'Archives') {
+    if (key === '档案管理') {
       router.push('/Archives');
     }
-    if (key === 'Setting') {
+    if (key === '系统设置') {
       router.push('/setting');
     }
-    if (key === 'Logout') {
+    if (key === '退出') {
       Modal.confirm({
         title: '警告',
         content: '确认退出系统？',
@@ -61,13 +60,27 @@ class BasicLayout extends Component {
 
   menus = () => {
     return (
-      <Menu
-        onClick={this.handleMenuClick}
-        selectedKeys={[this.state.current]}
-        mode="horizontal"
-        className={styles.menus}
-      >
-        <Menu.Item key="Guide">
+      <>
+        {[
+          ['系统设置', 'setting'],
+          ['退出', 'logout'],
+          ['操作说明', 'question-circle'],
+          ['档案管理', 'ordered-list'],
+        ].map(([title, icon]) => {
+          return (
+            <Button
+              key={Math.random()}
+              onClick={e => {
+                this.handleMenuClick(title);
+              }}
+              icon={icon}
+              type={this.state.current === title ? 'default' : 'primary'}
+            >
+              {title}
+            </Button>
+          );
+        })}
+        {/* <Menu.Item key="Guide">
           <Icon type="question-circle" />
           操作说明
         </Menu.Item>
@@ -82,23 +95,52 @@ class BasicLayout extends Component {
         <Menu.Item key="Logout">
           <Icon type="logout" />
           退出
-        </Menu.Item>
-      </Menu>
+        </Menu.Item> */}
+      </>
     );
   };
 
   render() {
-    const { children, pageData, page, dispatch } = this.props;
+    const { children, pageData, page, dispatch, listData } = this.props;
     return (
       <Layout className={styles.container}>
         <Header className={styles.header}>
-          <div
-            style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
-          >
-            <Link to="/" className={styles.logo}>
-              <img alt="logo" src={logo} />
-              <h1>胎监工作站</h1>
-            </Link>
+          <Link to="/" className={styles.logo}>
+            {/* <img alt="logo" src={logo} /> */}
+            <h1>胎监工作站</h1>
+          </Link>
+
+          <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+            <div style={{ display: 'flex', flex: 1, overflow: 'hidden', margin: '6px' }}>
+              <div className={styles.devices}>
+                {listData.map(({ index, id, pageIndex, status }) => {
+                  const mapStatusToType = ['danger', 'default', 'primary'];
+                  return (
+                    <Button
+                      key={id}
+                      size="small"
+                      style={{
+                        marginLeft: 4,
+                        marginTop: 4,
+                        padding: 0,
+                        width: 24,
+                        height: 24,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                      type={mapStatusToType[status]}
+                      onClick={() => {
+                        dispatch({ type: 'list/setPageItems', page: pageIndex });
+                      }}
+                    >
+                      {index + 1}
+                    </Button>
+                  );
+                })}
+              </div>
+              <div className={styles.actionBar}>{this.menus()}</div>
+            </div>
             <div style={{ display: 'flex', lineHeight: '24px' }}>
               {pageData.map(([left, rigth], index) => {
                 return (
@@ -109,7 +151,7 @@ class BasicLayout extends Component {
                     }}
                     style={{ margin: '4px' }}
                     size="small"
-                    type={page === index ? 'primary' : 'dashed'}
+                    type={page === index ? 'default' : 'primary'}
                   >
                     {left}~{rigth}
                   </Button>
@@ -117,16 +159,11 @@ class BasicLayout extends Component {
               })}
             </div>
           </div>
-          <div className={styles.devices}>
-            <div className={styles.wrapper}></div>
-            {/* <span className={styles.title}>子机状态</span> */}
-          </div>
-          <div className={styles.actionBar}>{this.menus()}</div>
         </Header>
         <Content className={styles.main}>{children}</Content>
         <Footer className={styles.footer}>
           <Fragment>
-            Copyright <Icon type="copyright" /> 2019 莲印医疗科技
+            Copyright <Icon type="copyright" /> {config.copyright}
           </Fragment>
         </Footer>
       </Layout>
@@ -140,5 +177,6 @@ export default connect(({ list }) => {
   return {
     pageData: list.pageData,
     page: list.page,
+    listData: list.listData,
   };
 })(BasicLayout);
