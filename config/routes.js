@@ -24,7 +24,7 @@ export default [
   {
     path: '/',
     component: '../layouts/BasicLayout',
-    // Routes: ['pages/Authorized'],// 可以做用户登录验证
+    Routes: ['src/pages/Authorized'], // 可以做用户登录验证
     routes: [
       { path: '/', redirect: '/workbench' },
       {

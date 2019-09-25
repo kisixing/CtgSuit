@@ -1,17 +1,19 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import { Layout, Menu, Icon } from 'antd';
+
+import styles from './index.less';
+
+const { Sider } = Layout;
 
 class Archives extends Component {
-  static propTypes = {
-    prop: PropTypes.any
-  }
 
   render() {
     return (
-      <div>
-        archives management page !
-      </div>
-    )
+      <Layout className={styles.wrapper}>
+        <Sider theme="light" width="320" className={styles.aside}></Sider>
+        <Layout>layout</Layout>
+      </Layout>
+    );
   }
 }
 

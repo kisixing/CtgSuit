@@ -4,6 +4,35 @@
 @header-height: 100px;
 @footer-height: 36px;
 
+@border-radius-base: 3px;
+@border-radius-sm: 2px;
+@shadow-color: rgba(0, 0, 0, 0.05);
+@shadow-1-down: 4px 4px 40px @shadow-color;
+@border-color-split: #f4f4f4;
+@border-color-base: #e5e5e5;
+@border-color: #e8e8e8;
+@font-size-base: 13px;
+@text-color: #666;
+@hover-color: #f9f9fc;
+@header-background-color: #173f81;
+
+// 基本hover background color
+@hover-background-color: #e6f7ff;
+@red-color: #f00;
+@red-400: #f44336;
+@red-500: #f44336;
+@red-600: #f44336;
+@red-700: #f44336;
+@red-800: #f44336;
+
+@dark-half: #494949;
+@purple: #d897eb;
+@shadow-1: 4px 4px 20px 0 rgba(0, 0, 0, 0.01);
+@shadow-2: 4px 4px 40px 0 rgba(0, 0, 0, 0.05);
+@transition-ease-in: all 0.3s ease-out;
+@transition-ease-out: all 0.3s ease-out;
+@ease-in: ease-in;
+
 .textOverflow() {
   overflow: hidden;
   white-space: nowrap;
@@ -36,6 +65,45 @@
     background: white;
     content: '';
   }
+}
+
+.text-gradient {
+  background-image: -webkit-gradient(
+    linear,
+    37.219838% 34.532506%,
+    36.425669% 93.178216%,
+    from(#29cdff),
+    to(#0a60ff),
+    color-stop(0.37, #148eff)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.z-depth1 {
+  box-shadow:
+    0 1px 1.5px rgba(0, 0, 0, 0.12),
+    0 1px 1px rgba(0, 0, 0, 0.24);
+}
+.z-depth2 {
+  box-shadow:
+    0 3px 3px rgba(0, 0, 0, 0.16),
+    0 3px 3px rgba(0, 0, 0, 0.23);
+}
+.z-depth3 {
+  box-shadow:
+    0 10px 10px rgba(0, 0, 0, 0.19),
+    0 6px 3px rgba(0, 0, 0, 0.23);
+}
+.z-depth4 {
+  box-shadow:
+    0 14px 14px rgba(0, 0, 0, 0.25),
+    0 10px 5px rgba(0, 0, 0, 0.22);
+}
+.z-depth5 {
+  box-shadow:
+    0 19px 19px rgba(0, 0, 0, 0.3),
+    0 15px 6px rgba(0, 0, 0, 0.22);
 }
 
 // mixins for clearfix

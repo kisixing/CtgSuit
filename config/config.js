@@ -22,7 +22,7 @@ export default {
           webpackChunkName: true,
           level: 3,
         },
-        title: 'umi_electron',
+        title: '胎监工作站',
         dll: false,
         routes: {
           exclude: [
@@ -38,7 +38,7 @@ export default {
   ],
   proxy: {
     '/api': {
-      target: 'http://192.168.1.24:5000/mock/5',
+      target: 'http://127.0.0.1:1702/api/',
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
     },

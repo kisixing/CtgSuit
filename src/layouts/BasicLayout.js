@@ -5,12 +5,15 @@
  */
 
 import React, { Component, Fragment } from 'react';
-import { Layout, Menu, Icon, Button } from 'antd';
+import { Layout, Menu, Icon, Button, Modal } from 'antd';
+import { connect } from 'dva';
 import router from 'umi/router';
 import Link from 'umi/link';
+import store from 'store';
+import { app, ipcRenderer } from 'electron';
+
 import logo from '../assets/logo.png';
 import styles from './BasicLayout.less';
-import { connect } from 'react-redux';
 
 const { Header, Footer, Content } = Layout;
 
@@ -38,6 +41,21 @@ class BasicLayout extends Component {
       router.push('/setting');
     }
     if (key === 'Logout') {
+      Modal.confirm({
+        title: '警告',
+        content: '确认退出系统？',
+        okText: '确认',
+        cancelText: '取消',
+        onOk: function() {
+          // 清除sessionStorage
+          store.clearAll();
+          // 退出登录，返回到登录界面
+          router.push('./user/login');
+          // 退出登录，关闭应用
+          console.log('11111111111', app, ipcRenderer);
+          // app.quit();
+        },
+      });
     }
   };
 
@@ -79,7 +97,7 @@ class BasicLayout extends Component {
           >
             <Link to="/" className={styles.logo}>
               <img alt="logo" src={logo} />
-              <h1>胎监</h1>
+              <h1>胎监工作站</h1>
             </Link>
             <div style={{ display: 'flex', lineHeight: '24px' }}>
               {pageData.map(([left, rigth], index) => {
@@ -101,7 +119,7 @@ class BasicLayout extends Component {
           </div>
           <div className={styles.devices}>
             <div className={styles.wrapper}></div>
-            <span className={styles.title}>子机状态</span>
+            {/* <span className={styles.title}>子机状态</span> */}
           </div>
           <div className={styles.actionBar}>{this.menus()}</div>
         </Header>

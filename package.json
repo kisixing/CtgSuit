@@ -4,7 +4,7 @@
   "license": "CC0-1.0",
   "private": true,
   "scripts": {
-    "start:dev":"concurrently --kill-others 'yarn start' 'yarn run dev:main'  ",
+    "start:dev": "concurrently --kill-others 'yarn start' 'yarn run dev:main'  ",
     "start": "cross-env PORT=1702 umi dev",
     "dev:main": "electron .",
     "build:render": "umi build",
@@ -24,6 +24,7 @@
     "dva": "^2.6.0-beta.6",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "store": "^2.0.12",
     "umi-request": "^1.2.2"
   },
   "devDependencies": {
@@ -41,7 +42,9 @@
     "eslint-plugin-react": "^7.11.1",
     "husky": "^0.14.3",
     "lint-staged": "^7.2.2",
+    "mockjs": "^1.0.1-beta3",
     "react-test-renderer": "^16.7.0",
+    "roadhog-api-doc": "^1.1.2",
     "shx": "^0.3.2",
     "slash": "^3.0.0",
     "umi": "^2.7.7",
@@ -49,7 +52,7 @@
     "webpack-chain": "^6.0.0"
   },
   "build": {
-    "productName": "胎监工作站",
+    "productName": "ctg-suit",
     "appId": "lian-med-ctgsuit",
     "directories": {
       "output": "release"
