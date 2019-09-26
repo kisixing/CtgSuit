@@ -1,10 +1,9 @@
-import store from 'store';
 import { TOKEN } from '@/utils/constant';
 
 export default {
   namespace: 'global',
   state: {
-    isLogin: store.get(TOKEN),
+    isLogin: sessionStorage.getItem(TOKEN),
     layout: [1, 2], // 一行一列 一行两列
     onWorks: [
       {

@@ -1,6 +1,5 @@
 import { routerRedux } from 'dva/router';
 import { parse } from 'qs';
-import store from 'store';
 import { TOKEN } from '@/utils/constant';
 import { login } from '@/services/api';
 
@@ -31,7 +30,7 @@ export default {
             isLogin: true
           },
         });
-        store.set(TOKEN, data['Access-Token']);
+        sessionStorage.setItem(TOKEN, data['Access-Token']);
         const urlParams = new URL(window.location.href);
         const params = parse(window.location.href.split('?')[1]);
         let { redirect } = params;

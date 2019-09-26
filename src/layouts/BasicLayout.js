@@ -41,20 +41,21 @@ class BasicLayout extends Component {
       router.push('/setting');
     }
     if (key === '退出系统') {
-      Modal.confirm({
-        title: '警告',
-        content: '确认退出系统？',
-        okText: '确认',
-        cancelText: '取消',
-        onOk: function() {
-          // 清除sessionStorage
-          store.clearAll();
-          // 退出登录，返回到登录界面
-          router.push('./user/login');
-          // 退出登录，关闭应用
-          ipcRenderer.send('closeMainWindow');
-        },
-      });
+      ipcRenderer.send('closeMainWindow');
+      // Modal.confirm({
+      //   title: '警告',
+      //   content: '确认退出系统？',
+      //   okText: '确认',
+      //   cancelText: '取消',
+      //   onOk: function() {
+      //     // 清除sessionStorage
+      //     store.clearAll();
+      //     // 退出登录，返回到登录界面
+      //     // router.push('./user/login');
+      //     // 退出登录，关闭应用
+      //     ipcRenderer.send('closeMainWindow');
+      //   },
+      // });
     }
   };
 
