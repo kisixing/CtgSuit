@@ -33,8 +33,16 @@
 
   .formBox {
     display: flex;
-    justify-content: center;
     align-items: center;
+
+    .scrollView {
+      height: 100%;
+      overflow-y: auto;
+
+      &::-webkit-scrollbar {
+      display:none
+    }
+    }
   }
 
 }

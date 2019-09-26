@@ -9,10 +9,14 @@ import styles from './style.less';
 class ScoreSet extends Component {
   render() {
     const {
+      id,
       form: { getFieldDecorator },
     } = this.props;
     return (
-      <Form layout="horizontal" {...formItemLayout} className={styles.form}>
+      <Form id={id} layout="horizontal" {...formItemLayout} className={styles.form}>
+        <Form.Item>
+          <div className={styles.subTitle}>评分设置</div>
+        </Form.Item>
         <Form.Item label="评分">
           {getFieldDecorator('title', {
             rules: [{ required: true, message: 'Please input the title of collection!' }],
