@@ -109,7 +109,7 @@ class BasicLayout extends Component {
       <Layout className={styles.container}>
         <Header className={styles.header}>
           <Link to="/" className={styles.logo}>
-            {/* <img alt="logo" src={logo} /> */}
+            <img alt="logo" src={logo} />
             <h1>胎监工作站</h1>
           </Link>
 

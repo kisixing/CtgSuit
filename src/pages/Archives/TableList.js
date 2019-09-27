@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Table } from 'antd';
-import styles from './TableList.less'
+import { Table, Button } from 'antd';
+import styles from './TableList.less';
 
 const columns = [
   {
@@ -84,6 +84,7 @@ class TableList extends Component {
 
   handleClick = (record, index) => {
     const { dispatch } = this.props;
+    console.log('888888', record)
     dispatch({
       type: 'archives/updateState',
       payload: {
@@ -92,34 +93,51 @@ class TableList extends Component {
     });
   };
 
+
+
   render() {
-    const { dataSource, loading } = this.props;
+    const { selected, dataSource, loading } = this.props;
     return (
-      <Table
-        bordered
-        size="small"
-        scroll={{ x: 1370, y: 260 }}
-        pagination={false}
-        columns={columns}
-        dataSource={dataSource}
-        className={styles.tableList}
-        onRow={record => {
-          return {
-            onClick: event => this.handleClick(record), // 点击行
-            onDoubleClick: event => {},
-            onContextMenu: event => {},
-            onMouseEnter: event => {}, // 鼠标移入行
-            onMouseLeave: event => {},
-          };
-        }}
-        loading={!loading}
-        rowKey="NO"
-      />
+      <div>
+        <Table
+          bordered
+          size="small"
+          scroll={{ x: 1400, y: 220 }}
+          pagination={false}
+          columns={columns}
+          dataSource={dataSource}
+          className={styles.tableList}
+          onRow={record => {
+            return {
+              onClick: event => this.handleClick(record), // 点击行
+              onDoubleClick: event => {},
+            };
+          }}
+          loading={!loading}
+          rowKey="NO"
+          rowClassName={record => (record.NO === selected.NO ? styles.selectedRow : '')}
+          rowSelection={{
+            columnWidth: '38px',
+            type: 'radio',
+            selectedRowKeys: [selected.NO],
+            onSelect: (record, selected, selectedRows) => this.handleClick(record),
+          }}
+        />
+        <div className={styles.buttonView}>
+          <Button>全选</Button>
+          <Button>查询</Button>
+          <Button>排序</Button>
+          <Button>导出</Button>
+          <Button>导入</Button>
+          <Button>记录单</Button>
+        </div>
+      </div>
     );
   }
 }
 
 export default connect(({ archives, loading }) => ({
+  selected: archives.current,
   dataSource: archives.dataSource,
   loading: loading,
 }))(TableList);

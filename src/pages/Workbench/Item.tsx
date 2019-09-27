@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import L from '@lianmed/lmg';
 import { Card, Col, Button } from 'antd';
 import { connect } from 'react-redux';
+import Link from 'umi/link';
+
 const Home = props => {
   const { index, name, age, id, itemHeight, outPadding, itemSpan, dispatch } = props;
   const [showSetting, setShowSetting] = useState(false);
@@ -28,7 +30,9 @@ const Home = props => {
         <Button icon="setting" type="link"></Button>
         <Button icon="setting" type="link"></Button>
         <Button icon="setting" type="link"></Button>
-        <Button icon="setting" type="link"></Button>
+        <Link to="">
+          <Button icon="user-add" type="link">建档</Button>
+        </Link>
       </div>
       <div
         style={{

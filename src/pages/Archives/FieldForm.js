@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
-import { Form, Row, Col, Input, InputNumber, DatePicker } from 'antd';
+import { Form, Row, Col, Input, InputNumber, DatePicker, Button } from 'antd';
 
 import styles from './FieldForm.less';
 
@@ -55,10 +55,10 @@ class FieldForm extends Component {
 
   render() {
     const {
-      current,
+      values,
       form: { getFieldDecorator },
     } = this.props;
-    console.log('current  item', current);
+    console.log('current item', values);
     return (
       <Form className={styles.form}>
         <Row>
@@ -112,6 +112,12 @@ class FieldForm extends Component {
               {getFieldDecorator('comment')(<TextArea style={{ width: '96%' }} rows={1} />)}
             </Form.Item>
           </Col>
+        </Row>
+        <Row className={styles.buttonView}>
+          <Button>修改</Button>
+          <Button>删除</Button>
+          <Button>取消</Button>
+          <Button>保存</Button>
         </Row>
       </Form>
     );

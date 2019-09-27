@@ -1,7 +1,23 @@
+@import '../../utils/utils.less';
+
 .tableList {
   :global {
     .ant-table-row {
       cursor: pointer;
     }
   }
+
+  .selectedRow {
+    & > td {
+      background-color: #f0f5ff !important;
+    }
+  }
 }
+
+.buttonView {
+  margin-top: 18px;
+  margin-left: 24px;
+    button {
+      margin-right: 24px;
+    }
+  }
