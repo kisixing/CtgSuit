@@ -20,8 +20,8 @@ const Home = props => {
           width: showSetting ? `calc(100% - 60px)` : 0,
           opacity: showSetting ? 1 : 0,
           position: 'absolute',
-          bottom: 10,
-          left: 10,
+          bottom: 12,
+          left: 12,
           zIndex: 10,
           height: 32,
         }}
@@ -37,10 +37,9 @@ const Home = props => {
       <div
         style={{
           position: 'absolute',
-          bottom: 10,
-          right: 10,
+          bottom: 12,
+          right: 12,
           zIndex: 10,
-          display: 'flex',
         }}
       >
         <Button

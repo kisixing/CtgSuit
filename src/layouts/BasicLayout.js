@@ -65,10 +65,10 @@ class BasicLayout extends Component {
     return (
       <>
         {[
-          ['系统设置', 'setting'],
-          ['退出系统', 'logout'],
           ['操作说明', 'question-circle'],
           ['档案管理', 'ordered-list'],
+          ['系统设置', 'setting'],
+          ['退出系统', 'logout'],
         ].map(([title, icon]) => {
           return (
             <Button
@@ -83,23 +83,25 @@ class BasicLayout extends Component {
             </Button>
           );
         })}
-        {/* <Menu.Item key="Guide">
-          <Icon type="question-circle" />
-          操作说明
-        </Menu.Item>
-        <Menu.Item key="Archives">
-          <Icon type="ordered-list" />
-          档案管理
-        </Menu.Item>
-        <Menu.Item key="Setting">
-          <Icon type="setting" />
-          系统设置
-        </Menu.Item>
-        <Menu.Item key="Logout">
-          <Icon type="logout" />
-          退出
-        </Menu.Item> */}
       </>
+      // <Menu>
+      //   <Menu.Item key="Guide">
+      //     <Icon type="question-circle" />
+      //     操作说明
+      //   </Menu.Item>
+      //   <Menu.Item key="Archives">
+      //     <Icon type="ordered-list" />
+      //     档案管理
+      //   </Menu.Item>
+      //   <Menu.Item key="Setting">
+      //     <Icon type="setting" />
+      //     系统设置
+      //   </Menu.Item>
+      //   <Menu.Item key="Logout">
+      //     <Icon type="logout" />
+      //     退出
+      //   </Menu.Item>
+      // </Menu>
     );
   };
 
