@@ -3,6 +3,8 @@ import L from '@lianmed/lmg';
 import { Card, Col, Button } from 'antd';
 import { connect } from 'react-redux';
 import { mapStatusToColor } from '@/constant';
+import Link from 'umi/link';
+
 const Home = props => {
   const { index, name, age, itemHeight, outPadding, itemSpan, status } = props;
   const [showSetting, setShowSetting] = useState(false);
@@ -19,8 +21,8 @@ const Home = props => {
           width: showSetting ? `calc(100% - 60px)` : 0,
           opacity: showSetting ? 1 : 0,
           position: 'absolute',
-          bottom: 10,
-          left: 10,
+          bottom: 12,
+          left: 12,
           zIndex: 10,
           height: 32,
         }}
@@ -29,15 +31,18 @@ const Home = props => {
         <Button icon="setting" type="link"></Button>
         <Button icon="setting" type="link"></Button>
         <Button icon="setting" type="link"></Button>
-        <Button icon="setting" type="link"></Button>
+        <Link to="">
+          <Button icon="user-add" type="link">
+            建档
+          </Button>
+        </Link>
       </div>
       <div
         style={{
           position: 'absolute',
-          bottom: 10,
-          right: 10,
+          bottom: 12,
+          right: 12,
           zIndex: 10,
-          display: 'flex',
         }}
       >
         <Button

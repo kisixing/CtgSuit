@@ -2,6 +2,40 @@
 
 .wrapper {
   height: 100%;
+  padding: 24px;
+
+  .top {
+    height: 332px;
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 24px;
+
+    .topLeft {
+      width: 60%;
+      margin-right: 12px;
+    }
+
+    .topRight {
+      width: 40%;
+      margin-left: 12px;
+    }
+
+    & > div {
+      background-color: #fff;
+    }
+  }
+
+  .bottom {
+    .line {
+      height: 100%;
+      padding: 24px;
+      background-color: #fff;
+
+      h2 {
+        text-align: center;
+      }
+    }
+  }
 }
 
 .aside {

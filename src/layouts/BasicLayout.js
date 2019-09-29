@@ -10,7 +10,7 @@ import { connect } from 'dva';
 import router from 'umi/router';
 import Link from 'umi/link';
 import store from 'store';
-import { app, ipcRenderer } from 'electron';
+import { ipcRenderer } from 'electron';
 import config from '@/utils/config';
 
 import logo from '../assets/logo.png';
@@ -31,7 +31,8 @@ class BasicLayout extends Component {
       current: key,
     });
     if (key === '操作说明') {
-      router.push('/testCtg');
+      // router.push('/testCtg');
+       ipcRenderer.send('newWindow', '新窗口');
     }
     if (key === '档案管理') {
       router.push('/Archives');
@@ -39,33 +40,35 @@ class BasicLayout extends Component {
     if (key === '系统设置') {
       router.push('/setting');
     }
-    if (key === '退出') {
-      Modal.confirm({
-        title: '警告',
-        content: '确认退出系统？',
-        okText: '确认',
-        cancelText: '取消',
-        onOk: function() {
-          // 清除sessionStorage
-          store.clearAll();
-          // 退出登录，返回到登录界面
-          router.push('./user/login');
-          // 退出登录，关闭应用
-          console.log('11111111111', app, ipcRenderer);
-          // app.quit();
-        },
-      });
+    if (key === '退出系统') {
+      ipcRenderer.send('closeMainWindow');
+      // Modal.confirm({
+      //   title: '警告',
+      //   content: '确认退出系统？',
+      //   okText: '确认',
+      //   cancelText: '取消',
+      //   onOk: function() {
+      //     // 清除sessionStorage
+      //     store.clearAll();
+      //     // 退出登录，返回到登录界面
+      //     // router.push('./user/login');
+      //     // 退出登录，关闭应用
+      //     ipcRenderer.send('closeMainWindow');
+      //   },
+      // });
     }
   };
+
+
 
   menus = () => {
     return (
       <>
         {[
-          ['系统设置', 'setting'],
-          ['退出', 'logout'],
           ['操作说明', 'question-circle'],
           ['档案管理', 'ordered-list'],
+          ['系统设置', 'setting'],
+          ['退出系统', 'logout'],
         ].map(([title, icon]) => {
           return (
             <Button
@@ -80,23 +83,25 @@ class BasicLayout extends Component {
             </Button>
           );
         })}
-        {/* <Menu.Item key="Guide">
-          <Icon type="question-circle" />
-          操作说明
-        </Menu.Item>
-        <Menu.Item key="Archives">
-          <Icon type="ordered-list" />
-          档案管理
-        </Menu.Item>
-        <Menu.Item key="Setting">
-          <Icon type="setting" />
-          系统设置
-        </Menu.Item>
-        <Menu.Item key="Logout">
-          <Icon type="logout" />
-          退出
-        </Menu.Item> */}
       </>
+      // <Menu>
+      //   <Menu.Item key="Guide">
+      //     <Icon type="question-circle" />
+      //     操作说明
+      //   </Menu.Item>
+      //   <Menu.Item key="Archives">
+      //     <Icon type="ordered-list" />
+      //     档案管理
+      //   </Menu.Item>
+      //   <Menu.Item key="Setting">
+      //     <Icon type="setting" />
+      //     系统设置
+      //   </Menu.Item>
+      //   <Menu.Item key="Logout">
+      //     <Icon type="logout" />
+      //     退出
+      //   </Menu.Item>
+      // </Menu>
     );
   };
 
@@ -106,7 +111,7 @@ class BasicLayout extends Component {
       <Layout className={styles.container}>
         <Header className={styles.header}>
           <Link to="/" className={styles.logo}>
-            {/* <img alt="logo" src={logo} /> */}
+            <img alt="logo" src={logo} />
             <h1>胎监工作站</h1>
           </Link>
 

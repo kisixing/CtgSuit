@@ -18,7 +18,7 @@ const Home = props => {
   }, []);
 
   const itemSpan = 24 / listLayout[0];
-  const outPadding = 4;
+  const outPadding = 12;
   const itemHeight =
     (wrapRec.height - outPadding * 2) / listLayout[1] - outPadding * 2 - 2 - 37 * 1;
   return (
