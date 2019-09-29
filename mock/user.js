@@ -7,19 +7,51 @@ export default delay(
       const { password, username } = req.body;
 
       if (password === '123456' && username === 'admin') {
-        res.send({
-          status: 'success',
-          currentAuthority: 'admin',
-          'Access-Token': 'Lian-med _4dff587dffd5_888rrrrrsdvsd1212154dfgd_',
-        });
+        res.send(
+          mockjs.mock({
+            status: 'success',
+            currentAuthority: 'admin',
+            'Access-Token': 'Lian-med _4dff587dffd5_888rrrrrsdvsd1212154dfgd_',
+            data: {
+              id: '2019_00000000000101',
+              name: 'Admin',
+              nickname: 'Admin',
+              createTime: '@time("yyyy-MM-dd HH:mm:ss")',
+              'avatar|1': [
+                'https://gw.alipayobjects.com/zos/rmsportal/gaOngJwsRYRaVAuXXcmB.png',
+                'https://gw.alipayobjects.com/zos/rmsportal/ubnKSIfAJTxIgXOKlciN.png',
+                'https://gw.alipayobjects.com/zos/rmsportal/WhxKECPNujWoWEFNdnJE.png',
+                'https://gw.alipayobjects.com/zos/rmsportal/jZUIxmJycoymBprLOUbT.png',
+                'https://gw.alipayobjects.com/zos/rmsportal/psOgztMplJMGpVEqfcgF.png',
+                'https://gw.alipayobjects.com/zos/rmsportal/ZpBqSxLxVEXfcUNoPKrz.png',
+              ],
+            },
+          })
+        );
         return;
       }
       if (password === '123456' && username === 'user') {
-        res.send({
-          status: 'success',
-          currentAuthority: 'user',
-          'Access-Token': 'Lian-med _4dff587dffd5_888rrrrrsdvsd1212154dfgd__',
-        });
+        res.send(
+          mockjs.mock({
+            status: 'success',
+            currentAuthority: 'user',
+            'Access-Token': 'Lian-med _4dff587dffd5_888rrrrrsdvsd1212154dfgd__',
+            data: {
+              id: '2019_00000000000102',
+              name: 'User',
+              nickname: 'User',
+              createTime: '@time("yyyy-MM-dd HH:mm:ss")',
+              'avatar|1': [
+                'https://gw.alipayobjects.com/zos/rmsportal/gaOngJwsRYRaVAuXXcmB.png',
+                'https://gw.alipayobjects.com/zos/rmsportal/ubnKSIfAJTxIgXOKlciN.png',
+                'https://gw.alipayobjects.com/zos/rmsportal/WhxKECPNujWoWEFNdnJE.png',
+                'https://gw.alipayobjects.com/zos/rmsportal/jZUIxmJycoymBprLOUbT.png',
+                'https://gw.alipayobjects.com/zos/rmsportal/psOgztMplJMGpVEqfcgF.png',
+                'https://gw.alipayobjects.com/zos/rmsportal/ZpBqSxLxVEXfcUNoPKrz.png',
+              ],
+            },
+          })
+        );
         return;
       }
       res.send({

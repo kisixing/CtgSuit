@@ -16,8 +16,8 @@ ipcMain.on('msg', (event, msg) => {
 ipcMain.on('newWindow', (event) => {
   newWindow = new BrowserWindow({
     title: '操作手册',
-    width: 800,
-    height: 600,
+    width: 1280,
+    height: 720,
     resizable: true, // 窗口大小是否可变
     frame: true, // 是否带边框
     parent: mainWindow, // mainWindow是主窗口 父窗口
@@ -37,7 +37,8 @@ ipcMain.on('newWindow', (event) => {
 
 ipcMain.on('closeMainWindow', (event) => {
   mainWindow = null;
-  app.quit();
+  // app.quit();
+  app.exit();
 })
 
 function createWindow() {
@@ -45,6 +46,8 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1440,
     height: 900,
+    show: false,
+    fullscreen: false, // 默认全屏
     webPreferences: {
       javascript: true,
       plugins: true,
@@ -56,13 +59,18 @@ function createWindow() {
     // }
   });
 
+  // 菜单栏设置
   Menu.setApplicationMenu(menus);
 
   // and load the index.html of the app.
   mainWindow.loadURL(getMainPath());
 
   // Open the DevTools.打开开发者工具
-  // mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
+
+  // 默认最大化
+  mainWindow.maximize();
+  mainWindow.show();
 
   // Emitted when the window is closed.
   // mainWindow.on('closed', function() {
@@ -73,21 +81,6 @@ function createWindow() {
   // });
 
   mainWindow.on('close', function(e) {
-    // dialog.showMessageBox({
-    //   type: 'info',
-    //   title: 'Information',
-    //   message: '确定要关闭吗？',
-    //   buttons: ['最小化','直接退出']
-    // }, (index) => {
-    //   if(index === 0) {
-    //     e.preventDefault();		// 阻止默认行为，一定要有
-    //     mainWindow.minimize();	// 调用 最小化实例方法
-    //   } else {
-    //     mainWindow = null;
-    //     // app.quit();	// 不要用quit();试了会弹两次
-    //     app.exit();		// exit()直接关闭客户端，不会执行quit();
-    //   }
-    // })
     dialog.showMessageBox(
       {
         type: 'info',
@@ -97,8 +90,14 @@ function createWindow() {
       },
       function(index) {
         if (index === 0) {
+          // cancel
           e.preventDefault();
         } else {
+          // ok
+          // 窗口关闭按钮，提示弹窗，不清除登录信息，下次直接进入主页
+          ipcMain.on('clear-all-store', (event, params) => {
+            params.clearAll();
+          });
           mainWindow = null;
           app.exit();
         }

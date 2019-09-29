@@ -1,4 +1,5 @@
 const { Menu } = require('electron');
+const hasMenus = false;
 
 const menu = [
   {
@@ -39,4 +40,4 @@ const menu = [
   },
 ];
 
-module.exports = Menu.buildFromTemplate(menu);
+module.exports = hasMenus ? Menu.buildFromTemplate(menu) : null;

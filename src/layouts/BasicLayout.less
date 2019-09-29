@@ -1,5 +1,7 @@
 @import '../utils/utils.less';
 
+@pro-header-hover-bg: rgba(255, 255, 255, 0.35);
+
 .container {
   height: 100%;
 }
@@ -35,7 +37,7 @@
     flex: 1;
     display: flex;
     background-color: #ccc;
-    border-radius: 5px;
+    border-radius: 4px;
     align-content: flex-start;
     flex-wrap: wrap;
   }
@@ -48,6 +50,43 @@
     flex-wrap: wrap;
     align-content: center;
     justify-items: right;
+
+    .action {
+      display: inline-block;
+      height: 32px;
+      line-height: 32px;
+      padding: 0 15px;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: all 0.3s;
+      > i {
+        color: @text-color;
+        vertical-align: middle;
+      }
+      &:hover {
+        background: @pro-header-hover-bg;
+      }
+      &:global(.opened) {
+        background: @pro-header-hover-bg;
+      }
+    }
+    .search {
+      padding: 0 12px;
+      &:hover {
+        background: transparent;
+      }
+    }
+    .account {
+      .avatar {
+        margin: ~'calc((@{layout-header-height} - 24px) / 2)' 0;
+        margin-right: 8px;
+        margin-top: 4px;
+        margin-bottom: 4px;
+        color: @primary-color;
+        vertical-align: top;
+        background: rgba(255, 255, 255, 0.85);
+      }
+    }
   }
 }
 

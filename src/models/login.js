@@ -10,6 +10,9 @@ export default {
     error: {
       status: '',
       desc: '',
+      currentUser: {
+        data: {}
+      }
     },
   },
   subscriptions: {},
@@ -28,7 +31,8 @@ export default {
         yield put({
           type: 'global/updateState',
           payload: {
-            isLogin: true
+            isLogin: true,
+            currentUser: data,
           },
         });
         store.set(TOKEN, data['Access-Token']);

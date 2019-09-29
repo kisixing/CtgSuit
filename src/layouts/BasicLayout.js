@@ -5,14 +5,15 @@
  */
 
 import React, { Component, Fragment } from 'react';
-import { Layout, Menu, Icon, Button, Modal } from 'antd';
+import { Layout, Menu, Icon, Button, Modal, Avatar } from 'antd';
 import { connect } from 'dva';
 import router from 'umi/router';
 import Link from 'umi/link';
 import store from 'store';
 import { ipcRenderer } from 'electron';
-import config from '@/utils/config';
+import HeaderDropdown from '@/components/HeaderDropdown';
 
+import config from '@/utils/config';
 import logo from '../assets/logo.png';
 import styles from './BasicLayout.less';
 
@@ -26,13 +27,22 @@ class BasicLayout extends Component {
     };
   }
 
+  componentDidMount() {
+    // send ipcMain
+    ipcRenderer.send('clear-all-store', {
+      name: 'clear all stroe!!!',
+      age: '18',
+      clearAll: store.clearAll(),
+    });
+  }
+
   handleMenuClick = key => {
     this.setState({
       current: key,
     });
     if (key === '操作说明') {
       // router.push('/testCtg');
-       ipcRenderer.send('newWindow', '新窗口');
+      ipcRenderer.send('newWindow', '新窗口');
     }
     if (key === '档案管理') {
       router.push('/Archives');
@@ -41,6 +51,7 @@ class BasicLayout extends Component {
       router.push('/setting');
     }
     if (key === '退出系统') {
+      // store.clearAll();
       ipcRenderer.send('closeMainWindow');
       // Modal.confirm({
       //   title: '警告',
@@ -59,20 +70,58 @@ class BasicLayout extends Component {
     }
   };
 
+  onMenuClick = (e) => {
+    const { key } = e;
+    this.setState({ current: key });
+    console.log('onMenuClick', e);
+  };
 
+  user = (key) => {
+    const currentUser = this.props.currentUser.data;
+    const menu = (
+      <Menu className={styles.menu} selectedKeys={[]} onClick={this.onMenuClick}>
+        <Menu.Item key="userinfo">
+          <Icon type="user" />
+          账户设置
+        </Menu.Item>
+        <Menu.Item key="signout">
+          <Icon type="user" />
+          注销登录
+        </Menu.Item>
+        <Menu.Divider />
+        <Menu.Item key="logout">
+          <Icon type="logout" />
+          退出系统
+        </Menu.Item>
+      </Menu>
+    );
+    return (
+      <HeaderDropdown overlay={menu} key={key}>
+        <span className={`${styles.action} ${styles.account}`}>
+          <Avatar size="small" className={styles.avatar} src={currentUser.avatar} alt="avatar">
+            {currentUser.name}
+          </Avatar>
+          <span className={styles.name}>{currentUser.name}</span>
+        </span>
+      </HeaderDropdown>
+    );
+  };
 
   menus = () => {
     return (
-      <>
+      <Fragment>
         {[
-          ['操作说明', 'question-circle'],
           ['档案管理', 'ordered-list'],
           ['系统设置', 'setting'],
-          ['退出系统', 'logout'],
+          ['操作说明', 'question-circle'],
+          ['用户信息', 'user'],
         ].map(([title, icon]) => {
+          if (title === '用户信息') {
+            return this.user(icon);
+          }
           return (
             <Button
-              key={Math.random()}
+              key={icon}
               onClick={e => {
                 this.handleMenuClick(title);
               }}
@@ -83,25 +132,7 @@ class BasicLayout extends Component {
             </Button>
           );
         })}
-      </>
-      // <Menu>
-      //   <Menu.Item key="Guide">
-      //     <Icon type="question-circle" />
-      //     操作说明
-      //   </Menu.Item>
-      //   <Menu.Item key="Archives">
-      //     <Icon type="ordered-list" />
-      //     档案管理
-      //   </Menu.Item>
-      //   <Menu.Item key="Setting">
-      //     <Icon type="setting" />
-      //     系统设置
-      //   </Menu.Item>
-      //   <Menu.Item key="Logout">
-      //     <Icon type="logout" />
-      //     退出
-      //   </Menu.Item>
-      // </Menu>
+      </Fragment>
     );
   };
 
@@ -178,10 +209,9 @@ class BasicLayout extends Component {
 
 BasicLayout.propTypes = {};
 
-export default connect(({ list }) => {
-  return {
-    pageData: list.pageData,
-    page: list.page,
-    listData: list.listData,
-  };
-})(BasicLayout);
+export default connect(({ global, list, loading }) => ({
+  currentUser: global.currentUser,
+  pageData: list.pageData,
+  page: list.page,
+  listData: list.listData,
+}))(BasicLayout);
