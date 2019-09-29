@@ -109,7 +109,7 @@ class Setting extends Component {
     return (
       <Layout className={styles.wrapper}>
         <Sider theme="light" width="256" className={styles.aside}>
-          <div className={styles.menuBox}>{this.menus()}</div>
+          <div className={styles.sideMenu}>{this.menus()}</div>
         </Sider>
         <Layout className={styles.main}>
           <Header className={styles.headerTitle}>系统设置</Header>

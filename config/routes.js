@@ -51,6 +51,12 @@ export default [
         title: '胎监-系统设置',
         component: './TestCtg',
       },
+      {
+        path: '/account',
+        name: 'account',
+        title: '账户设置',
+        component: './Account'
+      },
       // 异常处理页面
       {
         name: 'exception',

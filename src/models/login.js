@@ -10,9 +10,6 @@ export default {
     error: {
       status: '',
       desc: '',
-      currentUser: {
-        data: {}
-      }
     },
   },
   subscriptions: {},
@@ -32,7 +29,7 @@ export default {
           type: 'global/updateState',
           payload: {
             isLogin: true,
-            currentUser: data,
+            currentUser: data.data,
           },
         });
         store.set(TOKEN, data['Access-Token']);

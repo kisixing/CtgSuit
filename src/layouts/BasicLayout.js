@@ -28,11 +28,15 @@ class BasicLayout extends Component {
   }
 
   componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'global/fetchAccount',
+    });
     // send ipcMain
     ipcRenderer.send('clear-all-store', {
       name: 'clear all stroe!!!',
       age: '18',
-      clearAll: store.clearAll(),
+      clearAll: () => store.clearAll(),
     });
   }
 
@@ -50,34 +54,49 @@ class BasicLayout extends Component {
     if (key === '系统设置') {
       router.push('/setting');
     }
-    if (key === '退出系统') {
-      // store.clearAll();
-      ipcRenderer.send('closeMainWindow');
-      // Modal.confirm({
-      //   title: '警告',
-      //   content: '确认退出系统？',
-      //   okText: '确认',
-      //   cancelText: '取消',
-      //   onOk: function() {
-      //     // 清除sessionStorage
-      //     store.clearAll();
-      //     // 退出登录，返回到登录界面
-      //     // router.push('./user/login');
-      //     // 退出登录，关闭应用
-      //     ipcRenderer.send('closeMainWindow');
-      //   },
-      // });
-    }
   };
 
   onMenuClick = (e) => {
     const { key } = e;
     this.setState({ current: key });
-    console.log('onMenuClick', e);
+    if (key === 'logout') {
+      // 退出系统，但不注销登录信息，再次登录直接进入主页
+      Modal.confirm({
+        title: '警告',
+        content: '确认退出系统？',
+        okText: '确认',
+        cancelText: '取消',
+        onOk: function() {
+          // 清除sessionStorage
+          // store.clearAll();
+          // 退出登录，关闭应用
+          ipcRenderer.send('closeMainWindow');
+        },
+      });
+    }
+    if (key === 'signout') {
+      // 注销登录信息，跳转到登录界面。下次打开应用回到登录界面
+      Modal.confirm({
+        title: '警告',
+        content: '确认退出登录？',
+        okText: '确认',
+        cancelText: '取消',
+        onOk: function() {
+          // 清除sessionStorage
+          store.clearAll();
+          // 退出登录，回到登录页面
+          router.push('/user/login');
+        },
+      });
+    }
+    if (key === 'userinfo') {
+      router.push('/account')
+    }
   };
 
   user = (key) => {
-    const currentUser = this.props.currentUser.data;
+    const { currentUser } = this.props;
+    console.log('777777777', this.props)
     const menu = (
       <Menu className={styles.menu} selectedKeys={[]} onClick={this.onMenuClick}>
         <Menu.Item key="userinfo">
@@ -206,8 +225,6 @@ class BasicLayout extends Component {
     );
   }
 }
-
-BasicLayout.propTypes = {};
 
 export default connect(({ global, list, loading }) => ({
   currentUser: global.currentUser,

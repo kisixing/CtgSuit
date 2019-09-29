@@ -37,8 +37,10 @@ ipcMain.on('newWindow', (event) => {
 
 ipcMain.on('closeMainWindow', (event) => {
   mainWindow = null;
-  // app.quit();
+  // 所有的窗口会被立刻关闭，不会询问用户。
   app.exit();
+  // 试图关掉所有的窗口。before-quit 事件将会最先被触发。如果所有的窗口都被成功关闭了， will-quit 事件将会被触发，默认下应用将会被关闭。
+  // app.quit();
 })
 
 function createWindow() {
@@ -66,7 +68,7 @@ function createWindow() {
   mainWindow.loadURL(getMainPath());
 
   // Open the DevTools.打开开发者工具
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 
   // 默认最大化
   mainWindow.maximize();
