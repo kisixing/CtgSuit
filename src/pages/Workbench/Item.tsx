@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import L from '@lianmed/lmg';
 import { Card, Col, Button } from 'antd';
 import { connect } from 'react-redux';
+import { mapStatusToColor } from '@/constant';
 const Home = props => {
-  const { index, name, age, id, itemHeight, outPadding, itemSpan, dispatch } = props;
+  const { index, name, age, itemHeight, outPadding, itemSpan, status } = props;
   const [showSetting, setShowSetting] = useState(false);
 
   return (
@@ -52,7 +53,7 @@ const Home = props => {
       <Card
         title={
           <div>
-            【{index}】姓名：
+            【{index + 1}】姓名：
             <span style={{ color: '#000' }}>{name}</span>
             <span style={{ margin: '0 10px' }} />
             年龄：
@@ -60,14 +61,14 @@ const Home = props => {
           </div>
         }
         size="small"
-        headStyle={{ background: 'pink', color: '#888' }}
+        headStyle={{ background: mapStatusToColor[status], color: '#888' }}
         style={{
           border: '1px solid #aaa',
           overflow: 'hidden',
           display: 'flex',
           flexDirection: 'column',
         }}
-        extra={<Button icon="close" size="small" type="link"></Button>}
+        extra={<Button style={{ color: '#fff' }} icon="close" size="small" type="link"></Button>}
         bodyStyle={{
           padding: 0,
           flex: 1,
