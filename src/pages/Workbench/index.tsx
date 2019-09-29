@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import L from '@lianmed/lmg';
-import { Card, Icon, Row, Col, Button } from 'antd';
+import { Row } from 'antd';
 import { connect } from 'react-redux';
 import './index.less';
 import Item from './Item';

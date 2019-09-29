@@ -1,13 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import L from '@lianmed/lmg';
 import { Card, Col, Button } from 'antd';
 import { connect } from 'react-redux';
+import { mapStatusToColor } from '@/constant';
 import Link from 'umi/link';
 
 const Home = props => {
-  const { index, name, age, id, itemHeight, outPadding, itemSpan, dispatch } = props;
+  const { index, name, age, itemHeight, outPadding, itemSpan, status } = props;
   const [showSetting, setShowSetting] = useState(false);
-
+  const floatPadding = outPadding + 10;
   return (
     <Col span={itemSpan} style={{ padding: outPadding, position: 'relative' }}>
       <div
@@ -17,11 +18,11 @@ const Home = props => {
           borderRadius: '2px',
           boxShadow: '#aaa 3px 3px 5px 1px',
           transition: 'all 0.2s ease-out',
-          width: showSetting ? `calc(100% - 60px)` : 0,
+          width: showSetting ? `calc(100% - ${2 * floatPadding + 40}px )` : 0,
           opacity: showSetting ? 1 : 0,
           position: 'absolute',
-          bottom: 12,
-          left: 12,
+          bottom: floatPadding,
+          left: floatPadding,
           zIndex: 10,
           height: 32,
         }}
@@ -31,14 +32,16 @@ const Home = props => {
         <Button icon="setting" type="link"></Button>
         <Button icon="setting" type="link"></Button>
         <Link to="">
-          <Button icon="user-add" type="link">建档</Button>
+          <Button icon="user-add" type="link">
+            建档
+          </Button>
         </Link>
       </div>
       <div
         style={{
           position: 'absolute',
-          bottom: 12,
-          right: 12,
+          bottom: floatPadding,
+          right: floatPadding,
           zIndex: 10,
         }}
       >
@@ -55,7 +58,7 @@ const Home = props => {
       <Card
         title={
           <div>
-            【{index}】姓名：
+            【{index + 1}】姓名：
             <span style={{ color: '#000' }}>{name}</span>
             <span style={{ margin: '0 10px' }} />
             年龄：
@@ -63,14 +66,14 @@ const Home = props => {
           </div>
         }
         size="small"
-        headStyle={{ background: 'pink', color: '#888' }}
+        headStyle={{ background: mapStatusToColor[status], color: '#888' }}
         style={{
           border: '1px solid #aaa',
           overflow: 'hidden',
           display: 'flex',
           flexDirection: 'column',
         }}
-        extra={<Button icon="close" size="small" type="link"></Button>}
+        extra={<Button style={{ color: '#fff' }} icon="close" size="small" type="link"></Button>}
         bodyStyle={{
           padding: 0,
           flex: 1,
