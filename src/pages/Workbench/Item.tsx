@@ -8,7 +8,7 @@ import Link from 'umi/link';
 const Home = props => {
   const { index, name, age, itemHeight, outPadding, itemSpan, status } = props;
   const [showSetting, setShowSetting] = useState(false);
-
+  const floatPadding = outPadding + 10;
   return (
     <Col span={itemSpan} style={{ padding: outPadding, position: 'relative' }}>
       <div
@@ -18,11 +18,11 @@ const Home = props => {
           borderRadius: '2px',
           boxShadow: '#aaa 3px 3px 5px 1px',
           transition: 'all 0.2s ease-out',
-          width: showSetting ? `calc(100% - 60px)` : 0,
+          width: showSetting ? `calc(100% - ${2 * floatPadding + 40}px )` : 0,
           opacity: showSetting ? 1 : 0,
           position: 'absolute',
-          bottom: 12,
-          left: 12,
+          bottom: floatPadding,
+          left: floatPadding,
           zIndex: 10,
           height: 32,
         }}
@@ -40,8 +40,8 @@ const Home = props => {
       <div
         style={{
           position: 'absolute',
-          bottom: 12,
-          right: 12,
+          bottom: floatPadding,
+          right: floatPadding,
           zIndex: 10,
         }}
       >
