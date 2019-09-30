@@ -28,6 +28,7 @@ class BasicLayout extends Component {
   }
 
   componentDidMount() {
+    this.props.dispatch({ type: 'list/getlist' });
     // send ipcMain
     ipcRenderer.send('clear-all-store', {
       name: 'clear all stroe!!!',
@@ -70,14 +71,14 @@ class BasicLayout extends Component {
     }
   };
 
-  onMenuClick = (e) => {
+  onMenuClick = e => {
     const { key } = e;
     this.setState({ current: key });
     console.log('onMenuClick', e);
   };
 
-  user = (key) => {
-    const currentUser = this.props.currentUser.data;
+  user = key => {
+    const currentUser = (this.props.currentUser && this.props.currentUser.data) || {};
     const menu = (
       <Menu className={styles.menu} selectedKeys={[]} onClick={this.onMenuClick}>
         <Menu.Item key="userinfo">
@@ -111,11 +112,11 @@ class BasicLayout extends Component {
     return (
       <Fragment>
         {[
-          ['档案管理', 'ordered-list'],
-          ['系统设置', 'setting'],
+          ['档案管理', 'ordered-list', '/Archives'],
+          ['系统设置', 'setting', '/setting'],
           ['操作说明', 'question-circle'],
           ['用户信息', 'user'],
-        ].map(([title, icon]) => {
+        ].map(([title, icon, path]) => {
           if (title === '用户信息') {
             return this.user(icon);
           }
@@ -126,7 +127,7 @@ class BasicLayout extends Component {
                 this.handleMenuClick(title);
               }}
               icon={icon}
-              type={this.state.current === title ? 'default' : 'primary'}
+              type={this.props.location.pathname === path ? 'default' : 'primary'}
             >
               {title}
             </Button>
@@ -141,7 +142,7 @@ class BasicLayout extends Component {
     return (
       <Layout className={styles.container}>
         <Header className={styles.header}>
-          <Link to="/" className={styles.logo}>
+          <Link to="/workbench" className={styles.logo}>
             <img alt="logo" src={logo} />
             <h1>胎监工作站</h1>
           </Link>
@@ -168,6 +169,7 @@ class BasicLayout extends Component {
                       type={mapStatusToType[status]}
                       onClick={() => {
                         dispatch({ type: 'list/setPageItems', page: pageIndex });
+                        router.push('/workbench');
                       }}
                     >
                       {index + 1}
