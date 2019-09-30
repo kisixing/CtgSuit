@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import { Card, Col, Button } from 'antd';
 import { connect } from 'dva';
 import Link from 'umi/link';
@@ -16,6 +17,8 @@ class WorkbenchItem extends Component {
       showSetting: false,
       visible: false,
     };
+    this.ref = React.createRef();
+    this.isFull = false;
   }
 
   toggleTool = () => {
@@ -56,8 +59,25 @@ class WorkbenchItem extends Component {
   renderExtra = data => {
     return (
       <div className={styles.extra}>
-        <Button title="关闭" icon="close" size="small" type="link"></Button>
-        <Button title="全屏展示" icon="fullscreen" size="small" type="link"></Button>
+        {/* <Button title="关闭" icon="close" size="small" type="link"></Button> */}
+        <Button
+          title="全屏展示"
+          icon="fullscreen"
+          size="small"
+          type="link"
+          onClick={() => {
+            const el = ReactDOM.findDOMNode(this.ref.current);
+            if (this.isFull) {
+              document.body.requestFullscreen().then(() => {
+                this.isFull = false;
+              });
+            } else {
+              el.requestFullscreen().then(() => {
+                this.isFull = true;
+              });
+            }
+          }}
+        ></Button>
       </div>
     );
   };
@@ -84,7 +104,7 @@ class WorkbenchItem extends Component {
     const { showSetting, visible } = this.state;
 
     return (
-      <Col span={itemSpan} className={styles.col}>
+      <Col span={itemSpan} className={styles.col} ref={this.ref}>
         <div className={cx(styles.toolbar, { [styles.show]: showSetting })}>
           <Button icon="user-add" type="link" onClick={this.showModal}>
             建档

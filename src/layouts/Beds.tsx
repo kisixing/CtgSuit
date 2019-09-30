@@ -7,8 +7,9 @@
 import React from 'react';
 import { Button } from 'antd';
 import { router } from 'umi';
-
+import { remote } from 'electron';
 import { mapStatusToColor } from '@/constant';
+const { dialog } = remote;
 function Beds({ dispatch, listData }) {
   return (
     <div
@@ -41,6 +42,23 @@ function Beds({ dispatch, listData }) {
             onClick={() => {
               dispatch({ type: 'list/setPageItems', page: pageIndex });
               router.replace('/workbench');
+            }}
+            onDoubleClick={e => {
+              dialog.showMessageBox(
+                {
+                  type: 'info',
+                  title: '提示信息',
+                  message: '确定关闭应用？',
+                  buttons: ['cancel', 'ok'],
+                },
+                function(index) {
+                  if (index === 0) {
+                    // cancel
+                    e.preventDefault();
+                  } else {
+                  }
+                },
+              );
             }}
           >
             {index + 1}
