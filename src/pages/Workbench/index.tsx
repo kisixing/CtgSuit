@@ -8,9 +8,6 @@ const Home = props => {
   const wrap = useRef(null);
 
   const [wrapRec, setWrapRec] = useState({ height: 0, width: 0 });
-  useEffect(() => {
-    dispatch({ type: 'list/getlist' });
-  }, []);
 
   useEffect(() => {
     const [rec] = wrap.current.getClientRects();
