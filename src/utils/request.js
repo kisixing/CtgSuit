@@ -4,6 +4,8 @@
  */
 import { extend } from 'umi-request';
 import { notification } from 'antd';
+import store from 'store';
+import { TOKEN } from '@/utils/constant';
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -27,7 +29,7 @@ const codeMessage = {
  * 异常处理程序
  */
 const errorHandler = (error) => {
-  const { response } = error;
+  const { response = {} } = error;
   if (response && response.status) {
     const errorText = codeMessage[response.status] || response.statusText;
     const { status, url } = response;
@@ -43,8 +45,22 @@ const errorHandler = (error) => {
  * 配置request请求时的默认参数
  */
 const request = extend({
+  timeout: '5000',
   errorHandler, // 默认错误处理
   credentials: 'include', // 默认请求是否带上cookie
+  headers: {
+    Accept: 'application/json',
+  },
+});
+
+// request拦截器, 改变url 或 options.
+request.interceptors.request.use((url, options) => {
+  options.headers = {
+    ...options.headers,
+    Authorization: store.get(TOKEN),
+  };
+  return ({ url, options }
+  );
 });
 
 

@@ -2,7 +2,7 @@ import { routerRedux } from 'dva/router';
 import { parse } from 'qs';
 import store from 'store';
 import { TOKEN } from '@/utils/constant';
-import { login } from '@/services/api';
+import { login, authenticate } from '@/services/api';
 
 export default {
   namespace: 'login',
@@ -15,7 +15,7 @@ export default {
   subscriptions: {},
   effects: {
     *login({ payload }, { put, call, select }) {
-      const data = yield call(login, payload);
+      const data = yield call(authenticate, payload);
 
       if (data.status === 'success') {
         // 登录验证成功
@@ -29,7 +29,7 @@ export default {
           type: 'global/updateState',
           payload: {
             isLogin: true,
-            currentUser: data.data,
+            // currentUser: data.data,
           },
         });
         store.set(TOKEN, data['Access-Token']);

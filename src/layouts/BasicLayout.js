@@ -5,7 +5,7 @@
  */
 
 import React, { Component, Fragment } from 'react';
-import { Layout, Menu, Icon, Button, Modal, Avatar } from 'antd';
+import { Layout, Menu, Icon, Button, Modal, Avatar, Spin } from 'antd';
 import { connect } from 'dva';
 import router from 'umi/router';
 import Link from 'umi/link';
@@ -95,8 +95,8 @@ class BasicLayout extends Component {
   };
 
   user = (key) => {
-    const { currentUser } = this.props;
-    console.log('777777777', this.props)
+    const { account, loading } = this.props;
+    const info = account.data || {};
     const menu = (
       <Menu className={styles.menu} selectedKeys={[]} onClick={this.onMenuClick}>
         <Menu.Item key="userinfo">
@@ -115,14 +115,16 @@ class BasicLayout extends Component {
       </Menu>
     );
     return (
-      <HeaderDropdown overlay={menu} key={key}>
-        <span className={`${styles.action} ${styles.account}`}>
-          <Avatar size="small" className={styles.avatar} src={currentUser.avatar} alt="avatar">
-            {currentUser.name}
-          </Avatar>
-          <span className={styles.name}>{currentUser.name}</span>
-        </span>
-      </HeaderDropdown>
+      <Spin wrapperClassName={styles.loading} spinning={loading.effects['global/fetchAccount']}>
+        <HeaderDropdown overlay={menu} key={key}>
+          <span className={`${styles.action} ${styles.account}`}>
+            <Avatar size="small" className={styles.avatar} src={info.avatar} alt="avatar">
+              {info.name}
+            </Avatar>
+            <span className={styles.name}>{info.name}</span>
+          </span>
+        </HeaderDropdown>
+      </Spin>
     );
   };
 
@@ -227,7 +229,8 @@ class BasicLayout extends Component {
 }
 
 export default connect(({ global, list, loading }) => ({
-  currentUser: global.currentUser,
+  loading: loading,
+  account: global.account,
   pageData: list.pageData,
   page: list.page,
   listData: list.listData,
