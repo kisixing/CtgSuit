@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import L from '@lianmed/lmg';
-import { Card, Col, Button } from 'antd';
+import { Card, Col, Button, Tag } from 'antd';
 import { connect } from 'react-redux';
 import { mapStatusToColor, mapStatusToText } from '@/constant';
 import Link from 'umi/link';
@@ -72,14 +72,7 @@ const Home = props => {
           display: 'flex',
           flexDirection: 'column',
         }}
-        extra={
-          <Button
-            size="small"
-            style={{ background: mapStatusToColor[status], color: '#fff', border: 0 }}
-          >
-            {mapStatusToText[status]}
-          </Button>
-        }
+        extra={<Tag color={mapStatusToColor[status]}>{mapStatusToText[status]}</Tag>}
         bodyStyle={{
           padding: 0,
           flex: 1,
