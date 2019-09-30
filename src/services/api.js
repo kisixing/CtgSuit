@@ -13,13 +13,34 @@ export async function login(params) {
   });
 }
 
+/**
+ * 账户验证登录
+ * @param {object} params {username, password}
+ */
 export async function authenticate(params) {
-  return request('api/authenticate', {
+  return request('/api/v1/authenticate', {
     method: 'POST',
     data: params
   });
 }
 
+/**
+ * 获取账户信息
+ */
 export async function getAccount() {
   return request('/api/account');
+}
+
+/**
+ *
+ * 孕妇建档、绑定床号
+ * @export
+ * @param {*} params
+ * @returns
+ */
+export async function newPregnancies(params) {
+  return request('/api/v1/pregnancies', {
+    method: 'POST',
+    data: params,
+  });
 }

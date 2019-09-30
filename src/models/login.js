@@ -16,8 +16,9 @@ export default {
   effects: {
     *login({ payload }, { put, call, select }) {
       const data = yield call(authenticate, payload);
+      const auth = data.id_token ? true : false;
 
-      if (data.status === 'success') {
+      if (auth) {
         // 登录验证成功
         yield put({
           type: 'updateState',
@@ -32,7 +33,7 @@ export default {
             // currentUser: data.data,
           },
         });
-        store.set(TOKEN, data['Access-Token']);
+        store.set(TOKEN, `Bearer ${data.id_token}`);
         const urlParams = new URL(window.location.href);
         const params = parse(window.location.href.split('?')[1]);
         let { redirect } = params;

@@ -40,10 +40,15 @@ export default {
     ],
   ],
   proxy: {
-    '/api': {
-      target: 'http://127.0.0.1:1702/api/',
+    // '/api': {
+    //   target: 'http://127.0.0.1:1702/',
+    //   changeOrigin: true,
+    //   pathRewrite: { '^/api': '' },
+    // },
+    '/api/v1': {
+      target: 'http://192.168.0.183:9986/api/',
       changeOrigin: true,
-      pathRewrite: { '^/api': '' },
+      pathRewrite: { '^/api/v1': '' },
     },
   },
   outputPath: './app/render', // 更改输出目录

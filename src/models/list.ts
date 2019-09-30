@@ -1,4 +1,12 @@
 // import { getList } from '@/services/list.js';
+import { message } from 'antd';
+import { newPregnancies } from '@/services/api';
+
+message.config({
+  top: 150,
+  duration: 2,
+});
+
 export default {
   namespace: 'list',
   state: {
@@ -74,6 +82,17 @@ export default {
 
       yield put({ type: 'setState', payload: { pageItems, page } });
     },
+    // 建档
+    *createPregnancies({ payload }, { call, put }) {
+      const res = yield call(newPregnancies, payload);
+      if (res && res.id) {
+        message.success('创建成功！')
+      }
+      yield put({
+        type: 'setState',
+        payload: {}
+      })
+    }
   },
   reducers: {
     setState(state, { payload }) {

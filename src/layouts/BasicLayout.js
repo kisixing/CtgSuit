@@ -65,6 +65,7 @@ class BasicLayout extends Component {
     if (key === 'logout') {
       // 退出系统，但不注销登录信息，再次登录直接进入主页
       Modal.confirm({
+        centered: true,
         title: '警告',
         content: '确认退出系统？',
         okText: '确认',
@@ -80,6 +81,7 @@ class BasicLayout extends Component {
     if (key === 'signout') {
       // 注销登录信息，跳转到登录界面。下次打开应用回到登录界面
       Modal.confirm({
+        centered: true,
         title: '警告',
         content: '确认退出登录？',
         okText: '确认',

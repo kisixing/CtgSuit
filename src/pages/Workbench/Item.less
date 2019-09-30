@@ -1,0 +1,64 @@
+@import '../../utils/utils.less';
+
+@float-padding: 12px;
+
+.col {
+  position: relative;
+  margin-bottom: 24px;
+
+  .toolbar {
+    position: absolute;
+    bottom: @float-padding;
+    right: 3 * @float-padding + 32px;
+    z-index: 9;
+    height: 32px;
+    width: 0;
+    background: #fff;
+    overflow: hidden;
+    border-radius: 3px;
+    box-shadow: #aaa 3px 3px 5px 1px;
+    opacity: 0;
+    transition: all 0.2s ease-out;
+
+    button {
+      padding-left: 8px;
+      padding-right: 8px;
+
+      span {
+        margin-left: 2px;
+      }
+    }
+  }
+
+  .show {
+    width: calc(100% - (4 * @float-padding + 32px));
+    opacity: 1;
+  }
+
+  .actionButton {
+    position: absolute;
+    bottom: @float-padding;
+    right: 2 * @float-padding;
+    z-index: 99,
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid #ddd;
+
+    .extra {
+
+      button {
+        margin-left: 8px;
+      }
+    }
+
+    .title {
+      span {
+        margin-right: 12px;
+      }
+    }
+  }
+}
