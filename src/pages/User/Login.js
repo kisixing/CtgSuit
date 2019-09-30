@@ -17,6 +17,11 @@ const FormItem = Form.Item;
 }))
 @Form.create()
 class Login extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
   handleSubmit = e => {
     e.preventDefault();
     const { dispatch, form } = this.props;
@@ -52,6 +57,7 @@ class Login extends PureComponent {
                 initialValue: 'admin',
               })(
                 <Input
+                  autoFocus
                   placeholder="用户名"
                   prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
                   onPressEnter={this.handleSubmit}

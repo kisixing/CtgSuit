@@ -1,40 +1,24 @@
 import store from 'store';
 import { TOKEN } from '@/utils/constant';
+import { getAccount } from '@/services/api';
 
 export default {
   namespace: 'global',
   state: {
     isLogin: store.get(TOKEN),
     layout: [1, 2], // 一行一列 一行两列
-    onWorks: [
-      {
-        id: '788787_edeed',
-        name: '设备001',
-        status: '',
-      },
-      {
-        id: '788787_edeea',
-        name: '设备001',
-        status: '',
-      },
-      {
-        id: '788787_edeeb',
-        name: '设备001',
-        status: '',
-      },
-      {
-        id: '788787_edeec',
-        name: '设备001',
-        status: '',
-      },
-      {
-        id: '788787_edeee',
-        name: '设备001',
-        status: '',
-      },
-    ], // 在状态的子机数量
+    account: {},
   },
   effects: {
+    *fetchAccount({ payload }, { call, put }) {
+      const res = yield call(getAccount);
+      yield put({
+        type: 'updateState',
+        payload: {
+          account: res
+        }
+      })
+    },
     *changeLayout({ payload }, { put, call }) {
       yield put({
         type: 'updateState',

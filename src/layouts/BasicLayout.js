@@ -5,7 +5,7 @@
  */
 
 import React, { Component, Fragment } from 'react';
-import { Layout, Menu, Icon, Button, Modal, Avatar } from 'antd';
+import { Layout, Menu, Icon, Button, Modal, Avatar, Spin } from 'antd';
 import { connect } from 'dva';
 import router from 'umi/router';
 import Link from 'umi/link';
@@ -28,12 +28,18 @@ class BasicLayout extends Component {
   }
 
   componentDidMount() {
-    this.props.dispatch({ type: 'list/getlist' });
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'global/fetchAccount',
+    });
+    dispatch({
+      type: 'list/getlist'
+    });
     // send ipcMain
     ipcRenderer.send('clear-all-store', {
       name: 'clear all stroe!!!',
       age: '18',
-      clearAll: store.clearAll(),
+      clearAll: () => store.clearAll(),
     });
   }
 
@@ -51,34 +57,50 @@ class BasicLayout extends Component {
     if (key === '系统设置') {
       router.push('/setting');
     }
-    if (key === '退出系统') {
-      // store.clearAll();
-      ipcRenderer.send('closeMainWindow');
-      // Modal.confirm({
-      //   title: '警告',
-      //   content: '确认退出系统？',
-      //   okText: '确认',
-      //   cancelText: '取消',
-      //   onOk: function() {
-      //     // 清除sessionStorage
-      //     store.clearAll();
-      //     // 退出登录，返回到登录界面
-      //     // router.push('./user/login');
-      //     // 退出登录，关闭应用
-      //     ipcRenderer.send('closeMainWindow');
-      //   },
-      // });
-    }
   };
 
   onMenuClick = e => {
     const { key } = e;
     this.setState({ current: key });
-    console.log('onMenuClick', e);
+    if (key === 'logout') {
+      // 退出系统，但不注销登录信息，再次登录直接进入主页
+      Modal.confirm({
+        title: '警告',
+        content: '确认退出系统？',
+        okText: '确认',
+        cancelText: '取消',
+        onOk: function() {
+          // 清除sessionStorage
+          // store.clearAll();
+          // 退出登录，关闭应用
+          ipcRenderer.send('closeMainWindow');
+        },
+      });
+    }
+    if (key === 'signout') {
+      // 注销登录信息，跳转到登录界面。下次打开应用回到登录界面
+      Modal.confirm({
+        title: '警告',
+        content: '确认退出登录？',
+        okText: '确认',
+        cancelText: '取消',
+        onOk: function() {
+          // 清除sessionStorage
+          store.clearAll();
+          // 退出登录，回到登录页面
+          router.push('/user/login');
+        },
+      });
+    }
+    if (key === 'userinfo') {
+      router.push('/account')
+    }
   };
 
   user = key => {
-    const currentUser = (this.props.currentUser && this.props.currentUser.data) || {};
+    const { account, loading } = this.props;
+    const info = account.data || {};
+
     const menu = (
       <Menu className={styles.menu} selectedKeys={[]} onClick={this.onMenuClick}>
         <Menu.Item key="userinfo">
@@ -97,14 +119,16 @@ class BasicLayout extends Component {
       </Menu>
     );
     return (
-      <HeaderDropdown overlay={menu} key={key}>
-        <span className={`${styles.action} ${styles.account}`}>
-          <Avatar size="small" className={styles.avatar} src={currentUser.avatar} alt="avatar">
-            {currentUser.name}
-          </Avatar>
-          <span className={styles.name}>{currentUser.name}</span>
-        </span>
-      </HeaderDropdown>
+      <Spin wrapperClassName={styles.loading} spinning={loading.effects['global/fetchAccount']}>
+        <HeaderDropdown overlay={menu} key={key}>
+          <span className={`${styles.action} ${styles.account}`}>
+            <Avatar size="small" className={styles.avatar} src={info.avatar} alt="avatar">
+              {info.name}
+            </Avatar>
+            <span className={styles.name}>{info.name}</span>
+          </span>
+        </HeaderDropdown>
+      </Spin>
     );
   };
 
@@ -209,10 +233,9 @@ class BasicLayout extends Component {
   }
 }
 
-BasicLayout.propTypes = {};
-
 export default connect(({ global, list, loading }) => ({
-  currentUser: global.currentUser,
+  loading: loading,
+  account: global.account,
   pageData: list.pageData,
   page: list.page,
   listData: list.listData,

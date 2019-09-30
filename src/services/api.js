@@ -12,3 +12,14 @@ export async function login(params) {
     },
   });
 }
+
+export async function authenticate(params) {
+  return request('api/authenticate', {
+    method: 'POST',
+    data: params
+  });
+}
+
+export async function getAccount() {
+  return request('/api/account');
+}
