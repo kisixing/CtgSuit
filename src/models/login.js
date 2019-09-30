@@ -11,8 +11,8 @@ export default {
       status: '',
       desc: '',
       currentUser: {
-        data: {}
-      }
+        data: {},
+      },
     },
   },
   subscriptions: {},

@@ -12,7 +12,7 @@ export default {
       //   const res = yield call(getList, { name: 'zsd', age: '14' });
       //   console.log('res', res);
 
-      const rawData = Array(40)
+      const rawData = Array(49)
         .fill('')
         .map((_, index) => {
           let id = Math.random()
@@ -52,10 +52,11 @@ export default {
       const listLen = listData.length;
 
       const pageItemsCount: number = listLayout[0] * listLayout[1];
-      const pageCount: number = Math.round(listLen / pageItemsCount);
+      const pageCount: number = Math.ceil(listLen / pageItemsCount);
       const pageData = new Array(pageCount).fill(0).map((_, index) => {
-        if (index === pageCount) {
-          return [1 + index * pageItemsCount, listLen];
+        if (index === pageCount - 1) {
+          const lastLeft = 1 + index * pageItemsCount;
+          return [lastLeft, listLen];
         }
         return [1 + index * pageItemsCount, (index + 1) * pageItemsCount];
       });

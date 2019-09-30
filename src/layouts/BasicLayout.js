@@ -169,7 +169,7 @@ class BasicLayout extends Component {
                       type={mapStatusToType[status]}
                       onClick={() => {
                         dispatch({ type: 'list/setPageItems', page: pageIndex });
-                        router.push('/workbench');
+                        router.replace('/workbench');
                       }}
                     >
                       {index + 1}
@@ -191,7 +191,7 @@ class BasicLayout extends Component {
                     size="small"
                     type={page === index ? 'default' : 'primary'}
                   >
-                    {left}~{rigth}
+                    {left === rigth ? left : `${left}~${rigth}`}
                   </Button>
                 );
               })}

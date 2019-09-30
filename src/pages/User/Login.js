@@ -49,6 +49,7 @@ class Login extends PureComponent {
                     message: '请输入用户名！',
                   },
                 ],
+                initialValue: 'admin',
               })(
                 <Input
                   placeholder="用户名"
@@ -65,6 +66,7 @@ class Login extends PureComponent {
                     message: '请输入用户密码！',
                   },
                 ],
+                initialValue: '123456',
               })(
                 <Input
                   type="password"

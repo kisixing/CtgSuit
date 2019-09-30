@@ -3,10 +3,7 @@ import { connect } from 'dva';
 import Redirect from 'umi/redirect';
 import Loader from '@/components/PageLoading';
 
-const AuthComponent = ({
-  children,
-  isLogin,
-}) => {
+const AuthComponent = ({ children, isLogin }) => {
   return (
     <Fragment>
       {isLogin ? null : <Loader />}
