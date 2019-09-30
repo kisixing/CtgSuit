@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import L from '@lianmed/lmg';
 import { Card, Col, Button } from 'antd';
 import { connect } from 'react-redux';
-import { mapStatusToColor } from '@/constant';
+import { mapStatusToColor, mapStatusToText } from '@/constant';
 import Link from 'umi/link';
 
 const Home = props => {
@@ -66,14 +66,20 @@ const Home = props => {
           </div>
         }
         size="small"
-        headStyle={{ background: mapStatusToColor[status], color: '#888' }}
+        headStyle={{ background: '#fff', color: '#888' }}
         style={{
-          border: '1px solid #aaa',
           overflow: 'hidden',
           display: 'flex',
           flexDirection: 'column',
         }}
-        extra={<Button style={{ color: '#fff' }} icon="close" size="small" type="link"></Button>}
+        extra={
+          <Button
+            size="small"
+            style={{ background: mapStatusToColor[status], color: '#fff', border: 0 }}
+          >
+            {mapStatusToText[status]}
+          </Button>
+        }
         bodyStyle={{
           padding: 0,
           flex: 1,
