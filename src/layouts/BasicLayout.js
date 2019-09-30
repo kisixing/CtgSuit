@@ -7,16 +7,17 @@
 import React, { Component, Fragment } from 'react';
 import { Layout, Menu, Icon, Button, Modal, Avatar, Spin } from 'antd';
 import { connect } from 'dva';
-import router from 'umi/router';
+import { router } from 'umi';
 import Link from 'umi/link';
 import store from 'store';
 import { ipcRenderer } from 'electron';
 import HeaderDropdown from '@/components/HeaderDropdown';
 
 import config from '@/utils/config';
-import logo from '../assets/logo.png';
+// import logo from '../assets/logo.png';
 import styles from './BasicLayout.less';
-
+import Beds from './Beds';
+import Tabs from './Tabs';
 const { Header, Footer, Content } = Layout;
 
 class BasicLayout extends Component {
@@ -33,7 +34,7 @@ class BasicLayout extends Component {
       type: 'global/fetchAccount',
     });
     dispatch({
-      type: 'list/getlist'
+      type: 'list/getlist',
     });
     // send ipcMain
     ipcRenderer.send('clear-all-store', {
@@ -95,7 +96,7 @@ class BasicLayout extends Component {
       });
     }
     if (key === 'userinfo') {
-      router.push('/account')
+      router.push('/account');
     }
   };
 
@@ -121,7 +122,11 @@ class BasicLayout extends Component {
       </Menu>
     );
     return (
-      <Spin wrapperClassName={styles.loading} spinning={loading.effects['global/fetchAccount']}>
+      <Spin
+        wrapperClassName={styles.loading}
+        spinning={loading.effects['global/fetchAccount']}
+        key={key}
+      >
         <HeaderDropdown overlay={menu} key={key}>
           <span className={`${styles.action} ${styles.account}`}>
             <Avatar size="small" className={styles.avatar} src={info.avatar} alt="avatar">
@@ -164,64 +169,21 @@ class BasicLayout extends Component {
   };
 
   render() {
-    const { children, pageData, page, dispatch, listData } = this.props;
+    const { children } = this.props;
     return (
       <Layout className={styles.container}>
         <Header className={styles.header}>
           <Link to="/workbench" className={styles.logo}>
-            <img alt="logo" src={logo} />
+            {/* <img alt="logo" src={logo} /> */}
             <h1>胎监工作站</h1>
           </Link>
 
           <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
             <div style={{ display: 'flex', flex: 1, overflow: 'hidden', margin: '6px' }}>
-              <div className={styles.devices}>
-                {listData.map(({ index, id, pageIndex, status }) => {
-                  const mapStatusToType = ['danger', 'default', 'primary'];
-                  return (
-                    <Button
-                      key={id}
-                      size="small"
-                      style={{
-                        marginLeft: 4,
-                        marginTop: 4,
-                        padding: 0,
-                        width: 24,
-                        height: 24,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                      type={mapStatusToType[status]}
-                      onClick={() => {
-                        dispatch({ type: 'list/setPageItems', page: pageIndex });
-                        router.push('/workbench');
-                      }}
-                    >
-                      {index + 1}
-                    </Button>
-                  );
-                })}
-              </div>
+              <Beds {...this.props} />
               <div className={styles.actionBar}>{this.menus()}</div>
             </div>
-            <div style={{ display: 'flex', lineHeight: '24px' }}>
-              {pageData.map(([left, rigth], index) => {
-                return (
-                  <Button
-                    key={Math.random()}
-                    onClick={e => {
-                      dispatch({ type: 'list/setPageItems', page: index });
-                    }}
-                    style={{ margin: '4px' }}
-                    size="small"
-                    type={page === index ? 'default' : 'primary'}
-                  >
-                    {left}~{rigth}
-                  </Button>
-                );
-              })}
-            </div>
+            <Tabs {...this.props} />
           </div>
         </Header>
         <Content className={styles.main}>{children}</Content>

@@ -5,7 +5,12 @@ export enum EStatus {
 }
 const { Offline, Online, Working } = EStatus;
 export const mapStatusToColor = {
-  [Offline]: '#ff4d4f',
-  [Online]: '#ccc',
-  [Working]: '#5c6bc0',
+  [Offline]: '#f4511e',
+  [Online]: '#bdbdbd ',
+  [Working]: '#43a047',
+};
+export const mapStatusToText = {
+  [Offline]: '离线',
+  [Online]: '未工作',
+  [Working]: '工作中',
 };
