@@ -16,9 +16,9 @@ class WorkbenchItem extends Component {
     this.state = {
       showSetting: false,
       visible: false,
+      isFull: false,
     };
     this.ref = React.createRef();
-    this.isFull = false;
   }
 
   toggleTool = () => {
@@ -57,6 +57,7 @@ class WorkbenchItem extends Component {
   };
 
   renderExtra = data => {
+    const { state } = this;
     return (
       <div className={styles.extra}>
         {/* <Button title="关闭" icon="close" size="small" type="link"></Button> */}
@@ -67,13 +68,14 @@ class WorkbenchItem extends Component {
           type="link"
           onClick={() => {
             const el = ReactDOM.findDOMNode(this.ref.current);
-            if (this.isFull) {
-              document.body.requestFullscreen().then(() => {
-                this.isFull = false;
+
+            if (state.isFull) {
+              document.exitFullscreen().then(() => {
+                this.setState({ isFull: false });
               });
             } else {
               el.requestFullscreen().then(() => {
-                this.isFull = true;
+                this.setState({ isFull: true });
               });
             }
           }}
@@ -156,11 +158,10 @@ class WorkbenchItem extends Component {
           headStyle={{ background: mapStatusToColor[status] }}
           className={styles.card}
           extra={this.renderExtra()}
-          bodyStyle={{
-            padding: 0,
-            flex: 1,
-            height: this.isFull ? '100%' : itemHeight,
+          style={{
+            height: this.state.isFull ? '100%' : itemHeight,
           }}
+          bodyStyle={{ padding: 0, flex: 1 }}
         >
           <L data={null}></L>
         </Card>
