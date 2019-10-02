@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { Card, Col, Button } from 'antd';
+import { Card, Col, Button, Tag } from 'antd';
 import { connect } from 'dva';
 import Link from 'umi/link';
 import cx from 'classnames';
 
 import L from '@lianmed/lmg';
 import CollectionCreateForm from './CollectionCreateForm';
-import { mapStatusToColor } from '@/constant';
+import { mapStatusToColor, mapStatusToText } from '@/constant';
 import styles from './Item.less';
 
 class WorkbenchItem extends Component {
@@ -56,11 +56,12 @@ class WorkbenchItem extends Component {
     });
   };
 
-  renderExtra = data => {
+  renderExtra = status => {
     const { state } = this;
     return (
       <div className={styles.extra}>
         {/* <Button title="关闭" icon="close" size="small" type="link"></Button> */}
+        <Tag color={mapStatusToColor[status]}>{mapStatusToText[status]}</Tag>
         <Button
           title="全屏展示"
           icon="fullscreen"
@@ -87,7 +88,6 @@ class WorkbenchItem extends Component {
   renderTilte = (index, name, age) => {
     return (
       <div className={styles.title}>
-        <span>【{index + 1}】</span>
         床号：
         <span>{index + 1}</span>
         住院号：
@@ -155,9 +155,9 @@ class WorkbenchItem extends Component {
           hoverable
           title={this.renderTilte(index, name, age)}
           size="small"
-          headStyle={{ background: mapStatusToColor[status] }}
+          // headStyle={{ background: mapStatusToColor[status] }}
           className={styles.card}
-          extra={this.renderExtra()}
+          extra={this.renderExtra(status)}
           style={{
             height: this.state.isFull ? '100%' : itemHeight,
           }}
