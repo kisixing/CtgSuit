@@ -8,8 +8,9 @@
   background: #eee;
   .toolbar {
     position: absolute;
-    bottom: @float-padding;
-    right: 3 * @float-padding + 32px;
+    left: 2 * @float-padding;
+    bottom: 2 * @float-padding;
+    // right: 3 * @float-padding + 60px;
     z-index: 9;
     height: 32px;
     width: 0;
@@ -31,13 +32,13 @@
   }
 
   .show {
-    width: calc(100% - (4 * @float-padding + 32px));
+    width: calc(100% - (4 * @float-padding + 36px));
     opacity: 1;
   }
 
   .actionButton {
     position: absolute;
-    bottom: @float-padding;
+    bottom: 2 * @float-padding;
     right: 2 * @float-padding;
     z-index: 99;
   }

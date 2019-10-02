@@ -161,7 +161,7 @@ class WorkbenchItem extends Component {
           style={{
             height: this.state.isFull ? '100%' : itemHeight,
           }}
-          bodyStyle={{ padding: 0, flex: 1 }}
+          bodyStyle={{ padding: 0, height: '100%' }}
         >
           <L data={null}></L>
         </Card>
