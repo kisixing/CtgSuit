@@ -8,6 +8,7 @@ import React, { Component } from 'react';
 import { Layout, Modal, Row, Col } from 'antd';
 import L from '@lianmed/lmg';
 import ScoringMethod from './ScoringMethod';
+import Setting from './Setting';
 
 import styles from './index.less';
 
@@ -33,12 +34,12 @@ class Analysis extends Component {
             <L data={null}></L>
           </div>
           <div className={styles.content}>
-            <Row>
+            <Row gutter={24}>
               <Col span={12}>
                 <ScoringMethod />
               </Col>
               <Col span={12}>
-                {/* <Result /> */}
+                <Setting />
               </Col>
             </Row>
           </div>

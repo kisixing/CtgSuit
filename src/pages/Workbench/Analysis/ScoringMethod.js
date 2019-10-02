@@ -38,7 +38,7 @@ class ScoringMethod extends Component {
       wrapperCol: { span: 16 },
     };
     return (
-      <div>
+      <div className={styles.wrapper}>
         <div className={styles.tabs}>
           <div className={styles.radioBar}>
             <Radio.Group onChange={this.onChange} value={this.state.value}>
@@ -95,9 +95,11 @@ class ScoringMethod extends Component {
         <div className={styles.result}>
           <div>
             电脑评分：
-            <span>CTG = {"6"}</span>
+            <span>CTG = {'6'}</span>
           </div>
-          <div className={styles.tip}><Button disabled>注意：电脑自动分析数据和结果仅供参考</Button></div>
+          <div className={styles.tip}>
+            <Button disabled>注意：电脑自动分析数据和结果仅供参考</Button>
+          </div>
         </div>
       </div>
     );
