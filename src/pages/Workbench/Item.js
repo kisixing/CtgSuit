@@ -100,11 +100,11 @@ class WorkbenchItem extends Component {
   };
 
   render() {
-    const { index, name, age, itemHeight, itemSpan, status, dataSource } = this.props;
+    const { index, name, age, itemHeight, itemSpan, status, dataSource, outPadding } = this.props;
     const { showSetting, visible } = this.state;
 
     return (
-      <Col span={itemSpan} className={styles.col} ref={this.ref}>
+      <Col span={itemSpan} className={styles.col} ref={this.ref} style={{ padding: outPadding }}>
         <div className={cx(styles.toolbar, { [styles.show]: showSetting })}>
           <Button icon="user-add" type="link" onClick={this.showModal}>
             建档
@@ -159,7 +159,7 @@ class WorkbenchItem extends Component {
           bodyStyle={{
             padding: 0,
             flex: 1,
-            height: itemHeight,
+            height: this.isFull ? '100%' : itemHeight,
           }}
         >
           <L data={null}></L>

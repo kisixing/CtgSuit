@@ -17,10 +17,10 @@ const Home = props => {
   const itemSpan = 24 / listLayout[0];
   const outPadding = 12;
   const itemHeight =
-    (wrapRec.height - outPadding * 2) / listLayout[1] - outPadding * 2 - 2 - 37 * 1;
+    (wrapRec.height - outPadding * 2) / listLayout[1] - outPadding * 2 - 4 - 37 * 1;
   return (
     <div style={{ height: '100%', overflow: 'hidden' }} ref={wrap}>
-      <Row style={{ padding: 2 * outPadding }} gutter={24}>
+      <Row style={{ padding: outPadding }}>
         {pageItems.map(item => {
           return (
             <Item
