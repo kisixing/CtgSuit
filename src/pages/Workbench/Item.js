@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { Card, Col, Button, Tag } from 'antd';
+import { Card, Col, Button, Tag, Modal } from 'antd';
 import { connect } from 'dva';
 import Link from 'umi/link';
 import cx from 'classnames';
@@ -55,6 +55,30 @@ class WorkbenchItem extends Component {
     });
   };
 
+  start = () => {
+    Modal.confirm({
+      centered: true,
+      title: '提示',
+      content: '确认退出登录？',
+      okText: '确认',
+      cancelText: '取消',
+      onOk: function() {
+      },
+    });
+  }
+
+  end = () => {
+    Modal.confirm({
+      centered: true,
+      title: '提示',
+      content: '确认退出登录？',
+      okText: '确认',
+      cancelText: '取消',
+      onOk: function() {
+      },
+    });
+  }
+
   renderExtra = status => {
     return (
       <div className={styles.extra}>
@@ -106,16 +130,12 @@ class WorkbenchItem extends Component {
           <Button icon="user-add" type="link" onClick={() => this.showModal('visible')}>
             建档
           </Button>
-          <Link to="">
-            <Button icon="play-circle" type="link">
-              开始监护
-            </Button>
-          </Link>
-          <Link to="">
-            <Button icon="pause-circle" type="link">
-              停止监护
-            </Button>
-          </Link>
+          <Button icon="play-circle" type="link" onClick={this.start}>
+            开始监护
+          </Button>
+          <Button icon="pause-circle" type="link" onClick={this.end}>
+            停止监护
+          </Button>
           <Button icon="pie-chart" type="link" onClick={() => this.showModal('analysisVisible')}>
             电脑分析
           </Button>
