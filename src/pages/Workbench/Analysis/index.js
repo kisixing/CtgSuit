@@ -37,7 +37,9 @@ class Analysis extends Component {
               <Col span={12}>
                 <ScoringMethod />
               </Col>
-              <Col span={12}>3</Col>
+              <Col span={12}>
+                {/* <Result /> */}
+              </Col>
             </Row>
           </div>
         </Layout>

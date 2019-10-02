@@ -5,11 +5,11 @@
  */
 
 import React, { Component } from 'react';
-import { Tabs, Radio, Form, Button } from 'antd';
+import { Tabs, Radio, Form, Button, InputNumber } from 'antd';
 import styles from './ScoringMethod.less';
 
 const { TabPane } = Tabs;
-
+@Form.create()
 class ScoringMethod extends Component {
   constructor(props) {
     super(props);
@@ -22,7 +22,7 @@ class ScoringMethod extends Component {
     console.log(key);
   }
 
-  onChange = (e) => {
+  onChange = e => {
     console.log('radio checked', e.target.value);
     this.setState({
       value: e.target.value,
@@ -30,7 +30,13 @@ class ScoringMethod extends Component {
   };
 
   render() {
+    const { form } = this.props;
+    const { getFieldDecorator } = form;
     const { value } = this.state;
+    const formItemLayout = {
+      labelCol: { span: 8 },
+      wrapperCol: { span: 16 },
+    };
     return (
       <div>
         <div className={styles.tabs}>
@@ -52,13 +58,46 @@ class ScoringMethod extends Component {
           </Tabs>
         </div>
         <div className={styles.content}>
-          <Form className={styles.form}></Form>
+          <Form {...formItemLayout} className={styles.form}>
+            <Form.Item label="宫缩次数（次）">
+              {getFieldDecorator('uteruScontraction', {
+                rules: [{ required: true, message: 'Please input your phone number!' }],
+              })(<InputNumber style={{ width: '150px' }} />)}
+            </Form.Item>
+            <Form.Item label="宫缩强度（%）">
+              {getFieldDecorator('intensity', {
+                rules: [{ required: true, message: 'Please input your phone number!' }],
+              })(<InputNumber style={{ width: '150px' }} />)}
+            </Form.Item>
+            <Form.Item label="间隔时间（分）">
+              {getFieldDecorator('interval', {
+                rules: [{ required: true, message: 'Please input your phone number!' }],
+              })(<InputNumber style={{ width: '150px' }} />)}
+            </Form.Item>
+            <Form.Item label="持续时间（秒）">
+              {getFieldDecorator('duration', {
+                rules: [{ required: true, message: 'Please input your phone number!' }],
+              })(<InputNumber style={{ width: '150px' }} />)}
+            </Form.Item>
+            <Form.Item label="短变异（毫秒）">
+              {getFieldDecorator('variation', {
+                rules: [{ required: true, message: 'Please input your phone number!' }],
+              })(<InputNumber style={{ width: '150px' }} />)}
+            </Form.Item>
+          </Form>
           <div className={styles.buttonView}>
-            <Button>分析</Button>
+            <Button type="primary">分析</Button>
             <Button>修改</Button>
             <Button>打印</Button>
             <Button>退出</Button>
           </div>
+        </div>
+        <div className={styles.result}>
+          <div>
+            电脑评分：
+            <span>CTG = {"6"}</span>
+          </div>
+          <div className={styles.tip}><Button disabled>注意：电脑自动分析数据和结果仅供参考</Button></div>
         </div>
       </div>
     );
