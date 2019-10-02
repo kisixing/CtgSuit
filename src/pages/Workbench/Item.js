@@ -16,7 +16,6 @@ class WorkbenchItem extends Component {
     this.state = {
       showSetting: false,
       visible: false,
-      isFull: false,
     };
     this.ref = React.createRef();
   }
@@ -57,7 +56,6 @@ class WorkbenchItem extends Component {
   };
 
   renderExtra = status => {
-    const { state } = this;
     return (
       <div className={styles.extra}>
         {/* <Button title="关闭" icon="close" size="small" type="link"></Button> */}
@@ -70,14 +68,10 @@ class WorkbenchItem extends Component {
           onClick={() => {
             const el = ReactDOM.findDOMNode(this.ref.current);
 
-            if (state.isFull) {
-              document.exitFullscreen().then(() => {
-                this.setState({ isFull: false });
-              });
+            if (document.fullscreenElement) {
+              document.exitFullscreen();
             } else {
-              el.requestFullscreen().then(() => {
-                this.setState({ isFull: true });
-              });
+              el.requestFullscreen();
             }
           }}
         ></Button>
@@ -106,7 +100,12 @@ class WorkbenchItem extends Component {
     const { showSetting, visible } = this.state;
 
     return (
-      <Col span={itemSpan} className={styles.col} ref={this.ref} style={{ padding: outPadding }}>
+      <Col
+        span={itemSpan}
+        className={styles.col}
+        ref={this.ref}
+        style={{ padding: outPadding, height: itemHeight }}
+      >
         <div className={cx(styles.toolbar, { [styles.show]: showSetting })}>
           <Button icon="user-add" type="link" onClick={this.showModal}>
             建档
@@ -155,12 +154,8 @@ class WorkbenchItem extends Component {
           hoverable
           title={this.renderTilte(index, name, age)}
           size="small"
-          // headStyle={{ background: mapStatusToColor[status] }}
           className={styles.card}
           extra={this.renderExtra(status)}
-          style={{
-            height: this.state.isFull ? '100%' : itemHeight,
-          }}
           bodyStyle={{ padding: 0, height: '100%' }}
         >
           <L data={null}></L>

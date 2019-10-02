@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import './index.less';
 import Item from './Item';
 const Home = props => {
-  const { listLayout = [], pageItems, dispatch } = props;
+  const { listLayout = [], pageItems } = props;
   const wrap = useRef(null);
 
   const [wrapRec, setWrapRec] = useState({ height: 0, width: 0 });
@@ -16,7 +16,7 @@ const Home = props => {
 
   const itemSpan = 24 / listLayout[0];
   const outPadding = 12;
-  const itemHeight = (wrapRec.height - outPadding * 2) / listLayout[1] - outPadding * 2;
+  const itemHeight = (wrapRec.height - outPadding * 2) / listLayout[1];
   return (
     <div style={{ height: '100%', overflow: 'hidden' }} ref={wrap}>
       <Row style={{ padding: outPadding }}>
