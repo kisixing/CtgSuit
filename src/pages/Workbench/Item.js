@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { Card, Col, Button } from 'antd';
+import { Card, Col, Button, Tag } from 'antd';
 import { connect } from 'dva';
 import Link from 'umi/link';
 import cx from 'classnames';
@@ -8,7 +8,7 @@ import cx from 'classnames';
 import L from '@lianmed/lmg';
 import CollectionCreateForm from './CollectionCreateForm';
 import Analysis from './Analysis';
-import { mapStatusToColor } from '@/constant';
+import { mapStatusToColor, mapStatusToText } from '@/constant';
 import styles from './Item.less';
 
 class WorkbenchItem extends Component {
@@ -20,7 +20,6 @@ class WorkbenchItem extends Component {
       analysisVisible: false, // 电脑分析modal
     };
     this.ref = React.createRef();
-    this.isFull = false;
   }
 
   toggleTool = () => {
@@ -56,10 +55,11 @@ class WorkbenchItem extends Component {
     });
   };
 
-  renderExtra = data => {
+  renderExtra = status => {
     return (
       <div className={styles.extra}>
         {/* <Button title="关闭" icon="close" size="small" type="link"></Button> */}
+        <Tag color={mapStatusToColor[status]}>{mapStatusToText[status]}</Tag>
         <Button
           title="全屏展示"
           icon="fullscreen"
@@ -67,14 +67,11 @@ class WorkbenchItem extends Component {
           type="link"
           onClick={() => {
             const el = ReactDOM.findDOMNode(this.ref.current);
-            if (this.isFull) {
-              document.body.requestFullscreen().then(() => {
-                this.isFull = false;
-              });
+
+            if (document.fullscreenElement) {
+              document.exitFullscreen();
             } else {
-              el.requestFullscreen().then(() => {
-                this.isFull = true;
-              });
+              el.requestFullscreen();
             }
           }}
         ></Button>
@@ -85,7 +82,7 @@ class WorkbenchItem extends Component {
   renderTilte = item => {
     return (
       <div className={styles.title}>
-        床号: <span>【{item.index + 1}】</span>
+        床号: <span>{item.index + 1}</span>
         住院号: <span>{item.index + 1}</span>
         姓名: <span>{item.name}</span>
         年龄: <span>{item.age}</span>
@@ -99,7 +96,12 @@ class WorkbenchItem extends Component {
     const { showSetting, visible, analysisVisible } = this.state;
 
     return (
-      <Col span={itemSpan} className={styles.col} ref={this.ref} style={{ padding: outPadding }}>
+      <Col
+        span={itemSpan}
+        className={styles.col}
+        ref={this.ref}
+        style={{ padding: outPadding, height: itemHeight }}
+      >
         <div className={cx(styles.toolbar, { [styles.show]: showSetting })}>
           <Button icon="user-add" type="link" onClick={() => this.showModal('visible')}>
             建档
@@ -146,14 +148,9 @@ class WorkbenchItem extends Component {
           hoverable
           title={this.renderTilte(dataSource)}
           size="small"
-          headStyle={{ background: mapStatusToColor[dataSource.status] }}
           className={styles.card}
-          extra={this.renderExtra()}
-          bodyStyle={{
-            padding: 0,
-            flex: 1,
-            height: this.isFull ? '100%' : itemHeight,
-          }}
+          extra={this.renderExtra(dataSource.status)}
+          bodyStyle={{ padding: 0, height: '100%' }}
         >
           <L data={null}></L>
         </Card>
