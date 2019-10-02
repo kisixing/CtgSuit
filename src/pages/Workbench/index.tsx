@@ -26,7 +26,6 @@ const Home = props => {
             <Item
               key={item.id}
               dataSource={item}
-              {...item}
               itemHeight={itemHeight}
               itemSpan={itemSpan}
               outPadding={outPadding}

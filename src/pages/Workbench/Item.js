@@ -7,6 +7,7 @@ import cx from 'classnames';
 
 import L from '@lianmed/lmg';
 import CollectionCreateForm from './CollectionCreateForm';
+import Analysis from './Analysis';
 import { mapStatusToColor } from '@/constant';
 import styles from './Item.less';
 
@@ -15,7 +16,8 @@ class WorkbenchItem extends Component {
     super(props);
     this.state = {
       showSetting: false,
-      visible: false,
+      visible: false, // 建档modal
+      analysisVisible: false, // 电脑分析modal
     };
     this.ref = React.createRef();
     this.isFull = false;
@@ -26,12 +28,12 @@ class WorkbenchItem extends Component {
     this.setState({ showSetting: !showSetting });
   };
 
-  showModal = () => {
-    this.setState({ visible: true });
+  showModal = name => {
+    this.setState({ [name]: true });
   };
 
-  handleCancel = () => {
-    this.setState({ visible: false });
+  handleCancel = name => {
+    this.setState({ [name]: false });
   };
 
   saveFormRef = formRef => {
@@ -45,8 +47,6 @@ class WorkbenchItem extends Component {
       if (err) {
         return;
       }
-
-      console.log('Received values of form: ', values);
       dispatch({
         type: 'list/createPregnancies',
         payload: { ...values },
@@ -82,26 +82,26 @@ class WorkbenchItem extends Component {
     );
   };
 
-  renderTilte = (index, name, age) => {
+  renderTilte = item => {
     return (
       <div className={styles.title}>
-        床号: <span>【{index + 1}】</span>
-        住院号: <span>{index + 1}</span>
-        姓名: <span>{12122121}</span>
-        年龄: <span>{name}</span>
-        开始时间: <span>{age}</span>
+        床号: <span>【{item.index + 1}】</span>
+        住院号: <span>{item.index + 1}</span>
+        姓名: <span>{item.name}</span>
+        年龄: <span>{item.age}</span>
+        开始时间: <span>{item.startTime}</span>
       </div>
     );
   };
 
   render() {
-    const { index, name, age, itemHeight, itemSpan, status, dataSource, outPadding } = this.props;
-    const { showSetting, visible } = this.state;
+    const { itemHeight, itemSpan, dataSource, outPadding } = this.props;
+    const { showSetting, visible, analysisVisible } = this.state;
 
     return (
       <Col span={itemSpan} className={styles.col} ref={this.ref} style={{ padding: outPadding }}>
         <div className={cx(styles.toolbar, { [styles.show]: showSetting })}>
-          <Button icon="user-add" type="link" onClick={this.showModal}>
+          <Button icon="user-add" type="link" onClick={() => this.showModal('visible')}>
             建档
           </Button>
           <Link to="">
@@ -114,11 +114,9 @@ class WorkbenchItem extends Component {
               停止监护
             </Button>
           </Link>
-          <Link to="">
-            <Button icon="pie-chart" type="link">
-              电脑分析
-            </Button>
-          </Link>
+          <Button icon="pie-chart" type="link" onClick={() => this.showModal('analysisVisible')}>
+            电脑分析
+          </Button>
           <Link to="">
             <Button icon="printer" type="link">
               打印
@@ -146,9 +144,9 @@ class WorkbenchItem extends Component {
         </div>
         <Card
           hoverable
-          title={this.renderTilte(index, name, age)}
+          title={this.renderTilte(dataSource)}
           size="small"
-          headStyle={{ background: mapStatusToColor[status] }}
+          headStyle={{ background: mapStatusToColor[dataSource.status] }}
           className={styles.card}
           extra={this.renderExtra()}
           bodyStyle={{
@@ -162,6 +160,13 @@ class WorkbenchItem extends Component {
         <CollectionCreateForm
           wrappedComponentRef={this.saveFormRef}
           visible={visible}
+          onCancel={this.handleCancel}
+          onCreate={this.handleCreate}
+          dataSource={dataSource}
+        />
+        <Analysis
+          wrappedComponentRef={this.saveFormRef}
+          visible={analysisVisible}
           onCancel={this.handleCancel}
           onCreate={this.handleCreate}
           dataSource={dataSource}

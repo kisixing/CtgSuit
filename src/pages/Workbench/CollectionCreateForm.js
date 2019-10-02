@@ -1,7 +1,10 @@
+/**
+ * 建档
+ */
 import React from 'react';
 import { Button, Modal, Form, Input, Row, Col, Select, DatePicker, InputNumber } from 'antd';
 
-const CollectionCreateForm = Form.create({ name: 'form_in_modal' })(
+const CollectionCreateForm = Form.create({ name: 'create_form' })(
   // eslint-disable-next-line
   class extends React.Component {
     render() {
@@ -27,7 +30,7 @@ const CollectionCreateForm = Form.create({ name: 'form_in_modal' })(
           title={`【${dataSource.index + 1}】 建档（绑定）`}
           okText="创建"
           cancelText="取消"
-          onCancel={onCancel}
+          onCancel={() => onCancel('visible')}
           onOk={onCreate}
           bodyStyle={{ paddingRight: '48px' }}
         >
