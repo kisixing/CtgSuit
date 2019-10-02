@@ -102,7 +102,6 @@ class BasicLayout extends Component {
 
   user = key => {
     const { account, loading } = this.props;
-    const info = account.data || {};
 
     const menu = (
       <Menu className={styles.menu} selectedKeys={[]} onClick={this.onMenuClick}>
@@ -129,10 +128,15 @@ class BasicLayout extends Component {
       >
         <HeaderDropdown overlay={menu} key={key}>
           <span className={`${styles.action} ${styles.account}`}>
-            <Avatar size="small" className={styles.avatar} src={info.avatar} alt="avatar">
-              {info.name}
+            <Avatar
+              size="small"
+              className={styles.avatar}
+              src={account && account.imageUrl}
+              alt="avatar"
+            >
+              {account && account.login && account.login.substr(0, 1).toUpperCase()}
             </Avatar>
-            <span className={styles.name}>{info.name}</span>
+            <span className={styles.name}>{account && account.login}</span>
           </span>
         </HeaderDropdown>
       </Spin>

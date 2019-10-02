@@ -1,11 +1,12 @@
 import request from '@/utils/request';
+import { apiPrefix } from '@/utils/config';
 
 /**
  * 验证账户登录
  * @returns {Promise<void>}
  */
 export async function login(params) {
-  return request('/api/user/account', {
+  return request(`${apiPrefix}/account`, {
     method: 'POST',
     data: {
       ...params,
@@ -18,9 +19,9 @@ export async function login(params) {
  * @param {object} params {username, password}
  */
 export async function authenticate(params) {
-  return request('/api/v1/authenticate', {
+  return request(`${apiPrefix}/authenticate`, {
     method: 'POST',
-    data: params
+    data: params,
   });
 }
 
@@ -28,7 +29,7 @@ export async function authenticate(params) {
  * 获取账户信息
  */
 export async function getAccount() {
-  return request('/api/account');
+  return request(`${apiPrefix}/account`);
 }
 
 /**
@@ -39,7 +40,7 @@ export async function getAccount() {
  * @returns
  */
 export async function newPregnancies(params) {
-  return request('/api/v1/pregnancies', {
+  return request(`${apiPrefix}/pregnancies`, {
     method: 'POST',
     data: params,
   });

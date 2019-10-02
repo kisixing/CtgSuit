@@ -65,16 +65,11 @@ class WorkbenchItem extends Component {
   renderTilte = (index, name, age) => {
     return (
       <div className={styles.title}>
-        <span>【{index + 1}】</span>
-        床号：
-        <span>{index + 1}</span>
-        住院号：
-        <span>{12122121}</span>
-        姓名：
-        <span style={{ color: '#000' }}>{name}</span>
-        年龄：
-        <span style={{ color: '#000' }}>{age}</span>
-        开始时间：
+        床号: <span>【{index + 1}】</span>
+        住院号: <span>{index + 1}</span>
+        姓名: <span>{12122121}</span>
+        年龄: <span>{name}</span>
+        开始时间: <span>{age}</span>
       </div>
     );
   };

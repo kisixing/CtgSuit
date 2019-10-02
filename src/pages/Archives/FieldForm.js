@@ -62,38 +62,38 @@ class FieldForm extends Component {
     return (
       <Form className={styles.form}>
         <Row>
-          <Col span={8}>
+          <Col span={24}>
             <Form.Item label="编号">
               {getFieldDecorator('NO', {
                 rules: [{ required: false, message: '请输入编号!' }],
               })(<Input disabled />)}
             </Form.Item>
           </Col>
-          <Col span={8}>
+          <Col span={24}>
             <Form.Item label="姓名">{getFieldDecorator('name')(<Input type="text" />)}</Form.Item>
           </Col>
-          <Col span={8}>
+          <Col span={24}>
             <Form.Item label="年龄">{getFieldDecorator('age')(<InputNumber min={10} />)}</Form.Item>
           </Col>
-          <Col span={8}>
+          <Col span={24}>
             <Form.Item label="孕周">
               {getFieldDecorator('gestweek')(<Input type="text" />)}
             </Form.Item>
           </Col>
-          <Col span={8}>
+          <Col span={24}>
             <Form.Item label="门诊号">
               {getFieldDecorator('patientNumber')(<Input type="text" />)}
             </Form.Item>
           </Col>
-          <Col span={8}>
+          <Col span={24}>
             <Form.Item label="住院号">{getFieldDecorator('AD')(<Input type="text" />)}</Form.Item>
           </Col>
-          <Col span={8}>
+          <Col span={24}>
             <Form.Item label="床号">
               {getFieldDecorator('bedNumber')(<Input type="text" />)}
             </Form.Item>
           </Col>
-          <Col span={8}>
+          <Col span={24}>
             <Form.Item label="日期">
               {getFieldDecorator('date')(
                 <DatePicker
@@ -104,10 +104,10 @@ class FieldForm extends Component {
               )}
             </Form.Item>
           </Col>
-          <Col span={8}>
+          <Col span={24}>
             <Form.Item label="G/P">{getFieldDecorator('G/P')(<Input type="text" />)}</Form.Item>
           </Col>
-          <Col span={16}>
+          <Col span={24}>
             <Form.Item label="备注">
               {getFieldDecorator('comment')(<TextArea style={{ width: '96%' }} rows={1} />)}
             </Form.Item>

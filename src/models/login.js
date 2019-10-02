@@ -17,7 +17,6 @@ export default {
     *login({ payload }, { put, call, select }) {
       const data = yield call(authenticate, payload);
       const auth = data.id_token ? true : false;
-
       if (auth) {
         // 登录验证成功
         yield put({
@@ -61,6 +60,15 @@ export default {
         throw data;
       }
     },
+    *logout(_, { put }) {
+      store.clearAll();
+      yield put({
+        type: 'global/updateState',
+        payload: {
+          isLogin: false
+        }
+      })
+    }
   },
   reducers: {
     updateState(state, { payload }) {

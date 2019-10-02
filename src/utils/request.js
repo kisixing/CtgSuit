@@ -4,6 +4,7 @@
  */
 import { extend } from 'umi-request';
 import { notification } from 'antd';
+import router from 'umi/router';
 import store from 'store';
 import { TOKEN } from '@/utils/constant';
 
@@ -28,28 +29,68 @@ const codeMessage = {
 /**
  * 异常处理程序
  */
-const errorHandler = (error) => {
-  const { response = {} } = error;
-  if (response && response.status) {
-    const errorText = codeMessage[response.status] || response.statusText;
-    const { status, url } = response;
+// const errorHandler = (error) => {
+//   const { response = {} } = error;
+//   if (response && response.status) {
+//     const errorText = codeMessage[response.status] || response.statusText;
+//     const { status, url } = response;
 
+//     notification.error({
+//       message: `请求错误 ${status}: ${url}`,
+//       description: errorText,
+//     });
+//   }
+// };
+const errorHandler = error => {
+  const { response = {} } = error;
+  const errortext = codeMessage[response.status] || response.statusText;
+  const { status, url } = response;
+
+  if (status === 401) {
     notification.error({
-      message: `请求错误 ${status}: ${url}`,
-      description: errorText,
+      message: '未登录或登录已过期，请重新登录。',
     });
+    // @HACK
+    /* eslint-disable no-underscore-dangle */
+    window.g_app._store.dispatch({
+      type: 'login/logout',
+    });
+    return;
   }
+  notification.error({
+    message: `请求错误 ${status}: ${url}`,
+    description: errortext,
+  });
+  // environment should not be used
+  if (status === 403) {
+    router.push('/exception/403');
+    return;
+  }
+  if (status <= 504 && status >= 500) {
+    router.push('/exception/500');
+    return;
+  }
+  if (status >= 404 && status < 422) {
+    router.push('/exception/404');
+  }
+  if (!status) {
+    // 请求初始化时出错或者没有响应返回的异常
+    console.log(error.message);
+  }
+  throw error;
 };
 
 /**
  * 配置request请求时的默认参数
  */
 const request = extend({
+  // prefix: 'http://192.168.0.183:9986',
   timeout: '5000',
   errorHandler, // 默认错误处理
   credentials: 'include', // 默认请求是否带上cookie
   headers: {
     Accept: 'application/json',
+    'Content-Type': 'application/json;charset=UTF-8',
   },
 });
 
@@ -61,6 +102,18 @@ request.interceptors.request.use((url, options) => {
   };
   return ({ url, options }
   );
+});
+
+// response拦截器, 处理response
+request.interceptors.response.use((response, options) => {
+  let token = response.headers.get('authorization');
+  if (token) {
+    store.set(TOKEN, token);
+  }
+  return response;
+}, error => {
+  console.log(error);
+  return Promise.reject(error);
 });
 
 

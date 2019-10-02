@@ -98,15 +98,14 @@ class TableList extends Component {
   render() {
     const { selected, dataSource, loading } = this.props;
     return (
-      <div>
+      <div className={styles.tableList}>
         <Table
           bordered
           size="small"
-          scroll={{ x: 1400, y: 220 }}
+          scroll={{ x: 1400, y: 240 }}
           pagination={false}
           columns={columns}
           dataSource={dataSource}
-          className={styles.tableList}
           onRow={record => {
             return {
               onClick: event => this.handleClick(record), // 点击行
