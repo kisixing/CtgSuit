@@ -1,8 +1,8 @@
 // import { getList } from '@/services/list.js';
 import { message } from 'antd';
 import { newPregnancies } from '@/services/api';
-import { connectWs } from "@/services/connectWs";
-import { getList } from "@/services/list";
+import { connectWs } from '@/services/connectWs';
+import { getList } from '@/services/list';
 message.config({
   top: 150,
   duration: 2,
@@ -15,22 +15,26 @@ export default {
     pageData: [], //[[1,4],[5,8]]
     page: null, //当前页码
     pageItems: [], //[listItem,...]
-    datacache: new Map()
+    fullscreenId: '', // 全屏id
+    datacache: new Map(),
   },
   effects: {
     *getlist(_, { put, call }) {
       //   const res = yield call(getList, { name: 'zsd', age: '14' });
       //   console.log('res', res);
-      const cache: Map<string, object> = yield call(connectWs)
-      let rawData:IItem[] = yield call(getList)
-      
-      rawData = rawData && rawData.map(_=>{
-        return {..._,data:cache.get(`${_.deviceno}-${_.subdevice}`)}
-      }) || []
-    
+      const cache: Map<string, object> = yield call(connectWs);
+      let rawData: IItem[] = yield call(getList);
+
+      rawData =
+        (rawData &&
+          rawData.map(_ => {
+            return { ..._, data: cache.get(`${_.deviceno}-${_.subdevice}`) };
+          })) ||
+        [];
+
       yield put({ type: 'dataHandler', rawData });
     },
-    *dataHandler({ rawData }:{rawData:IItem[]}, { put, select }) {
+    *dataHandler({ rawData }: { rawData: IItem[] }, { put, select }) {
       const state = yield select();
       const {
         setting: { listLayout },
@@ -80,13 +84,13 @@ export default {
     *createPregnancies({ payload }, { call, put }) {
       const res = yield call(newPregnancies, payload);
       if (res && res.id) {
-        message.success('创建成功！')
+        message.success('创建成功！');
       }
       yield put({
         type: 'setState',
-        payload: {}
-      })
-    }
+        payload: {},
+      });
+    },
   },
   reducers: {
     setState(state, { payload }) {
@@ -97,7 +101,6 @@ export default {
     },
   },
 };
-
 
 interface IItem {
   bedname: string;
@@ -127,7 +130,7 @@ interface IItem {
     riskRecords: any[];
     sureEdd: any;
     telephone: string;
-  }
+  };
   status: string;
   subdevice: string;
   type: string;
