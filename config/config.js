@@ -46,7 +46,7 @@ export default {
     //   pathRewrite: { '^/api': '' },
     // },
     '/api/v1': {
-      target: 'http://192.168.0.183:9986/api/',
+      target: 'http://192.168.0.208:9986/api/',
       changeOrigin: true,
       pathRewrite: { '^/api/v1': '' },
     },

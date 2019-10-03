@@ -1,7 +1,8 @@
 // import { getList } from '@/services/list.js';
 import { message } from 'antd';
 import { newPregnancies } from '@/services/api';
-
+import { connectWs } from "@/services/connectWs";
+import { getList } from "@/services/list";
 message.config({
   top: 150,
   duration: 2,
@@ -14,29 +15,22 @@ export default {
     pageData: [], //[[1,4],[5,8]]
     page: null, //当前页码
     pageItems: [], //[listItem,...]
+    datacache: new Map()
   },
   effects: {
     *getlist(_, { put, call }) {
       //   const res = yield call(getList, { name: 'zsd', age: '14' });
       //   console.log('res', res);
-
-      const rawData = Array(49)
-        .fill('')
-        .map((_, index) => {
-          let id = Math.random()
-            .toString(16)
-            .slice(2);
-          let name = [0, 1, 2]
-            .map(_ => {
-              return String.fromCodePoint(parseInt(id.slice(_ * 4, (_ + 1) * 4), 16));
-            })
-            .join('');
-          return { name, id, age: index, status: Math.round((Math.random() * 2) % 3) };
-        });
-
+      const cache: Map<string, object> = yield call(connectWs)
+      let rawData:IItem[] = yield call(getList)
+      
+      rawData = rawData && rawData.map(_=>{
+        return {..._,data:cache.get(`${_.deviceno}-${_.subdevice}`)}
+      }) || []
+    
       yield put({ type: 'dataHandler', rawData });
     },
-    *dataHandler({ rawData }, { put, select }) {
+    *dataHandler({ rawData }:{rawData:IItem[]}, { put, select }) {
       const state = yield select();
       const {
         setting: { listLayout },
@@ -80,7 +74,6 @@ export default {
       if (page === oldPage) return;
       const pageItemsCount: number = listLayout[0] * listLayout[1];
       const pageItems = listData.slice(page * pageItemsCount, (page + 1) * pageItemsCount);
-
       yield put({ type: 'setState', payload: { pageItems, page } });
     },
     // 建档
@@ -104,3 +97,39 @@ export default {
     },
   },
 };
+
+
+interface IItem {
+  bedname: string;
+  bedno: string;
+  deviceno: string;
+  documentno: string;
+  id: number;
+  pregnancy: {
+    age: number;
+    dob: any;
+    doctor: any;
+    edd: any;
+    ethnic: any;
+    gender: any;
+    gravidity: number;
+    id: number;
+    idNO: any;
+    idType: any;
+    inpatientNO: string;
+    insuranceType: any;
+    lmp: any;
+    name: string;
+    organization: any;
+    outpatientNO: any;
+    parity: number;
+    prenatalscreens: any;
+    riskRecords: any[];
+    sureEdd: any;
+    telephone: string;
+  }
+  status: string;
+  subdevice: string;
+  type: string;
+  updateTime: string;
+}

@@ -12,7 +12,6 @@ import Link from 'umi/link';
 import store from 'store';
 import { ipcRenderer } from 'electron';
 import HeaderDropdown from '@/components/HeaderDropdown';
-
 import config from '@/utils/config';
 // import logo from '../assets/logo.png';
 import styles from './BasicLayout.less';
