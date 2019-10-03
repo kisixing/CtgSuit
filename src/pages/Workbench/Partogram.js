@@ -7,10 +7,11 @@
 import React, { Component } from 'react';
 import { Modal } from 'antd';
 import modalStyles from './Analysis/index.less';
-
-class Partogram extends Component {
+import { Partogram } from '@lianmed/lmg';
+import { PartogramTable } from '@lianmed/components';
+class C extends Component {
   render() {
-     const { visible, onCancel, onCreate, dataSource } = this.props;
+    const { visible, onCancel, onCreate, dataSource } = this.props;
     return (
       <Modal
         centered
@@ -25,9 +26,14 @@ class Partogram extends Component {
         bodyStyle={{ paddingRight: '48px' }}
         wrapClassName={modalStyles.modal}
         onCancel={() => onCancel('partogramVisible')}
-      ></Modal>
+      >
+        <div style={{ height: 450 }}>
+          <Partogram />
+        </div>
+        <PartogramTable url="api/prenatal-visits" style={{ padding: '20px' }} />
+      </Modal>
     );
   }
 }
 
-export default Partogram;
+export default C;

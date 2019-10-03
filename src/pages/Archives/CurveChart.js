@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import L from '@lianmed/lmg';
+import { Ctg as L } from '@lianmed/lmg';
 
 import styles from './CurveChart.less';
 

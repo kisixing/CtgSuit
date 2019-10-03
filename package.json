@@ -20,6 +20,9 @@
   "main": "./app/main/index.js",
   "dependencies": {
     "@lianmed/lmg": "NenX/lianmed_lmg.git",
+    "@lianmed/utils": "NenX/lianmed_utils.git",
+    "@lianmed/components": "NenX/components",
+    "@lianmed/request": "NenX/request",
     "antd": "^3.19.5",
     "dva": "^2.6.0-beta.6",
     "electron-store": "^5.0.0",

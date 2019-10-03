@@ -15,20 +15,19 @@ export default {
     pageData: [], //[[1,4],[5,8]]
     page: null, //当前页码
     pageItems: [], //[listItem,...]
-    fullscreenId: '', // 全屏id
     datacache: new Map(),
   },
   effects: {
     *getlist(_, { put, call }) {
       //   const res = yield call(getList, { name: 'zsd', age: '14' });
-      //   console.log('res', res);
       const cache: Map<string, object> = yield call(connectWs);
       let rawData: IItem[] = yield call(getList);
 
       rawData =
         (rawData &&
           rawData.map(_ => {
-            return { ..._, data: cache.get(`${_.deviceno}-${_.subdevice}`) };
+            const unitId = `${_.deviceno}-${_.subdevice}`;
+            return { ..._, data: cache.get(unitId), unitId };
           })) ||
         [];
 
@@ -108,6 +107,7 @@ interface IItem {
   deviceno: string;
   documentno: string;
   id: number;
+  unitId: string;
   pregnancy: {
     age: number;
     dob: any;
