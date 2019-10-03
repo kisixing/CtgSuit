@@ -1,0 +1,59 @@
+@import '../../../utils/utils.less';
+
+.wrapper {
+  background-color: #fff;
+}
+
+.tabs {
+  .radioBar {
+    padding: 12px 24px;
+    background-color: #ddd;
+  }
+
+  .tabContent {
+    height: 180px;
+  }
+}
+
+.content {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 24px;
+
+  .form {
+    width: 100%;
+
+    :global {
+      .ant-form-item {
+        margin-bottom: 0;
+      }
+
+      .ant-form-item-label {
+        text-align: left;
+      }
+    }
+  }
+
+  .buttonView {
+    width: 68px;
+    margin-top: 5px;
+
+    button {
+      margin-bottom: 8px;
+    }
+  }
+}
+
+.result {
+  padding: 0 24px;
+  margin-top: 12px;
+
+  .tip {
+    margin-top: 12px;
+    text-align: center;
+
+    button {
+      color: @error-color;
+    }
+  }
+}

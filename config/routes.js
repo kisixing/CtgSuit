@@ -17,6 +17,26 @@ export default [
         title: '注册',
         component: './User/Register',
       },
+      {
+        path: '/blank/analysis',
+        name: 'analysis',
+        title: '电脑分析',
+        component: './Workbench/Analysis',
+      },
+      { component: '404' },
+    ],
+  },
+  // full Page
+  {
+    path: '/full',
+    component: '../layouts/BlankLayout',
+    routes: [
+      {
+        path: '/full/analysis',
+        name: 'analysis',
+        title: '电脑分析',
+        component: './Workbench/Analysis/',
+      },
       { component: '404' },
     ],
   },
@@ -55,7 +75,7 @@ export default [
         path: '/account',
         name: 'account',
         title: '账户设置',
-        component: './Account'
+        component: './Account',
       },
       // 异常处理页面
       {
