@@ -7,10 +7,36 @@
 import React from 'react';
 import { Button } from 'antd';
 import { router } from 'umi';
-import { remote } from 'electron';
 import { mapStatusToColor } from '@/constant';
-const { dialog } = remote;
+import { event } from '@lianmed/utils';
+
 function Beds({ dispatch, listData }) {
+  let clickTimeout = null;
+
+  const handleClicks = ({ pageIndex, unitId }) => {
+    return () => {
+      const data = { type: 'list/setPageItems', page: pageIndex };
+      dispatch(data);
+
+      if (clickTimeout !== null) {
+        clearTimeout(clickTimeout);
+        clickTimeout = null;
+        dispatch(data);
+        // setTimeout(() => {
+        //   event.emit('fullScreen', unitId);
+        // }, 5000);
+        location.hash.includes('workbench') || router.replace('/workbench');
+      } else {
+        clickTimeout = setTimeout(() => {
+          clearTimeout(clickTimeout);
+          clickTimeout = null;
+          dispatch(data);
+          location.hash.includes('workbench') || router.replace('/workbench');
+        }, 200);
+      }
+    };
+  };
+
   return (
     <div
       style={{
@@ -22,7 +48,7 @@ function Beds({ dispatch, listData }) {
         flexWrap: 'wrap',
       }}
     >
-      {listData.map(({ index, id, pageIndex, status }) => {
+      {listData.map(({ index, id, pageIndex, status, unitId }) => {
         return (
           <Button
             key={id}
@@ -39,27 +65,7 @@ function Beds({ dispatch, listData }) {
               background: mapStatusToColor[status],
               color: '#fff',
             }}
-            onClick={() => {
-              dispatch({ type: 'list/setPageItems', page: pageIndex });
-              router.replace('/workbench');
-            }}
-            onDoubleClick={e => {
-              dialog.showMessageBox(
-                {
-                  type: 'info',
-                  title: '提示信息',
-                  message: '确定关闭应用？',
-                  buttons: ['cancel', 'ok'],
-                },
-                function(index) {
-                  if (index === 0) {
-                    // cancel
-                    e.preventDefault();
-                  } else {
-                  }
-                },
-              );
-            }}
+            onClick={handleClicks({ pageIndex, unitId })}
           >
             {index + 1}
           </Button>

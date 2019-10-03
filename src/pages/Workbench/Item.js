@@ -4,8 +4,8 @@ import { Card, Col, Button, Tag, Modal, Switch } from 'antd';
 import { connect } from 'dva';
 import Link from 'umi/link';
 import cx from 'classnames';
-
-import L from '@lianmed/lmg';
+import { event } from '@lianmed/utils';
+import { Ctg as L } from '@lianmed/lmg';
 import CollectionCreateForm from './CollectionCreateForm';
 import Analysis from './Analysis';
 import PrintModal from './PrintModal';
@@ -23,10 +23,22 @@ class WorkbenchItem extends Component {
       printVisible: false,
       partogramVisible: false,
     };
-    this.suitObject = {suit:null}
+    this.suitObject = { suit: null };
     this.ref = React.createRef();
   }
 
+  fullScreen() {
+    const el = ReactDOM.findDOMNode(this.ref.current);
+    if (document.fullscreenElement) {
+      document.exitFullscreen().then(() => {
+        this.suitObject.suit.resize();
+      });
+    } else {
+      el.requestFullscreen().then(() => {
+        this.suitObject.suit.resize();
+      });
+    }
+  }
   toggleTool = () => {
     const { showSetting } = this.state;
     this.setState({ showSetting: !showSetting });
@@ -77,7 +89,7 @@ class WorkbenchItem extends Component {
         })
       },
     });
-  }
+  };
 
   end = item => {
     Modal.confirm({
@@ -95,7 +107,7 @@ class WorkbenchItem extends Component {
         });
       },
     });
-  }
+  };
 
   // 点解弹出建档按钮
   showCreateModal = (item) => {
@@ -127,19 +139,7 @@ class WorkbenchItem extends Component {
           icon="fullscreen"
           size="small"
           type="link"
-          onClick={() => {
-            const el = ReactDOM.findDOMNode(this.ref.current);
-
-            if (document.fullscreenElement) {
-              document.exitFullscreen().then(() => {
-                this.suitObject.suit.resize();
-              });
-            } else {
-              el.requestFullscreen().then(() => {
-                this.suitObject.suit.resize();
-              });
-            }
-          }}
+          onClick={this.fullScreen.bind(this)}
         ></Button>
         <Switch defaultChecked />
       </div>
@@ -149,15 +149,28 @@ class WorkbenchItem extends Component {
   renderTilte = item => {
     return (
       <div className={styles.title}>
-        床号: <span>{item.bedno }</span>
-        住院号: <span>{item.documentno }</span>
+        床号: <span>{item.bedno}</span>
+        住院号: <span>{item.documentno}</span>
         姓名: <span>{item.bedname}</span>
         {/* 年龄: <span>{item.age}</span> */}
         开始时间: <span>{new Date(item.updateTime).toLocaleDateString()}</span>
       </div>
     );
   };
-
+  componentDidMount() {
+    event.on(
+      'fullScreen',
+      (this.cb = id => {
+        console.log('aaaaa', id, this.props.dataSource.unitId);
+        if (id === this.props.dataSource.unitId) {
+          // this.fullScreen();
+        }
+      }),
+    );
+  }
+  componentWillUnmount() {
+    event.off('fullScreen', this.cb);
+  }
   render() {
     const { itemHeight, itemSpan, dataSource, outPadding, ...rest } = this.props;
     const { showSetting, visible, analysisVisible, printVisible, partogramVisible } = this.state;

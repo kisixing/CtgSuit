@@ -38,14 +38,14 @@ const request = r.config({
       router.push('/exception/404');
     }
   },
-})._request;
+});
 
 /**
  * 配置request请求时的默认参数
  */
 
 // request拦截器, 改变url 或 options.
-request.interceptors.request.use((url, options) => {
+request._request.interceptors.request.use((url, options) => {
   options.headers = {
     ...options.headers,
     Authorization: store.get(TOKEN),
@@ -54,7 +54,7 @@ request.interceptors.request.use((url, options) => {
 });
 
 // response拦截器, 处理response
-request.interceptors.response.use(
+request._request.interceptors.response.use(
   (response, options) => {
     let token = response.headers.get('authorization');
     if (token) {

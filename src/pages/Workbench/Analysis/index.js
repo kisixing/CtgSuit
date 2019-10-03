@@ -6,7 +6,8 @@
 
 import React, { Component } from 'react';
 import { Layout, Modal, Row, Col } from 'antd';
-import L from '@lianmed/lmg';
+import { Ctg as L } from '@lianmed/lmg';
+
 import ScoringMethod from './ScoringMethod';
 import Setting from './Setting';
 
