@@ -31,7 +31,7 @@ class Analysis extends Component {
       >
         <Layout style={{ height: '100%' }}>
           <div className={styles.chart}>
-            <L data={null}></L>
+            {/* <L data={null}></L> */}
           </div>
           <div className={styles.content}>
             <Row gutter={24}>

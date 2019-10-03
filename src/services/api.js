@@ -1,4 +1,5 @@
 import request from '@/utils/request';
+import { stringify } from 'qs';
 import { apiPrefix } from '@/utils/config';
 
 /**
@@ -44,6 +45,10 @@ export async function newPregnancies(params) {
     method: 'POST',
     data: params,
   });
+}
+
+export async function getPregnancy(params = {}) {
+  return request(`${apiPrefix}/pregnancies?${stringify(params)}`);
 }
 
 export async function getCTGrecords() {

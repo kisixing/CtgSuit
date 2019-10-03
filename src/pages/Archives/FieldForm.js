@@ -38,22 +38,7 @@ class FieldForm extends Component {
         <p>搜索条件</p>
         <Row>
           <Col span={4}>
-            <Form.Item label="编号">
-              {getFieldDecorator('NO', {
-                rules: [{ required: false, message: '请输入编号!' }],
-              })(<Input disabled />)}
-            </Form.Item>
-          </Col>
-          <Col span={4}>
             <Form.Item label="姓名">{getFieldDecorator('name')(<Input type="text" />)}</Form.Item>
-          </Col>
-          <Col span={4}>
-            <Form.Item label="年龄">{getFieldDecorator('age')(<InputNumber min={10} />)}</Form.Item>
-          </Col>
-          <Col span={4}>
-            <Form.Item label="孕周">
-              {getFieldDecorator('gestweek')(<Input type="text" />)}
-            </Form.Item>
           </Col>
           <Col span={4}>
             <Form.Item label="门诊号">
@@ -80,20 +65,12 @@ class FieldForm extends Component {
             </Form.Item>
           </Col>
           <Col span={4}>
-            <Form.Item label="G/P">{getFieldDecorator('G/P')(<Input type="text" />)}</Form.Item>
-          </Col>
-          <Col span={4}>
-            <Form.Item label="备注">
-              {getFieldDecorator('comment')(<TextArea rows={1} />)}
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                搜索
+              </Button>
+              <Button onClick={this.handleReset}>重置</Button>
             </Form.Item>
-          </Col>
-        </Row>
-        <Row>
-          <Col span={24} style={{ textAlign: 'right' }}>
-            <Button type="primary" htmlType="submit">
-              搜索
-            </Button>
-            <Button onClick={this.handleReset}>重置</Button>
           </Col>
         </Row>
       </Form>

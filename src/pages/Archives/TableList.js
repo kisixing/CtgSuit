@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Table, Divider } from 'antd';
+import { Table, Divider, Button } from 'antd';
 import moment from 'moment';
+import CreateRecordModal from './CreateRecordModal';
+
 import styles from './TableList.less';
 
 class TableList extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      visible: false,
+    };
+    this.ref = React.createRef();
     this.columns = [
       {
         title: '编号',
@@ -28,14 +33,14 @@ class TableList extends Component {
         dataIndex: 'name',
         key: 'name',
         width: 100,
-        render: (text, record) => record.pregnancy.name,
+        render: (text, record) => record.pregnancy && record.pregnancy.name,
       },
       {
         title: '年龄',
         dataIndex: 'age',
         key: 'age',
         width: 80,
-        render: (text, record) => record.pregnancy.age,
+        render: (text, record) => record.pregnancy && record.pregnancy.age,
       },
       {
         title: '孕周',
@@ -48,20 +53,20 @@ class TableList extends Component {
         dataIndex: 'outpatientNO',
         key: 'outpatientNO',
         width: 200,
-        render: (text, record) => record.pregnancy.outpatientNO,
+        render: (text, record) => record.pregnancy && record.pregnancy.outpatientNO,
       },
       {
         title: '住院号',
         dataIndex: 'inpatientNO',
         key: 'inpatientNO',
         width: 200,
-        render: (text, record) => record.pregnancy.inpatientNO,
+        render: (text, record) => record.pregnancy && record.pregnancy.inpatientNO,
       },
       {
         title: '床号',
         dataIndex: 'bedNumber',
         key: 'bedNumber',
-        width: 200,
+        width: 80,
         render: (text, record) => record.ctgexam.id,
       },
       {
@@ -113,6 +118,34 @@ class TableList extends Component {
     dispatch({ type: 'archives/fetchRecords' });
   }
 
+  showModal = name => {
+    this.setState({ [name]: true });
+  };
+
+  handleCancel = name => {
+    this.setState({ [name]: false });
+  };
+
+  saveFormRef = formRef => {
+    this.formRef = formRef;
+  };
+
+  // 创建
+  handleCreate = () => {
+    const { dispatch } = this.props;
+    const { form } = this.formRef.props;
+    form.validateFields((err, values) => {
+      if (err) {
+        return;
+      }
+      dispatch({
+        type: 'list/createPregnancies',
+        payload: { ...values },
+      });
+      form.resetFields();
+      this.setState({ visible: false });
+    });
+  };
 
   handleClick = (record, index) => {
     const { dispatch } = this.props;
@@ -124,8 +157,20 @@ class TableList extends Component {
     });
   };
 
+  renderTitle = () => {
+    return (
+      <>
+        <Button type="primary" onClick={() => this.showModal('visible')}>
+          新建
+        </Button>
+        <Button style={{ marginLeft: '12px' }}>导入</Button>
+      </>
+    );
+  };
+
   render() {
     const { selected, dataSource, loading } = this.props;
+    const { visible } = this.state;
 
     return (
       <div className={styles.tableList}>
@@ -151,6 +196,14 @@ class TableList extends Component {
             selectedRowKeys: [selected.NO],
             onSelect: (record, selected, selectedRows) => this.handleClick(record),
           }}
+          title={this.renderTitle}
+        />
+        <CreateRecordModal
+          wrappedComponentRef={this.saveFormRef}
+          visible={visible}
+          onCancel={this.handleCancel}
+          onCreate={this.handleCreate}
+          dataSource={dataSource}
         />
       </div>
     );

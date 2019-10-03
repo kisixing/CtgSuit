@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { Card, Col, Button, Tag, Modal } from 'antd';
+import { Card, Col, Button, Tag, Modal, Switch } from 'antd';
 import { connect } from 'dva';
 import Link from 'umi/link';
 import cx from 'classnames';
@@ -33,7 +33,6 @@ class WorkbenchItem extends Component {
   };
 
   showModal = name => {
-    console.log('123456', name)
     this.setState({ [name]: true });
   };
 
@@ -46,6 +45,7 @@ class WorkbenchItem extends Component {
   };
 
   handleCreate = () => {
+    // 建档/确定action
     const { dispatch } = this.props;
     const { form } = this.formRef.props;
     form.validateFields((err, values) => {
@@ -65,10 +65,17 @@ class WorkbenchItem extends Component {
     Modal.confirm({
       centered: true,
       title: '提示',
-      content: `确认 床号：${item.index}，姓名：${item.name} 开始监护？`,
+      content: `确认 床号：${item.index} 开始监护？`,
       okText: '确认',
       cancelText: '取消',
-      onOk: function() {},
+      onOk: function() {
+        this.props.dispatch({
+          type: '',
+          payload: {
+
+          }
+        })
+      },
     });
   }
 
@@ -76,12 +83,39 @@ class WorkbenchItem extends Component {
     Modal.confirm({
       centered: true,
       title: '提示',
-      content: `确认 床号：${item.index}，姓名：${item.name} 停止监护？`,
+      content: `确认 床号：${item.index} 停止监护？`,
       okText: '确认',
       cancelText: '取消',
-      onOk: function() {},
+      onOk: function() {
+        this.props.dispatch({
+          type: '',
+          payload: {
+
+          }
+        });
+      },
     });
   }
+
+  // 点解弹出建档按钮
+  showCreateModal = (item) => {
+    this.setState({ visible: true });
+    const { dispatch } = this.props;
+    const { pregnancy } = item;
+    const isFetch = pregnancy && pregnancy.inpatientNO;
+    if (isFetch) {
+      dispatch({
+        type: 'item/fetchPregnancy',
+        payload: {
+          inpatientNO: pregnancy.inpatientNO,
+        },
+        callback(e) {
+          console.log('call back', e);
+        },
+      });
+    }
+  }
+
 
   renderExtra = status => {
     return (
@@ -97,16 +131,17 @@ class WorkbenchItem extends Component {
             const el = ReactDOM.findDOMNode(this.ref.current);
 
             if (document.fullscreenElement) {
-              document.exitFullscreen().then(()=>{
-              this.suitObject.suit.resize()
+              document.exitFullscreen().then(() => {
+                this.suitObject.suit.resize();
               });
             } else {
-              el.requestFullscreen().then(()=>{
-              this.suitObject.suit.resize()
+              el.requestFullscreen().then(() => {
+                this.suitObject.suit.resize();
               });
             }
           }}
         ></Button>
+        <Switch defaultChecked />
       </div>
     );
   };
@@ -124,9 +159,9 @@ class WorkbenchItem extends Component {
   };
 
   render() {
-    const { itemHeight, itemSpan, dataSource, outPadding } = this.props;
+    const { itemHeight, itemSpan, dataSource, outPadding, ...rest } = this.props;
     const { showSetting, visible, analysisVisible, printVisible, partogramVisible } = this.state;
-    const { data } = dataSource;
+    const { data, documentno } = dataSource;
     console.log('78787878', dataSource);
     return (
       <Col
@@ -136,14 +171,14 @@ class WorkbenchItem extends Component {
         style={{ padding: outPadding, height: itemHeight }}
       >
         <div className={cx(styles.toolbar, { [styles.show]: showSetting })}>
-          <Button icon="user-add" type="link" onClick={() => this.showModal('visible')}>
-            建档
-          </Button>
           <Button icon="play-circle" type="link" onClick={() => this.start(dataSource)}>
             开始监护
           </Button>
           <Button icon="pause-circle" type="link" onClick={() => this.end(dataSource)}>
             停止监护
+          </Button>
+          <Button icon="user-add" type="link" onClick={() => this.showCreateModal(dataSource)}>
+            {documentno ? '已建档' : '建档'}
           </Button>
           <Button icon="pie-chart" type="link" onClick={() => this.showModal('analysisVisible')}>
             电脑分析
@@ -181,6 +216,7 @@ class WorkbenchItem extends Component {
         </Card>
         <CollectionCreateForm
           wrappedComponentRef={this.saveFormRef}
+          {...rest}
           visible={visible}
           onCancel={this.handleCancel}
           onCreate={this.handleCreate}
@@ -201,7 +237,7 @@ class WorkbenchItem extends Component {
           dataSource={dataSource}
         />
         <Partogram
-          wrappedComponentRef={this.printRef}
+          wrappedComponentRef={this.partogramRef}
           visible={partogramVisible}
           onCancel={this.handleCancel}
           onCreate={this.handleCreate}

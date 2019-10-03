@@ -5,11 +5,11 @@ import React from 'react';
 import { Button, Modal, Form, Input, Row, Col, Select, DatePicker, InputNumber } from 'antd';
 import styles from './index.less';
 
-const CollectionCreateForm = Form.create({ name: 'create_form11' })(
+const CreateRecordModal = Form.create({ name: 'create_form' })(
   // eslint-disable-next-line
   class extends React.Component {
     render() {
-      const { visible, onCancel, onCreate, form, dataSource } = this.props;
+      const { visible, onCancel, onCreate, form } = this.props;
       const { getFieldDecorator } = form;
 
       const formItemLayout = {
@@ -26,11 +26,9 @@ const CollectionCreateForm = Form.create({ name: 'create_form11' })(
       return (
         <Modal
           centered
-          destroyOnClose
           width={800}
           visible={visible}
-          title={`【${dataSource.index + 1}】 建档（绑定）`}
-          footer={null}
+          title="建档（绑定）"
           okText="创建"
           cancelText="取消"
           bodyStyle={{ paddingRight: '48px' }}
@@ -81,13 +79,13 @@ const CollectionCreateForm = Form.create({ name: 'create_form11' })(
                   })(<InputNumber />)}
                 </Form.Item>
               </Col>
-              <Col span={24} className={styles.buttons}>
+              {/* <Col className={styles.buttons}>
                 <Button onClick={() => onCancel('visible')}>取消</Button>
-                {dataSource.documentno ? null : <Button>搜索</Button>}
+                <Button>搜索</Button>
                 <Button type="primary" onClick={onCreate}>
-                  确定
+                  确定（绑定）
                 </Button>
-              </Col>
+              </Col> */}
             </Row>
           </Form>
         </Modal>
@@ -96,4 +94,4 @@ const CollectionCreateForm = Form.create({ name: 'create_form11' })(
   },
 );
 
-export default CollectionCreateForm;
+export default CreateRecordModal;

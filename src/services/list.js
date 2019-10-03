@@ -1,4 +1,6 @@
-import request from '@/utils/request.js'
+import request from '@/utils/request.js';
+import { apiPrefix } from '@/utils/config';
+
 export async function getList(param){
-    return request('/api/v1/bedinfos')
+    return request(`${apiPrefix}/bedinfos`);
 }
