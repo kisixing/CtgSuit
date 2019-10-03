@@ -14,6 +14,7 @@ export default {
     pageData: [], //[[1,4],[5,8]]
     page: null, //当前页码
     pageItems: [], //[listItem,...]
+    fullscreenId: '', // 全屏id
   },
   effects: {
     *getlist(_, { put, call }) {
@@ -87,13 +88,13 @@ export default {
     *createPregnancies({ payload }, { call, put }) {
       const res = yield call(newPregnancies, payload);
       if (res && res.id) {
-        message.success('创建成功！')
+        message.success('创建成功！');
       }
       yield put({
         type: 'setState',
-        payload: {}
-      })
-    }
+        payload: {},
+      });
+    },
   },
   reducers: {
     setState(state, { payload }) {
