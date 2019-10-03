@@ -45,3 +45,21 @@ export async function newPregnancies(params) {
     data: params,
   });
 }
+
+export async function getCTGrecords() {
+  return request(`${apiPrefix}/prenatal-visits?CTGExamId.specified=true`);
+}
+
+export async function newCTGrecord(params) {
+  return request(`${apiPrefix}/prenatal-visits`, {
+    method: 'POST',
+    data: params,
+  });
+}
+
+export async function updateCTGrecord(params) {
+  return request(`${apiPrefix}/prenatal-visits`, {
+    method: 'PUT',
+    data: params,
+  });
+}

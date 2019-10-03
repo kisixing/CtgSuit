@@ -82,7 +82,7 @@ const errorHandler = error => {
       description: error.message,
     });
   }
-  throw error;
+  // throw error;
 };
 
 /**
