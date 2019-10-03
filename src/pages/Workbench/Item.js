@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { Card, Col, Button, Tag } from 'antd';
+import { Card, Col, Button, Tag, Modal } from 'antd';
 import { connect } from 'dva';
 import Link from 'umi/link';
 import cx from 'classnames';
@@ -8,6 +8,8 @@ import cx from 'classnames';
 import L from '@lianmed/lmg';
 import CollectionCreateForm from './CollectionCreateForm';
 import Analysis from './Analysis';
+import PrintModal from './PrintModal';
+import Partogram from './Partogram';
 import { mapStatusToColor, mapStatusToText } from '@/constant';
 import styles from './Item.less';
 
@@ -18,6 +20,8 @@ class WorkbenchItem extends Component {
       showSetting: false,
       visible: false, // 建档modal
       analysisVisible: false, // 电脑分析modal
+      printVisible: false,
+      partogramVisible: false,
     };
     this.suitObject = {suit:null}
     this.ref = React.createRef();
@@ -29,6 +33,7 @@ class WorkbenchItem extends Component {
   };
 
   showModal = name => {
+    console.log('123456', name)
     this.setState({ [name]: true });
   };
 
@@ -55,6 +60,28 @@ class WorkbenchItem extends Component {
       this.setState({ visible: false });
     });
   };
+
+  start = item => {
+    Modal.confirm({
+      centered: true,
+      title: '提示',
+      content: `确认 床号：${item.index}，姓名：${item.name} 开始监护？`,
+      okText: '确认',
+      cancelText: '取消',
+      onOk: function() {},
+    });
+  }
+
+  end = item => {
+    Modal.confirm({
+      centered: true,
+      title: '提示',
+      content: `确认 床号：${item.index}，姓名：${item.name} 停止监护？`,
+      okText: '确认',
+      cancelText: '取消',
+      onOk: function() {},
+    });
+  }
 
   renderExtra = status => {
     return (
@@ -98,7 +125,7 @@ class WorkbenchItem extends Component {
 
   render() {
     const { itemHeight, itemSpan, dataSource, outPadding } = this.props;
-    const { showSetting, visible, analysisVisible } = this.state;
+    const { showSetting, visible, analysisVisible, printVisible, partogramVisible } = this.state;
     const {data} = dataSource
     return (
       <Col
@@ -111,29 +138,21 @@ class WorkbenchItem extends Component {
           <Button icon="user-add" type="link" onClick={() => this.showModal('visible')}>
             建档
           </Button>
-          <Link to="">
-            <Button icon="play-circle" type="link">
-              开始监护
-            </Button>
-          </Link>
-          <Link to="">
-            <Button icon="pause-circle" type="link">
-              停止监护
-            </Button>
-          </Link>
+          <Button icon="play-circle" type="link" onClick={() => this.start(dataSource)}>
+            开始监护
+          </Button>
+          <Button icon="pause-circle" type="link" onClick={() => this.end(dataSource)}>
+            停止监护
+          </Button>
           <Button icon="pie-chart" type="link" onClick={() => this.showModal('analysisVisible')}>
             电脑分析
           </Button>
-          <Link to="">
-            <Button icon="printer" type="link">
-              打印
-            </Button>
-          </Link>
-          <Link to="">
-            <Button icon="line-chart" type="link">
-              产程图
-            </Button>
-          </Link>
+          <Button icon="printer" type="link" onClick={() => this.showModal('printVisible')}>
+            打印
+          </Button>
+          <Button icon="line-chart" type="link" onClick={() => this.showModal('partogramVisible')}>
+            产程图
+          </Button>
           <Link to="">
             <Button icon="reconciliation" type="link">
               事件记录
@@ -167,8 +186,22 @@ class WorkbenchItem extends Component {
           dataSource={dataSource}
         />
         <Analysis
-          wrappedComponentRef={this.saveFormRef}
+          wrappedComponentRef={this.analysisRef}
           visible={analysisVisible}
+          onCancel={this.handleCancel}
+          onCreate={this.handleCreate}
+          dataSource={dataSource}
+        />
+        <PrintModal
+          wrappedComponentRef={this.printRef}
+          visible={printVisible}
+          onCancel={this.handleCancel}
+          onCreate={this.handleCreate}
+          dataSource={dataSource}
+        />
+        <Partogram
+          wrappedComponentRef={this.printRef}
+          visible={partogramVisible}
           onCancel={this.handleCancel}
           onCreate={this.handleCreate}
           dataSource={dataSource}

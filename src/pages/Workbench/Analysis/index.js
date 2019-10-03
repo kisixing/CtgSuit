@@ -27,7 +27,7 @@ class Analysis extends Component {
         cancelText="取消"
         onCancel={() => onCancel('analysisVisible')}
         onOk={onCreate}
-        wrapClassName={styles.analysisModal}
+        wrapClassName={styles.modal}
       >
         <Layout style={{ height: '100%' }}>
           <div className={styles.chart}>
