@@ -70,9 +70,10 @@ class WorkbenchItem extends Component {
             const el = ReactDOM.findDOMNode(this.ref.current);
 
             if (document.fullscreenElement) {
-              document.exitFullscreen();
+              document.exitFullscreen().then(()=>{
+              this.suitObject.suit.resize()
+              });
             } else {
-              
               el.requestFullscreen().then(()=>{
               this.suitObject.suit.resize()
               });
