@@ -7,7 +7,7 @@ class CurveChart extends Component {
   render() {
     return (
       <div className={styles.chart}>
-        <L data={null}></L>
+        {/* <L data={null}></L> */}
       </div>
     );
   }

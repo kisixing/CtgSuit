@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Table, Divider } from 'antd';
+import moment from 'moment';
 import styles from './TableList.less';
 
 class TableList extends Component {
@@ -10,15 +11,15 @@ class TableList extends Component {
     this.columns = [
       {
         title: '编号',
-        dataIndex: 'NO',
-        key: 'NO',
+        dataIndex: 'id',
+        key: 'id',
         width: 80,
         align: 'center',
       },
       {
         title: '检查次数',
-        dataIndex: 'checkNumber',
-        key: 'checkNumber',
+        dataIndex: 'visitType',
+        key: 'visitType',
         width: 80,
         align: 'center',
       },
@@ -27,42 +28,48 @@ class TableList extends Component {
         dataIndex: 'name',
         key: 'name',
         width: 100,
+        render: (text, record) => record.pregnancy.name,
       },
       {
         title: '年龄',
         dataIndex: 'age',
         key: 'age',
         width: 80,
+        render: (text, record) => record.pregnancy.age,
       },
       {
         title: '孕周',
-        dataIndex: 'gestweek',
-        key: 'gestweek',
+        dataIndex: 'gestationalWeek',
+        key: 'gestationalWeek',
         width: 80,
       },
       {
         title: '门诊号',
-        dataIndex: 'patientNumber',
-        key: 'patientNumber',
+        dataIndex: 'outpatientNO',
+        key: 'outpatientNO',
         width: 200,
+        render: (text, record) => record.pregnancy.outpatientNO,
       },
       {
         title: '住院号',
-        dataIndex: 'AD',
-        key: 'AD',
+        dataIndex: 'inpatientNO',
+        key: 'inpatientNO',
         width: 200,
+        render: (text, record) => record.pregnancy.inpatientNO,
       },
       {
         title: '床号',
         dataIndex: 'bedNumber',
         key: 'bedNumber',
         width: 200,
+        render: (text, record) => record.ctgexam.id,
       },
       {
         title: '日期',
-        dataIndex: 'date',
-        key: 'date',
+        dataIndex: 'visitTime',
+        key: 'visitTime',
         width: 150,
+        render: text => moment(text).format('YYYY-MM-DD HH:mm:ss'),
       },
       {
         title: 'GP',
@@ -76,7 +83,7 @@ class TableList extends Component {
         key: 'comment',
         width: 180,
         align: 'center',
-        render: (text, recod) => 123456789,
+        render: (text, recod) => '',
       },
       {
         title: '操作',
@@ -93,7 +100,7 @@ class TableList extends Component {
               <Divider type="vertical" />
               <a href="javacript:;">导出</a>
               <Divider type="vertical" />
-              <a href="javacript:;">记录单</a>
+              <a href="javacript:;">删除</a>
             </span>
           );
         },
@@ -119,6 +126,7 @@ class TableList extends Component {
 
   render() {
     const { selected, dataSource, loading } = this.props;
+
     return (
       <div className={styles.tableList}>
         <Table
@@ -134,7 +142,7 @@ class TableList extends Component {
               onDoubleClick: event => {},
             };
           }}
-          loading={!loading}
+          loading={loading.effects['archives/fetchRecords']}
           rowKey="id"
           rowClassName={record => (record.NO === selected.NO ? styles.selectedRow : '')}
           rowSelection={{

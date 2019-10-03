@@ -126,7 +126,8 @@ class WorkbenchItem extends Component {
   render() {
     const { itemHeight, itemSpan, dataSource, outPadding } = this.props;
     const { showSetting, visible, analysisVisible, printVisible, partogramVisible } = this.state;
-    const {data} = dataSource
+    const { data } = dataSource;
+    console.log('78787878', dataSource);
     return (
       <Col
         span={itemSpan}

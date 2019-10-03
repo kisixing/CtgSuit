@@ -28,11 +28,12 @@ const CollectionCreateForm = Form.create({ name: 'create_form' })(
           width={800}
           visible={visible}
           title={`【${dataSource.index + 1}】 建档（绑定）`}
+          footer={null}
           okText="创建"
           cancelText="取消"
+          bodyStyle={{ paddingRight: '48px' }}
           onCancel={() => onCancel('visible')}
           onOk={onCreate}
-          bodyStyle={{ paddingRight: '48px' }}
         >
           <Form layout="horizontal" {...formItemLayout}>
             <Row gutter={24}>
