@@ -131,12 +131,12 @@ class BasicLayout extends Component {
             <Avatar
               size="small"
               className={styles.avatar}
-              src={account && account.imageUrl}
+              src={account.imageUrl}
               alt="avatar"
             >
-              {account && account.login && account.login.substr(0, 1).toUpperCase()}
+              {account.login && account.login.substr(0, 1).toUpperCase()}
             </Avatar>
-            <span className={styles.name}>{account && account.login}</span>
+            <span className={styles.name}>{account.login}</span>
           </span>
         </HeaderDropdown>
       </Spin>
@@ -203,7 +203,7 @@ class BasicLayout extends Component {
 
 export default connect(({ global, list, loading }) => ({
   loading: loading,
-  account: global.account,
+  account: global.account || {},
   pageData: list.pageData,
   page: list.page,
   listData: list.listData,

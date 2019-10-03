@@ -31,17 +31,14 @@ class Archives extends PureComponent {
     // );
     return (
       <Layout className={styles.wrapper}>
-        <Sider theme="light" width="320" className={styles.aside}>
+        <div className={styles.searchForm}>
           <FieldForm />
-        </Sider>
-        <Layout className={styles.main}>
           <TableList />
-
-          <Layout className={styles.chart}>
-            <h2>电脑胎儿监护图</h2>
-            <CurveChart />
-          </Layout>
-        </Layout>
+        </div>
+        <div className={styles.chart}>
+          <h2>电脑胎儿监护图</h2>
+          <CurveChart />
+        </div>
       </Layout>
     );
   }

@@ -7,6 +7,6 @@ module.exports = {
   copyright: '© 2019 莲印医疗科技',
   logoPath: require('../assets/logo.png'),
   avatar: '',
-  apiPrefix: NODE_ENV === 'development' ? '/api/v1' : 'http://192.168.0.183:9986/api',
+  apiPrefix: NODE_ENV === 'development' ? '/api/v1' : 'http://192.168.0.208:9986/api',
   fixedHeader: true, // sticky primary layout header
 };

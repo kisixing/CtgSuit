@@ -37,7 +37,6 @@ class Login extends PureComponent {
   render() {
     const { loading, error, form } = this.props;
     const { getFieldDecorator } = form;
-
     return (
       <>
         <div className={styles.container}>
@@ -91,7 +90,9 @@ class Login extends PureComponent {
                 <span>password：123456</span>
               </p>
             </Row>
-            {error.status ? <Alert message={error.desc} type="error" closable /> : null}
+            {error.status === '401' ? (
+              <Alert message={error.message} type="error" closable />
+            ) : null}
           </Form>
         </div>
         {/* footer */}

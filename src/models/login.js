@@ -14,8 +14,10 @@ export default {
   },
   subscriptions: {},
   effects: {
-    *login({ payload }, { put, call, select }) {
-      const data = yield call(authenticate, payload);
+    *login({ payload }, { put, call }) {
+      let data = {};
+      data = yield call(authenticate, payload);
+      console.log('error------', data);
       const auth = data.id_token ? true : false;
       if (auth) {
         // 登录验证成功
@@ -29,7 +31,6 @@ export default {
           type: 'global/updateState',
           payload: {
             isLogin: true,
-            // currentUser: data.data,
           },
         });
         store.set(TOKEN, `Bearer ${data.id_token}`);

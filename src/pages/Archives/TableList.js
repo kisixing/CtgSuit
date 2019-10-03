@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Table, Button } from 'antd';
+import { Table, Button, Divider } from 'antd';
 import styles from './TableList.less';
 
 const columns = [
@@ -70,9 +70,29 @@ const columns = [
     title: '备注',
     dataIndex: 'comment',
     key: 'comment',
-    width: 100,
+    width: 180,
     align: 'center',
     render: (text, recod) => 123456789,
+  },
+  {
+    title: '操作',
+    dataIndex: 'action',
+    key: 'action',
+    align: 'center',
+    width: 200,
+    render: (text, record) => {
+      return (
+        <span>
+          <a href="javacript:;">详情</a>
+          <Divider type="vertical" />
+          <a href="javacript:;">修改</a>
+          <Divider type="vertical" />
+          <a href="javacript:;">导出</a>
+          <Divider type="vertical" />
+          <a href="javacript:;">记录单</a>
+        </span>
+      );
+    },
   },
 ];
 
@@ -84,7 +104,6 @@ class TableList extends Component {
 
   handleClick = (record, index) => {
     const { dispatch } = this.props;
-    console.log('888888', record)
     dispatch({
       type: 'archives/updateState',
       payload: {
@@ -102,7 +121,7 @@ class TableList extends Component {
         <Table
           bordered
           size="small"
-          scroll={{ x: 1400, y: 240 }}
+          scroll={{ x: 1680, y: 240 }}
           pagination={false}
           columns={columns}
           dataSource={dataSource}
@@ -122,14 +141,6 @@ class TableList extends Component {
             onSelect: (record, selected, selectedRows) => this.handleClick(record),
           }}
         />
-        <div className={styles.buttonView}>
-          <Button>全选</Button>
-          <Button>查询</Button>
-          <Button>排序</Button>
-          <Button>导出</Button>
-          <Button>导入</Button>
-          <Button>记录单</Button>
-        </div>
       </div>
     );
   }
