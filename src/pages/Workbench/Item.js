@@ -109,11 +109,11 @@ class WorkbenchItem extends Component {
   renderTilte = item => {
     return (
       <div className={styles.title}>
-        床号: <span>{item.index + 1}</span>
-        住院号: <span>{item.index + 1}</span>
-        姓名: <span>{item.name}</span>
-        年龄: <span>{item.age}</span>
-        开始时间: <span>{item.startTime}</span>
+        床号: <span>{item.bedno }</span>
+        住院号: <span>{item.documentno }</span>
+        姓名: <span>{item.bedname}</span>
+        {/* 年龄: <span>{item.age}</span> */}
+        开始时间: <span>{new Date(item.updateTime).toLocaleDateString()}</span>
       </div>
     );
   };
@@ -121,7 +121,7 @@ class WorkbenchItem extends Component {
   render() {
     const { itemHeight, itemSpan, dataSource, outPadding } = this.props;
     const { showSetting, visible, analysisVisible, printVisible, partogramVisible } = this.state;
-
+    const {data} = dataSource
     return (
       <Col
         span={itemSpan}
@@ -171,7 +171,7 @@ class WorkbenchItem extends Component {
           extra={this.renderExtra(dataSource.status)}
           bodyStyle={{ padding: 0, height: '100%' }}
         >
-          <L data={null}></L>
+          <L data={data}></L>
         </Card>
         <CollectionCreateForm
           wrappedComponentRef={this.saveFormRef}
