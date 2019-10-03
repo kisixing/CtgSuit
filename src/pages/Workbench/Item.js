@@ -23,6 +23,7 @@ class WorkbenchItem extends Component {
       printVisible: false,
       partogramVisible: false,
     };
+    this.suitObject = {suit:null}
     this.ref = React.createRef();
   }
 
@@ -96,9 +97,13 @@ class WorkbenchItem extends Component {
             const el = ReactDOM.findDOMNode(this.ref.current);
 
             if (document.fullscreenElement) {
-              document.exitFullscreen();
+              document.exitFullscreen().then(()=>{
+              this.suitObject.suit.resize()
+              });
             } else {
-              el.requestFullscreen();
+              el.requestFullscreen().then(()=>{
+              this.suitObject.suit.resize()
+              });
             }
           }}
         ></Button>
@@ -169,9 +174,9 @@ class WorkbenchItem extends Component {
           size="small"
           className={styles.card}
           extra={this.renderExtra(dataSource.status)}
-          bodyStyle={{ padding: 0, height: '100%' }}
+          bodyStyle={{ padding: 0, height: 'calc(100% - 40px)' }}
         >
-          <L data={data}></L>
+          <L data={data} mutableSuitObject={this.suitObject}></L>
         </Card>
         <CollectionCreateForm
           wrappedComponentRef={this.saveFormRef}

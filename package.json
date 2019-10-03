@@ -4,7 +4,7 @@
   "license": "CC0-1.0",
   "private": true,
   "scripts": {
-    "start:dev": "concurrently --kill-others 'yarn start' 'yarn run dev:main'  ",
+    "start:dev": "concurrently  'yarn start' 'yarn run dev:main'  ",
     "start": "cross-env PORT=1702 umi dev",
     "dev:main": "electron .",
     "build:render": "umi build",
@@ -15,7 +15,7 @@
     "pack-linux": "npm run build:render && npm run rebuild && electron-builder build --linux ",
     "dist": "electron-builder",
     "precommit": "lint-staged",
-    "update:lianmed": "shx rm -rf  node_modules/@lianmed && yarn"
+    "update:lianmed": "shx rm -rf  node_modules/@lianmed yarn.lock && yarn"
   },
   "main": "./app/main/index.js",
   "dependencies": {
