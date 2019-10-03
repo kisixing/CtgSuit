@@ -23,14 +23,14 @@ class C extends Component {
         cancelText="取消"
         footer={null}
         onOk={onCreate}
-        bodyStyle={{ paddingRight: '48px' }}
+        bodyStyle={{ paddingRight: '48px', background: '#fff' }}
         wrapClassName={modalStyles.modal}
         onCancel={() => onCancel('partogramVisible')}
       >
         <div style={{ height: 450 }}>
           <Partogram />
         </div>
-        <PartogramTable url="api/v1/prenatal-visits" style={{ padding: '20px' }} />
+        <PartogramTable url="api/v1/prenatal-visits" style={{ padding: '20px' }} id="1" />
       </Modal>
     );
   }
