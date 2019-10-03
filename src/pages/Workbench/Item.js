@@ -9,7 +9,7 @@ import { Ctg as L } from '@lianmed/lmg';
 import CollectionCreateForm from './CollectionCreateForm';
 import Analysis from './Analysis';
 import PrintModal from './PrintModal';
-import C from './Partogram';
+import Partogram from './Partogram';
 import { mapStatusToColor, mapStatusToText } from '@/constant';
 import styles from './Item.less';
 
@@ -213,7 +213,7 @@ class WorkbenchItem extends Component {
           onCreate={this.handleCreate}
           dataSource={dataSource}
         />
-        <C
+        <Partogram
           wrappedComponentRef={this.printRef}
           visible={partogramVisible}
           onCancel={this.handleCancel}
