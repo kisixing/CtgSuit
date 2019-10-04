@@ -1,9 +1,8 @@
 const datacache: Map<any, any> = new Map();
 const interval: number = 800;
 export default datacache;
-const defaultUrl =
-  'ws://192.168.0.208:8084/websocket/?request=e2lkOjE7cmlkOjI2O3Rva2VuOiI0MzYwNjgxMWM3MzA1Y2NjNmFiYjJiZTExNjU3OWJmZCJ9';
 
+import config from '@/utils/config';
 export class WsConnect {
   static _this: WsConnect;
   datacache = datacache;
@@ -25,8 +24,10 @@ export class WsConnect {
     this.socket.send(message);
   }
 
-  connect = (url: string = defaultUrl): Promise<Map<any, any>> => {
-    const socket = (this.socket = new WebSocket(url));
+  connect = (url: string = config.wsUrl): Promise<Map<any, any>> => {
+    const socket = (this.socket = new WebSocket(
+      `ws://${url}/websocket/?request=e2lkOjE7cmlkOjI2O3Rva2VuOiI0MzYwNjgxMWM3MzA1Y2NjNmFiYjJiZTExNjU3OWJmZCJ9`,
+    ));
     return new Promise(res => {
       socket.onerror = () => {
         console.log('websocket 错误');
