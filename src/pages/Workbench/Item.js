@@ -13,8 +13,8 @@ import Partogram from './Partogram';
 import { mapStatusToColor, mapStatusToText } from '@/constant';
 import styles from './Item.less';
 import { WsConnect } from '@/services/WsConnect';
-const socket = WsConnect._this.socket;
-console.log(socket);
+const socket = WsConnect._this;
+
 class WorkbenchItem extends Component {
   constructor(props) {
     super(props);
@@ -41,6 +41,7 @@ class WorkbenchItem extends Component {
       });
     }
   }
+
   toggleTool = () => {
     const { showSetting } = this.state;
     this.setState({ showSetting: !showSetting });
@@ -54,7 +55,7 @@ class WorkbenchItem extends Component {
     this.setState({ [name]: false });
   };
 
-  handleCreate = () => {
+  handleCreate = item => {
     // 建档/确定action
     const { dispatch } = this.props;
     const { form } = this.formRef.props;
@@ -62,9 +63,32 @@ class WorkbenchItem extends Component {
       if (err) {
         return;
       }
+      // 新建孕册
+      console.log('create--------', item, values);
       dispatch({
         type: 'list/createPregnancies',
         payload: { ...values },
+      });
+      // 新建档案
+      const d = {
+        visitType: values.visitTime,
+        visitTime: values.values,
+        gestationalWeek: values.gestationalWeek,
+        pregnancy: values,
+        ctgexam: {
+          startTime: '2019-09-30T16:15:24+08:00',
+          endTime: null,
+          result: null,
+          note: null,
+          diagnosis: null,
+          report: null,
+        },
+      };
+      dispatch({
+        type: 'archives/create',
+        payload: d,
+      }, () => {
+        // 刷新 bed infomation
       });
       form.resetFields();
       this.setState({ visible: false });
@@ -72,6 +96,7 @@ class WorkbenchItem extends Component {
   };
 
   start = item => {
+    const { deviceno, bedno } = item;
     Modal.confirm({
       centered: true,
       title: '提示',
@@ -79,15 +104,13 @@ class WorkbenchItem extends Component {
       okText: '确认',
       cancelText: '取消',
       onOk: function() {
-        this.props.dispatch({
-          type: '',
-          payload: {},
-        });
+        socket.startwork(deviceno, bedno);
       },
     });
   };
 
   end = item => {
+    const { deviceno, bedno } = item;
     Modal.confirm({
       centered: true,
       title: '提示',
@@ -95,31 +118,9 @@ class WorkbenchItem extends Component {
       okText: '确认',
       cancelText: '取消',
       onOk: function() {
-        this.props.dispatch({
-          type: '',
-          payload: {},
-        });
+        socket.endwork(deviceno, bedno);
       },
     });
-  };
-
-  // 点解弹出建档按钮
-  showCreateModal = item => {
-    this.setState({ visible: true });
-    const { dispatch } = this.props;
-    const { pregnancy } = item;
-    const isFetch = pregnancy && pregnancy.inpatientNO;
-    if (isFetch) {
-      dispatch({
-        type: 'item/fetchPregnancy',
-        payload: {
-          'inpatientNO.contains': pregnancy.inpatientNO,
-        },
-        callback(e) {
-          console.log('call back', e);
-        },
-      });
-    }
   };
 
   renderExtra = status => {
@@ -150,6 +151,7 @@ class WorkbenchItem extends Component {
       </div>
     );
   };
+
   componentDidMount() {
     event.on(
       'fullScreen',
@@ -161,9 +163,11 @@ class WorkbenchItem extends Component {
       }),
     );
   }
+
   componentWillUnmount() {
     event.off('fullScreen', this.cb);
   }
+
   render() {
     const { itemHeight, itemSpan, dataSource, outPadding, ...rest } = this.props;
     const { showSetting, visible, analysisVisible, printVisible, partogramVisible } = this.state;
@@ -183,7 +187,7 @@ class WorkbenchItem extends Component {
           <Button icon="pause-circle" type="link" onClick={() => this.end(dataSource)}>
             停止监护
           </Button>
-          <Button icon="user-add" type="link" onClick={() => this.showCreateModal(dataSource)}>
+          <Button icon="user-add" type="link" onClick={() => this.showModal('visible')}>
             {documentno ? '已建档' : '建档'}
           </Button>
           <Button icon="pie-chart" type="link" onClick={() => this.showModal('analysisVisible')}>
@@ -221,7 +225,7 @@ class WorkbenchItem extends Component {
           <L data={data} mutableSuitObject={this.suitObject}></L>
         </Card>
         <CollectionCreateForm
-          wrappedComponentRef={form => this.formRef = form}
+          wrappedComponentRef={form => (this.formRef = form)}
           {...rest}
           visible={visible}
           onCancel={this.handleCancel}
@@ -229,21 +233,21 @@ class WorkbenchItem extends Component {
           dataSource={dataSource}
         />
         <Analysis
-          wrappedComponentRef={form => this.analysisRef = form}
+          wrappedComponentRef={form => (this.analysisRef = form)}
           visible={analysisVisible}
           onCancel={this.handleCancel}
           onCreate={this.handleCreate}
           dataSource={dataSource}
         />
         <PrintModal
-          wrappedComponentRef={form => this.printRef = form}
+          wrappedComponentRef={form => (this.printRef = form)}
           visible={printVisible}
           onCancel={this.handleCancel}
           onCreate={this.handleCreate}
           dataSource={dataSource}
         />
         <Partogram
-          wrappedComponentRef={form => this.partogramRef = form}
+          wrappedComponentRef={form => (this.partogramRef = form)}
           visible={partogramVisible}
           onCancel={this.handleCancel}
           onCreate={this.handleCreate}
@@ -255,6 +259,6 @@ class WorkbenchItem extends Component {
 }
 
 export default connect(({ loading, item }) => ({
-  loading: loading,
   pregnancy: item.pregnancy,
+  loading: loading,
 }))(WorkbenchItem);

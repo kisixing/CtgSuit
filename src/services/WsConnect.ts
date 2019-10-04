@@ -17,6 +17,7 @@ export class WsConnect {
   }
 
   startwork(device_no, bed_no) {
+    console.log('9999', device_no, bed_no)
     const message = `{"name":"start_work","data":{"device_no":${device_no},"bed_no":${bed_no}}}`;
     this.socket.send(message);
   }
