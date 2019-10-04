@@ -15,6 +15,16 @@ export class WsConnect {
 
     WsConnect._this = this;
   }
+
+  startwork(device_no, bed_no) {
+    const message = `{"name":"start_work","data":{"device_no":${device_no},"bed_no":${bed_no}}}`;
+    this.socket.send(message);
+  }
+  endwork(device_no, bed_no) {
+    const message = `{"name":"end_work","data":{"device_no":${device_no},"bed_no":${bed_no}}}`;
+    this.socket.send(message);
+  }
+
   connect = (url: string = defaultUrl): Promise<Map<any, any>> => {
     const socket = (this.socket = new WebSocket(url));
     return new Promise(res => {
@@ -212,14 +222,6 @@ export class WsConnect {
       } else if (value >= datacache.get(id).index) {
         datacache.get(id).index = value;
       }
-    }
-
-    function startwork() {
-      //var message = '{"name":"start_work","data":{"device_no":'+Number(adid[0])+',"bed_no":'+Number(adid[1])+'}}';
-    }
-
-    function endwork() {
-      //var message = '{"name":"start_work","data":{"device_no":'+Number(adid[0])+',"bed_no":'+Number(adid[1])+'}}';
     }
 
     function send(message: string) {
