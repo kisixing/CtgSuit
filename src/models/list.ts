@@ -6,7 +6,7 @@ message.config({
   top: 150,
   duration: 2,
 });
-
+let flag = false;
 export default {
   namespace: 'list',
   state: {
@@ -18,6 +18,9 @@ export default {
   },
   effects: {
     *init(_, { put, call }) {
+      if (flag) return;
+      flag = true;
+      console.log('init');
       const wsConnect = new WsConnect();
 
       let datacache: Map<string, object> = yield call(wsConnect.connect);
