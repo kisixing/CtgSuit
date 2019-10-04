@@ -12,7 +12,9 @@ import PrintModal from './PrintModal';
 import Partogram from './Partogram';
 import { mapStatusToColor, mapStatusToText } from '@/constant';
 import styles from './Item.less';
-
+import { WsConnect } from '@/services/WsConnect';
+const socket = WsConnect._this.socket;
+console.log(socket);
 class WorkbenchItem extends Component {
   constructor(props) {
     super(props);
@@ -79,10 +81,8 @@ class WorkbenchItem extends Component {
       onOk: function() {
         this.props.dispatch({
           type: '',
-          payload: {
-
-          }
-        })
+          payload: {},
+        });
       },
     });
   };
@@ -97,16 +97,14 @@ class WorkbenchItem extends Component {
       onOk: function() {
         this.props.dispatch({
           type: '',
-          payload: {
-
-          }
+          payload: {},
         });
       },
     });
   };
 
   // 点解弹出建档按钮
-  showCreateModal = (item) => {
+  showCreateModal = item => {
     this.setState({ visible: true });
     const { dispatch } = this.props;
     const { pregnancy } = item;
@@ -122,8 +120,7 @@ class WorkbenchItem extends Component {
         },
       });
     }
-  }
-
+  };
 
   renderExtra = status => {
     return (
