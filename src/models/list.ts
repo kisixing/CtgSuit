@@ -1,7 +1,6 @@
-// import { getList } from '@/services/list.js';
 import { message } from 'antd';
 import { newPregnancies } from '@/services/api';
-import { connectWs } from '@/services/connectWs';
+import { WsConnect } from '@/services/WsConnect';
 import { getList } from '@/services/list';
 message.config({
   top: 150,
@@ -18,16 +17,26 @@ export default {
     datacache: new Map(),
   },
   effects: {
-    *getlist(_, { put, call }) {
-      //   const res = yield call(getList, { name: 'zsd', age: '14' });
-      const cache: Map<string, object> = yield call(connectWs);
+    *init(_, { put, call }) {
+      const wsConnect = new WsConnect();
+
+      let datacache: Map<string, object> = yield call(wsConnect.connect);
+
+      yield put({ type: 'setState', payload: { datacache } });
+      yield put({ type: 'getlist' });
+    },
+    *getlist(_, { put, call, select }) {
+      const state = yield select();
+      const {
+        list: { datacache },
+      } = state;
       let rawData: IItem[] = yield call(getList);
 
       rawData =
         (rawData &&
           rawData.map(_ => {
             const unitId = `${_.deviceno}-${_.subdevice}`;
-            return { ..._, data: cache.get(unitId), unitId };
+            return { ..._, data: datacache.get(unitId) || null, unitId };
           })) ||
         [];
 

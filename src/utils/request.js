@@ -2,7 +2,6 @@
  * request 网络请求工具
  * 更详细的 api 文档: https://github.com/umijs/umi-request
  */
-import { notification } from 'antd';
 import router from 'umi/router';
 import store from 'store';
 import { TOKEN } from '@/utils/constant';
@@ -11,9 +10,6 @@ import r from '@lianmed/request';
 const request = r.config({
   errHandler({ status, errortext, url }) {
     if (status === 401) {
-      notification.error({
-        message: '未登录或登录已过期，请重新登录。',
-      });
       // @HACK
       /* eslint-disable no-underscore-dangle */
       window.g_app._store.dispatch({
@@ -21,10 +17,6 @@ const request = r.config({
       });
       return;
     }
-    notification.error({
-      message: `请求错误 ${status}: ${url}`,
-      description: errortext,
-    });
     // environment should not be used
     if (status === 403) {
       router.push('/exception/403');

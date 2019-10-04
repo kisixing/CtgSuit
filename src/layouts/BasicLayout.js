@@ -33,7 +33,7 @@ class BasicLayout extends Component {
       type: 'global/fetchAccount',
     });
     dispatch({
-      type: 'list/getlist',
+      type: 'list/init',
     });
     // send ipcMain
     ipcRenderer.send('clear-all-store', {
@@ -127,12 +127,7 @@ class BasicLayout extends Component {
       >
         <HeaderDropdown overlay={menu} key={key}>
           <span className={`${styles.action} ${styles.account}`}>
-            <Avatar
-              size="small"
-              className={styles.avatar}
-              src={account.imageUrl}
-              alt="avatar"
-            >
+            <Avatar size="small" className={styles.avatar} src={account.imageUrl} alt="avatar">
               {account.login && account.login.substr(0, 1).toUpperCase()}
             </Avatar>
             <span className={styles.name}>{account.login}</span>
