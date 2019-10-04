@@ -150,13 +150,17 @@ class WorkbenchItem extends Component {
     this.suitObject.suit.resize();
   };
   componentDidUpdate() {
-    if (this.props.fullScreenId === this.props.dataSource.unitId) {
+    const { dispatch, fullScreenId, dataSource } = this.props;
+    if (fullScreenId === dataSource.unitId) {
       this.fullScreen();
+      dispatch({ type: 'list/setState', payload: { fullScreenId: null } });
     }
   }
   componentDidMount() {
-    if (this.props.fullScreenId === this.props.dataSource.unitId) {
+    const { dispatch, fullScreenId, dataSource } = this.props;
+    if (fullScreenId === dataSource.unitId) {
       this.fullScreen();
+      dispatch({ type: 'list/setState', payload: { fullScreenId: null } });
     }
     document.addEventListener('fullscreenchange', this.fullScreenEvent);
   }

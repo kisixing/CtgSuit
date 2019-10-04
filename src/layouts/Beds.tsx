@@ -19,7 +19,9 @@ function Beds({ dispatch, listData }) {
       if (clickTimeout !== null) {
         clearTimeout(clickTimeout);
         clickTimeout = null;
-        dispatch({ ...data, fullScreenId: unitId });
+        dispatch(data);
+        dispatch({ type: 'list/setState', payload: { fullScreenId: unitId } });
+
         router.replace('/workbench');
       } else {
         clickTimeout = setTimeout(() => {

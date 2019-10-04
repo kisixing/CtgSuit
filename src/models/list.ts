@@ -79,9 +79,7 @@ export default {
 
       yield put({ type: 'setState', payload: { pageData } });
     },
-    *setPageItems({ page, fullScreenId = null }, { put, select }) {
-      console.log('yyyyyyyyyyyyyyy', fullScreenId);
-
+    *setPageItems({ page }, { put, select }) {
       const state = yield select();
       const {
         setting: { listLayout },
@@ -90,7 +88,7 @@ export default {
       if (page === oldPage) return;
       const pageItemsCount: number = listLayout[0] * listLayout[1];
       const pageItems = listData.slice(page * pageItemsCount, (page + 1) * pageItemsCount);
-      yield put({ type: 'setState', payload: { pageItems, page, fullScreenId } });
+      yield put({ type: 'setState', payload: { pageItems, page } });
     },
     // 建档
     *createPregnancies({ payload }, { call, put }) {
