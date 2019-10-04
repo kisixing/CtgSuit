@@ -32,13 +32,9 @@ class WorkbenchItem extends Component {
   fullScreen() {
     const el = ReactDOM.findDOMNode(this.ref.current);
     if (document.fullscreenElement) {
-      document.exitFullscreen().then(() => {
-        this.suitObject.suit.resize();
-      });
+      document.exitFullscreen();
     } else {
-      el.requestFullscreen().then(() => {
-        this.suitObject.suit.resize();
-      });
+      el.requestFullscreen();
     }
   }
   toggleTool = () => {
@@ -150,19 +146,23 @@ class WorkbenchItem extends Component {
       </div>
     );
   };
+  fullScreenEvent = () => {
+    this.suitObject.suit.resize();
+  };
+  componentDidUpdate() {
+    if (this.props.fullScreenId === this.props.dataSource.unitId) {
+      this.fullScreen();
+    }
+  }
   componentDidMount() {
-    event.on(
-      'fullScreen',
-      (this.cb = id => {
-        console.log('aaaaa', id, this.props.dataSource.unitId);
-        if (id === this.props.dataSource.unitId) {
-          // this.fullScreen();
-        }
-      }),
-    );
+    if (this.props.fullScreenId === this.props.dataSource.unitId) {
+      this.fullScreen();
+    }
+    document.addEventListener('fullscreenchange', this.fullScreenEvent);
   }
   componentWillUnmount() {
     event.off('fullScreen', this.cb);
+    document.removeEventListener('fullscreenchange', this.fullScreenEvent);
   }
   render() {
     const { itemHeight, itemSpan, dataSource, outPadding, ...rest } = this.props;
@@ -218,10 +218,10 @@ class WorkbenchItem extends Component {
           extra={this.renderExtra(dataSource.status)}
           bodyStyle={{ padding: 0, height: 'calc(100% - 40px)' }}
         >
-          <L data={data} mutableSuitObject={this.suitObject}></L>
+          <L data={data} mutableSuitObject={this.suitObject} itemHeight={itemHeight}></L>
         </Card>
         <CollectionCreateForm
-          wrappedComponentRef={form => this.formRef = form}
+          wrappedComponentRef={form => (this.formRef = form)}
           {...rest}
           visible={visible}
           onCancel={this.handleCancel}
@@ -229,21 +229,21 @@ class WorkbenchItem extends Component {
           dataSource={dataSource}
         />
         <Analysis
-          wrappedComponentRef={form => this.analysisRef = form}
+          wrappedComponentRef={form => (this.analysisRef = form)}
           visible={analysisVisible}
           onCancel={this.handleCancel}
           onCreate={this.handleCreate}
           dataSource={dataSource}
         />
         <PrintModal
-          wrappedComponentRef={form => this.printRef = form}
+          wrappedComponentRef={form => (this.printRef = form)}
           visible={printVisible}
           onCancel={this.handleCancel}
           onCreate={this.handleCreate}
           dataSource={dataSource}
         />
         <Partogram
-          wrappedComponentRef={form => this.partogramRef = form}
+          wrappedComponentRef={form => (this.partogramRef = form)}
           visible={partogramVisible}
           onCancel={this.handleCancel}
           onCreate={this.handleCreate}

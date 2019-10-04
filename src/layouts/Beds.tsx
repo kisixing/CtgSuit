@@ -8,7 +8,6 @@ import React from 'react';
 import { Button } from 'antd';
 import { router } from 'umi';
 import { mapStatusToColor } from '@/constant';
-import { event } from '@lianmed/utils';
 
 function Beds({ dispatch, listData }) {
   let clickTimeout = null;
@@ -16,22 +15,18 @@ function Beds({ dispatch, listData }) {
   const handleClicks = ({ pageIndex, unitId }) => {
     return () => {
       const data = { type: 'list/setPageItems', page: pageIndex };
-      dispatch(data);
 
       if (clickTimeout !== null) {
         clearTimeout(clickTimeout);
         clickTimeout = null;
-        dispatch(data);
-        // setTimeout(() => {
-        //   event.emit('fullScreen', unitId);
-        // }, 5000);
-        location.hash.includes('workbench') || router.replace('/workbench');
+        dispatch({ ...data, fullScreenId: unitId });
+        router.replace('/workbench');
       } else {
         clickTimeout = setTimeout(() => {
           clearTimeout(clickTimeout);
           clickTimeout = null;
           dispatch(data);
-          location.hash.includes('workbench') || router.replace('/workbench');
+          router.replace('/workbench');
         }, 200);
       }
     };

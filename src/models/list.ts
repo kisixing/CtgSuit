@@ -15,14 +15,13 @@ export default {
     page: null, //当前页码
     pageItems: [], //[listItem,...]
     datacache: new Map(),
+    fullScreenId: null,
   },
   effects: {
     *init(_, { put, call }) {
       if (flag) return;
       flag = true;
-      console.log('init');
       const wsConnect = new WsConnect();
-
       let datacache: Map<string, object> = yield call(wsConnect.connect);
 
       yield put({ type: 'setState', payload: { datacache } });
@@ -80,7 +79,9 @@ export default {
 
       yield put({ type: 'setState', payload: { pageData } });
     },
-    *setPageItems({ page }, { put, select }) {
+    *setPageItems({ page, fullScreenId = null }, { put, select }) {
+      console.log('yyyyyyyyyyyyyyy', fullScreenId);
+
       const state = yield select();
       const {
         setting: { listLayout },
@@ -89,7 +90,7 @@ export default {
       if (page === oldPage) return;
       const pageItemsCount: number = listLayout[0] * listLayout[1];
       const pageItems = listData.slice(page * pageItemsCount, (page + 1) * pageItemsCount);
-      yield put({ type: 'setState', payload: { pageItems, page } });
+      yield put({ type: 'setState', payload: { pageItems, page, fullScreenId } });
     },
     // 建档
     *createPregnancies({ payload }, { call, put }) {

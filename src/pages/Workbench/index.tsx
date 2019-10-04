@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import './index.less';
 import Item from './Item';
 const Home = props => {
-  const { listLayout = [], pageItems } = props;
+  const { listLayout = [], pageItems, fullScreenId, dispatch } = props;
   const wrap = useRef(null);
 
   const [wrapRec, setWrapRec] = useState({ height: 0, width: 0 });
@@ -27,6 +27,7 @@ const Home = props => {
               itemHeight={itemHeight}
               itemSpan={itemSpan}
               outPadding={outPadding}
+              fullScreenId={fullScreenId}
               {...item}
             />
           );
@@ -40,5 +41,6 @@ export default connect(({ setting, list }: any) => {
   return {
     listLayout: setting.listLayout,
     pageItems: list.pageItems,
+    fullScreenId: list.fullScreenId,
   };
 })(Home);
