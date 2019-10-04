@@ -51,6 +51,11 @@ export async function getPregnancy(params = {}) {
   return request(`${apiPrefix}/pregnancies?${stringify(params)}`);
 }
 
+/**
+ * 胎监档案记录接口
+ * @export
+ * @returns
+ */
 export async function getCTGrecords() {
   return request(`${apiPrefix}/prenatal-visits?CTGExamId.specified=true`);
 }
@@ -64,6 +69,19 @@ export async function newCTGrecord(params) {
 
 export async function updateCTGrecord(params) {
   return request(`${apiPrefix}/prenatal-visits`, {
+    method: 'PUT',
+    data: params,
+  });
+}
+
+/**
+ * 更新胎监状态接口 - 可选择调用 根据档案的自增id直接更新档案信息，如停止时间、诊断结果等
+ * @export
+ * @param {*} params
+ * @returns
+ */
+export async function updateCTGexams(params) {
+  return request(`${apiPrefix}/ctg-exams`, {
     method: 'PUT',
     data: params,
   });

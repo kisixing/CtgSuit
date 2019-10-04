@@ -90,11 +90,14 @@ export default {
       const pageItems = listData.slice(page * pageItemsCount, (page + 1) * pageItemsCount);
       yield put({ type: 'setState', payload: { pageItems, page } });
     },
-    // 建档
-    *createPregnancies({ payload }, { call, put }) {
+    // 新建孕册
+    *createPregnancies({ payload, callback }, { call, put }) {
       const res = yield call(newPregnancies, payload);
       if (res && res.id) {
         message.success('创建成功！');
+        if (callback && typeof callback === 'function') {
+          callback(res); // 返回结果
+        }
       }
       yield put({
         type: 'setState',

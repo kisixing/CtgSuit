@@ -23,7 +23,7 @@ const CollectionCreateForm = Form.create({
         form,
         dataSource: { documentno, pregnancy },
       } = this.props;
-      if (documentno) {
+      if (documentno && pregnancy) {
         form.setFieldsValue(pregnancy);
       }
     }

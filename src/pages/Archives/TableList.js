@@ -52,14 +52,14 @@ class TableList extends Component {
         title: '门诊号',
         dataIndex: 'outpatientNO',
         key: 'outpatientNO',
-        width: 200,
+        width: 100,
         render: (text, record) => record.pregnancy && record.pregnancy.outpatientNO,
       },
       {
         title: '住院号',
         dataIndex: 'inpatientNO',
         key: 'inpatientNO',
-        width: 200,
+        width: 100,
         render: (text, record) => record.pregnancy && record.pregnancy.inpatientNO,
       },
       {
@@ -95,17 +95,15 @@ class TableList extends Component {
         dataIndex: 'action',
         key: 'action',
         align: 'center',
-        width: 200,
+        width: 150,
         render: (text, record) => {
           return (
             <span>
-              <a href="javacript:;">详情</a>
+              <span onClick={this.showDetailModal}>修改</span>
               <Divider type="vertical" />
-              <a href="javacript:;">修改</a>
+              <span>导出</span>
               <Divider type="vertical" />
-              <a href="javacript:;">导出</a>
-              <Divider type="vertical" />
-              <a href="javacript:;">删除</a>
+              <span>删除</span>
             </span>
           );
         },
@@ -118,12 +116,22 @@ class TableList extends Component {
     dispatch({ type: 'archives/fetchRecords' });
   }
 
-  showModal = name => {
-    this.setState({ [name]: true });
+  showModal = () => {
+    this.setState({
+      visible: true,
+      type: 'create',
+    });
   };
 
-  handleCancel = name => {
-    this.setState({ [name]: false });
+  showDetailModal = () => {
+    this.setState({
+      visible: true,
+      type: 'detail',
+    });
+  }
+
+  handleCancel = () => {
+    this.setState({ visible: false });
   };
 
   saveFormRef = formRef => {
@@ -147,10 +155,7 @@ class TableList extends Component {
             name: values.name,
             age: values.age,
           },
-        },
-        callback(e) {
-          console.log('99999999999999999999999999999999999999999', e);
-        },
+        }
       });
       form.resetFields();
       this.setState({ visible: false });
@@ -188,7 +193,7 @@ class TableList extends Component {
         <Table
           bordered
           size="small"
-          scroll={{ x: 1680, y: 240 }}
+          scroll={{ x: 1400, y: 240 }}
           pagination={false}
           columns={this.columns}
           dataSource={dataSource}
@@ -215,6 +220,7 @@ class TableList extends Component {
           wrappedComponentRef={this.saveFormRef}
           onCancel={this.handleCancel}
           onCreate={this.handleCreate}
+          dataSource={selected}
         />
       </div>
     );

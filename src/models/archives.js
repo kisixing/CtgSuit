@@ -1,4 +1,9 @@
-import { getCTGrecords, newCTGrecord, updateCTGrecord } from '@/services/api';
+import {
+  getCTGrecords,
+  newCTGrecord,
+  updateCTGrecord,
+  updateCTGexams
+} from '@/services/api';
 
 export default {
   namespace: 'archives',
@@ -22,6 +27,9 @@ export default {
     *update({ payload }, { call, put }) {
       const res = yield call(updateCTGrecord, payload);
     },
+    *updateExams({ payload }, { call, put }) {
+      const res = yield call(updateCTGexams, payload);
+    }
   },
   reducers: {
     updateState(state, { payload }) {

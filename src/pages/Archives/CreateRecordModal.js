@@ -3,14 +3,26 @@
  */
 import React from 'react';
 import moment from 'moment';
-import { Button, Modal, Form, Input, Row, Col, Select, DatePicker, InputNumber } from 'antd';
-import styles from './index.less';
+import { Modal, Form, Input, Row, Col, DatePicker, InputNumber } from 'antd';
 
-const CreateRecordModal = Form.create({ name: 'create_form' })(
-  // eslint-disable-next-line
+const CreateRecordModal = Form.create({
+  name: 'create_form',
+})(
   class extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = {};
+    }
+
+    componentDidMount() {
+      const { form, type, dataSource } = this.props;
+      if (type === 'detail') {
+        form.setFieldsValue(dataSource);
+      }
+    }
+
     render() {
-      const { visible, onCancel, onCreate, form } = this.props;
+      const { visible, onCancel, onCreate, type, form } = this.props;
       const { getFieldDecorator } = form;
 
       const formItemLayout = {
@@ -27,13 +39,14 @@ const CreateRecordModal = Form.create({ name: 'create_form' })(
       return (
         <Modal
           centered
+          destroyOnClose
           width={800}
           visible={visible}
-          title="新建"
+          title={type === 'create' ? '新建' : '详情'}
           okText="创建"
           cancelText="取消"
           bodyStyle={{ paddingRight: '48px' }}
-          onCancel={() => onCancel('visible')}
+          onCancel={onCancel}
           onOk={onCreate}
         >
           <Form layout="horizontal" {...formItemLayout}>
