@@ -16,7 +16,6 @@ export class WsConnect {
   }
 
   startwork(device_no, bed_no) {
-    console.log('9999', device_no, bed_no)
     const message = `{"name":"start_work","data":{"device_no":${device_no},"bed_no":${bed_no}}}`;
     this.socket.send(message);
   }
@@ -26,9 +25,11 @@ export class WsConnect {
   }
 
   connect = (url: string = config.wsUrl): Promise<Map<any, any>> => {
-    const socket = (this.socket = new WebSocket(
+    this.socket = new WebSocket(
       `ws://${url}/websocket/?request=e2lkOjE7cmlkOjI2O3Rva2VuOiI0MzYwNjgxMWM3MzA1Y2NjNmFiYjJiZTExNjU3OWJmZCJ9`,
-    ));
+    );
+
+    const socket = this.socket;
     return new Promise(res => {
       socket.onerror = () => {
         console.log('websocket 错误');

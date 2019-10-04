@@ -145,7 +145,7 @@ class WorkbenchItem extends Component {
           type="link"
           onClick={this.fullScreen.bind(this)}
         ></Button>
-        <Switch defaultChecked />
+        {/* <Switch defaultChecked /> */}
       </div>
     );
   };
@@ -236,7 +236,7 @@ class WorkbenchItem extends Component {
           ></Button>
         </div>
         <Card
-          hoverable
+          // hoverable
           title={this.renderTilte(dataSource)}
           size="small"
           className={styles.card}
