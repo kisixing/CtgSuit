@@ -2,14 +2,53 @@
  * 建档
  */
 import React from 'react';
+import moment from 'moment';
 import { Button, Modal, Form, Input, Row, Col, Select, DatePicker, InputNumber } from 'antd';
 import styles from './index.less';
 
-const CollectionCreateForm = Form.create({ name: 'create_form11' })(
+const CollectionCreateForm = Form.create({
+  name: 'create_form',
+  mapPropsToFields ({ values }) {
+    return values && values['NO']
+      ? {
+          NO: Form.createFormField({
+            value: values.NO,
+          }),
+          name: Form.createFormField({
+            value: values.name,
+          }),
+          age: Form.createFormField({
+            value: values.age,
+          }),
+          gestweek: Form.createFormField({
+            value: values.gestweek,
+          }),
+          patientNumber: Form.createFormField({
+            value: values.patientNumber,
+          }),
+          AD: Form.createFormField({
+            value: values.AD,
+          }),
+          bedNumber: Form.createFormField({
+            value: values.bedNumber,
+          }),
+          date: Form.createFormField({
+            value: moment(values.date),
+          }),
+          GP: Form.createFormField({
+            value: values.GP,
+          }),
+          comment: Form.createFormField({
+            value: values.comment,
+          }),
+        }
+      : {};
+  }
+})(
   // eslint-disable-next-line
   class extends React.Component {
     render() {
-      const { visible, onCancel, onCreate, form, dataSource } = this.props;
+      const { visible, onCancel, onCreate, form, dataSource, pregnancy } = this.props;
       const { getFieldDecorator } = form;
 
       const formItemLayout = {

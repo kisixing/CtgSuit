@@ -54,10 +54,6 @@ class WorkbenchItem extends Component {
     this.setState({ [name]: false });
   };
 
-  saveFormRef = formRef => {
-    this.formRef = formRef;
-  };
-
   handleCreate = () => {
     // 建档/确定action
     const { dispatch } = this.props;
@@ -117,7 +113,7 @@ class WorkbenchItem extends Component {
       dispatch({
         type: 'item/fetchPregnancy',
         payload: {
-          inpatientNO: pregnancy.inpatientNO,
+          'inpatientNO.contains': pregnancy.inpatientNO,
         },
         callback(e) {
           console.log('call back', e);
@@ -225,7 +221,7 @@ class WorkbenchItem extends Component {
           <L data={data} mutableSuitObject={this.suitObject}></L>
         </Card>
         <CollectionCreateForm
-          wrappedComponentRef={this.saveFormRef}
+          wrappedComponentRef={form => this.formRef = form}
           {...rest}
           visible={visible}
           onCancel={this.handleCancel}
@@ -233,21 +229,21 @@ class WorkbenchItem extends Component {
           dataSource={dataSource}
         />
         <Analysis
-          wrappedComponentRef={this.analysisRef}
+          wrappedComponentRef={form => this.analysisRef = form}
           visible={analysisVisible}
           onCancel={this.handleCancel}
           onCreate={this.handleCreate}
           dataSource={dataSource}
         />
         <PrintModal
-          wrappedComponentRef={this.printRef}
+          wrappedComponentRef={form => this.printRef = form}
           visible={printVisible}
           onCancel={this.handleCancel}
           onCreate={this.handleCreate}
           dataSource={dataSource}
         />
         <Partogram
-          wrappedComponentRef={this.partogramRef}
+          wrappedComponentRef={form => this.partogramRef = form}
           visible={partogramVisible}
           onCancel={this.handleCancel}
           onCreate={this.handleCreate}
@@ -258,6 +254,7 @@ class WorkbenchItem extends Component {
   }
 }
 
-export default connect(({ loading }) => ({
+export default connect(({ loading, item }) => ({
   loading: loading,
+  pregnancy: item.pregnancy,
 }))(WorkbenchItem);

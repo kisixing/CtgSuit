@@ -11,8 +11,8 @@ class TableList extends Component {
     super(props);
     this.state = {
       visible: false,
+      type: 'create',
     };
-    this.ref = React.createRef();
     this.columns = [
       {
         title: '编号',
@@ -130,7 +130,7 @@ class TableList extends Component {
     this.formRef = formRef;
   };
 
-  // 创建
+  // 创建档案
   handleCreate = () => {
     const { dispatch } = this.props;
     const { form } = this.formRef.props;
@@ -139,15 +139,26 @@ class TableList extends Component {
         return;
       }
       dispatch({
-        type: 'list/createPregnancies',
-        payload: { ...values },
+        type: 'archives/create',
+        payload: {
+          ...values,
+          visitTime: moment(values.visitTime).format('YYYY-MM-DD HH:ss:mm'),
+          pregnancy: {
+            name: values.name,
+            age: values.age,
+          },
+        },
+        callback(e) {
+          console.log('99999999999999999999999999999999999999999', e);
+        },
       });
       form.resetFields();
       this.setState({ visible: false });
     });
   };
 
-  handleClick = (record, index) => {
+  // 单机行事件
+  handleRow = (record, index) => {
     const { dispatch } = this.props;
     dispatch({
       type: 'archives/updateState',
@@ -170,7 +181,7 @@ class TableList extends Component {
 
   render() {
     const { selected, dataSource, loading } = this.props;
-    const { visible } = this.state;
+    const { visible, type } = this.state;
 
     return (
       <div className={styles.tableList}>
@@ -183,27 +194,27 @@ class TableList extends Component {
           dataSource={dataSource}
           onRow={record => {
             return {
-              onClick: event => this.handleClick(record), // 点击行
+              onClick: event => this.handleRow(record), // 点击行
               onDoubleClick: event => {},
             };
           }}
           loading={loading.effects['archives/fetchRecords']}
           rowKey="id"
-          rowClassName={record => (record.NO === selected.NO ? styles.selectedRow : '')}
+          rowClassName={record => (record.id === selected.id ? styles.selectedRow : '')}
           rowSelection={{
             columnWidth: '38px',
             type: 'radio',
-            selectedRowKeys: [selected.NO],
-            onSelect: (record, selected, selectedRows) => this.handleClick(record),
+            selectedRowKeys: [selected.id],
+            onSelect: (record, selected, selectedRows) => this.handleRow(record),
           }}
           title={this.renderTitle}
         />
         <CreateRecordModal
-          wrappedComponentRef={this.saveFormRef}
+          type={type}
           visible={visible}
+          wrappedComponentRef={this.saveFormRef}
           onCancel={this.handleCancel}
           onCreate={this.handleCreate}
-          dataSource={dataSource}
         />
       </div>
     );

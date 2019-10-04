@@ -3,7 +3,7 @@ import { getPregnancy } from '@/services/api';
 export default {
   namespace: 'item',
   state: {
-    pregnancy: {},
+    pregnancy: {}, // 检索的孕册信息
   },
   effects: {
     *fetchPregnancy({ payload }, { call, put }) {
@@ -11,7 +11,7 @@ export default {
       yield put({
         type: 'updateState',
         payload: {
-          dataSource: res,
+          pregnancy: res[0],
         },
       });
     },
