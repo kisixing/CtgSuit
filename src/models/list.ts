@@ -15,14 +15,13 @@ export default {
     page: null, //当前页码
     pageItems: [], //[listItem,...]
     datacache: new Map(),
+    fullScreenId: null,
   },
   effects: {
     *init(_, { put, call }) {
       if (flag) return;
       flag = true;
-      console.log('init');
       const wsConnect = new WsConnect();
-
       let datacache: Map<string, object> = yield call(wsConnect.connect);
 
       yield put({ type: 'setState', payload: { datacache } });

@@ -32,13 +32,9 @@ class WorkbenchItem extends Component {
   fullScreen() {
     const el = ReactDOM.findDOMNode(this.ref.current);
     if (document.fullscreenElement) {
-      document.exitFullscreen().then(() => {
-        this.suitObject.suit.resize();
-      });
+      document.exitFullscreen();
     } else {
-      el.requestFullscreen().then(() => {
-        this.suitObject.suit.resize();
-      });
+      el.requestFullscreen();
     }
   }
 
@@ -152,20 +148,30 @@ class WorkbenchItem extends Component {
     );
   };
 
+  fullScreenEvent = () => {
+    this.suitObject.suit.resize();
+  };
+
+  componentDidUpdate() {
+    const { dispatch, fullScreenId, dataSource } = this.props;
+    if (fullScreenId === dataSource.unitId) {
+      this.fullScreen();
+      dispatch({ type: 'list/setState', payload: { fullScreenId: null } });
+    }
+  }
+
   componentDidMount() {
-    event.on(
-      'fullScreen',
-      (this.cb = id => {
-        console.log('aaaaa', id, this.props.dataSource.unitId);
-        if (id === this.props.dataSource.unitId) {
-          // this.fullScreen();
-        }
-      }),
-    );
+    const { dispatch, fullScreenId, dataSource } = this.props;
+    if (fullScreenId === dataSource.unitId) {
+      this.fullScreen();
+      dispatch({ type: 'list/setState', payload: { fullScreenId: null } });
+    }
+    document.addEventListener('fullscreenchange', this.fullScreenEvent);
   }
 
   componentWillUnmount() {
     event.off('fullScreen', this.cb);
+    document.removeEventListener('fullscreenchange', this.fullScreenEvent);
   }
 
   render() {
@@ -222,7 +228,7 @@ class WorkbenchItem extends Component {
           extra={this.renderExtra(dataSource.status)}
           bodyStyle={{ padding: 0, height: 'calc(100% - 40px)' }}
         >
-          <L data={data} mutableSuitObject={this.suitObject}></L>
+          <L data={data} mutableSuitObject={this.suitObject} itemHeight={itemHeight}></L>
         </Card>
         <CollectionCreateForm
           wrappedComponentRef={form => (this.formRef = form)}
