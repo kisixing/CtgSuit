@@ -1,5 +1,6 @@
 import {
   getCTGrecords,
+  getCTGrecordData,
   newCTGrecord,
   updateCTGrecord,
   updateCTGexams
@@ -10,6 +11,7 @@ export default {
   state: {
     dataSource: [],
     current: {},
+    currentData: {}
   },
   effects: {
     *fetchRecords({ payload }, { call, put }) {
@@ -18,6 +20,15 @@ export default {
         type: 'updateState',
         payload: {
           dataSource: res
+        }
+      })
+    },
+    *fetchCTGrecordData({ payload }, { call, put }) {
+      const res = yield call(getCTGrecordData, payload);
+      yield put({
+        type: 'updateState',
+        payload: {
+          currentData: res
         }
       })
     },

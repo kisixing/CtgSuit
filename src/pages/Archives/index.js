@@ -15,7 +15,6 @@ class Archives extends PureComponent {
           <TableList />
         </div>
         <div className={styles.chart}>
-          <h2>电脑胎儿监护图</h2>
           <CurveChart />
         </div>
       </Layout>

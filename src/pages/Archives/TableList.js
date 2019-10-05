@@ -165,10 +165,20 @@ class TableList extends Component {
   // 单机行事件
   handleRow = (record, index) => {
     const { dispatch } = this.props;
+    console.log('444444444444444', record)
+    // 当前点击的档案详情
     dispatch({
       type: 'archives/updateState',
       payload: {
         current: record,
+      },
+    });
+    // 获取监护图曲线信息
+    dispatch({
+      type: 'archives/fetchCTGrecordData',
+      payload: {
+        ctgexamid: record.ctgexam.id,
+        // ctgexamid: record.ctgexam.note,
       },
     });
   };
