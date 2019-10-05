@@ -75,6 +75,16 @@ export async function updateCTGrecord(params) {
 }
 
 /**
+ * 根据档案列表获取的胎儿监护图数据
+ * @export
+ * @param {*} params
+ * @returns
+ */
+export async function getCTGrecordData(params) {
+  return request(`${apiPrefix}/ctg-exams-data/${params.ctgexamid}`);
+}
+
+/**
  * 更新胎监状态接口 - 可选择调用 根据档案的自增id直接更新档案信息，如停止时间、诊断结果等
  * @export
  * @param {*} params

@@ -192,6 +192,7 @@ class WorkbenchItem extends Component {
     const { itemHeight, itemSpan, dataSource, outPadding, ...rest } = this.props;
     const { showSetting, visible, analysisVisible, printVisible, partogramVisible } = this.state;
     const { data, documentno, pregnancy } = dataSource;
+    console.log('list item--', dataSource)
 
     return (
       <Col
