@@ -24,7 +24,7 @@ const Home = props => {
         {pageItems.map(item => {
           return (
             <Item
-              key={item.id}
+              key={Math.random()}
               dataSource={item}
               itemHeight={itemHeight}
               itemSpan={itemSpan}
