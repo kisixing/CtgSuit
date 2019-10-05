@@ -23,7 +23,6 @@ export default {
       flag = true;
       const wsConnect = new WsConnect();
       let datacache: Map<string, object> = yield call(wsConnect.connect);
-
       yield put({ type: 'setState', payload: { datacache } });
       yield put({ type: 'getlist' });
     },
@@ -41,17 +40,20 @@ export default {
             return { ..._, data: datacache.get(unitId) || null, unitId };
           })) ||
         [];
+      console.log(datacache, rawData.map(_ => _.data))
+      yield put({ type: 'setState', payload: { listData: rawData } });
 
-      yield put({ type: 'dataHandler', rawData });
+      yield put({ type: 'computeLayout' });
     },
-    *dataHandler({ rawData }: { rawData: IItem[] }, { put, select }) {
+    *computeLayout({ }: { rawData: IItem[] }, { put, select }) {
       const state = yield select();
       const {
         setting: { listLayout },
+        list: { listData: oldListData },
       } = state;
       const pageItemsCount: number = listLayout[0] * listLayout[1];
 
-      const listData = rawData.map((_, index) => {
+      const listData = oldListData.map((_, index) => {
         return { ..._, index, pageIndex: Math.floor(index / pageItemsCount) };
       });
 
@@ -85,7 +87,6 @@ export default {
         setting: { listLayout },
         list: { listData, page: oldPage },
       } = state;
-      if (page === oldPage) return;
       const pageItemsCount: number = listLayout[0] * listLayout[1];
       const pageItems = listData.slice(page * pageItemsCount, (page + 1) * pageItemsCount);
       yield put({ type: 'setState', payload: { pageItems, page } });
@@ -122,6 +123,7 @@ interface IItem {
   documentno: string;
   id: number;
   unitId: string;
+  data: any;
   pregnancy: {
     age: number;
     dob: any;

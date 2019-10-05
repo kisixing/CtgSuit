@@ -5,7 +5,7 @@
  */
 
 import React, { Component, Fragment } from 'react';
-import { Layout, Menu, Icon, Button, Modal, Avatar, Spin } from 'antd';
+import { Layout, Menu, Icon, Button, Modal, Avatar, Spin, Dropdown, Select } from 'antd';
 import { connect } from 'dva';
 import { router } from 'umi';
 import Link from 'umi/link';
@@ -18,7 +18,7 @@ import styles from './BasicLayout.less';
 import Beds from './Beds';
 import Tabs from './Tabs';
 const { Header, Footer, Content } = Layout;
-
+const joinSymbol = ' x '
 class BasicLayout extends Component {
   constructor(props) {
     super(props);
@@ -70,7 +70,7 @@ class BasicLayout extends Component {
         content: '确认退出系统？',
         okText: '确认',
         cancelText: '取消',
-        onOk: function() {
+        onOk: function () {
           // 清除sessionStorage
           // store.clearAll();
           // 退出登录，关闭应用
@@ -86,7 +86,7 @@ class BasicLayout extends Component {
         content: '确认退出登录？',
         okText: '确认',
         cancelText: '取消',
-        onOk: function() {
+        onOk: function () {
           // 清除sessionStorage
           store.clearAll();
           // 退出登录，回到登录页面
@@ -137,6 +137,32 @@ class BasicLayout extends Component {
     );
   };
 
+  ListLayout = () => {
+    const { listLayout, listLayoutOptions,dispatch } = this.props;
+    const renderText = _ => _.join(joinSymbol)
+    const menu = (
+          listLayoutOptions.map(_ => {
+            return (
+              <Select.Option key={renderText(_)} >
+                {renderText(_)}
+              </Select.Option>
+            )
+          })
+
+    );
+    return (
+      <Select value={renderText(listLayout)} style={{width:80}} onChange={value=>{
+        dispatch({type:'setting/setListLayout',payload:{listLayout:value.split(joinSymbol).map(_=>+_ )}})
+      }} >
+        {
+          menu
+        }
+      </Select>
+
+    );
+  };
+
+
   menus = () => {
     return (
       <Fragment>
@@ -171,10 +197,15 @@ class BasicLayout extends Component {
     return (
       <Layout className={styles.container}>
         <Header className={styles.header}>
-          <Link to="/" className={styles.logo}>
-            {/* <img alt="logo" src={logo} /> */}
-            <h1>胎监工作站</h1>
-          </Link>
+          <div style={{display:'flex',flexDirection:'column'}}>
+            <Link to="/" className={styles.logo}>
+              {/* <img alt="logo" src={logo} /> */}
+              <h1>胎监工作站</h1>
+
+            </Link>
+            <this.ListLayout />
+
+          </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
             <div style={{ display: 'flex', flex: 1, overflow: 'hidden', margin: '6px' }}>
@@ -195,10 +226,12 @@ class BasicLayout extends Component {
   }
 }
 
-export default connect(({ global, list, loading }) => ({
+export default connect(({ global, list, loading, setting }) => ({
   loading: loading,
   account: global.account || {},
   pageData: list.pageData,
   page: list.page,
   listData: list.listData,
+  listLayout: setting.listLayout,
+  listLayoutOptions: setting.listLayoutOptions
 }))(BasicLayout);
