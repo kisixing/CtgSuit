@@ -31,6 +31,9 @@ export class WsConnect {
 
     const socket = this.socket;
     return new Promise(res => {
+      setTimeout(()=>{
+        res(datacache)
+      },5000)
       socket.onerror = () => {
         console.log('websocket 错误');
         res(datacache);
@@ -231,7 +234,7 @@ export class WsConnect {
       if (socket.readyState == WebSocket.OPEN) {
         socket.send(message);
       } else {
-        alert('The socket is not open.');
+        console.log('The socket is not open.');
       }
     }
   };
