@@ -71,7 +71,7 @@ class Login extends PureComponent {
                     message: '请输入用户密码！',
                   },
                 ],
-                initialValue: '123456',
+                initialValue: 'admin',
               })(
                 <Input
                   type="password"

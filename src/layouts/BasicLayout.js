@@ -151,7 +151,7 @@ class BasicLayout extends Component {
 
     );
     return (
-      <Select value={renderText(listLayout)} style={{width:80}} onChange={value=>{
+      <Select size="small" value={renderText(listLayout)} style={{width:80}} onChange={value=>{
         dispatch({type:'setting/setListLayout',payload:{listLayout:value.split(joinSymbol).map(_=>+_ )}})
       }} >
         {

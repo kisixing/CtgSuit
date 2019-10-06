@@ -1,22 +1,18 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
-import { Card, Col, Button, Tag, Modal, Switch } from 'antd';
+import { Button, Modal } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
 import Link from 'umi/link';
 import cx from 'classnames';
-import { event } from '@lianmed/utils';
-import { Ctg as L } from '@lianmed/lmg';
 import CollectionCreateForm from './CollectionCreateForm';
 import Analysis from './Analysis';
 import PrintModal from './PrintModal';
 import Partogram from './Partogram';
-import { mapStatusToColor, mapStatusToText } from '@/constant';
 import styles from './Item.less';
 import { WsConnect } from '@/services/WsConnect';
 const socket = WsConnect._this;
 
-class WorkbenchItem extends Component {
+class Toolbar extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -26,17 +22,6 @@ class WorkbenchItem extends Component {
       printVisible: false,
       partogramVisible: false,
     };
-    this.suitObject = { suit: null };
-    this.ref = React.createRef();
-  }
-
-  fullScreen() {
-    const el = ReactDOM.findDOMNode(this.ref.current);
-    if (document.fullscreenElement) {
-      document.exitFullscreen();
-    } else {
-      el.requestFullscreen();
-    }
   }
 
   toggleTool = () => {
@@ -108,7 +93,7 @@ class WorkbenchItem extends Component {
       content: `确认 床号：${item.index} 开始监护？`,
       okText: '确认',
       cancelText: '取消',
-      onOk: function() {
+      onOk: function () {
         socket.startwork(deviceno, bedno);
       },
     });
@@ -123,7 +108,7 @@ class WorkbenchItem extends Component {
       content: `确认 床号：${item.index} 停止监护？`,
       okText: '确认',
       cancelText: '取消',
-      onOk: function() {
+      onOk: function () {
         socket.endwork(deviceno, bedno);
         this.props.dispatch({
           type: 'archives/updateExams',
@@ -133,74 +118,14 @@ class WorkbenchItem extends Component {
     });
   };
 
-  renderExtra = status => {
-    return (
-      <div className={styles.extra}>
-        {/* <Button title="关闭" icon="close" size="small" type="link"></Button> */}
-        <Tag color={mapStatusToColor[status]}>{mapStatusToText[status]}</Tag>
-        <Button
-          title="全屏展示"
-          icon="fullscreen"
-          size="small"
-          type="link"
-          onClick={this.fullScreen.bind(this)}
-        ></Button>
-        {/* <Switch defaultChecked /> */}
-      </div>
-    );
-  };
-
-  renderTilte = item => {
-    return (
-      <div className={styles.title}>
-        床号: <span>{item.bedno}</span>
-        住院号: <span>{item.documentno}</span>
-        姓名: <span>{item.bedname}</span>
-        {/* 年龄: <span>{item.age}</span> */}
-        开始时间: <span>{new Date(item.updateTime).toLocaleDateString()}</span>
-      </div>
-    );
-  };
-
-  fullScreenEvent = () => {
-    this.suitObject.suit.resize();
-  };
-
-  componentDidUpdate() {
-    const { dispatch, fullScreenId, dataSource } = this.props;
-    if (fullScreenId === dataSource.unitId) {
-      this.fullScreen();
-      dispatch({ type: 'list/setState', payload: { fullScreenId: null } });
-    }
-  }
-
-  componentDidMount() {
-    const { dispatch, fullScreenId, dataSource } = this.props;
-    if (fullScreenId === dataSource.unitId) {
-      this.fullScreen();
-      dispatch({ type: 'list/setState', payload: { fullScreenId: null } });
-    }
-    document.addEventListener('fullscreenchange', this.fullScreenEvent);
-  }
-
-  componentWillUnmount() {
-    event.off('fullScreen', this.cb);
-    document.removeEventListener('fullscreenchange', this.fullScreenEvent);
-  }
-
   render() {
-    const { itemHeight, itemSpan, dataSource, outPadding, ...rest } = this.props;
+    const {   dataSource,  ...rest } = this.props;
     const { showSetting, visible, analysisVisible, printVisible, partogramVisible } = this.state;
-    const { data, documentno, pregnancy } = dataSource;
+    const {  documentno, pregnancy } = dataSource;
     console.log('list item--', dataSource)
 
     return (
-      <Col
-        span={itemSpan}
-        className={styles.col}
-        ref={this.ref}
-        style={{ padding: outPadding, height: itemHeight }}
-      >
+      <>
         <div className={cx(styles.toolbar, { [styles.show]: showSetting })}>
           <Button icon="play-circle" type="link" onClick={() => this.start(dataSource)}>
             开始监护
@@ -235,16 +160,7 @@ class WorkbenchItem extends Component {
             onClick={this.toggleTool}
           ></Button>
         </div>
-        <Card
-          // hoverable
-          title={this.renderTilte(dataSource)}
-          size="small"
-          className={styles.card}
-          extra={this.renderExtra(dataSource.status)}
-          bodyStyle={{ padding: 0, height: 'calc(100% - 40px)' }}
-        >
-          <L data={data} mutableSuitObject={this.suitObject} itemHeight={itemHeight}></L>
-        </Card>
+
         <CollectionCreateForm
           wrappedComponentRef={form => (this.formRef = form)}
           {...rest}
@@ -274,7 +190,7 @@ class WorkbenchItem extends Component {
           onCreate={this.handleCreate}
           dataSource={dataSource}
         />
-      </Col>
+      </>
     );
   }
 }
@@ -282,4 +198,4 @@ class WorkbenchItem extends Component {
 export default connect(({ loading, item }) => ({
   pregnancy: item.pregnancy,
   loading: loading,
-}))(WorkbenchItem);
+}))(Toolbar);
