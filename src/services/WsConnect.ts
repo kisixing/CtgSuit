@@ -1,17 +1,33 @@
 const datacache: Map<any, any> = new Map();
 const interval: number = 800;
+const RE_CONNECT_INTERVAL: number = 5000;
 export default datacache;
-
+const log = console.log.bind(console, 'websocket')
+// import { message as Message } from "antd";
 import config from '@/utils/config';
-export class WsConnect {
+import { EventEmitter } from "@lianmed/utils";
+// import request from "@/utils/request";
+// request.get('url',{data:{}}).then(responseData => {
+//   console.log(responseData)
+// })
+
+
+export enum EWsStatus {
+  Pendding, Success, Error
+}
+
+
+
+export class WsConnect extends EventEmitter {
   static _this: WsConnect;
   datacache = datacache;
   socket: WebSocket;
+  store = (window as any).g_app._store
   constructor() {
+    super()
     if (WsConnect._this) {
       return WsConnect._this;
     }
-
     WsConnect._this = this;
   }
 
@@ -24,28 +40,38 @@ export class WsConnect {
     this.socket.send(message);
   }
 
+  tip = (text: string, status: EWsStatus) => {
+    log(text);
+    (window as any).g_app._store.dispatch({
+      type: 'ws/setState',
+      payload: { status }
+    });
+  }
   connect = (url: string = config.wsUrl): Promise<Map<any, any>> => {
+
+    this.tip('连接中', EWsStatus.Pendding)
+
     this.socket = new WebSocket(
       `ws://${url}/websocket/?request=e2lkOjE7cmlkOjI2O3Rva2VuOiI0MzYwNjgxMWM3MzA1Y2NjNmFiYjJiZTExNjU3OWJmZCJ9`,
     );
-
     const socket = this.socket;
+
     return new Promise(res => {
-      setTimeout(()=>{
-        res(datacache)
-      },5000)
+
       socket.onerror = () => {
-        console.log('websocket 错误');
-        res(datacache);
+        log('错误')
       };
-      socket.onopen = function(event) {
-        console.log('websocket 打开了');
+      socket.onopen = function (event) {
+        log('打开');
       };
-      socket.onclose = function(event) {
-        console.log('websocket 关闭了');
+      socket.onclose = (event) => {
+        this.tip('关闭', EWsStatus.Error)
+        setTimeout(() => {
+          this.connect()
+        }, RE_CONNECT_INTERVAL);
       };
       // 接收服务端数据时触发事件
-      socket.onmessage = function(msg) {
+      socket.onmessage = (msg) => {
         var received_msg = JSON.parse(msg.data);
         if (received_msg) {
           //showMessage(received_msg);
@@ -77,7 +103,8 @@ export class WsConnect {
                 }
               }
             }
-            res(datacache);
+            this.tip('成功', EWsStatus.Success)
+            res(datacache)
           } else if (received_msg.name == 'push_data_ctg') {
             //TODO 解析应用层数据包
             var ctgdata = received_msg.data;
@@ -106,14 +133,14 @@ export class WsConnect {
                       //反向取值
                       send(
                         '{"name":"get_data_ctg","data":{"start_index":' +
-                          startpoint +
-                          ',"end_index":' +
-                          endpoint +
-                          ',"device_no":' +
-                          id +
-                          ',"bed_no":' +
-                          bi +
-                          '}}',
+                        startpoint +
+                        ',"end_index":' +
+                        endpoint +
+                        ',"device_no":' +
+                        id +
+                        ',"bed_no":' +
+                        bi +
+                        '}}',
                       );
                       tmpcache.timestamp = new Date().getTime();
                       break;
@@ -129,7 +156,6 @@ export class WsConnect {
           } else if (received_msg.name == 'get_data_ctg') {
             //TODO 解析应用层数据包
             var ctgdata = received_msg.data;
-            //console.log(ctgdata);
             var id = received_msg.device_no;
             var bi = received_msg.bed_no;
             var cachbi = id + '-' + bi;
@@ -154,18 +180,17 @@ export class WsConnect {
                   if (flag > 0) {
                     eflag = il;
                     var curstamp = new Date().getTime();
-                    //console.log(il +"--"+ datacache[cachbi].last);
                     if (curstamp - tmpcache.timestamp > interval) {
                       send(
                         '{"name":"get_data_ctg","data":{"start_index":' +
-                          sflag +
-                          ',"end_index":' +
-                          eflag +
-                          ',"device_no":' +
-                          id +
-                          ',"bed_no":' +
-                          bi +
-                          '}}',
+                        sflag +
+                        ',"end_index":' +
+                        eflag +
+                        ',"device_no":' +
+                        id +
+                        ',"bed_no":' +
+                        bi +
+                        '}}',
                       );
                       tmpcache.timestamp = new Date().getTime();
                       break;
@@ -177,7 +202,7 @@ export class WsConnect {
               }
             }
           } else if (received_msg.name == 'get_devices') {
-            console.log(received_msg.data);
+            log('get_devices', received_msg.data);
             var devlist = received_msg.data;
             for (var i in devlist) {
               var devdata = devlist[i];
@@ -190,7 +215,7 @@ export class WsConnect {
             let curid = Number(devdata['device_no']) + '-' + Number(devdata['bed_no']);
             //TODO : 更新设备状态
             convertdocid(curid, devdata.doc_id);
-            console.log(devdata.is_working);
+            log('start_work', devdata.is_working);
           }
         }
       };
@@ -234,7 +259,7 @@ export class WsConnect {
       if (socket.readyState == WebSocket.OPEN) {
         socket.send(message);
       } else {
-        console.log('The socket is not open.');
+        log('The socket is not open.');
       }
     }
   };

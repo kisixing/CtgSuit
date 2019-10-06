@@ -17,6 +17,7 @@ import config from '@/utils/config';
 import styles from './BasicLayout.less';
 import Beds from './Beds';
 import Tabs from './Tabs';
+import { EWsStatus } from "@/services/WsConnect";
 const { Header, Footer, Content } = Layout;
 const joinSymbol = ' x '
 class BasicLayout extends Component {
@@ -33,7 +34,10 @@ class BasicLayout extends Component {
       type: 'global/fetchAccount',
     });
     dispatch({
-      type: 'list/init',
+      type: 'list/getlist',
+    });
+    dispatch({
+      type: 'ws/connectWs',
     });
     // send ipcMain
     ipcRenderer.send('clear-all-store', {
@@ -138,21 +142,21 @@ class BasicLayout extends Component {
   };
 
   ListLayout = () => {
-    const { listLayout, listLayoutOptions,dispatch } = this.props;
+    const { listLayout, listLayoutOptions, dispatch } = this.props;
     const renderText = _ => _.join(joinSymbol)
     const menu = (
-          listLayoutOptions.map(_ => {
-            return (
-              <Select.Option key={renderText(_)} >
-                {renderText(_)}
-              </Select.Option>
-            )
-          })
+      listLayoutOptions.map(_ => {
+        return (
+          <Select.Option key={renderText(_)} >
+            {renderText(_)}
+          </Select.Option>
+        )
+      })
 
     );
     return (
-      <Select size="small" value={renderText(listLayout)} style={{width:80}} onChange={value=>{
-        dispatch({type:'setting/setListLayout',payload:{listLayout:value.split(joinSymbol).map(_=>+_ )}})
+      <Select size="small" value={renderText(listLayout)} style={{ width: 70 }} onChange={value => {
+        dispatch({ type: 'setting/setListLayout', payload: { listLayout: value.split(joinSymbol).map(_ => +_) } })
       }} >
         {
           menu
@@ -193,17 +197,30 @@ class BasicLayout extends Component {
   };
 
   render() {
-    const { children } = this.props;
+    const { children, wsStatus, loading } = this.props;
+    const wsStatusColor = wsStatus === EWsStatus.Pendding ? 'transparent' : (wsStatus === EWsStatus.Success ? 'green' : 'red')
     return (
       <Layout className={styles.container}>
         <Header className={styles.header}>
-          <div style={{display:'flex',flexDirection:'column'}}>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
             <Link to="/" className={styles.logo}>
               {/* <img alt="logo" src={logo} /> */}
               <h1>胎监工作站</h1>
 
             </Link>
-            <this.ListLayout />
+            <div style={{ display: 'flex', lineHeight: '24px', justifyContent: 'space-around' }}>
+              <this.ListLayout />
+              <div style={{ marginLeft: 6, borderRadius: 2, overflow: 'hidden', display: 'flex', alignItems: 'center'  }} >
+
+                <Spin spinning={wsStatus === EWsStatus.Pendding} >
+                  {
+                    <div style={{ background: wsStatusColor, borderRadius: 10, cursor: 'pointer',width: 20, height: 20 }}></div>
+                  }
+
+                </Spin>
+
+              </div>
+            </div>
 
           </div>
 
@@ -226,12 +243,13 @@ class BasicLayout extends Component {
   }
 }
 
-export default connect(({ global, list, loading, setting }) => ({
+export default connect(({ global, list, loading, setting, ws }) => ({
   loading: loading,
   account: global.account || {},
   pageData: list.pageData,
   page: list.page,
   listData: list.listData,
   listLayout: setting.listLayout,
-  listLayoutOptions: setting.listLayoutOptions
+  listLayoutOptions: setting.listLayoutOptions,
+  wsStatus: ws.status
 }))(BasicLayout);

@@ -1,12 +1,7 @@
 import { message } from 'antd';
 import { newPregnancies } from '@/services/api';
-import { WsConnect } from '@/services/WsConnect';
 import { getList } from '@/services/list';
-message.config({
-  top: 150,
-  duration: 2,
-});
-let flag = false;
+
 export default {
   namespace: 'list',
   state: {
@@ -14,38 +9,24 @@ export default {
     pageData: [], //[[1,4],[5,8]]
     page: null, //当前页码
     pageItems: [], //[listItem,...]
-    datacache: new Map(),
     fullScreenId: null,
   },
   effects: {
-    *init(_, { put, call }) {
-      if (flag) return;
-      flag = true;
-      const wsConnect = new WsConnect();
-      let datacache: Map<string, object> = yield call(wsConnect.connect);
-      yield put({ type: 'setState', payload: { datacache } });
-      yield put({ type: 'getlist' });
-    },
     *getlist(_, { put, call, select }) {
-      const state = yield select();
-      const {
-        list: { datacache },
-      } = state;
-      let rawData: IItem[] = yield call(getList);
 
+      let rawData: IDevice[] = yield call(getList);
       rawData =
         (rawData &&
           rawData.map(_ => {
             const unitId = `${_.deviceno}-${_.subdevice}`;
-            return { ..._, data: datacache.get(unitId) || null, unitId };
+            return { ..._,  unitId };
           })) ||
         [];
-      console.log(datacache, rawData.map(_ => _.data))
+   
       yield put({ type: 'setState', payload: { listData: rawData } });
-
       yield put({ type: 'computeLayout' });
     },
-    *computeLayout({ }: { rawData: IItem[] }, { put, select }) {
+    *computeLayout({ }: { rawData: IDevice[] }, { put, select }) {
       const state = yield select();
       const {
         setting: { listLayout },
@@ -116,7 +97,7 @@ export default {
   },
 };
 
-interface IItem {
+export interface IDevice {
   bedname: string;
   bedno: string;
   deviceno: string;

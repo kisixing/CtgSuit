@@ -3,9 +3,9 @@ import { Row } from 'antd';
 import { connect } from 'react-redux';
 import './index.less';
 import Item from './Item';
-
+import { IDevice } from '@/models/list'
 const Home = props => {
-  const { listLayout = [], pageItems, fullScreenId,dispatch } = props;
+  const { listLayout = [], pageItems, fullScreenId,dispatch,datacache } = props;
   const wrap = useRef(null);
 
   // const [wrapRec, setWrapRec] = useState({ height: 0, width: 0 });
@@ -21,11 +21,11 @@ const Home = props => {
   return (
     <div style={{ height: '100%', overflow: 'hidden' }} ref={wrap}>
       <Row style={{ padding: outPadding }}>
-        {pageItems.map(item => {
+        {(pageItems as IDevice[]).map(item => {
           return (
             <Item
-              key={Math.random()}
-              dataSource={item}
+              key={item.id}
+              dataSource={{...item,data:(datacache as Map<string,any>).get(item.unitId)}}
               itemHeight={itemHeight}
               itemSpan={itemSpan}
               outPadding={outPadding}
@@ -39,10 +39,11 @@ const Home = props => {
   );
 };
 
-export default connect(({ setting, list }: any) => {
+export default connect(({ setting, list,ws }: any) => {
   return {
     listLayout: setting.listLayout,
     pageItems: list.pageItems,
     fullScreenId: list.fullScreenId,
+    datacache:ws.data
   };
 })(Home);

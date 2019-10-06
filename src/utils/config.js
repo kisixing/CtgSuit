@@ -5,7 +5,8 @@ const isDev = NODE_ENV === 'development';
 // const localUrl = window.location.protocol + '//' + window.location.host + '/';
 const wsUrl = store.get('ws_url') || (isDev ? '192.168.2.227:8084' : '192.168.2.227:8084');
 const apiPrefix = store.get('rest_url') || (isDev ? '/api/v1' : 'http://192.168.2.152:9986/api');
-console.log('ws_url', 'rest_url');
+store.set('ws_url',wsUrl)
+store.set('rest_url',apiPrefix)
 
 module.exports = {
   siteName: '胎监工作站',
