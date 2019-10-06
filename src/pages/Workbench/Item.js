@@ -116,7 +116,6 @@ class WorkbenchItem extends Component {
 
   end = item => {
     const { deviceno, bedno } = item;
-    console.log('4444444', item)
     Modal.confirm({
       centered: true,
       title: '提示',
@@ -202,12 +201,15 @@ class WorkbenchItem extends Component {
         style={{ padding: outPadding, height: itemHeight }}
       >
         <div className={cx(styles.toolbar, { [styles.show]: showSetting })}>
-          <Button icon="play-circle" type="link" onClick={() => this.start(dataSource)}>
-            开始监护
-          </Button>
-          <Button icon="pause-circle" type="link" onClick={() => this.end(dataSource)}>
-            停止监护
-          </Button>
+          {data && data.starttime ? (
+            <Button icon="pause-circle" type="link" onClick={() => this.end(dataSource)}>
+              停止监护
+            </Button>
+          ) : (
+            <Button icon="play-circle" type="link" onClick={() => this.start(dataSource)}>
+              开始监护
+            </Button>
+          )}
           <Button icon="user-add" type="link" onClick={() => this.showModal('visible')}>
             {documentno && pregnancy && pregnancy.id ? '已建档' : '建档'}
           </Button>
@@ -245,14 +247,16 @@ class WorkbenchItem extends Component {
         >
           <L data={data} mutableSuitObject={this.suitObject} itemHeight={itemHeight}></L>
         </Card>
-        <CollectionCreateForm
-          wrappedComponentRef={form => (this.formRef = form)}
-          {...rest}
-          visible={visible}
-          onCancel={this.handleCancel}
-          onCreate={this.handleCreate}
-          dataSource={dataSource}
-        />
+        {visible ? (
+          <CollectionCreateForm
+            wrappedComponentRef={form => (this.formRef = form)}
+            {...rest}
+            visible={visible}
+            onCancel={this.handleCancel}
+            onCreate={this.handleCreate}
+            dataSource={dataSource}
+          />
+        ) : null}
         <Analysis
           wrappedComponentRef={form => (this.analysisRef = form)}
           visible={analysisVisible}

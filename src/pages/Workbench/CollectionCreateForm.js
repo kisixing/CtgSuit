@@ -19,6 +19,7 @@ const CollectionCreateForm = Form.create({
     }
 
     componentDidMount() {
+      console.log('modal componentDidMount');
       const {
         form,
         dataSource: { documentno, pregnancy },
@@ -36,13 +37,16 @@ const CollectionCreateForm = Form.create({
            return;
          }
          // 获取孕册信息
+         let obj = {};
+         Object.keys(values).forEach(function(key) {
+           const k = `${key}.contains`;
+           const value = values[key];
+           obj[k] = value;
+         });
          dispatch(
            {
              type: 'item/fetchPregnancy',
-             payload: {
-               'inpatientNO.contains': values.inpatientNO,
-               'name.contains': values.name,
-             },
+             payload: obj,
            },
            () => {
              form.setFieldsValue(this.props.pregnancy);
@@ -70,7 +74,7 @@ const CollectionCreateForm = Form.create({
       return (
         <Modal
           centered
-          destroyOnClose
+          destroyOnClose={false}
           width={800}
           visible={visible}
           title={`【${dataSource.index + 1}】 建档（绑定）`}
@@ -87,47 +91,47 @@ const CollectionCreateForm = Form.create({
                 <Form.Item label="住院号">
                   {getFieldDecorator('inpatientNO', {
                     rules: [{ required: required, message: '请填写孕妇住院号!' }],
-                  })(<Input />)}
+                  })(<Input placeholder="输入住院号..." />)}
                 </Form.Item>
               </Col>
               <Col span={12}>
                 <Form.Item label="孕妇姓名">
                   {getFieldDecorator('name', {
                     rules: [{ required: required, message: '请填写孕妇姓名!' }],
-                  })(<Input type="text" />)}
+                  })(<Input placeholder="输入孕妇姓名..." />)}
                 </Form.Item>
               </Col>
               <Col span={12}>
                 <Form.Item label="孕妇年龄">
                   {getFieldDecorator('age', {
                     rules: [{ required: required, message: '请填写孕妇住年龄!' }],
-                  })(<InputNumber />)}
+                  })(<InputNumber placeholder="输入孕妇年龄..." />)}
                 </Form.Item>
               </Col>
               <Col span={12}>
                 <Form.Item label="联系电话">
                   {getFieldDecorator('telephone', {
                     rules: [{ required: required, message: '请填写孕妇联系电话!' }],
-                  })(<Input />)}
+                  })(<Input placeholder="请输入联系电话..." />)}
                 </Form.Item>
               </Col>
               <Col span={12}>
                 <Form.Item label="孕次">
                   {getFieldDecorator('gravidity', {
                     rules: [{ required: required, message: '请输入孕次!' }],
-                  })(<InputNumber />)}
+                  })(<InputNumber placeholder="请输入孕次..." />)}
                 </Form.Item>
               </Col>
               <Col span={12}>
                 <Form.Item label="产次">
                   {getFieldDecorator('parity', {
                     rules: [{ required: required, message: '请输入产次!' }],
-                  })(<InputNumber />)}
+                  })(<InputNumber placeholder="请输入产次..." />)}
                 </Form.Item>
               </Col>
               <Col span={24} className={styles.buttons}>
                 <Button onClick={() => onCancel('visible')}>取消</Button>
-                {dataSource.documentno ? null : <Button onClick={this.handleSearch}>搜索</Button>}
+                {!dataSource.documentno ? null : <Button onClick={this.handleSearch}>搜索</Button>}
                 <Button type="primary" onClick={() => onCreate(dataSource)}>
                   确定
                 </Button>

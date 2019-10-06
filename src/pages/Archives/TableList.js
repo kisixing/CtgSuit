@@ -11,7 +11,7 @@ class TableList extends Component {
     super(props);
     this.state = {
       visible: false,
-      type: 'create',
+      type: 'edit',
     };
     this.columns = [
       {
@@ -126,7 +126,7 @@ class TableList extends Component {
   showDetailModal = () => {
     this.setState({
       visible: true,
-      type: 'detail',
+      type: 'update',
     });
   }
 
@@ -139,22 +139,31 @@ class TableList extends Component {
   };
 
   // 创建档案
-  handleCreate = () => {
+  handleOk = (item) => {
     const { dispatch } = this.props;
     const { form } = this.formRef.props;
     form.validateFields((err, values) => {
       if (err) {
         return;
       }
+      const p = {
+        ...item,
+        visitTime: moment(values.visitTime),
+        gestationalWeek: values.gestationalWeek,
+        pregnancy: {
+          ...item.pregnancy,
+          name: values.name,
+          age: values.age,
+          inpatientNO: values.inpatientNO,
+          gravidity: values.gravidity,
+          parity: values.parity,
+          telephone: values.telephone,
+        },
+      };
       dispatch({
-        type: 'archives/create',
+        type: 'archives/update',
         payload: {
-          ...values,
-          visitTime: moment(values.visitTime).format('YYYY-MM-DD HH:ss:mm'),
-          pregnancy: {
-            name: values.name,
-            age: values.age,
-          },
+          ...p,
         }
       });
       form.resetFields();
@@ -221,16 +230,18 @@ class TableList extends Component {
             selectedRowKeys: [selected.id],
             onSelect: (record, selected, selectedRows) => this.handleRow(record),
           }}
-          title={this.renderTitle}
+          // title={this.renderTitle}
         />
-        <CreateRecordModal
-          type={type}
-          visible={visible}
-          wrappedComponentRef={this.saveFormRef}
-          onCancel={this.handleCancel}
-          onCreate={this.handleCreate}
-          dataSource={selected}
-        />
+        {visible ? (
+          <CreateRecordModal
+            type={type}
+            visible={visible}
+            wrappedComponentRef={this.saveFormRef}
+            onCancel={this.handleCancel}
+            onOk={this.handleOk}
+            dataSource={selected}
+          />
+        ) : null}
       </div>
     );
   }

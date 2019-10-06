@@ -4,6 +4,7 @@ import { Layout, Menu, Button } from 'antd';
 // 各个模块
 import BasicSetting from './BasicSetting';
 import ScoreSet from './ScoreSet';
+import Network from './Network';
 
 import styles from './index.less';
 
@@ -74,7 +75,8 @@ class Setting extends Component {
         <Menu.Item key="form4">事件设置</Menu.Item>
         <Menu.Item key="form5">网络设置</Menu.Item>
         <Menu.Item key="form6">医院设置</Menu.Item>
-        <Menu.Item key="form7">版本信息</Menu.Item>
+        <Menu.Item key="form7">床位信息设置</Menu.Item>
+        <Menu.Item key="form8">版本信息</Menu.Item>
       </Menu>
     );
   };
@@ -118,14 +120,11 @@ class Setting extends Component {
             <div className={styles.scrollView}>
               <BasicSetting id="form1" wrappedComponentRef={form => (this.form1 = form)} />
               <ScoreSet id="form2" wrappedComponentRef={form => (this.form2 = form)} />
-              <BasicSetting wrappedComponentRef={form => (this.form1 = form)} />
-              <ScoreSet wrappedComponentRef={form => (this.form2 = form)} />
-              <BasicSetting wrappedComponentRef={form => (this.form1 = form)} />
-              <ScoreSet wrappedComponentRef={form => (this.form2 = form)} />
-              <BasicSetting wrappedComponentRef={form => (this.form1 = form)} />
-              <ScoreSet wrappedComponentRef={form => (this.form2 = form)} />
-              <BasicSetting wrappedComponentRef={form => (this.form1 = form)} />
-              <ScoreSet wrappedComponentRef={form => (this.form2 = form)} />
+              <BasicSetting id="form3" wrappedComponentRef={form => (this.form3 = form)} />
+              <ScoreSet id="form4" wrappedComponentRef={form => (this.form4 = form)} />
+              <Network id="form5" wrappedComponentRef={form => (this.form5 = form)} />
+              <ScoreSet id="form6" wrappedComponentRef={form => (this.form6 = form)} />
+              <BasicSetting id="form7" wrappedComponentRef={form => (this.form7 = form)} />
             </div>
             <div>{JSON.stringify(this.state.results)}</div>
           </Layout>

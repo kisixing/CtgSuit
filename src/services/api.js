@@ -44,7 +44,7 @@ export async function newPregnancies(params) {
   });
 }
 
-export async function getPregnancy(params = {}) {
+export async function getPregnancy(params) {
   return request.get(`${apiPrefix}/pregnancies?${stringify(params)}`);
 }
 

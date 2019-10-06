@@ -1,3 +1,9 @@
+/*
+ * @Description: 评分设置
+ * @Author: Zhong Jun
+ * @Date: 2019-10-06 14:51:23
+ */
+
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Form, Input } from 'antd';

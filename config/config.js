@@ -11,6 +11,7 @@ export default {
   },
   treeShaking: true,
   publicPath: './',
+  hash: true, // 是否开启 hash 文件后缀
   history: 'hash', // 必须配置hash路由
   routes: pageRoutes,
   plugins: [
