@@ -6,10 +6,12 @@
 
 import React, { Component } from 'react';
 import { Modal } from 'antd';
-import modalStyles from './Analysis/index.less';
-import styles from './PrintModal.less';
 
-class PrintModal extends Component {
+import Setting from './Setting';
+
+import styles from './index.less';
+
+class PrintPreview extends Component {
   render() {
      const { visible, onCancel, onCreate, dataSource } = this.props;
     return (
@@ -22,13 +24,19 @@ class PrintModal extends Component {
         okText="创建"
         cancelText="取消"
         footer={null}
-        bodyStyle={{ paddingRight: '48px' }}
-        wrapClassName={modalStyles.modal}
+        bodyStyle={{ display: 'flex', flexDirection: 'column' }}
+        wrapClassName={styles.modal}
         onCancel={() => onCancel('printVisible')}
         onOk={onCreate}
-      ></Modal>
+      >
+        <div className={styles.setting}>
+          <Setting />
+        </div>
+        <div className={styles.info}></div>
+        <div className={styles.chart}></div>
+      </Modal>
     );
   }
 }
 
-export default PrintModal;
+export default PrintPreview;

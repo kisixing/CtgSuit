@@ -16,13 +16,25 @@ const CreateRecordModal = Form.create({
 
     componentDidMount() {
       const { form, type, dataSource } = this.props;
-      if (type === 'detail') {
-        form.setFieldsValue(dataSource);
+      console.log('78787878', dataSource)
+      if (type === 'update' && dataSource.pregnancy) {
+        const visitTime = dataSource.visitTime;
+        dataSource.visitTime = moment(visitTime);
+        form.setFieldsValue({
+          visitTime: dataSource.visitTime,
+          visitType: dataSource.visitType,
+          gestationalWeek: dataSource.gestationalWeek,
+          age: dataSource.pregnancy.age,
+          bedno: '',
+          inpatientNO: dataSource.pregnancy.inpatientNO,
+          telephone: dataSource.pregnancy.telephone,
+          name: dataSource.pregnancy.name,
+        });
       }
     }
 
     render() {
-      const { visible, onCancel, onCreate, type, form } = this.props;
+      const { visible, onCancel, onOk, type, form, dataSource } = this.props;
       const { getFieldDecorator } = form;
 
       const formItemLayout = {
@@ -47,7 +59,7 @@ const CreateRecordModal = Form.create({
           cancelText="取消"
           bodyStyle={{ paddingRight: '48px' }}
           onCancel={onCancel}
-          onOk={onCreate}
+          onOk={() => onOk(dataSource)}
         >
           <Form layout="horizontal" {...formItemLayout}>
             <Row gutter={24}>
@@ -55,63 +67,63 @@ const CreateRecordModal = Form.create({
                 <Form.Item label="创建时间">
                   {getFieldDecorator('visitTime', {
                     rules: [{ required: true, message: '请填写创建时间!' }],
-                  })(<DatePicker />)}
+                  })(<DatePicker placeholder="选择时间..." />)}
                 </Form.Item>
               </Col>
               <Col span={12}>
                 <Form.Item label="孕妇姓名">
                   {getFieldDecorator('name', {
                     rules: [{ required: true, message: '请填写孕妇姓名!visitTime' }],
-                  })(<Input type="text" />)}
+                  })(<Input placeholder="输入孕妇姓名..." />)}
                 </Form.Item>
               </Col>
               <Col span={12}>
                 <Form.Item label="检查次数">
                   {getFieldDecorator('visitType', {
                     rules: [{ required: true, message: '请填写检查次数!' }],
-                  })(<InputNumber />)}
+                  })(<InputNumber placeholder="输入检查次数..." />)}
                 </Form.Item>
               </Col>
               <Col span={12}>
                 <Form.Item label="孕妇年龄">
                   {getFieldDecorator('age', {
                     rules: [{ required: true, message: '请填写孕妇住年龄!' }],
-                  })(<InputNumber />)}
+                  })(<InputNumber placeholder="输入孕妇年龄..." />)}
                 </Form.Item>
               </Col>
               <Col span={12}>
                 <Form.Item label="孕周">
                   {getFieldDecorator('gestationalWeek', {
                     rules: [{ required: true, message: '请填写孕妇联系电话!' }],
-                  })(<Input />)}
+                  })(<Input placeholder="输入孕周..." />)}
                 </Form.Item>
               </Col>
               <Col span={12}>
                 <Form.Item label="联系电话">
-                  {getFieldDecorator('mobile', {
+                  {getFieldDecorator('telephone', {
                     rules: [{ required: true, message: '请填写孕妇联系电话!' }],
-                  })(<Input />)}
+                  })(<Input placeholder="输入联系电话..." />)}
                 </Form.Item>
               </Col>
               <Col span={12}>
                 <Form.Item label="门诊号">
                   {getFieldDecorator('outpatientNO', {
-                    rules: [{ required: true, message: '请输入门诊号!' }],
-                  })(<Input />)}
+                    rules: [{ required: false, message: '请输入门诊号!' }],
+                  })(<Input placeholder="输入门诊号..." />)}
                 </Form.Item>
               </Col>
               <Col span={12}>
                 <Form.Item label="住院号">
                   {getFieldDecorator('inpatientNO', {
-                    rules: [{ required: true, message: '请输入住院号!' }],
-                  })(<Input />)}
+                    rules: [{ required: false, message: '请输入住院号!' }],
+                  })(<Input placeholder="输入住院号..." />)}
                 </Form.Item>
               </Col>
               <Col span={12}>
                 <Form.Item label="床号">
                   {getFieldDecorator('bedno', {
-                    rules: [{ required: true, message: '请输入床号!' }],
-                  })(<Input />)}
+                    rules: [{ required: false, message: '请输入床号!' }],
+                  })(<Input placeholder="输入床号..." />)}
                 </Form.Item>
               </Col>
             </Row>
