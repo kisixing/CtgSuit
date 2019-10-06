@@ -5,7 +5,7 @@ import './index.less';
 import Item from './Item';
 
 const Home = props => {
-  const { listLayout = [], pageItems, fullScreenId } = props;
+  const { listLayout = [], pageItems, fullScreenId,dispatch } = props;
   const wrap = useRef(null);
 
   // const [wrapRec, setWrapRec] = useState({ height: 0, width: 0 });
@@ -30,7 +30,7 @@ const Home = props => {
               itemSpan={itemSpan}
               outPadding={outPadding}
               fullScreenId={fullScreenId}
-              {...item}
+              dispatch={dispatch}
             />
           );
         })}
