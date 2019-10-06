@@ -88,7 +88,7 @@ class TableList extends Component {
         key: 'comment',
         width: 180,
         align: 'center',
-        render: (text, recod) => '',
+        render: (text, record) => record.ctgexam.note,
       },
       {
         title: '操作',

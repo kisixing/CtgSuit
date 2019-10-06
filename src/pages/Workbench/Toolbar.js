@@ -4,9 +4,10 @@ import { connect } from 'dva';
 import moment from 'moment';
 import Link from 'umi/link';
 import cx from 'classnames';
+
 import CollectionCreateForm from './CollectionCreateForm';
 import Analysis from './Analysis';
-import PrintModal from './PrintModal';
+import PrintPreview from './PrintPreview';
 import Partogram from './Partogram';
 import styles from './Item.less';
 import { WsConnect } from '@/services/WsConnect';
@@ -54,20 +55,20 @@ class Toolbar extends Component {
             // console.log('call back', res); // 请求完成后返回的结果
             const id = res.id;
             const {
-              data: { starttime },
+              data: { starttime, docid },
             } = item;
             const d = {
               visitType: values.visitTime,
               visitTime: moment(values.values).format(),
               gestationalWeek: values.gestationalWeek,
               pregnancy: {
-                id: id,
+                id,
               },
               ctgexam: {
-                startTime: starttime,
+                startTime: moment(starttime),
                 endTime: null,
                 result: null,
-                note: null,
+                note: docid, // docid
                 diagnosis: null,
                 report: null,
               },
@@ -87,6 +88,7 @@ class Toolbar extends Component {
 
   start = item => {
     const { deviceno, bedno } = item;
+    console.log('start Device -- ', item);
     Modal.confirm({
       centered: true,
       title: '提示',
@@ -101,6 +103,7 @@ class Toolbar extends Component {
 
   end = item => {
     const { deviceno, bedno } = item;
+    console.log('end Device -- ', item);
     Modal.confirm({
       centered: true,
       title: '提示',
@@ -109,19 +112,20 @@ class Toolbar extends Component {
       cancelText: '取消',
       onOk: function () {
         socket.endwork(deviceno, bedno);
-        this.props.dispatch({
-          type: 'archives/updateExams',
-          payload: {}
-        });
+        // this.props.dispatch({
+        //   type: 'archives/updateExams',
+        //   payload: {}
+        // });
       },
     });
   };
 
   render() {
-    const {   dataSource,  ...rest } = this.props;
+    const { dataSource,  ...rest } = this.props;
     const { showSetting, visible, analysisVisible, printVisible, partogramVisible } = this.state;
-    const {  data, documentno, pregnancy } = dataSource;
-    console.log('list item--', dataSource)
+    const { data, documentno, pregnancy } = dataSource;
+    // 判断是否已建档
+    const isCreated = pregnancy && pregnancy.id && documentno === data.docid;
 
     return (
       <>
@@ -135,8 +139,13 @@ class Toolbar extends Component {
               开始监护
             </Button>
           )}
-          <Button icon="user-add" type="link" onClick={() => this.showModal('visible')}>
-            {documentno && pregnancy && pregnancy.id ? '已建档' : '建档'}
+          <Button
+            icon="user-add"
+            type="link"
+            disabled={isCreated}
+            onClick={() => this.showModal('visible')}
+          >
+            {isCreated ? '已建档' : '建档'}
           </Button>
           <Button icon="pie-chart" type="link" onClick={() => this.showModal('analysisVisible')}>
             电脑分析
@@ -162,14 +171,16 @@ class Toolbar extends Component {
             onClick={this.toggleTool}
           ></Button>
         </div>
-        <CollectionCreateForm
-          wrappedComponentRef={form => (this.formRef = form)}
-          {...rest}
-          visible={visible}
-          onCancel={this.handleCancel}
-          onCreate={this.handleCreate}
-          dataSource={dataSource}
-        />
+        {visible ? (
+          <CollectionCreateForm
+            {...rest}
+            wrappedComponentRef={form => (this.formRef = form)}
+            visible={visible}
+            onCancel={this.handleCancel}
+            onCreate={this.handleCreate}
+            dataSource={dataSource}
+          />
+        ) : null}
         <Analysis
           wrappedComponentRef={form => (this.analysisRef = form)}
           visible={analysisVisible}
@@ -177,7 +188,7 @@ class Toolbar extends Component {
           onCreate={this.handleCreate}
           dataSource={dataSource}
         />
-        <PrintModal
+        <PrintPreview
           wrappedComponentRef={form => (this.printRef = form)}
           visible={printVisible}
           onCancel={this.handleCancel}

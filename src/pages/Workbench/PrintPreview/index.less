@@ -1,0 +1,91 @@
+@import '~antd/lib/style/themes/default.less';
+
+.modal {
+  dispaly: flex;
+
+  .setting {
+    min-height: 320px;
+    padding: 24px;
+  }
+
+  .info {
+    min-height: 100px;
+  }
+
+  .chart {
+    flex: 1;
+    padding: 24px;
+    background: #dfdfdf;
+  }
+
+  :global {
+    .ant-modal {
+      padding-bottom: 0;
+    }
+
+    .ant-modal-content {
+      height: 100%;
+    }
+
+    .ant-modal-header {
+      padding: 8px 12px;
+    }
+
+    .ant-modal-body {
+      height: calc(100% - 55px);
+      background: #f0f2f5;
+      overflow: auto;
+    }
+
+    .ant-modal-close-x {
+      height: 40px;
+      width: 40px;
+      line-height: 40px;
+    }
+  }
+}
+
+.wrapper {
+  .setting {
+    width: 600px;
+    height: 320px;
+    background: #fcf;
+
+    fieldset {
+      display: block;
+      margin-inline-start: 2px;
+      margin-inline-end: 2px;
+      padding-block-start: 0.35em;
+      padding-inline-start: 0.75em;
+      padding-inline-end: 0.75em;
+      padding-block-end: 0.625em;
+      min-inline-size: min-content;
+      border-width: 2px;
+      border-style: groove;
+      border-color: threedface;
+      border-image: initial;
+    }
+
+    legend {
+      margin-bottom: 0;
+    }
+
+    input {
+      margin-right: 5px;
+    }
+
+    :global {
+      .ant-radio-wrapper {
+        width: 100%;
+      }
+
+      .ant-input-number {
+        margin-right: 6px;
+      }
+    }
+  }
+
+  .preview {
+
+  }
+}

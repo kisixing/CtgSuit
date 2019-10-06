@@ -19,12 +19,12 @@ const CollectionCreateForm = Form.create({
     }
 
     componentDidMount() {
-      console.log('modal componentDidMount');
       const {
         form,
-        dataSource: { documentno, pregnancy },
+        dataSource: { documentno, pregnancy, data },
       } = this.props;
-      if (documentno && pregnancy) {
+      const isCreated = pregnancy && pregnancy.id && documentno === data.docid;
+      if (isCreated) {
         form.setFieldsValue(pregnancy);
       }
     }
@@ -43,15 +43,13 @@ const CollectionCreateForm = Form.create({
            const value = values[key];
            obj[k] = value;
          });
-         dispatch(
-           {
-             type: 'item/fetchPregnancy',
-             payload: obj,
+         dispatch({
+           type: 'list/fetchPregnancy',
+           payload: obj,
+           callback: res => {
+             form.setFieldsValue(res);
            },
-           () => {
-             form.setFieldsValue(this.props.pregnancy);
-           },
-         );
+         });
        });
     };
 
