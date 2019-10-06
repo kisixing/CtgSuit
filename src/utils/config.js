@@ -3,8 +3,8 @@ const { NODE_ENV } = process.env;
 const isDev = NODE_ENV === 'development';
 // 本机地址
 // const localUrl = window.location.protocol + '//' + window.location.host + '/';
-const wsUrl = store.get('ws_url') || (isDev ? '192.168.2.161:8084' : '192.168.2.161:8084');
-const apiPrefix = store.get('rest_url') || (isDev ? '/api/v1' : 'http://192.168.2.167:9986/api');
+const wsUrl = store.get('ws_url') || (isDev ? '192.168.2.227:8084' : '192.168.2.227:8084');
+const apiPrefix = store.get('rest_url') || (isDev ? '/api/v1' : 'http://192.168.2.152:9986/api');
 console.log('ws_url', 'rest_url');
 
 module.exports = {

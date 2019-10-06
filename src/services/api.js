@@ -8,7 +8,6 @@ import { apiPrefix } from '@/utils/config';
  */
 export async function login(params) {
   return request.get(`${apiPrefix}/account`, {
-    method: 'POST',
     data: {
       ...params,
     },
@@ -20,8 +19,7 @@ export async function login(params) {
  * @param {object} params {username, password}
  */
 export async function authenticate(params) {
-  return request.get(`${apiPrefix}/authenticate`, {
-    method: 'POST',
+  return request.post(`${apiPrefix}/authenticate`, {
     data: params,
   });
 }
@@ -41,8 +39,7 @@ export async function getAccount() {
  * @returns
  */
 export async function newPregnancies(params) {
-  return request.get(`${apiPrefix}/pregnancies`, {
-    method: 'POST',
+  return request.post(`${apiPrefix}/pregnancies`, {
     data: params,
   });
 }
@@ -61,15 +58,13 @@ export async function getCTGrecords() {
 }
 
 export async function newCTGrecord(params) {
-  return request.get(`${apiPrefix}/prenatal-visits`, {
-    method: 'POST',
+  return request.post(`${apiPrefix}/prenatal-visits`, {
     data: params,
   });
 }
 
 export async function updateCTGrecord(params) {
-  return request.get(`${apiPrefix}/prenatal-visits`, {
-    method: 'PUT',
+  return request.put(`${apiPrefix}/prenatal-visits`, {
     data: params,
   });
 }
@@ -81,7 +76,7 @@ export async function updateCTGrecord(params) {
  * @returns
  */
 export async function getCTGrecordData(params) {
-  return request(`${apiPrefix}/ctg-exams-data/${params.ctgexamid}`);
+  return request.get(`${apiPrefix}/ctg-exams-data/${params.ctgexamid}`);
 }
 
 /**
@@ -91,8 +86,7 @@ export async function getCTGrecordData(params) {
  * @returns
  */
 export async function updateCTGexams(params) {
-  return request.get(`${apiPrefix}/ctg-exams`, {
-    method: 'PUT',
+  return request.put(`${apiPrefix}/ctg-exams`, {
     data: params,
   });
 }

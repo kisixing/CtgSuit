@@ -125,34 +125,6 @@ const CollectionCreateForm = Form.create({
                   })(<InputNumber />)}
                 </Form.Item>
               </Col>
-              <Col span={12}>
-                <Form.Item label="检查次数">
-                  {getFieldDecorator('parity', {
-                    rules: [{ required: required, message: '请输入产次!' }],
-                  })(<InputNumber />)}
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item label="孕周">
-                  {getFieldDecorator('parity', {
-                    rules: [{ required: required, message: '请输入产次!' }],
-                  })(<InputNumber />)}
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item label="GP">
-                  {getFieldDecorator('parity', {
-                    rules: [{ required: required, message: '请输入产次!' }],
-                  })(<InputNumber />)}
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item label="备注">
-                  {getFieldDecorator('parity', {
-                    rules: [{ required: required, message: '请输入产次!' }],
-                  })(<InputNumber />)}
-                </Form.Item>
-              </Col>
               <Col span={24} className={styles.buttons}>
                 <Button onClick={() => onCancel('visible')}>取消</Button>
                 {dataSource.documentno ? null : <Button onClick={this.handleSearch}>搜索</Button>}

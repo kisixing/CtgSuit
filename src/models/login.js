@@ -18,7 +18,7 @@ export default {
       let data = {};
       data = yield call(authenticate, payload);
       console.log('error------', data);
-      const auth = data.id_token ? true : false;
+      const auth = data && data.id_token ? true : false;
       if (auth) {
         // 登录验证成功
         yield put({

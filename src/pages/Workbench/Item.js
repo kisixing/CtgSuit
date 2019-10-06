@@ -66,7 +66,7 @@ class WorkbenchItem extends Component {
         payload: { ...values },
         callback: (res) => {
           if (res && res.id) {
-            console.log('call back', res); // 请求完成后返回的结果
+            // console.log('call back', res); // 请求完成后返回的结果
             const id = res.id;
             const {
               data: { starttime },

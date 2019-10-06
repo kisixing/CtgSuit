@@ -1,3 +1,4 @@
+import { message } from 'antd';
 import {
   getCTGrecords,
   getCTGrecordData,
@@ -34,6 +35,13 @@ export default {
     },
     *create({ payload }, { call, put }) {
       const res = yield call(newCTGrecord, payload);
+      if (res && res.id) {
+        message.success('创建成功！');
+        // 创建成功后更新bed的information
+        yield put({
+          type: 'list/getlist'
+        })
+      }
     },
     *update({ payload }, { call, put }) {
       const res = yield call(updateCTGrecord, payload);
