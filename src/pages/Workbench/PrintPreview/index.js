@@ -8,6 +8,7 @@ import React, { Component } from 'react';
 import { Modal } from 'antd';
 
 import Setting from './Setting';
+import Preview from './Preview';
 
 import styles from './index.less';
 
@@ -35,7 +36,9 @@ class PrintPreview extends Component {
           <Setting />
         </div>
         <div className={styles.info}></div>
-        <div className={styles.chart}></div>
+        <div className={styles.chart}>
+          <Preview />
+        </div>
       </Modal>
     );
   }
