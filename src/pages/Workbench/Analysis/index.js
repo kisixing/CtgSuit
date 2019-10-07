@@ -18,6 +18,8 @@ class Analysis extends Component {
     const { visible, onCancel, onCreate, form, dataSource } = this.props;
     return (
       <Modal
+        getContainer={false}
+        destroyOnClose
         centered
         width="92%"
         height="96%"
