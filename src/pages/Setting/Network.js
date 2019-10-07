@@ -37,7 +37,16 @@ class Network extends Component {
       }
     });
   };
-
+  reset(){
+    store.set(['ws_url', 'xhr_url'], ['', '']).then(status=>{
+      if(status){
+       message.success('恢复成功,2s 后重启',2).then(()=>{
+         // eslint-disable-next-line no-restricted-globals
+         location.reload()
+       })
+      }
+    })
+  }
   render() {
     const {
       form: { getFieldDecorator },
@@ -60,6 +69,9 @@ class Network extends Component {
         <Form.Item {...tailFormItemLayout}>
           <Button type="primary" onClick={this.handleSubmit}>
             保存
+          </Button>
+          <Button type="default" onClick={this.reset} style={{marginLeft:10}}>
+            恢复默认
           </Button>
         </Form.Item>
       </Form>
