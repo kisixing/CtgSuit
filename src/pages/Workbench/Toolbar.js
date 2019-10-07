@@ -1,3 +1,8 @@
+/*
+ * @Description: 监控窗口工具条toolbar
+ * @Author: Zhong Jun
+ * @Date: 2019-10-07 16:14:11
+ */
 import React, { Component } from 'react';
 import { Button, Modal } from 'antd';
 import { connect } from 'dva';
@@ -22,7 +27,18 @@ class Toolbar extends Component {
       analysisVisible: false, // 电脑分析modal
       printVisible: false,
       partogramVisible: false,
+      isCreated: false, // 默认未建档
+      isMonitor: false, // 是否已经开始监护
     };
+  }
+
+  componentDidMount() {
+    const { dataSource: { data }, documentno, pregnancy } = this.props;
+    // 判断是否已建档
+    const isCreated = data && pregnancy && pregnancy.id && documentno === data.docid;
+    // 判断是否已开始监护
+    const isMonitor = data && data.starttime !== '';
+    this.setState({ isCreated, isMonitor });
   }
 
   toggleTool = () => {
@@ -87,7 +103,7 @@ class Toolbar extends Component {
   };
 
   start = item => {
-    const { deviceno, bedno } = item;
+    const { id, deviceno, bedno, pregnancy } = item;
     console.log('start Device -- ', item);
     Modal.confirm({
       centered: true,
@@ -97,48 +113,82 @@ class Toolbar extends Component {
       cancelText: '取消',
       onOk: function () {
         socket.startwork(deviceno, bedno);
-      },
-    });
-  };
-
-  end = item => {
-    const { deviceno, bedno } = item;
-    console.log('end Device -- ', item);
-    Modal.confirm({
-      centered: true,
-      title: '提示',
-      content: `确认 床号：${item.index} 停止监护？`,
-      okText: '确认',
-      cancelText: '取消',
-      onOk: function () {
-        socket.endwork(deviceno, bedno);
         // this.props.dispatch({
         //   type: 'archives/updateExams',
-        //   payload: {}
+        //   payload: {},
         // });
       },
     });
   };
 
+  // 停止监护
+  end = item => {
+    const { isCreated } = this.state;
+    const { deviceno, bedno, pregnancy, data, prenatalVisit = {} } = item;
+    if (isCreated) {
+      // 已经建档
+      const pregnancyId = pregnancy.id;
+      console.log('end Device -- ', item);
+      Modal.confirm({
+        centered: true,
+        title: '提示',
+        content: `确认 床号：${item.index} 停止监护？`,
+        okText: '确认',
+        cancelText: '取消',
+        onOk: function() {
+          socket.endwork(deviceno, bedno);
+          this.props.dispatch({
+            type: 'archives/updateExams',
+            payload: {
+              id: prenatalVisit.id,
+              pregnancy: {
+                id: pregnancyId,
+              },
+              ctgexam: {
+                ...prenatalVisit.ctgexam,
+                endTime: moment(),
+                note: data.docid,
+              },
+            },
+            callback: res => {
+              if (res && res.id) {
+                // 将监护状态改为未监护状态
+                this.setState({ isMonitor: false });
+              }
+            },
+          });
+        },
+      });
+    } else {
+      // 未建档，直接调用web socket
+      socket.endwork(deviceno, bedno);
+    }
+  };
+
   render() {
     const { dataSource, ...rest } = this.props;
-    const { showSetting, visible, analysisVisible, printVisible, partogramVisible } = this.state;
-    const { data, documentno, pregnancy } = dataSource;
-    // 判断是否已建档
-    const isCreated = data && pregnancy && pregnancy.id && documentno === data.docid;
+    const {
+      showSetting,
+      visible,
+      analysisVisible,
+      printVisible,
+      partogramVisible,
+      isCreated,
+      isMonitor,
+    } = this.state;
 
     return (
       <>
         <div className={cx(styles.toolbar, { [styles.show]: showSetting })}>
-          {data && data.starttime ? (
+          {isMonitor ? (
             <Button icon="pause-circle" type="link" onClick={() => this.end(dataSource)}>
               停止监护
             </Button>
           ) : (
-              <Button icon="play-circle" type="link" onClick={() => this.start(dataSource)}>
-                开始监护
+            <Button icon="play-circle" type="link" onClick={() => this.start(dataSource)}>
+              开始监护
             </Button>
-            )}
+          )}
           <Button
             icon="user-add"
             type="link"

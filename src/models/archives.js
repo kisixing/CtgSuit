@@ -4,7 +4,6 @@ import {
   getCTGrecordData,
   newCTGrecord,
   updateCTGrecord,
-  updateCTGexams
 } from '@/services/api';
 
 export default {
@@ -24,6 +23,7 @@ export default {
         }
       })
     },
+    // 获取静态ctg数据，渲染静态ctg曲线
     *fetchCTGrecordData({ payload }, { call, put }) {
       const res = yield call(getCTGrecordData, payload);
       yield put({
@@ -38,17 +38,17 @@ export default {
       if (res && res.id) {
         message.success('创建成功！');
         // 创建成功后更新bed的information
-        yield put({
-          type: 'list/getlist'
-        })
+        // yield put({
+        //   type: 'list/getlist'
+        // })
       }
     },
-    *update({ payload }, { call, put }) {
+    *update({ payload, callback }, { call, put }) {
       const res = yield call(updateCTGrecord, payload);
+      if (callback && typeof callback === 'function') {
+        callback(res); // 返回结果
+      }
     },
-    *updateExams({ payload }, { call, put }) {
-      const res = yield call(updateCTGexams, payload);
-    }
   },
   reducers: {
     updateState(state, { payload }) {
