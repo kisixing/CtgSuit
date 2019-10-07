@@ -30,7 +30,7 @@ class C extends Component {
         <div style={{ height: 450 }}>
           <Partogram />
         </div>
-        <PartogramTable url="api/v1/prenatal-visits" style={{ padding: '20px' }} id="1" />
+        <PartogramTable url="/prenatal-visits" style={{ padding: '20px' }} id="1" />
       </Modal>
     );
   }

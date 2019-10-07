@@ -1,13 +1,12 @@
 import request from '@/utils/request';
 import { stringify } from 'qs';
-import { apiPrefix } from '@/utils/config';
 
 /**
  * 验证账户登录
  * @returns {Promise<void>}
  */
 export async function login(params) {
-  return request.get(`${apiPrefix}/account`, {
+  return request.get(`/account`, {
     data: {
       ...params,
     },
@@ -19,7 +18,7 @@ export async function login(params) {
  * @param {object} params {username, password}
  */
 export async function authenticate(params) {
-  return request.post(`${apiPrefix}/authenticate`, {
+  return request.post(`/authenticate`, {
     data: params,
   });
 }
@@ -28,7 +27,7 @@ export async function authenticate(params) {
  * 获取账户信息
  */
 export async function getAccount() {
-  return request.get(`${apiPrefix}/account`);
+  return request.get(`/account`);
 }
 
 /**
@@ -39,13 +38,13 @@ export async function getAccount() {
  * @returns
  */
 export async function newPregnancies(params) {
-  return request.post(`${apiPrefix}/pregnancies`, {
+  return request.post(`/pregnancies`, {
     data: params,
   });
 }
 
 export async function getPregnancy(params) {
-  return request.get(`${apiPrefix}/pregnancies?${stringify(params)}`);
+  return request.get(`/pregnancies?${stringify(params)}`);
 }
 
 /**
@@ -54,17 +53,17 @@ export async function getPregnancy(params) {
  * @returns
  */
 export async function getCTGrecords() {
-  return request.get(`${apiPrefix}/prenatal-visits?CTGExamId.specified=true`);
+  return request.get(`/prenatal-visits?CTGExamId.specified=true`);
 }
 
 export async function newCTGrecord(params) {
-  return request.post(`${apiPrefix}/prenatal-visits`, {
+  return request.post(`/prenatal-visits`, {
     data: params,
   });
 }
 
 export async function updateCTGrecord(params) {
-  return request.put(`${apiPrefix}/prenatal-visits`, {
+  return request.put(`/prenatal-visits`, {
     data: params,
   });
 }
@@ -76,7 +75,7 @@ export async function updateCTGrecord(params) {
  * @returns
  */
 export async function getCTGrecordData(params) {
-  return request.get(`${apiPrefix}/ctg-exams-data/${params.ctgexamid}`);
+  return request.get(`/ctg-exams-data/${params.ctgexamid}`);
 }
 
 /**
@@ -86,7 +85,7 @@ export async function getCTGrecordData(params) {
  * @returns
  */
 export async function updateCTGexams(params) {
-  return request.put(`${apiPrefix}/ctg-exams`, {
+  return request.put(`/ctg-exams`, {
     data: params,
   });
 }

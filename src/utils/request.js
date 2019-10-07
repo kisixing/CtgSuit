@@ -6,8 +6,9 @@ import router from 'umi/router';
 import store from 'store';
 import { TOKEN } from '@/utils/constant';
 import r from '@lianmed/request';
-
+import config from "@/utils/config";
 const request = r.config({
+  prefix:config.apiPrefix,
   errHandler({ status, errortext, url }) {
     if (status === 401) {
       // @HACK
