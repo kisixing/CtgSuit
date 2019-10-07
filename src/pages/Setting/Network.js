@@ -6,8 +6,8 @@
 
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Form, Input, Button } from 'antd';
-import store from 'store';
+import { Form, Input, Button,message } from 'antd';
+import { store } from '@/utils/Storage';
 
 import { formItemLayout, tailFormItemLayout } from './utils';
 import styles from './style.less';
@@ -16,19 +16,37 @@ import styles from './style.less';
 class Network extends Component {
   componentDidMount() {
     const { form } = this.props;
-    const ws_url = store.get('ws_url');
-    const rest_url = store.get('rest_url');
-    form.setFieldsValue({ rest_url, ws_url });
+
+    store.get(['ws_url', 'xhr_url']).then(([ws_url,xhr_url])=> {
+      form.setFieldsValue({ xhr_url, ws_url });
+    })
+   
   }
 
   handleSubmit = () => {
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
+       store.set(Object.keys(values),Object.values(values)).then(status=>{
+         if(status){
+          message.success('设置成功,2s 后重启',2).then(()=>{
+            // eslint-disable-next-line no-restricted-globals
+            location.reload()
+          })
+         }
+       })
       }
     });
   };
-
+  reset(){
+    store.set(['ws_url', 'xhr_url'], ['', '']).then(status=>{
+      if(status){
+       message.success('恢复成功,2s 后重启',2).then(()=>{
+         // eslint-disable-next-line no-restricted-globals
+         location.reload()
+       })
+      }
+    })
+  }
   render() {
     const {
       form: { getFieldDecorator },
@@ -41,16 +59,19 @@ class Network extends Component {
         <Form.Item label="web socket">
           {getFieldDecorator('ws_url', {
             rules: [{ required: false, message: '请输入websocket服务地址!' }],
-          })(<Input addonBefore="http://" placeholder="请输入web socket服务地址!" />)}
+          })(<Input addonBefore="ws://" placeholder="请输入web socket服务地址!" />)}
         </Form.Item>
         <Form.Item label="web service">
-          {getFieldDecorator('rest_url')(
+          {getFieldDecorator('xhr_url')(
             <Input addonBefore="http://" placeholder="请输入web service服务地址!" />,
           )}
         </Form.Item>
         <Form.Item {...tailFormItemLayout}>
           <Button type="primary" onClick={this.handleSubmit}>
             保存
+          </Button>
+          <Button type="default" onClick={this.reset} style={{marginLeft:10}}>
+            恢复默认
           </Button>
         </Form.Item>
       </Form>
