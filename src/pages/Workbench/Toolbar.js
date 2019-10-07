@@ -103,7 +103,7 @@ class Toolbar extends Component {
   };
 
   start = item => {
-    const { id, deviceno, bedno, pregnancy } = item;
+    const { deviceno, bedno } = item;
     console.log('start Device -- ', item);
     Modal.confirm({
       centered: true,

@@ -21,7 +21,7 @@ export class Storage {
         } else {
             arr.push([key, value])
         }
-        return arr.map(_ => _.join('=')).join('\n')
+        return arr.map(_ => _.join('=')).join('\n').trim()
     }
     setSnc(key: string, value: string) {
         const res = fs.readFileSync(this.url, this.encoding)

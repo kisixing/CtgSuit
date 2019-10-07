@@ -1,16 +1,12 @@
-const datacache: Map<any, any> = new Map();
+let datacache: Map<any, any> = new Map();
 const interval: number = 800;
-const RE_CONNECT_INTERVAL: number = 5000;
+const RECONNECT_INTERVAL: number = 5000;
 export default datacache;
 const log = console.log.bind(console, 'websocket')
 // import { message as Message } from "antd";
 import config from '@/utils/config';
 import { EventEmitter } from "@lianmed/utils";
-// import request from "@/utils/request";
-// request.get('url',{data:{}}).then(responseData => {
-//   console.log(responseData)
-// })
-
+import request from "@/utils/request";
 
 export enum EWsStatus {
   Pendding, Success, Error
@@ -39,13 +35,15 @@ export class WsConnect extends EventEmitter {
     const message = `{"name":"end_work","data":{"device_no":${device_no},"bed_no":${bed_no}}}`;
     this.socket.send(message);
   }
-
+  dispatch(action: any) {
+    (window as any).g_app._store.dispatch(action);
+  }
   tip = (text: string, status: EWsStatus) => {
     log(text);
-    (window as any).g_app._store.dispatch({
+    this.dispatch({
       type: 'ws/setState',
       payload: { status }
-    });
+    })
   }
   connect = (url: string = config.wsUrl): Promise<Map<any, any>> => {
 
@@ -68,7 +66,7 @@ export class WsConnect extends EventEmitter {
         this.tip('关闭', EWsStatus.Error)
         setTimeout(() => {
           this.connect()
-        }, RE_CONNECT_INTERVAL);
+        }, RECONNECT_INTERVAL);
       };
       // 接收服务端数据时触发事件
       socket.onmessage = (msg) => {
@@ -94,10 +92,18 @@ export class WsConnect extends EventEmitter {
                     past: 0,
                     timestamp: 0,
                     docid: '',
+                    status: '',
                     starttime: '',
+                    fetal_num: 1,
                   });
                   convertdocid(cachebi, devdata.beds[bi].doc_id);
-                  for (var fetal = 0; fetal < 3; fetal++) {
+                  if (devdata.beds[bi].is_working) {
+                    datacache.get(cachebi).status = 1;
+                  } else {
+                    datacache.get(cachebi).status = 2;
+                  }
+                  datacache.get(cachebi).fetal_num = devdata.beds[bi].fetal_num;
+                  for (let fetal = 0; fetal < devdata.beds[bi].fetal_num; fetal++) {
                     datacache.get(cachebi).fhr[fetal] = [];
                   }
                 }
@@ -114,12 +120,21 @@ export class WsConnect extends EventEmitter {
             if (datacache.has(cachbi)) {
               var tmpcache = datacache.get(cachbi);
               for (let key in ctgdata) {
-                tmpcache.fhr[0][ctgdata[key].index] = ctgdata[key].fhr;
-                tmpcache.fhr[1][ctgdata[key].index] = ctgdata[key].fhr2;
+                for (let fetal = 0; fetal < tmpcache.fetal_num; fetal++) {
+                  if (fetal == 0) {
+                    tmpcache.fhr[fetal][ctgdata[key].index] = ctgdata[key].fhr;
+                  } else {
+                    tmpcache.fhr[fetal][ctgdata[key].index] = ctgdata[key].fhr2;
+                  }
+                }
                 tmpcache.toco[ctgdata[key].index] = ctgdata[key].toco;
                 if (tmpcache.start == -1) {
                   tmpcache.start = ctgdata[key].index;
                   tmpcache.past = ctgdata[key].index - 4800 > 0 ? ctgdata[key].index - 4800 : 0;
+                  if (tmpcache.past > 0) {
+                    console.log(datacache.get(cachbi).docid, tmpcache.past);
+                    getoffline(datacache.get(cachbi).docid, tmpcache.past);
+                  }
                 }
                 setcur(cachbi, ctgdata[key].index);
                 for (let i = datacache.get(cachbi).start; i > datacache.get(cachbi).past; i--) {
@@ -161,9 +176,14 @@ export class WsConnect extends EventEmitter {
             var cachbi = id + '-' + bi;
             if (datacache.has(cachbi)) {
               var tmpcache = datacache.get(cachbi);
-              for (var key in ctgdata) {
-                tmpcache.fhr[0][ctgdata[key].index] = ctgdata[key].fhr;
-                tmpcache.fhr[1][ctgdata[key].index] = ctgdata[key].fhr2;
+              for (let key in ctgdata) {
+                for (let fetal = 0; fetal < tmpcache.fetal_num; fetal++) {
+                  if (fetal == 0) {
+                    tmpcache.fhr[fetal][ctgdata[key].index] = ctgdata[key].fhr;
+                  } else {
+                    tmpcache.fhr[fetal][ctgdata[key].index] = ctgdata[key].fhr2;
+                  }
+                }
                 tmpcache.toco[ctgdata[key].index] = ctgdata[key].toco;
                 setcur(cachbi, ctgdata[key].index);
               }
@@ -212,10 +232,39 @@ export class WsConnect extends EventEmitter {
           //开启监护页
           else if (received_msg.name == 'start_work') {
             let devdata = received_msg.data;
+            const { bed_no, device_no } = devdata
+            let curid = `${device_no}-${bed_no}`
+
+            //TODO : 更新设备状态
+            convertdocid(curid, devdata.doc_id);
+            log('start_work', devdata.is_working);
+            const target = datacache.get(curid)
+            if (devdata.is_working) {
+              target.status = 1
+            } else {
+              target.status = 2
+            }
+
+            this.dispatch({
+              type: 'ws/setState', payload: { data: new Map(datacache) }
+            })
+          }
+          //结束监护页
+          else if (received_msg.name == 'end_work') {
+            let devdata = received_msg.data;
             let curid = Number(devdata['device_no']) + '-' + Number(devdata['bed_no']);
             //TODO : 更新设备状态
             convertdocid(curid, devdata.doc_id);
             log('start_work', devdata.is_working);
+            const target = datacache.get(curid)
+            if (devdata.is_working) {
+              target.status = 1
+            } else {
+              target.status = 2
+            }
+            this.dispatch({
+              type: 'ws/setState', payload: { data: new Map(datacache) }
+            })
           }
         }
       };
@@ -262,5 +311,39 @@ export class WsConnect extends EventEmitter {
         log('The socket is not open.');
       }
     }
+
+    function getoffline(doc_id: string, offlineend: number) {
+      request.get(`/ctg-exams-data/${doc_id}`).then(responseData => {
+        let vt = doc_id.split('_');
+        let dbid = vt[0] + '-' + vt[1];
+        console.log(doc_id, offlineend, responseData, datacache.get(dbid).past);
+        initfhrdata(responseData, datacache.get(dbid), offlineend);
+        //datacache.get(dbid).start = 0;
+      })
+    }
+
+    function initfhrdata(data, datacache, offindex) {
+      Object.keys(data).forEach(key => {
+        let oridata = data[key] as string;
+        if (!oridata) {
+          return;
+        }
+        for (let i = 0; i < offindex; i++) {
+          let hexBits = oridata.substring(0, 2);
+          let data_to_push = parseInt(hexBits, 16);
+          if (key == 'fhr1') {
+            datacache.fhr[0][i] = data_to_push;
+          } else if (key == 'fhr2') {
+            datacache.fhr[1][i] = data_to_push;
+          } else if (key == 'fhr3') {
+            //datacache.fhr[2][i] = data_to_push;
+          } else if (key == 'toco') {
+            datacache.toco[i] = data_to_push;
+          }
+          oridata = oridata.substring(2, oridata.length);
+        }
+      });
+    }
+
   };
 }

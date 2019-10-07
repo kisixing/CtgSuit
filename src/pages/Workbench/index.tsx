@@ -5,7 +5,7 @@ import './index.less';
 import Item from './Item';
 import { IDevice } from '@/models/list'
 const Home = props => {
-  const { listLayout = [], pageItems, fullScreenId,dispatch,datacache } = props;
+  const { listLayout = [], pageItems, fullScreenId, dispatch, datacache } = props;
   const wrap = useRef(null);
 
   // const [wrapRec, setWrapRec] = useState({ height: 0, width: 0 });
@@ -22,10 +22,11 @@ const Home = props => {
     <div style={{ height: '100%', overflow: 'hidden' }} ref={wrap}>
       <Row style={{ padding: outPadding }}>
         {(pageItems as IDevice[]).map(item => {
+          const data = (datacache as Map<string, any>).get(item.unitId)
           return (
             <Item
               key={item.id}
-              dataSource={{...item,data:(datacache as Map<string,any>).get(item.unitId)}}
+              dataSource={{ ...item, data, status: data && data.status }}
               itemHeight={itemHeight}
               itemSpan={itemSpan}
               outPadding={outPadding}
@@ -39,11 +40,11 @@ const Home = props => {
   );
 };
 
-export default connect(({ setting, list,ws }: any) => {
+export default connect(({ setting, list, ws }: any) => {
   return {
     listLayout: setting.listLayout,
     pageItems: list.pageItems,
     fullScreenId: list.fullScreenId,
-    datacache:ws.data
+    datacache: ws.data,
   };
 })(Home);

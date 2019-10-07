@@ -39,7 +39,7 @@ const WorkbenchItem = props => {
   const renderTilte = item => {
     return (
       <div className={styles.title}>
-        床号: <span>{item.bedno}</span>
+        床号: <span>{item.bedname}</span>
         住院号: <span>{item.documentno}</span>
         姓名: <span>{item.bedname}</span>
         开始时间: <span>{new Date(item.updateTime).toLocaleDateString()}</span>
