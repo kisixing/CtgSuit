@@ -104,6 +104,7 @@ class Toolbar extends Component {
 
   start = item => {
     const { deviceno, bedno } = item;
+    const _this = this;
     console.log('start Device -- ', item);
     Modal.confirm({
       centered: true,
@@ -113,6 +114,7 @@ class Toolbar extends Component {
       cancelText: '取消',
       onOk: function () {
         socket.startwork(deviceno, bedno);
+        _this.setState({ isMonitor: true });
         // this.props.dispatch({
         //   type: 'archives/updateExams',
         //   payload: {},
@@ -124,6 +126,7 @@ class Toolbar extends Component {
   // 停止监护
   end = item => {
     const { isCreated } = this.state;
+    const _this = this;
     const { deviceno, bedno, pregnancy, data, prenatalVisit = {} } = item;
     if (isCreated) {
       // 已经建档
@@ -153,7 +156,7 @@ class Toolbar extends Component {
             callback: res => {
               if (res && res.id) {
                 // 将监护状态改为未监护状态
-                this.setState({ isMonitor: false });
+                _this.setState({ isMonitor: false });
               }
             },
           });

@@ -3,8 +3,10 @@ import ReactDOM from 'react-dom';
 import { Card, Col, Button, Tag } from 'antd';
 import { Ctg as L } from '@lianmed/lmg';
 import { mapStatusToColor, mapStatusToText } from '@/constant';
+import Toolbar from './Toolbar';
+
 let styles = require('./Item.less')
-import Toolbar from './Toolbar'
+
 const WorkbenchItem = props => {
   const { dispatch, fullScreenId, itemHeight, itemSpan, dataSource, outPadding, } = props;
   const { data, unitId } = dataSource;
@@ -87,4 +89,4 @@ const WorkbenchItem = props => {
   );
 }
 
-export default WorkbenchItem
+export default WorkbenchItem;

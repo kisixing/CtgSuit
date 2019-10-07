@@ -3,7 +3,8 @@ import { Row } from 'antd';
 import { connect } from 'react-redux';
 import './index.less';
 import Item from './Item';
-import { IDevice } from '@/models/list'
+import { IDevice } from '@/models/list';
+
 const Home = props => {
   const { listLayout = [], pageItems, fullScreenId, dispatch, datacache } = props;
   const wrap = useRef(null);
