@@ -14,6 +14,8 @@ class C extends Component {
     const { visible, onCancel, onCreate, dataSource } = this.props;
     return (
       <Modal
+        getContainer={false}
+        destroyOnClose
         centered
         width="92%"
         height="96%"
@@ -28,6 +30,7 @@ class C extends Component {
         onCancel={() => onCancel('partogramVisible')}
       >
         <div style={{ height: 450 }}>
+          
           <Partogram />
         </div>
         <PartogramTable url="/prenatal-visits" style={{ padding: '20px' }} id="1" />

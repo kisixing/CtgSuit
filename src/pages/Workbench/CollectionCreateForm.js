@@ -71,8 +71,9 @@ const CollectionCreateForm = Form.create({
 
       return (
         <Modal
+          getContainer={false}
           centered
-          destroyOnClose={false}
+          destroyOnClose
           width={800}
           visible={visible}
           title={`【${dataSource.index + 1}】 建档（绑定）`}

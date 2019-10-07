@@ -13,9 +13,11 @@ import styles from './index.less';
 
 class PrintPreview extends Component {
   render() {
-     const { visible, onCancel, onCreate, dataSource } = this.props;
+    const { visible, onCancel, onCreate, dataSource } = this.props;
     return (
       <Modal
+        getContainer={false}
+        destroyOnClose
         centered
         width="92%"
         height="96%"
