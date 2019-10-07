@@ -234,18 +234,20 @@ export class WsConnect extends EventEmitter {
             let devdata = received_msg.data;
             const { bed_no, device_no } = devdata
             let curid = `${device_no}-${bed_no}`
-            datacache = new Map(datacache)
-            this.dispatch({
-              type: 'ws/setState', data: datacache
-            })
+
             //TODO : 更新设备状态
             convertdocid(curid, devdata.doc_id);
             log('start_work', devdata.is_working);
+            const target = datacache.get(curid)
             if (devdata.is_working) {
-              datacache.get(curid).status = 1;
+              target.status = 1
             } else {
-              datacache.get(curid).status = 2;
+              target.status = 2
             }
+
+            this.dispatch({
+              type: 'ws/setState', payload: { data: new Map(datacache) }
+            })
           }
           //结束监护页
           else if (received_msg.name == 'end_work') {
@@ -254,11 +256,15 @@ export class WsConnect extends EventEmitter {
             //TODO : 更新设备状态
             convertdocid(curid, devdata.doc_id);
             log('start_work', devdata.is_working);
+            const target = datacache.get(curid)
             if (devdata.is_working) {
-              datacache.get(curid).status = 1;
+              target.status = 1
             } else {
-              datacache.get(curid).status = 2;
+              target.status = 2
             }
+            this.dispatch({
+              type: 'ws/setState', payload: { data: new Map(datacache) }
+            })
           }
         }
       };

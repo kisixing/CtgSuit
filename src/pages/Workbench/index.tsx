@@ -45,6 +45,6 @@ export default connect(({ setting, list, ws }: any) => {
     listLayout: setting.listLayout,
     pageItems: list.pageItems,
     fullScreenId: list.fullScreenId,
-    datacache: ws.data
+    datacache: ws.data,
   };
 })(Home);

@@ -130,7 +130,7 @@ class Toolbar extends Component {
     return (
       <>
         <div className={cx(styles.toolbar, { [styles.show]: showSetting })}>
-          {data && data.starttime ? (
+          {data && data.status === 1 ? (
             <Button icon="pause-circle" type="link" onClick={() => this.end(dataSource)}>
               停止监护
             </Button>
