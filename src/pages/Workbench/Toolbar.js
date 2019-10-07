@@ -135,7 +135,7 @@ class Toolbar extends Component {
         content: `确认 床号：${item.index} 停止监护？`,
         okText: '确认',
         cancelText: '取消',
-        onOk: function() {
+        onOk: function () {
           socket.endwork(deviceno, bedno);
           this.props.dispatch({
             type: 'archives/updateExams',
@@ -166,7 +166,7 @@ class Toolbar extends Component {
   };
 
   render() {
-    const { dataSource, ...rest } = this.props;
+    const { dataSource, showSettingBar, ...rest } = this.props;
     const {
       showSetting,
       visible,
@@ -185,10 +185,10 @@ class Toolbar extends Component {
               停止监护
             </Button>
           ) : (
-            <Button icon="play-circle" type="link" onClick={() => this.start(dataSource)}>
-              开始监护
+              <Button icon="play-circle" type="link" onClick={() => this.start(dataSource)}>
+                开始监护
             </Button>
-          )}
+            )}
           <Button
             icon="user-add"
             type="link"
@@ -212,7 +212,7 @@ class Toolbar extends Component {
             </Button>
           </Link>
         </div>
-        <div className={styles.actionButton}>
+        <div className={styles.actionButton} style={{ opacity: showSetting || showSettingBar ? 1 : 0 }}>
           <Button
             icon={showSetting ? 'left' : 'right'}
             shape={showSetting ? 'circle' : null}
