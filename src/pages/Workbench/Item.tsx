@@ -56,7 +56,7 @@ const WorkbenchItem = props => {
     return () => {
       document.removeEventListener('fullscreenchange', fullScreenEvent);
     };
-  }, [])
+  }, [fullScreenId])
 
   return (
     <Col

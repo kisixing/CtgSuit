@@ -29,7 +29,7 @@ function Beds({ dispatch, listData }) {
           clickTimeout = null;
           dispatch(data);
           router.replace('/workbench');
-        }, 200);
+        }, 300);
       }
     };
   };
