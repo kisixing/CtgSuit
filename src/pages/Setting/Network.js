@@ -6,10 +6,10 @@
 
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Form, Input } from 'antd';
+import { Form, Input, Button } from 'antd';
 import store from 'store';
 
-import { formItemLayout } from './utils';
+import { formItemLayout, tailFormItemLayout } from './utils';
 import styles from './style.less';
 
 @Form.create()
@@ -20,13 +20,21 @@ class Network extends Component {
     const rest_url = store.get('rest_url');
     form.setFieldsValue({ rest_url, ws_url });
   }
+
+  handleSubmit = () => {
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        console.log('Received values of form: ', values);
+      }
+    });
+  };
+
   render() {
     const {
-      id,
       form: { getFieldDecorator },
     } = this.props;
     return (
-      <Form id={id} layout="horizontal" {...formItemLayout} className={styles.form}>
+      <Form layout="horizontal" {...formItemLayout} className={styles.form}>
         <Form.Item>
           <div className={styles.subTitle}>网络设置</div>
         </Form.Item>
@@ -39,6 +47,11 @@ class Network extends Component {
           {getFieldDecorator('rest_url')(
             <Input addonBefore="http://" placeholder="请输入web service服务地址!" />,
           )}
+        </Form.Item>
+        <Form.Item {...tailFormItemLayout}>
+          <Button type="primary" onClick={this.handleSubmit}>
+            保存
+          </Button>
         </Form.Item>
       </Form>
     );

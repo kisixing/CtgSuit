@@ -14,15 +14,21 @@ class Setting extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentKey: ['form1'],
+      current: { label: '基础设置', value: '1' },
       results: {},
     };
   }
 
   handleMenuClick = e => {
-    const key = e.key;
-    this.scrollToAnchor(key);
-    this.setState({ currentKey: [key] });
+    const {
+      key,
+      item: { props },
+    } = e;
+    const current = {
+      label: props.children,
+      value: key,
+    };
+    this.setState({ current });
   };
 
   handleSubmit = e => {
@@ -61,79 +67,63 @@ class Setting extends Component {
   };
 
   menus = () => {
-    const { currentKey } = this.state;
+    const { current } = this.state;
     return (
       <Menu
         mode="inline"
-        defaultSelectedKeys={['1']}
-        selectedKeys={currentKey}
+        selectedKeys={[current.value]}
         onClick={this.handleMenuClick}
       >
-        <Menu.Item key="form1">基础设置</Menu.Item>
-        <Menu.Item key="form2">评分设置</Menu.Item>
-        <Menu.Item key="form3">打印设置</Menu.Item>
-        <Menu.Item key="form4">事件设置</Menu.Item>
-        <Menu.Item key="form5">网络设置</Menu.Item>
-        <Menu.Item key="form6">医院设置</Menu.Item>
-        <Menu.Item key="form7">床位信息设置</Menu.Item>
-        <Menu.Item key="form8">版本信息</Menu.Item>
+        <Menu.Item key="1">基础设置</Menu.Item>
+        <Menu.Item key="2">评分设置</Menu.Item>
+        <Menu.Item key="3">打印设置</Menu.Item>
+        <Menu.Item key="4">事件设置</Menu.Item>
+        <Menu.Item key="5">网络设置</Menu.Item>
+        <Menu.Item key="7">床位信息设置</Menu.Item>
+        <Menu.Item key="6">医院设置</Menu.Item>
+        <Menu.Item key="8">版本信息</Menu.Item>
       </Menu>
     );
   };
 
   //函数定义
-  scrollToAnchor = anchorName => {
-    if (anchorName) {
-      // 找到锚点
-      let anchorElement = document.getElementById(anchorName);
-      // 如果对应id的锚点存在，就跳转到锚点
-      if (anchorElement) {
-        anchorElement.scrollIntoView({ block: 'start', behavior: 'smooth' });
-      }
-    }
-  };
-
-  // switchComponent = () => {
-  //   const { currentKey } = this.state;
-  //   switch (currentKey[0]) {
-  //     case '1':
-  //       return <BasicSetting wrappedComponentRef={form => (this.form1 = form)} />;
-  //       break;
-  //     case '2':
-  //       return <ScoreSet wrappedComponentRef={form => (this.form2 = form)} />;
-  //       break;
-  //     default:
-  //       break;
+  // scrollToAnchor = anchorName => {
+  //   if (anchorName) {
+  //     // 找到锚点
+  //     let anchorElement = document.getElementById(anchorName);
+  //     // 如果对应id的锚点存在，就跳转到锚点
+  //     if (anchorElement) {
+  //       anchorElement.scrollIntoView({ block: 'start', behavior: 'smooth' });
+  //     }
   //   }
   // };
 
+  switchComponent = () => {
+    const { current } = this.state;
+    switch (current.value) {
+      case '1':
+        return <BasicSetting wrappedComponentRef={form => (this.form1 = form)} />;
+        break;
+      case '2':
+        return <ScoreSet wrappedComponentRef={form => (this.form2 = form)} />;
+        break;
+      case '5':
+        return <Network id="form5" wrappedComponentRef={form => (this.form5 = form)} />;
+      default:
+        break;
+    }
+  };
+
   render() {
+    const { current } = this.state;
     return (
       <Layout className={styles.wrapper}>
         <Sider theme="light" width="256" className={styles.aside}>
           <div className={styles.sideMenu}>{this.menus()}</div>
         </Sider>
         <Layout className={styles.main}>
-          <Header className={styles.headerTitle}>系统设置</Header>
-          <Layout className={styles.formBox}>
-            {/* {this.switchComponent()} */}
-            <div className={styles.scrollView}>
-              <BasicSetting id="form1" wrappedComponentRef={form => (this.form1 = form)} />
-              <ScoreSet id="form2" wrappedComponentRef={form => (this.form2 = form)} />
-              <BasicSetting id="form3" wrappedComponentRef={form => (this.form3 = form)} />
-              <ScoreSet id="form4" wrappedComponentRef={form => (this.form4 = form)} />
-              <Network id="form5" wrappedComponentRef={form => (this.form5 = form)} />
-              <ScoreSet id="form6" wrappedComponentRef={form => (this.form6 = form)} />
-              <BasicSetting id="form7" wrappedComponentRef={form => (this.form7 = form)} />
-            </div>
-            <div>{JSON.stringify(this.state.results)}</div>
-          </Layout>
-          <Footer className={styles.footer}>
-            <Button>取消</Button>
-            <Button type="primary" onClick={this.handleSubmit}>
-              保存
-            </Button>
-          </Footer>
+          <Header className={styles.headerTitle}>{`系统设置/${current.label}`}</Header>
+          <Layout className={styles.formBox}>{this.switchComponent()}</Layout>
         </Layout>
       </Layout>
     );

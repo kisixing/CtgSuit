@@ -1,19 +1,25 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Form, Input } from 'antd';
+import { Form, Input, Button } from 'antd';
 
-import { formItemLayout } from './utils';
+import { formItemLayout, tailFormItemLayout } from './utils';
 import styles from './style.less';
 
 @Form.create()
 class BasicSetting extends Component {
+  handleSubmit = () => {
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        console.log('Received values of form: ', values);
+      }
+    });
+  };
   render() {
     const {
-      id, // 锚点
       form: { getFieldDecorator },
     } = this.props;
     return (
-      <Form id={id} layout="horizontal" {...formItemLayout} className={styles.form}>
+      <Form {...formItemLayout} layout="horizontal" className={styles.form}>
         <Form.Item>
           <div className={styles.subTitle}>基本设置</div>
         </Form.Item>
@@ -24,6 +30,11 @@ class BasicSetting extends Component {
         </Form.Item>
         <Form.Item label="Description">
           {getFieldDecorator('description')(<Input type="textarea" />)}
+        </Form.Item>
+        <Form.Item {...tailFormItemLayout}>
+          <Button type="primary" onClick={this.handleSubmit}>
+            保存
+          </Button>
         </Form.Item>
       </Form>
     );
