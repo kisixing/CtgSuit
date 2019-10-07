@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useEffect } from 'react';
+import React, { useRef, useCallback, useEffect,useState } from 'react';
 import ReactDOM from 'react-dom';
 import { Card, Col, Button, Tag } from 'antd';
 import { Ctg as L } from '@lianmed/lmg';
@@ -10,7 +10,7 @@ let styles = require('./Item.less')
 const WorkbenchItem = props => {
   const { dispatch, fullScreenId, itemHeight, itemSpan, dataSource, outPadding, } = props;
   const { data, unitId } = dataSource;
-
+  const [showSettingBar, setShowSettingBar] = useState(false)
   const ref = useRef(null)
   const suitObject = { suit: null };
 
@@ -66,8 +66,14 @@ const WorkbenchItem = props => {
       className={styles.col}
       ref={ref}
       style={{ padding: outPadding, height: itemHeight }}
+      onMouseOver={()=>{
+        setShowSettingBar(true)
+      }}
+      onMouseOut={()=>{
+        setShowSettingBar(false)
+      }}
     >
-      <Toolbar {...props} />
+      <Toolbar {...props} showSettingBar={showSettingBar}/>
       <Card
         title={renderTilte(dataSource)}
         size="small"
