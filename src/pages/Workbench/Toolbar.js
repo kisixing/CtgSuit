@@ -96,7 +96,7 @@ class Toolbar extends Component {
       okText: '确认',
       cancelText: '取消',
       onOk: function () {
-        socket.startwork(deviceno, bedno);
+        WsConnect._this.startwork(deviceno, bedno);
       },
     });
   };
@@ -111,7 +111,7 @@ class Toolbar extends Component {
       okText: '确认',
       cancelText: '取消',
       onOk: function () {
-        socket.endwork(deviceno, bedno);
+        WsConnect._this.endwork(deviceno, bedno);
         // this.props.dispatch({
         //   type: 'archives/updateExams',
         //   payload: {}

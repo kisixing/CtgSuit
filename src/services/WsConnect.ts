@@ -6,11 +6,8 @@ const log = console.log.bind(console, 'websocket')
 // import { message as Message } from "antd";
 import config from '@/utils/config';
 import { EventEmitter } from "@lianmed/utils";
-// import request from "@/utils/request";
-// request.get('url',{data:{}}).then(responseData => {
-//   console.log(responseData)
-// })
-
+import request from "@/utils/request";
+import { apiPrefix } from '@/utils/config';
 
 export enum EWsStatus {
   Pendding, Success, Error
@@ -94,10 +91,18 @@ export class WsConnect extends EventEmitter {
                     past: 0,
                     timestamp: 0,
                     docid: '',
+                    status: '',
                     starttime: '',
+                    fetal_num :1,
                   });
                   convertdocid(cachebi, devdata.beds[bi].doc_id);
-                  for (var fetal = 0; fetal < 3; fetal++) {
+                  if(devdata.beds[bi].is_working){
+                    datacache.get(cachebi).status = 1;
+                  }else{
+                    datacache.get(cachebi).status = 2;
+                  }
+                  datacache.get(cachebi).fetal_num = devdata.beds[bi].fetal_num;
+                  for (let fetal = 0; fetal < devdata.beds[bi].fetal_num; fetal++) {
                     datacache.get(cachebi).fhr[fetal] = [];
                   }
                 }
@@ -114,12 +119,21 @@ export class WsConnect extends EventEmitter {
             if (datacache.has(cachbi)) {
               var tmpcache = datacache.get(cachbi);
               for (let key in ctgdata) {
-                tmpcache.fhr[0][ctgdata[key].index] = ctgdata[key].fhr;
-                tmpcache.fhr[1][ctgdata[key].index] = ctgdata[key].fhr2;
+                for (let fetal = 0; fetal < tmpcache.fetal_num; fetal++) {
+                  if(fetal==0){
+                    tmpcache.fhr[fetal][ctgdata[key].index] = ctgdata[key].fhr;
+                  }else{
+                    tmpcache.fhr[fetal][ctgdata[key].index] = ctgdata[key].fhr2;
+                  }
+                }
                 tmpcache.toco[ctgdata[key].index] = ctgdata[key].toco;
                 if (tmpcache.start == -1) {
                   tmpcache.start = ctgdata[key].index;
                   tmpcache.past = ctgdata[key].index - 4800 > 0 ? ctgdata[key].index - 4800 : 0;
+                  if(tmpcache.past > 0){
+                    console.log(datacache.get(cachbi).docid,tmpcache.past);
+                    getoffline(datacache.get(cachbi).docid,tmpcache.past);
+                  }
                 }
                 setcur(cachbi, ctgdata[key].index);
                 for (let i = datacache.get(cachbi).start; i > datacache.get(cachbi).past; i--) {
@@ -161,9 +175,14 @@ export class WsConnect extends EventEmitter {
             var cachbi = id + '-' + bi;
             if (datacache.has(cachbi)) {
               var tmpcache = datacache.get(cachbi);
-              for (var key in ctgdata) {
-                tmpcache.fhr[0][ctgdata[key].index] = ctgdata[key].fhr;
-                tmpcache.fhr[1][ctgdata[key].index] = ctgdata[key].fhr2;
+              for (let key in ctgdata) {
+                for (let fetal = 0; fetal < tmpcache.fetal_num; fetal++) {
+                  if(fetal==0){
+                    tmpcache.fhr[fetal][ctgdata[key].index] = ctgdata[key].fhr;
+                  }else{
+                    tmpcache.fhr[fetal][ctgdata[key].index] = ctgdata[key].fhr2;
+                  }
+                }
                 tmpcache.toco[ctgdata[key].index] = ctgdata[key].toco;
                 setcur(cachbi, ctgdata[key].index);
               }
@@ -216,6 +235,24 @@ export class WsConnect extends EventEmitter {
             //TODO : 更新设备状态
             convertdocid(curid, devdata.doc_id);
             log('start_work', devdata.is_working);
+            if(devdata.is_working){
+              datacache.get(curid).status = 1;
+            }else{
+              datacache.get(curid).status = 2;
+            }
+          }
+          //结束监护页
+          else if (received_msg.name == 'end_work') {
+            let devdata = received_msg.data;
+            let curid = Number(devdata['device_no']) + '-' + Number(devdata['bed_no']);
+            //TODO : 更新设备状态
+            convertdocid(curid, devdata.doc_id);
+            log('start_work', devdata.is_working);
+            if(devdata.is_working){
+              datacache.get(curid).status = 1;
+            }else{
+              datacache.get(curid).status = 2;
+            }
           }
         }
       };
@@ -262,5 +299,39 @@ export class WsConnect extends EventEmitter {
         log('The socket is not open.');
       }
     }
+
+    function getoffline(doc_id:string,offlineend:number){
+      request.get(`${apiPrefix}/ctg-exams-data/${doc_id}`).then(responseData => {
+        let vt = doc_id.split('_');
+        let dbid = vt[0] + '-' +vt[1];
+        console.log(doc_id,offlineend,responseData,datacache.get(dbid).past);
+        initfhrdata(responseData,datacache.get(dbid),offlineend);
+        //datacache.get(dbid).start = 0;
+      })
+    }
+
+    function initfhrdata(data,datacache,offindex) {
+      Object.keys(data).forEach(key => {
+        let oridata = data[key] as string;
+        if (!oridata) {
+          return;
+        }
+        for (let i = 0; i < offindex; i++) {
+          let hexBits = oridata.substring(0, 2);
+          let data_to_push = parseInt(hexBits, 16);
+          if (key == 'fhr1') {
+            datacache.fhr[0][i] = data_to_push;
+          }else if(key == 'fhr2'){
+            datacache.fhr[1][i] = data_to_push;
+          }else if(key == 'fhr3'){
+            //datacache.fhr[2][i] = data_to_push;
+          }else if(key == 'toco'){
+            datacache.toco[i] = data_to_push;
+          }
+          oridata = oridata.substring(2, oridata.length);
+        }
+      });
+    }
+  
   };
 }
