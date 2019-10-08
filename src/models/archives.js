@@ -26,6 +26,7 @@ export default {
     // 获取静态ctg数据，渲染静态ctg曲线
     *fetchCTGrecordData({ payload }, { call, put }) {
       const res = yield call(getCTGrecordData, payload);
+      // 处理值，以便符合ctg曲线数据要求
       yield put({
         type: 'updateState',
         payload: {

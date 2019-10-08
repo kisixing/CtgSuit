@@ -1,6 +1,6 @@
 import store from './SettingStore'
 const { NODE_ENV } = process.env;
-const isDev = NODE_ENV === 'development';
+// const isDev = NODE_ENV === 'development';
 const WS_KEY = 'ws_url'
 const XHR_KEY = 'xhr_url'
 // const localUrl = window.location.protocol + '//' + window.location.host + '/';

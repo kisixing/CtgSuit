@@ -22,7 +22,10 @@ const WorkbenchItem = props => {
       el.requestFullscreen();
     }
   }
+
   const fullScreenEvent = useCallback(() => { suitObject.suit.resize(); }, [suitObject.suit])
+
+  // item右上角icon
   const renderExtra = status => {
     return (
       <div className={styles.extra}>
@@ -39,13 +42,14 @@ const WorkbenchItem = props => {
     );
   };
 
+  // 床位信息
   const renderTilte = item => {
     return (
       <div className={styles.title}>
         床号: <span>{item.bedname}</span>
         住院号: <span>{item.documentno}</span>
         姓名: <span>{item.bedname}</span>
-        开始时间: <span>{new Date(item.updateTime).toLocaleDateString()}</span>
+        开始时间: <span>{item.data && item.data.starttime}</span>
       </div>
     );
   };
@@ -80,7 +84,7 @@ const WorkbenchItem = props => {
         size="small"
         className={styles.card}
         extra={renderExtra(dataSource.status)}
-        headStyle={{background:'#004c8c',color:'#fff'}}
+        headStyle={{ background:'#004c8c', color:'#fff' }}
         bodyStyle={{ padding: 0, height: 'calc(100% - 40px)' }}
       >
         <L data={data} mutableSuitObject={suitObject} itemHeight={itemHeight}></L>

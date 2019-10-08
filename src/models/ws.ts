@@ -18,6 +18,7 @@ export default {
       } = state;
       if (status === EWsStatus.Success) return;
       let data = yield call(wsConnect.connect);
+      console.log(data);
       yield put({ type: 'setState', payload: { data } });
 
     }
