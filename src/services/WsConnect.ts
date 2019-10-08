@@ -276,13 +276,13 @@ export class WsConnect extends EventEmitter {
           else if (received_msg.name == 'end_work') {
             let devdata = received_msg.data;
             let curid = Number(devdata['device_no']) + '-' + Number(devdata['bed_no']);
-            
+
             if (devdata.is_working) {
               datacache.get(curid).status = 1;
             } else {
               datacache.get(curid).status = 2;
             }
-            
+
             log('end_work', devdata.is_working, datacache.get(curid).status );
             this.dispatch({
               type: 'ws/setState', payload: { data: new Map(datacache) }

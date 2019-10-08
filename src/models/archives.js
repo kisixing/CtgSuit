@@ -11,7 +11,7 @@ export default {
   state: {
     dataSource: [],
     current: {},
-    currentData: {}
+    currentData: {},
   },
   effects: {
     *fetchRecords({ payload }, { call, put }) {
@@ -19,9 +19,9 @@ export default {
       yield put({
         type: 'updateState',
         payload: {
-          dataSource: res
-        }
-      })
+          dataSource: res,
+        },
+      });
     },
     // 获取静态ctg数据，渲染静态ctg曲线
     *fetchCTGrecordData({ payload }, { call, put }) {
@@ -30,18 +30,36 @@ export default {
       yield put({
         type: 'updateState',
         payload: {
-          currentData: res
-        }
-      })
+          currentData: res,
+        },
+      });
     },
-    *create({ payload }, { call, put }) {
+    *create({ payload }, { call, put, select }) {
       const res = yield call(newCTGrecord, payload);
       if (res && res.id) {
         message.success('创建成功！');
-        // 创建成功后更新bed的information
-        // yield put({
-        //   type: 'list/getlist'
-        // })
+        // 创建成功后更新bed information
+        const bedinfo = yield select(state => state.list.pageItems);
+        const { ctgexam, pregnancy } = res;
+        const note = ctgexam.note.split('_');
+        const [bedno, deviceno, ...rest] = note;
+        // const selected = bedinfo.filter(item => item.bedno === bedno && item.deviceno === deviceno);
+        const newBedinfo = bedinfo.map(item => {
+          if (item.bedno === bedno && item.deviceno === deviceno) {
+            return {
+              ...item,
+              pregnancy,
+            };
+          }
+          return item;
+        });
+
+        yield put({
+          type: 'list/setState',
+          payload: {
+            pageItems: newBedinfo,
+          },
+        });
       }
     },
     *update({ payload, callback }, { call, put }) {

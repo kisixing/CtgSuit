@@ -54,6 +54,11 @@ class Toolbar extends Component {
     this.setState({ [name]: false });
   };
 
+  // 测试
+  show = () => {
+
+  }
+
   handleCreate = item => {
     // 建档/确定action
     const { dispatch } = this.props;
@@ -64,12 +69,11 @@ class Toolbar extends Component {
       }
       // 新建孕册
       dispatch({
-        type: 'list/createPregnancies',
+        type: 'list/createPregnancy',
         payload: { ...values },
-        callback: (res) => {
+        callback: res => {
           if (res && res.id) {
             // console.log('call back', res); // 请求完成后返回的结果
-            const id = res.id;
             const {
               data: { starttime, docid },
             } = item;
@@ -78,7 +82,7 @@ class Toolbar extends Component {
               visitTime: moment(values.values).format(),
               gestationalWeek: values.gestationalWeek,
               pregnancy: {
-                id,
+                id: res.id,
               },
               ctgexam: {
                 startTime: moment(starttime),
@@ -95,7 +99,7 @@ class Toolbar extends Component {
               payload: d,
             });
           }
-        }
+        },
       });
       form.resetFields();
       this.setState({ visible: false });

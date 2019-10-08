@@ -40,6 +40,12 @@ export default {
       },
     ],
   ],
+  copy: [
+    {
+      from: 'node_modules/pdfjs-dist/cmaps/',
+      to: 'cmaps/',
+    },
+  ],
   proxy: {
     // '/api': {
     //   target: 'http://127.0.0.1:1702/',

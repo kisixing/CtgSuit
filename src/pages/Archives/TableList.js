@@ -185,7 +185,7 @@ class TableList extends Component {
     dispatch({
       type: 'archives/fetchCTGrecordData',
       payload: {
-        ctgexamid: record.ctgexam.note,
+        ctgexamid: '9_3_190930222931', // record.ctgexam.note,
       },
     });
   };

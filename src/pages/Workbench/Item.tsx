@@ -26,7 +26,7 @@ const WorkbenchItem = props => {
   const fullScreenEvent = useCallback(() => { suitObject.suit.resize(); }, [suitObject.suit])
 
   // item右上角icon
-  const renderExtra = status => {
+  const renderExtra = (status: React.ReactText) => {
     return (
       <div className={styles.extra}>
         <Tag color={mapStatusToColor[status]}>{mapStatusToText[status]}</Tag>
@@ -35,7 +35,7 @@ const WorkbenchItem = props => {
           icon="fullscreen"
           size="small"
           type="link"
-          style={{color:"#fff"}}
+          style={{ color: "#fff" }}
           onClick={fullScreen.bind(this)}
         ></Button>
       </div>
@@ -43,13 +43,16 @@ const WorkbenchItem = props => {
   };
 
   // 床位信息
-  const renderTilte = item => {
+  const renderTilte = (item) => {
+    const { data, pregnancy, documentno, bedname } = item;
+    // 是否已经建档绑定孕册
+    const isCreated = pregnancy && pregnancy.id && data // && documentno === data.docid;
     return (
       <div className={styles.title}>
-        床号: <span>{item.bedname}</span>
-        住院号: <span>{item.documentno}</span>
-        姓名: <span>{item.bedname}</span>
-        开始时间: <span>{item.data && item.data.starttime}</span>
+        床号: <span>{bedname}</span>
+        住院号: <span>{isCreated ? pregnancy.inpatientNO : ''}</span>
+        姓名: <span>{isCreated ? pregnancy.name : ''}</span>
+        开始时间: <span>{data && data.starttime}</span>
       </div>
     );
   };
@@ -84,7 +87,7 @@ const WorkbenchItem = props => {
         size="small"
         className={styles.card}
         extra={renderExtra(dataSource.status)}
-        headStyle={{ background:'#004c8c', color:'#fff' }}
+        headStyle={{ background: '#004c8c', color: '#fff' }}
         bodyStyle={{ padding: 0, height: 'calc(100% - 40px)' }}
       >
         <L data={data} mutableSuitObject={suitObject} itemHeight={itemHeight}></L>

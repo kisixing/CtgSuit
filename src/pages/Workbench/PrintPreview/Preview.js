@@ -40,6 +40,10 @@ class Preview extends Component {
           onLoadSuccess={this.onDocumentLoad}
           file={pdfBase64}
           renderMode="svg"
+          options={{
+            cMapUrl: 'cmaps/',
+            cMapPacked: true,
+          }}
         >
           <Page className={styles.page} pageNumber={pageNumber} scale={1.5} />
         </Document>
