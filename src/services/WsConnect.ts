@@ -1,19 +1,16 @@
-let datacache: Map<any, any> = new Map();
-const interval: number = 30000;
-const RECONNECT_INTERVAL: number = 10000;
-export default datacache;
-const log = console.log.bind(console, 'websocket')
-let offrequest;
+
 // import { message as Message } from "antd";
 import config from '@/utils/config';
 import { EventEmitter } from "@lianmed/utils";
 import request from "@/utils/request";
-
-export enum EWsStatus {
-  Pendding, Success, Error
-}
-
-
+import settingStore from "@/utils/SettingStore";
+const settingData = settingStore.cache
+console.log('settingData',settingData)
+let datacache: Map<any, any> = new Map();
+const interval: number = 30000;
+const RECONNECT_INTERVAL: number = 10000;
+const log = console.log.bind(console, 'websocket')
+let offrequest;
 
 export class WsConnect extends EventEmitter {
   static _this: WsConnect;
@@ -382,3 +379,7 @@ export class WsConnect extends EventEmitter {
 
   };
 }
+export enum EWsStatus {
+  Pendding, Success, Error
+}
+export default datacache;

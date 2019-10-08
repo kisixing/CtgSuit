@@ -15,41 +15,36 @@ import styles from './style.less';
 @Form.create()
 class Network extends Component {
   componentDidMount() {
-    const { form } = this.props;
-
-    store.get(['alarm_high', 'alarm_low', 'alarm_on_window', 'alarm_on_sound']).then(([alarm_high, alarm_low, alarm_on_window, alarm_on_sound]) => {
-      form.setFieldsValue({ alarm_high, alarm_low, alarm_on_window:alarm_on_window.trim(), alarm_on_sound:alarm_on_sound.trim() });
-    })
-    // console.log('store',store)
+    this.fetchData()
 
   }
-
+  fetchData = () => {
+    const { form } = this.props;
+    store.get(['alarm_high', 'alarm_low', 'alarm_on_window', 'alarm_on_sound']).then(([alarm_high, alarm_low, alarm_on_window, alarm_on_sound]) => {
+      form.setFieldsValue({ alarm_high, alarm_low, alarm_on_window: alarm_on_window, alarm_on_sound: alarm_on_sound });
+    })
+  }
   handleSubmit = () => {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         store.set(Object.keys(values), Object.values(values)).then(status => {
           if (status) {
-            message.success('设置成功,2s 后重启', 2).then(() => {
-              // eslint-disable-next-line no-restricted-globals
-              location.reload()
-            })
+            message.success('设置成功', 2)
           }
         })
       }
     });
   };
   reset() {
-    store.reset(['ws_url', 'xhr_url']).then(status => {
+    store.reset(['alarm_high', 'alarm_low', 'alarm_on_window', 'alarm_on_sound']).then(status => {
       if (status) {
-        message.success('恢复成功,2s 后重启', 2).then(() => {
-          // eslint-disable-next-line no-restricted-globals
-          location.reload()
-        })
+        message.success('恢复成功', 2)
+        this.fetchData()
       }
     })
   }
 
-  checkboxGroup = ()=>(
+  checkboxGroup = () => (
     <Radio.Group>
       <Radio value={"1"}>打开</Radio>
       <Radio value={"0"}>关闭</Radio>
@@ -96,7 +91,7 @@ class Network extends Component {
           <Button type="primary" onClick={this.handleSubmit}>
             保存
           </Button>
-          <Button type="default" onClick={this.reset} style={{ marginLeft: 10 }}>
+          <Button type="default" onClick={this.reset.bind(this)} style={{ marginLeft: 10 }}>
             恢复默认
           </Button>
         </Form.Item>
