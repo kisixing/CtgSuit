@@ -45,7 +45,7 @@ export class WsConnect extends EventEmitter {
       payload: { status }
     })
   }
-  connect = (url: string = config.wsUrl): Promise<Map<any, any>> => {
+  connect = (url: string = <string>config.wsUrl ): Promise<Map<any, any>> => {
 
     this.tip('连接中', EWsStatus.Pendding)
 

@@ -5,6 +5,7 @@ import { Layout, Menu, Button } from 'antd';
 import BasicSetting from './BasicSetting';
 import ScoreSet from './ScoreSet';
 import Network from './Network';
+import Alarm from './Alarm';
 
 import styles from './index.less';
 
@@ -82,6 +83,7 @@ class Setting extends Component {
         <Menu.Item key="7">床位信息设置</Menu.Item>
         <Menu.Item key="6">医院设置</Menu.Item>
         <Menu.Item key="8">版本信息</Menu.Item>
+        <Menu.Item key="9">报警设置</Menu.Item>
       </Menu>
     );
   };
@@ -103,12 +105,12 @@ class Setting extends Component {
     switch (current.value) {
       case '1':
         return <BasicSetting wrappedComponentRef={form => (this.form1 = form)} />;
-        break;
       case '2':
         return <ScoreSet wrappedComponentRef={form => (this.form2 = form)} />;
-        break;
       case '5':
         return <Network id="form5" wrappedComponentRef={form => (this.form5 = form)} />;
+      case '9':
+        return <Alarm  wrappedComponentRef={form => (this.form9 = form)} />;
       default:
         break;
     }
