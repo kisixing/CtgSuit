@@ -1,7 +1,7 @@
 export enum EStatus {
   Offline = 0,
-  Online = 1,
-  Working = 2,
+  Working = 1,
+  Online = 2,
 }
 const { Offline, Online, Working } = EStatus;
 export const mapStatusToColor = {
@@ -13,7 +13,7 @@ export const mapStatusToColor = {
 };
 export const mapStatusToText = {
   [Offline]: '离线',
-  [Online]: '未工作',
-  [Working]: '工作中',
+  [Online]: '停止',
+  [Working]: '监护中',
   null:'未知'
 };

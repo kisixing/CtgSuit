@@ -253,15 +253,34 @@ export class WsConnect extends EventEmitter {
           else if (received_msg.name == 'end_work') {
             let devdata = received_msg.data;
             let curid = Number(devdata['device_no']) + '-' + Number(devdata['bed_no']);
+            let count = datacache.get(curid).fetal_num ;
             //TODO : 更新设备状态
+            datacache.set(curid, {
+              fhr: [],
+              toco: [],
+              fm: [],
+              index: 0,
+              length: 0,
+              start: -1,
+              last: 0,
+              past: 0,
+              timestamp: 0,
+              docid: '',
+              status: '',
+              starttime: '',
+              fetal_num: 1,
+            });
             convertdocid(curid, devdata.doc_id);
-            log('start_work', devdata.is_working);
-            const target = datacache.get(curid)
             if (devdata.is_working) {
-              target.status = 1
+              datacache.get(curid).status = 1;
             } else {
-              target.status = 2
+              datacache.get(curid).status = 2;
             }
+            datacache.get(curid).fetal_num = count;
+            for (let fetal = 0; fetal < count; fetal++) {
+              datacache.get(curid).fhr[fetal] = [];
+            }
+            log('end_work', devdata.is_working, datacache.get(curid).status );
             this.dispatch({
               type: 'ws/setState', payload: { data: new Map(datacache) }
             })

@@ -29,4 +29,5 @@ class CurveChart extends Component {
 export default connect(({ loading, archives }) => ({
   loading: loading,
   selected: archives.current,
+  dataSource: archives.currentData
 }))(CurveChart);

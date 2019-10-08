@@ -9,7 +9,7 @@ const _wsUrl = store.getSync(WS_KEY)
 const wsUrl = _wsUrl || (isDev ? '192.168.2.227:8084' : '192.168.2.227:8084');
 
 const _xhrUrl = store.getSync(XHR_KEY)
-const xhrUrl = _xhrUrl || (isDev ? '192.168.2.154:8084' : '192.168.2.154:8084');
+const xhrUrl = _xhrUrl || (isDev ? '192.168.2.152:9986' : '192.168.2.152:9986');
 
 store.set([WS_KEY, XHR_KEY], [wsUrl, xhrUrl])
 

@@ -165,6 +165,7 @@ class Toolbar extends Component {
     } else {
       // 未建档，直接调用web socket
       socket.endwork(deviceno, bedno);
+      _this.setState({ isMonitor: false });
     }
   };
 
