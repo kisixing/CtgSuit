@@ -5,7 +5,11 @@
  */
 
 import React, { Component, Fragment } from 'react';
-import { Layout, Menu, Icon, Button, Modal, Avatar, Spin, Dropdown, Select } from 'antd';
+// import DynamicAntdTheme from 'dynamic-antd-theme';
+// import {DynamicAntdTheme} from '@lianmed/components';
+
+
+import { Layout, Menu, Icon, Button, Modal, Avatar, Spin, Select } from 'antd';
 import { connect } from 'dva';
 import { router } from 'umi';
 import Link from 'umi/link';
@@ -218,7 +222,7 @@ class BasicLayout extends Component {
                   }
 
                 </Spin>
-
+                {/* <DynamicAntdTheme primaryColor='#77dd66' /> */}
               </div>
             </div>
 

@@ -2,7 +2,9 @@
 const { app, BrowserWindow, ipcMain, Menu, dialog } = require('electron');
 const { getMainPath, getNewPath } = require('./config/window');
 const menus = require('./config/menu');
-
+const fs = require('fs');
+const constant = require('./config/constant');
+require('./utils/globalMount')()
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
@@ -82,7 +84,7 @@ function createWindow() {
   //   mainWindow = null;
   // });
 
-  mainWindow.on('close', function(e) {
+  mainWindow.on('close', function (e) {
     dialog.showMessageBox(
       {
         type: 'info',
@@ -90,7 +92,7 @@ function createWindow() {
         message: '确定关闭应用？',
         buttons: ['cancel', 'ok'],
       },
-      function(index) {
+      function (index) {
         if (index === 0) {
           // cancel
           e.preventDefault();
@@ -107,6 +109,13 @@ function createWindow() {
     );
     e.preventDefault();
   });
+  fs.stat(constant.SETTING_PATH, err => {
+    if (err) {
+      const writeStream = fs.createWriteStream(constant.SETTING_PATH)
+      fs.createReadStream(constant.DEFAULT_SETTING_PATH).pipe(writeStream)
+    }
+  })
+
 }
 
 // This method will be called when Electron has finished
@@ -115,7 +124,7 @@ function createWindow() {
 app.on('ready', createWindow);
 
 // Quit when all windows are closed.
-app.on('window-all-closed', function() {
+app.on('window-all-closed', function () {
   // On macOS it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') {
@@ -123,7 +132,7 @@ app.on('window-all-closed', function() {
   }
 });
 
-app.on('activate', function() {
+app.on('activate', function () {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (mainWindow === null) {

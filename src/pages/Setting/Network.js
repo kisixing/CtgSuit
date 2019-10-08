@@ -7,7 +7,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Form, Input, Button,message } from 'antd';
-import { store } from '@/utils/Storage';
+import  store  from '@/utils/SettingStore';
 
 import { formItemLayout, tailFormItemLayout } from './utils';
 import styles from './style.less';
@@ -20,7 +20,8 @@ class Network extends Component {
     store.get(['ws_url', 'xhr_url']).then(([ws_url,xhr_url])=> {
       form.setFieldsValue({ xhr_url, ws_url });
     })
-   
+    // console.log('store',store)
+    
   }
 
   handleSubmit = () => {
@@ -38,7 +39,7 @@ class Network extends Component {
     });
   };
   reset(){
-    store.set(['ws_url', 'xhr_url'], ['', '']).then(status=>{
+    store.reset(['ws_url', 'xhr_url']).then(status=>{
       if(status){
        message.success('恢复成功,2s 后重启',2).then(()=>{
          // eslint-disable-next-line no-restricted-globals
