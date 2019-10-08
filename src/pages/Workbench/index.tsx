@@ -23,7 +23,7 @@ const Home = props => {
     <div style={{ height: '100%', overflow: 'hidden' }} ref={wrap}>
       <Row style={{ padding: outPadding }}>
         {(pageItems as IDevice[]).map(item => {
-          const data = (datacache as Map<string, any>).get(item.unitId)
+          const data = (datacache as Map<string, any>).get(item.unitId);
           return (
             <Item
               key={item.id}

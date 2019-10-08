@@ -5,16 +5,16 @@ import { getList } from '@/services/list';
 export default {
   namespace: 'list',
   state: {
-    listData: [], //所有数据
-    pageData: [], //[[1,4],[5,8]]
+    listData: [], // 所有数据
+    pageData: [], // [[1,4],[5,8]]
     page: null, //当前页码
-    pageItems: [], //[listItem,...]
+    pageItems: [], // [listItem,...] 床位信息
     fullScreenId: null,
     pregnancy: {}, // 初始化，暂无使用
   },
   effects: {
     *getlist(_, { put, call, select }) {
-
+      // get bed information
       let rawData: IDevice[] = yield call(getList);
       rawData =
         (rawData &&
@@ -23,8 +23,11 @@ export default {
             return { ..._,  unitId };
           })) ||
         [];
-   
-      yield put({ type: 'setState', payload: { listData: rawData } });
+
+      yield put({
+        type: 'setState',
+        payload: { listData: rawData }
+      });
       yield put({ type: 'computeLayout' });
     },
     *computeLayout({ }: { rawData: IDevice[] }, { put, select }) {
@@ -39,7 +42,10 @@ export default {
         return { ..._, index, pageIndex: Math.floor(index / pageItemsCount) };
       });
 
-      yield put({ type: 'setState', payload: { listData } });
+      yield put({
+        type: 'setState',
+        payload: { listData }
+      });
       yield put({ type: 'setPageData' });
       yield put({ type: 'setPageItems', page: 0 });
     },
@@ -71,7 +77,10 @@ export default {
       } = state;
       const pageItemsCount: number = listLayout[0] * listLayout[1];
       const pageItems = listData.slice(page * pageItemsCount, (page + 1) * pageItemsCount);
-      yield put({ type: 'setState', payload: { pageItems, page } });
+      yield put({
+        type: 'setState',
+        payload: { pageItems, page }
+      });
     },
     // 新建档案modal页面的搜索功能，检索个人孕册信息
     *fetchPregnancy({ payload, callback }, { call, put }) {
@@ -87,7 +96,7 @@ export default {
       });
     },
     // 新建孕册
-    *createPregnancies({ payload, callback }, { call, put }) {
+    *createPregnancy({ payload, callback }, { call, put, select }) {
       const res = yield call(newPregnancies, payload);
       if (res && res.id) {
         message.success('孕册创建成功！');
@@ -95,10 +104,6 @@ export default {
           callback(res); // 返回结果
         }
       }
-      yield put({
-        type: 'setState',
-        payload: {},
-      });
     },
   },
   reducers: {

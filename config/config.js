@@ -40,18 +40,24 @@ export default {
       },
     ],
   ],
-  // proxy: {
-  //   // '/api': {
-  //   //   target: 'http://127.0.0.1:1702/',
-  //   //   changeOrigin: true,
-  //   //   pathRewrite: { '^/api': '' },
-  //   // },
-  //   '/api/v1': {
-  //     target: 'http://192.168.2.152:9986/api/',
-  //     changeOrigin: true,
-  //     pathRewrite: { '^/api/v1': '' },
-  //   },
-  // },
+  copy: [
+    {
+      from: 'node_modules/pdfjs-dist/cmaps/',
+      to: 'cmaps/',
+    },
+  ],
+  proxy: {
+    // '/api': {
+    //   target: 'http://127.0.0.1:1702/',
+    //   changeOrigin: true,
+    //   pathRewrite: { '^/api': '' },
+    // },
+    '/api/v1': {
+      target: 'http://192.168.2.152:9986/api/',
+      changeOrigin: true,
+      pathRewrite: { '^/api/v1': '' },
+    },
+  },
   outputPath: './app/render', // 更改输出目录
   externals(context, request, callback) {
     const isDev = process.env.NODE_ENV === 'development';
