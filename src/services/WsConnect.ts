@@ -1,8 +1,9 @@
 let datacache: Map<any, any> = new Map();
-const interval: number = 800;
-const RECONNECT_INTERVAL: number = 5000;
+const interval: number = 30000;
+const RECONNECT_INTERVAL: number = 10000;
 export default datacache;
 const log = console.log.bind(console, 'websocket')
+let offrequest;
 // import { message as Message } from "antd";
 import config from '@/utils/config';
 import { EventEmitter } from "@lianmed/utils";
@@ -18,6 +19,7 @@ export class WsConnect extends EventEmitter {
   static _this: WsConnect;
   datacache = datacache;
   socket: WebSocket;
+  offrequest :number;
   store = (window as any).g_app._store
   constructor() {
     super()
@@ -60,6 +62,7 @@ export class WsConnect extends EventEmitter {
         log('错误')
       };
       socket.onopen = function (event) {
+        offrequest = 0;
         log('打开');
       };
       socket.onclose = (event) => {
@@ -93,6 +96,7 @@ export class WsConnect extends EventEmitter {
                     timestamp: 0,
                     docid: '',
                     status: '',
+                    orflag :true,
                     starttime: '',
                     fetal_num: 1,
                   });
@@ -114,6 +118,7 @@ export class WsConnect extends EventEmitter {
           } else if (received_msg.name == 'push_data_ctg') {
             //TODO 解析应用层数据包
             var ctgdata = received_msg.data;
+            //console.log(ctgdata);
             var id = received_msg.device_no;
             var bi = received_msg.bed_no;
             var cachbi = id + '-' + bi;
@@ -140,7 +145,9 @@ export class WsConnect extends EventEmitter {
                 for (let i = datacache.get(cachbi).start; i > datacache.get(cachbi).past; i--) {
                   if (!tmpcache.fhr[0][i]) {
                     var curstamp = new Date().getTime();
-                    if (curstamp - tmpcache.timestamp > interval) {
+                    if (offrequest <8 && (tmpcache.orflag || curstamp - tmpcache.timestamp > interval)) {
+                      tmpcache.orflag = false;
+                      offrequest += 1;  
                       var dis = tmpcache.start - tmpcache.past;
                       var length = dis > 800 ? 800 : dis;
                       var startpoint = tmpcache.start - length;
@@ -187,6 +194,10 @@ export class WsConnect extends EventEmitter {
                 tmpcache.toco[ctgdata[key].index] = ctgdata[key].toco;
                 setcur(cachbi, ctgdata[key].index);
               }
+              tmpcache.orflag = true; 
+              if(offrequest>0){
+                  offrequest -= 1;
+              }
               //判断 是否有缺失
               var flag = 0;
               var sflag = 0;
@@ -200,7 +211,9 @@ export class WsConnect extends EventEmitter {
                   if (flag > 0) {
                     eflag = il;
                     var curstamp = new Date().getTime();
-                    if (curstamp - tmpcache.timestamp > interval) {
+                    if (offrequest <8 && (tmpcache.orflag || curstamp - tmpcache.timestamp > interval)) {
+                      tmpcache.orflag = false;
+                      offrequest += 1;
                       send(
                         '{"name":"get_data_ctg","data":{"start_index":' +
                         sflag +
