@@ -6,7 +6,7 @@ import styles from './CurveChart.less';
 
 class CurveChart extends Component {
   render() {
-    const { selected } = this.props;
+    const { selected, dataSource } = this.props;
     return (
       <div className={styles.wrapper}>
         <h2>电脑胎儿监护图</h2>
@@ -19,8 +19,9 @@ class CurveChart extends Component {
             <span>监护时间：</span>
           </div>
         </div>
-        <div className={styles.chart}></div>
-        {/* <L data={null}></L> */}
+        <div className={styles.chart}>
+          <L type={1} data={dataSource}></L>
+        </div>
       </div>
     );
   }

@@ -54,11 +54,6 @@ class Toolbar extends Component {
     this.setState({ [name]: false });
   };
 
-  // 测试
-  show = () => {
-
-  }
-
   handleCreate = item => {
     // 建档/确定action
     const { dispatch } = this.props;

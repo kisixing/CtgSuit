@@ -147,7 +147,7 @@ export class WsConnect extends EventEmitter {
                     var curstamp = new Date().getTime();
                     if (offrequest <8 && (tmpcache.orflag || curstamp - tmpcache.timestamp > interval)) {
                       tmpcache.orflag = false;
-                      offrequest += 1;  
+                      offrequest += 1;
                       var dis = tmpcache.start - tmpcache.past;
                       var length = dis > 800 ? 800 : dis;
                       var startpoint = tmpcache.start - length;
@@ -194,7 +194,7 @@ export class WsConnect extends EventEmitter {
                 tmpcache.toco[ctgdata[key].index] = ctgdata[key].toco;
                 setcur(cachbi, ctgdata[key].index);
               }
-              tmpcache.orflag = true; 
+              tmpcache.orflag = true;
               if(offrequest>0){
                   offrequest -= 1;
               }
@@ -353,7 +353,7 @@ export class WsConnect extends EventEmitter {
         let dbid = vt[0] + '-' + vt[1];
         console.log(doc_id, offlineend, responseData, datacache.get(dbid).past);
         initfhrdata(responseData, datacache.get(dbid), offlineend);
-        //datacache.get(dbid).start = 0;
+        // datacache.get(dbid).start = 0;
       })
     }
 
@@ -366,14 +366,16 @@ export class WsConnect extends EventEmitter {
         for (let i = 0; i < offindex; i++) {
           let hexBits = oridata.substring(0, 2);
           let data_to_push = parseInt(hexBits, 16);
-          if (key == 'fhr1') {
+          if (key === 'fhr1') {
             datacache.fhr[0][i] = data_to_push;
-          } else if (key == 'fhr2') {
+          } else if (key === 'fhr2') {
             datacache.fhr[1][i] = data_to_push;
-          } else if (key == 'fhr3') {
-            //datacache.fhr[2][i] = data_to_push;
-          } else if (key == 'toco') {
+          } else if (key === 'fhr3') {
+            // datacache.fhr[2][i] = data_to_push;
+          } else if (key === 'toco') {
             datacache.toco[i] = data_to_push;
+          } else if (key === "fm") {
+            // datacache.fm[i] = data_to_push;
           }
           oridata = oridata.substring(2, oridata.length);
         }
