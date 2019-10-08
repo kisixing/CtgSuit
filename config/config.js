@@ -7,7 +7,7 @@ import pageRoutes from './routes';
 
 export default {
   theme: {
-    'primary-color': '#5c6bc0',
+    'primary-color': '#004c8c',
   },
   treeShaking: true,
   publicPath: './',

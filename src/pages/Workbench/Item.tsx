@@ -35,6 +35,7 @@ const WorkbenchItem = props => {
           icon="fullscreen"
           size="small"
           type="link"
+          style={{color:"#fff"}}
           onClick={fullScreen.bind(this)}
         ></Button>
       </div>
@@ -83,6 +84,7 @@ const WorkbenchItem = props => {
         size="small"
         className={styles.card}
         extra={renderExtra(dataSource.status)}
+        headStyle={{background:'#004c8c',color:'#fff'}}
         bodyStyle={{ padding: 0, height: 'calc(100% - 40px)' }}
       >
         <L data={data} mutableSuitObject={suitObject} itemHeight={itemHeight}></L>
