@@ -232,9 +232,32 @@ export class WsConnect extends EventEmitter {
           //开启监护页
           else if (received_msg.name == 'start_work') {
             let devdata = received_msg.data;
-            const { bed_no, device_no } = devdata
-            let curid = `${device_no}-${bed_no}`
-
+            const { bed_no, device_no } = devdata;
+            let curid = `${device_no}-${bed_no}`;
+            let count = datacache.get(curid).fetal_num ;
+            //TODO : 更新设备状态
+            datacache.get(curid).fhr = [];
+            datacache.get(curid).toco = [];
+            datacache.get(curid).fm = [];
+            datacache.get(curid).index = 0;
+            datacache.get(curid).length = 0;
+            datacache.get(curid).start = -1;
+            datacache.get(curid).last = 0;
+            datacache.get(curid).past = 0;
+            datacache.get(curid).timestamp = 0;
+            datacache.get(curid).docid = '';
+            datacache.get(curid).status = 0;
+            datacache.get(curid).starttime = '';
+            convertdocid(curid, devdata.doc_id);
+            if (devdata.is_working) {
+              datacache.get(curid).status = 1;
+            } else {
+              datacache.get(curid).status = 2;
+            }
+            datacache.get(curid).fetal_num = count;
+            for (let fetal = 0; fetal < count; fetal++) {
+              datacache.get(curid).fhr[fetal] = [];
+            }
             //TODO : 更新设备状态
             convertdocid(curid, devdata.doc_id);
             log('start_work', devdata.is_working);
@@ -253,33 +276,13 @@ export class WsConnect extends EventEmitter {
           else if (received_msg.name == 'end_work') {
             let devdata = received_msg.data;
             let curid = Number(devdata['device_no']) + '-' + Number(devdata['bed_no']);
-            let count = datacache.get(curid).fetal_num ;
-            //TODO : 更新设备状态
-            datacache.set(curid, {
-              fhr: [],
-              toco: [],
-              fm: [],
-              index: 0,
-              length: 0,
-              start: -1,
-              last: 0,
-              past: 0,
-              timestamp: 0,
-              docid: '',
-              status: '',
-              starttime: '',
-              fetal_num: 1,
-            });
-            convertdocid(curid, devdata.doc_id);
+            
             if (devdata.is_working) {
               datacache.get(curid).status = 1;
             } else {
               datacache.get(curid).status = 2;
             }
-            datacache.get(curid).fetal_num = count;
-            for (let fetal = 0; fetal < count; fetal++) {
-              datacache.get(curid).fhr[fetal] = [];
-            }
+            
             log('end_work', devdata.is_working, datacache.get(curid).status );
             this.dispatch({
               type: 'ws/setState', payload: { data: new Map(datacache) }
