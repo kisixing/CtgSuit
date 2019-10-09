@@ -33,6 +33,7 @@ const Home = props => {
               outPadding={outPadding}
               fullScreenId={fullScreenId}
               dispatch={dispatch}
+           
             />
           );
         })}
