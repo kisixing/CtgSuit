@@ -15,8 +15,8 @@ import Analysis from './Analysis';
 import PrintPreview from './PrintPreview';
 import Partogram from './Partogram';
 import styles from './Item.less';
-import { WsConnect } from '@/services/WsConnect';
-const socket = WsConnect._this;
+import { WsService } from '@lianmed/lmg';
+const socket = WsService._this;
 
 class Toolbar extends Component {
   constructor(props) {
