@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
-import { Form, Row, Col, Input, InputNumber, DatePicker, Button } from 'antd';
+import { Form, Row, Col, Input, DatePicker, Button } from 'antd';
 
 import styles from './FieldForm.less';
-
-const { TextArea } = Input;
 
 @Form.create()
 class FieldForm extends Component {
@@ -16,15 +14,21 @@ class FieldForm extends Component {
     };
   }
 
+  // 检索
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
+        this.props.dispatch({
+          type: 'archives/fetchRecords',
+          payload: {},
+        });
       }
     });
   };
 
+  // 重置表单
   handleReset = () => {
     this.props.form.resetFields();
   };
