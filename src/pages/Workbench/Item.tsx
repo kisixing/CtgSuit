@@ -8,7 +8,6 @@ import Toolbar from './Toolbar';
 let styles = require('./Item.less')
 
 const WorkbenchItem = props => {
-  console.log('renderItem')
   const { dispatch, fullScreenId, itemHeight, itemSpan, dataSource, outPadding } = props;
   const { data, unitId } = dataSource;
   const [showSettingBar, setShowSettingBar] = useState(false)

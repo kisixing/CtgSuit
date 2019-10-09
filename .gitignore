@@ -19,3 +19,4 @@
 .umi
 .umi-production
 /release
+/public/pdfjs

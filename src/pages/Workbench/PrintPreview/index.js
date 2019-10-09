@@ -32,11 +32,10 @@ class PrintPreview extends Component {
         onCancel={() => onCancel('printVisible')}
         onOk={onCreate}
       >
-        <div className={styles.setting}>
-          <Setting />
+        <div className={styles.top}>
+          {/* <Setting /> */}
         </div>
-        <div className={styles.info}></div>
-        <div className={styles.chart}>
+        <div className={styles.bottom}>
           <Preview />
         </div>
       </Modal>
