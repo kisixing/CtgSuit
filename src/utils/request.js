@@ -7,6 +7,7 @@ import store from 'store';
 import { TOKEN } from '@/utils/constant';
 import r from '@lianmed/request';
 import config from "@/utils/config";
+console.log('zz config')
 const request = r.config({
   prefix:config.apiPrefix,
   errHandler({ status, errortext, url }) {

@@ -24,7 +24,7 @@ FileStorage.prototype = {
             return []
         }
         const obj = str.split('\n').map(_ => _.split('=')).reduce((prev, curr) => {
-            prev[curr[0]] = curr[1]
+            prev[curr[0]] = curr[1].trim()
             return prev
         }, {})
         this.setCache(obj)

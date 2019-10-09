@@ -21,7 +21,13 @@ import config from '@/utils/config';
 import styles from './BasicLayout.less';
 import Beds from './Beds';
 import Tabs from './Tabs';
-import { EWsStatus } from "@/services/WsConnect";
+// import { wsStatus } from "@lianmed/lmg";
+import settingStore from "@/utils/SettingStore";
+// import { WsService } from '@/services/WsService';
+import { WsService } from "@lianmed/lmg";
+const wsStatus = WsService.wsStatus
+const settingData = settingStore.cache
+
 const { Header, Footer, Content } = Layout;
 const joinSymbol = ' x '
 class BasicLayout extends Component {
@@ -30,6 +36,8 @@ class BasicLayout extends Component {
     this.state = {
       current: '',
     };
+   const ws =  new WsService(settingData)
+   ws.connect()
   }
 
   componentDidMount() {
@@ -201,8 +209,8 @@ class BasicLayout extends Component {
   };
 
   render() {
-    const { children, wsStatus, loading } = this.props;
-    const wsStatusColor = wsStatus === EWsStatus.Pendding ? 'transparent' : (wsStatus === EWsStatus.Success ? 'green' : 'red')
+    const { children, wsStatus:status, loading } = this.props;
+    const wsStatusColor = status === wsStatus.Pendding ? 'transparent' : (wsStatus === wsStatus.Success ? 'green' : 'red')
     return (
       <Layout className={styles.container}>
         <Header className={styles.header}>
@@ -216,7 +224,7 @@ class BasicLayout extends Component {
               <this.ListLayout />
               <div style={{ marginLeft: 6, borderRadius: 2, overflow: 'hidden', display: 'flex', alignItems: 'center'  }} >
 
-                <Spin spinning={wsStatus === EWsStatus.Pendding} >
+                <Spin spinning={wsStatus === wsStatus.Pendding} >
                   {
                     <div style={{ background: wsStatusColor, borderRadius: 10, cursor: 'pointer',width: 20, height: 20 }}></div>
                   }

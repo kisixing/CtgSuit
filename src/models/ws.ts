@@ -1,6 +1,7 @@
 
-import { WsConnect, EWsStatus } from '@/services/WsConnect';
+import { WsService } from '@lianmed/lmg';
 
+const EWsStatus = WsService.wsStatus
 
 export default {
   namespace: 'ws',
@@ -10,15 +11,16 @@ export default {
   },
   effects: {
     *connectWs(_, { put, call, select }) {
-      const wsConnect = new WsConnect();
-
+      const wsService = WsService._this;
       const state = yield select();
       const {
         ws: { status },
       } = state;
-      if (status === EWsStatus.Success) return;
-      let data = yield call(wsConnect.connect);
-      console.log(data);
+      if (status === EWsStatus.Success) return; 
+      
+      let data = yield call(wsService.getDatacache.bind(wsService));
+
+      console.log('ws',data);
       yield put({ type: 'setState', payload: { data } });
 
     }
