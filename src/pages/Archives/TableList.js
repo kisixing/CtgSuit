@@ -21,13 +21,13 @@ class TableList extends Component {
         width: 80,
         align: 'center',
       },
-      {
-        title: '检查次数',
-        dataIndex: 'visitType',
-        key: 'visitType',
-        width: 80,
-        align: 'center',
-      },
+      // {
+      //   title: '检查次数',
+      //   dataIndex: 'visitType',
+      //   key: 'visitType',
+      //   width: 80,
+      //   align: 'center',
+      // },
       {
         title: '姓名',
         dataIndex: 'name',
@@ -48,13 +48,13 @@ class TableList extends Component {
         key: 'gestationalWeek',
         width: 80,
       },
-      {
-        title: '门诊号',
-        dataIndex: 'outpatientNO',
-        key: 'outpatientNO',
-        width: 100,
-        render: (text, record) => record.pregnancy && record.pregnancy.outpatientNO,
-      },
+      // {
+      //   title: '门诊号',
+      //   dataIndex: 'outpatientNO',
+      //   key: 'outpatientNO',
+      //   width: 100,
+      //   render: (text, record) => record.pregnancy && record.pregnancy.outpatientNO,
+      // },
       {
         title: '住院号',
         dataIndex: 'inpatientNO',
@@ -74,40 +74,46 @@ class TableList extends Component {
         dataIndex: 'visitTime',
         key: 'visitTime',
         width: 150,
-        render: text => moment(text).format('YYYY-MM-DD HH:mm:ss'),
+        render: text => text && moment(text).format('YYYY-MM-DD HH:mm:ss'),
       },
       {
         title: 'GP',
         dataIndex: 'GP',
         key: 'GP',
         width: 100,
+        render: (text, record) => {
+          if (record.pregnancy) {
+            return `${record.pregnancy.gravidity} / ${record.pregnancy.parity}`;
+          }
+          return;
+        }
       },
       {
-        title: '备注',
+        title: '档案号',
         dataIndex: 'comment',
         key: 'comment',
         width: 180,
         align: 'center',
         render: (text, record) => record.ctgexam.note,
       },
-      {
-        title: '操作',
-        dataIndex: 'action',
-        key: 'action',
-        align: 'center',
-        width: 150,
-        render: (text, record) => {
-          return (
-            <span>
-              <span onClick={this.showDetailModal}>修改</span>
-              <Divider type="vertical" />
-              <span>导出</span>
-              <Divider type="vertical" />
-              <span>删除</span>
-            </span>
-          );
-        },
-      },
+      // {
+      //   title: '操作',
+      //   dataIndex: 'action',
+      //   key: 'action',
+      //   align: 'center',
+      //   width: 150,
+      //   render: (text, record) => {
+      //     return (
+      //       <span>
+      //         <span onClick={this.showDetailModal}>修改</span>
+      //         <Divider type="vertical" />
+      //         <span>导出</span>
+      //         <Divider type="vertical" />
+      //         <span>删除</span>
+      //       </span>
+      //     );
+      //   },
+      // },
     ];
   }
 
@@ -185,7 +191,7 @@ class TableList extends Component {
     dispatch({
       type: 'archives/fetchCTGrecordData',
       payload: {
-        ctgexamid: '9_3_190930222931', // record.ctgexam.note,
+        ctgexamid: record.ctgexam.note,
       },
     });
   };

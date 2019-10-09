@@ -33,9 +33,11 @@ class Toolbar extends Component {
   }
 
   componentDidMount() {
-    const { dataSource: { data }, documentno, pregnancy } = this.props;
+    const {
+      dataSource: { data, documentno, pregnancy },
+    } = this.props;
     // 判断是否已建档
-    const isCreated = data && pregnancy && pregnancy.id && documentno === data.docid;
+    const isCreated = pregnancy && pregnancy.id && data && documentno === data.docid;
     // 判断是否已开始监护
     const isMonitor = data && data.starttime !== '';
     this.setState({ isCreated, isMonitor });

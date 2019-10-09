@@ -52,9 +52,15 @@ export async function getPregnancy(params) {
  * @export
  * @returns
  */
-export async function getCTGrecords() {
-  return request.get(`/prenatal-visits?CTGExamId.specified=true`);
+export async function getCTGrecords(params) {
+  return request.get(
+    `/prenatal-visits?CTGExamId.specified=true&pregnancyId.specified=true${params ? '&' : ''}${stringify(
+      params,
+    )}`,
+  );
 }
+
+
 
 export async function newCTGrecord(params) {
   return request.post(`/prenatal-visits`, {

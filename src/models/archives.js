@@ -15,7 +15,7 @@ export default {
   },
   effects: {
     *fetchRecords({ payload }, { call, put }) {
-      const res = yield call(getCTGrecords);
+      const res = yield call(getCTGrecords, payload);
       yield put({
         type: 'updateState',
         payload: {
@@ -27,7 +27,7 @@ export default {
     *fetchCTGrecordData({ payload }, { call, put }) {
       const res = yield call(getCTGrecordData, payload) || {};
       // 处理值，以便符合ctg曲线数据要求
-      let CTGDATA = { fhr: [[], [], []], toco: [], fm: [], fetal_num: 2, index :0};
+      let CTGDATA = { fhr: [[], [], []], toco: [], fm: [], fetal_num: 2, index: 0 };
       Object.keys(res).forEach(key => {
         let oridata = res[key];
         if (!oridata) {
@@ -50,7 +50,6 @@ export default {
           }
         }
       });
-      console.log('result', CTGDATA);
       yield put({
         type: 'updateState',
         payload: {

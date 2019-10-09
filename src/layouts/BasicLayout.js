@@ -25,7 +25,7 @@ import Tabs from './Tabs';
 import settingStore from "@/utils/SettingStore";
 // import { WsService } from '@/services/WsService';
 import { WsService } from "@lianmed/lmg";
-const wsStatus = WsService.wsStatus
+const EWsStatus = WsService.wsStatus
 const settingData = settingStore.cache
 
 const { Header, Footer, Content } = Layout;
@@ -37,7 +37,8 @@ class BasicLayout extends Component {
       current: '',
     };
    const ws =  new WsService(settingData)
-   ws.connect()
+     ws.connect()
+    this.interval = null;
   }
 
   componentDidMount() {
@@ -56,6 +57,18 @@ class BasicLayout extends Component {
       name: 'clear all stroe!!!',
       age: '18',
       clearAll: () => store.clearAll(),
+    });
+    // 每1min请求一次床位信息列表
+    this.interval = setInterval(() => this.getBeds(), 60000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+
+  getBeds = () => {
+    this.props.dispatch({
+      type: 'list/getlist',
     });
   }
 
@@ -86,7 +99,7 @@ class BasicLayout extends Component {
         content: '确认退出系统？',
         okText: '确认',
         cancelText: '取消',
-        onOk: function () {
+        onOk: function() {
           // 清除sessionStorage
           // store.clearAll();
           // 退出登录，关闭应用
@@ -102,7 +115,7 @@ class BasicLayout extends Component {
         content: '确认退出登录？',
         okText: '确认',
         cancelText: '取消',
-        onOk: function () {
+        onOk: function() {
           // 清除sessionStorage
           store.clearAll();
           // 退出登录，回到登录页面
@@ -155,29 +168,26 @@ class BasicLayout extends Component {
 
   ListLayout = () => {
     const { listLayout, listLayoutOptions, dispatch } = this.props;
-    const renderText = _ => _.join(joinSymbol)
-    const menu = (
-      listLayoutOptions.map(_ => {
-        return (
-          <Select.Option key={renderText(_)} >
-            {renderText(_)}
-          </Select.Option>
-        )
-      })
-
-    );
+    const renderText = _ => _.join(joinSymbol);
+    const menu = listLayoutOptions.map(_ => {
+      return <Select.Option key={renderText(_)}>{renderText(_)}</Select.Option>;
+    });
     return (
-      <Select size="small" value={renderText(listLayout)} style={{ width: 70 }} onChange={value => {
-        dispatch({ type: 'setting/setListLayout', payload: { listLayout: value.split(joinSymbol).map(_ => +_) } })
-      }} >
-        {
-          menu
-        }
+      <Select
+        size="small"
+        value={renderText(listLayout)}
+        style={{ width: 70 }}
+        onChange={value => {
+          dispatch({
+            type: 'setting/setListLayout',
+            payload: { listLayout: value.split(joinSymbol).map(_ => +_) },
+          });
+        }}
+      >
+        {menu}
       </Select>
-
     );
   };
-
 
   menus = () => {
     return (
@@ -209,8 +219,8 @@ class BasicLayout extends Component {
   };
 
   render() {
-    const { children, wsStatus:status, loading } = this.props;
-    const wsStatusColor = status === wsStatus.Pendding ? 'transparent' : (wsStatus === wsStatus.Success ? 'green' : 'red')
+    const { children, wsStatus, loading } = this.props;
+    const wsStatusColor = wsStatus === EWsStatus.Pendding ? 'transparent' : (wsStatus === EWsStatus.Success ? 'green' : 'red')
     return (
       <Layout className={styles.container}>
         <Header className={styles.header}>
@@ -218,22 +228,27 @@ class BasicLayout extends Component {
             <Link to="/" className={styles.logo}>
               {/* <img alt="logo" src={logo} /> */}
               <h1>胎监工作站</h1>
-
             </Link>
             <div style={{ display: 'flex', lineHeight: '24px', justifyContent: 'space-around' }}>
               <this.ListLayout />
               <div style={{ marginLeft: 6, borderRadius: 2, overflow: 'hidden', display: 'flex', alignItems: 'center'  }} >
 
-                <Spin spinning={wsStatus === wsStatus.Pendding} >
+                <Spin spinning={EWsStatus === EWsStatus.Pendding} >
                   {
-                    <div style={{ background: wsStatusColor, borderRadius: 10, cursor: 'pointer',width: 20, height: 20 }}></div>
+                    <div
+                      style={{
+                        background: wsStatusColor,
+                        borderRadius: 10,
+                        cursor: 'pointer',
+                        width: 20,
+                        height: 20,
+                      }}
+                    ></div>
                   }
-
                 </Spin>
                 {/* <DynamicAntdTheme primaryColor='#77dd66' /> */}
               </div>
             </div>
-
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
