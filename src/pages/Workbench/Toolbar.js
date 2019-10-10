@@ -129,18 +129,19 @@ class Toolbar extends Component {
     const { isCreated } = this.state;
     const _this = this;
     const { deviceno, bedno, bedname, pregnancy, data, prenatalVisit = {} } = item;
-    if (isCreated) {
-      // 已经建档
-      const pregnancyId = pregnancy.id;
-      console.log('end Device -- ', item);
-      Modal.confirm({
-        centered: true,
-        title: <span className="confirm-title">提示</span>,
-        content: <span className="confirm-content">{`确认床号: ${bedname} 停止监护 ?`}</span>,
-        okText: '确认',
-        cancelText: '取消',
-        onOk: function() {
-          socket.endwork(deviceno, bedno);
+
+    const pregnancyId = pregnancy.id;
+    console.log('end Device -- ', item);
+    Modal.confirm({
+      centered: true,
+      title: <span className="confirm-title">提示</span>,
+      content: <span className="confirm-content">{`确认床号: ${bedname} 停止监护 ?`}</span>,
+      okText: '确认',
+      cancelText: '取消',
+      onOk: function() {
+        socket.endwork(deviceno, bedno);
+        if (isCreated) {
+          // 已经建档
           this.props.dispatch({
             type: 'archives/updateExams',
             payload: {
@@ -161,13 +162,11 @@ class Toolbar extends Component {
               }
             },
           });
-        },
-      });
-    } else {
-      // 未建档，直接调用web socket
-      socket.endwork(deviceno, bedno);
-      _this.setState({ isMonitor: false });
-    }
+        } else {
+          _this.setState({ isMonitor: false });
+        }
+      },
+    });
   };
 
   render() {
@@ -211,11 +210,11 @@ class Toolbar extends Component {
           <Button disabled={!isCreated} icon="line-chart" type="link" onClick={() => this.showModal('partogramVisible')}>
             产程图
           </Button>
-          <Link to="">
+          {/* <Link to="">
             <Button icon="reconciliation" type="link">
               事件记录
             </Button>
-          </Link>
+          </Link> */}
         </div>
         <div className={styles.actionButton} style={{ opacity: showSetting || showSettingBar ? 1 : 0 }}>
           <Button

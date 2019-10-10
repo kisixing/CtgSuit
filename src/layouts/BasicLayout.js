@@ -133,10 +133,10 @@ class BasicLayout extends Component {
 
     const menu = (
       <Menu className={styles.menu} selectedKeys={[]} onClick={this.onMenuClick}>
-        <Menu.Item key="userinfo">
+        {/* <Menu.Item key="userinfo">
           <Icon type="user" />
           账户设置
-        </Menu.Item>
+        </Menu.Item> */}
         <Menu.Item key="signout">
           <Icon type="user" />
           注销登录
@@ -190,12 +190,13 @@ class BasicLayout extends Component {
   };
 
   menus = () => {
+    // ['操作说明', 'question-circle'],
     return (
       <Fragment>
         {[
           ['档案管理', 'ordered-list', '/Archives'],
           ['系统设置', 'setting', '/setting'],
-          ['操作说明', 'question-circle'],
+          ['', ''],
           ['用户信息', 'user'],
         ].map(([title, icon, path]) => {
           if (title === '用户信息') {

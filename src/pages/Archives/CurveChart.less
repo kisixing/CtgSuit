@@ -26,5 +26,18 @@
   .chart {
     height: 320px;
     border: 1px solid #ddd;
+
+    :global {
+      .ant-spin-nested-loading {
+        height: 100%;
+      }
+      .ant-spin-container {
+        height: 100%;
+
+        & > div {
+
+        }
+      }
+    }
   }
 }

@@ -11,7 +11,7 @@
   display: flex;
   height: @header-height;
   padding: 0 24px;
-  background-color:var(--theme-color) ;
+  background-color: var(--theme-color) ;
   :global {
     .ant-btn-primary {
       box-shadow: none;
@@ -41,6 +41,10 @@
     flex-wrap: wrap;
     align-content: center;
     justify-items: right;
+
+    button {
+      min-width: 110px;
+    }
 
     .action {
       display: inline-block;
