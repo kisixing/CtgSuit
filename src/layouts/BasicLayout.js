@@ -32,6 +32,8 @@ const joinSymbol = ' x '
 class BasicLayout extends Component {
   constructor(props) {
     super(props);
+    this.colorIndex = ~~(Math.random()*colors.length)
+
     this.state = {
       current: '',
     };
@@ -218,15 +220,14 @@ class BasicLayout extends Component {
   };
 
   render() {
-    const colorIndex = ~~(Math.random()*colors.length)
-    const primaryColor = colors[colorIndex]
+    const primaryColor = colors[this.colorIndex]
     const { children, wsStatus, loading } = this.props;
     const wsStatusColor = wsStatus === EWsStatus.Pendding ? 'transparent' : (wsStatus === EWsStatus.Success ? 'green' : 'red')
     return (
       <Layout className={styles.container}>
         <Header className={styles.header}>
           <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <Link to="/" className={styles.logo}>
+            <Link to="/workbench" className={styles.logo}>
               {/* <img alt="logo" src={logo} /> */}
               <h1>胎监工作站</h1>
             </Link>
