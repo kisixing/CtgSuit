@@ -24,7 +24,7 @@ export default class Preview extends Component {
   };
 
   handlePrint = (file = 'http://127.0.0.1:1702/example1.pdf') => {
-    ipcRenderer.send('printWindow', file);
+    ipcRenderer.send('printWindow', 'http://192.168.0.208:9986/api/ctg-exams-pdfurl/190930222541');
   }
 
   render() {

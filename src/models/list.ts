@@ -5,7 +5,7 @@ import { getList } from '@/services/list';
 export default {
   namespace: 'list',
   state: {
-    listData: [], // 所有数据
+    listData: [], // 所有bed数据
     pageData: [], // [[1,4],[5,8]]
     page: null, //当前页码
     pageItems: [], // [listItem,...] 床位信息
@@ -23,7 +23,6 @@ export default {
             return { ..._,  unitId };
           })) ||
         [];
-
       yield put({
         type: 'setState',
         payload: { listData: rawData }

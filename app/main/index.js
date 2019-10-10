@@ -38,15 +38,19 @@ ipcMain.on('newWindow', (event) => {
 });
 
 ipcMain.on('printWindow', (event, file) => {
-  const printWindow = new BrowserWindow({ show: false });
+  const printWindow = new BrowserWindow({
+    show: false,
+    width: 1920,
+    height: 1080,
+  });
   printWindow.loadURL(`${getPDFviewPath()}?file=${file}`);
   printWindow.webContents.on('did-finish-load', () => {
     setTimeout(() => {
-      printWindow.webContents.print({ silent: true }, e => {
+      printWindow.webContents.print({ silent: false }, e => {
         console.log('print callback', e);
       });
       // printWindow.webContents.executeJavaScript('window.print()');
-    }, 2000);
+    }, 5000);
   });
 })
 
