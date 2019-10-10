@@ -14,9 +14,9 @@ class Archives extends PureComponent {
           <FieldForm />
           <TableList />
         </div>
-        <div className={styles.chart}>
+        <Layout className={styles.chart}>
           <CurveChart />
-        </div>
+        </Layout>
       </Layout>
     );
   }
