@@ -59,7 +59,7 @@ class BasicLayout extends Component {
       clearAll: () => store.clearAll(),
     });
     // 每1min请求一次床位信息列表
-    // this.interval = setInterval(() => this.updateBeds(), 30000);
+    this.interval = setInterval(() => this.updateBeds(), 5000);
   }
 
   componentWillUnmount() {
@@ -68,7 +68,7 @@ class BasicLayout extends Component {
 
   updateBeds = () => {
     this.props.dispatch({
-      type: 'list/getlist',
+      type: 'list/updateBeds',
     });
   };
 

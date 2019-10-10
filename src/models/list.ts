@@ -22,6 +22,25 @@ export default {
       });
       yield put({ type: 'processListData' });
     },
+    *updateBeds({ payload }, { call, put, select }) {
+      let data = yield call(getList);
+      const oldData = yield select(_ => _.list.listData);
+      // const isDdifference = data !== oldData;
+      // if (isDdifference) {
+      //   yield put({
+      //     type: 'setState',
+      //     payload: {
+      //       listData: data || []
+      //     }
+      //   })
+      // }
+      yield put({
+        type: 'setState',
+        payload: {
+          listData: data || []
+        }
+      })
+    },
     *processListData(payload, { put, select }) {
       const state = yield select();
       let {
