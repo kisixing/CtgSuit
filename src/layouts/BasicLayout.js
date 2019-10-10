@@ -5,8 +5,7 @@
  */
 
 import React, { Component, Fragment } from 'react';
-// import DynamicAntdTheme from 'dynamic-antd-theme';
-// import {DynamicAntdTheme} from '@lianmed/components';
+import { AntdThemeManipulator } from '@lianmed/components';
 
 
 import { Layout, Menu, Icon, Button, Modal, Avatar, Spin, Select } from 'antd';
@@ -36,8 +35,8 @@ class BasicLayout extends Component {
     this.state = {
       current: '',
     };
-   const ws =  new WsService(settingData)
-     ws.connect()
+    const ws = new WsService(settingData)
+    ws.connect()
     this.interval = null;
   }
 
@@ -99,7 +98,7 @@ class BasicLayout extends Component {
         content: '确认退出系统？',
         okText: '确认',
         cancelText: '取消',
-        onOk: function() {
+        onOk: function () {
           // 清除sessionStorage
           // store.clearAll();
           // 退出登录，关闭应用
@@ -115,7 +114,7 @@ class BasicLayout extends Component {
         content: '确认退出登录？',
         okText: '确认',
         cancelText: '取消',
-        onOk: function() {
+        onOk: function () {
           // 清除sessionStorage
           store.clearAll();
           // 退出登录，回到登录页面
@@ -231,9 +230,9 @@ class BasicLayout extends Component {
             </Link>
             <div style={{ display: 'flex', lineHeight: '24px', justifyContent: 'space-around' }}>
               <this.ListLayout />
-              <div style={{ marginLeft: 6, borderRadius: 2, overflow: 'hidden', display: 'flex', alignItems: 'center'  }} >
+              <div style={{ marginLeft: 6, borderRadius: 2, overflow: 'hidden', display: 'flex', alignItems: 'center' }} >
 
-                <Spin spinning={EWsStatus === EWsStatus.Pendding} >
+                <Spin spinning={wsStatus === EWsStatus.Pendding} >
                   {
                     <div
                       style={{
@@ -246,7 +245,6 @@ class BasicLayout extends Component {
                     ></div>
                   }
                 </Spin>
-                {/* <DynamicAntdTheme primaryColor='#77dd66' /> */}
               </div>
             </div>
           </div>
@@ -261,9 +259,12 @@ class BasicLayout extends Component {
         </Header>
         <Content className={styles.main}>{children}</Content>
         <Footer className={styles.footer}>
-          <Fragment>
+          <span />
+          <span>
             Copyright <Icon type="copyright" /> {config.copyright}
-          </Fragment>
+          </span>
+          <AntdThemeManipulator primaryColor='#004c8c' placement="topLeft" />
+
         </Footer>
       </Layout>
     );
