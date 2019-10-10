@@ -5,7 +5,7 @@ import { getList } from '@/services/list';
 export default {
   namespace: 'list',
   state: {
-    listData: [], // 所有数据
+    listData: [], // 所有bed数据
     pageData: [], // [[1,4],[5,8]]
     page: null, //当前页码
     pageItems: [], // [listItem,...] 床位信息
@@ -21,6 +21,25 @@ export default {
         payload: { listData: rawData || [] }
       });
       yield put({ type: 'processListData' });
+    },
+    *updateBeds({ payload }, { call, put, select }) {
+      let data = yield call(getList);
+      const oldData = yield select(_ => _.list.listData);
+      // const isDdifference = data !== oldData;
+      // if (isDdifference) {
+      //   yield put({
+      //     type: 'setState',
+      //     payload: {
+      //       listData: data || []
+      //     }
+      //   })
+      // }
+      yield put({
+        type: 'setState',
+        payload: {
+          listData: data || []
+        }
+      })
     },
     *processListData(payload, { put, select }) {
       const state = yield select();
@@ -74,13 +93,18 @@ export default {
 
       const pageItemsCount: number = listLayout[0] * listLayout[1];
       const pageCount: number = Math.ceil(listLen / pageItemsCount);
-      const pageData = new Array(pageCount).fill(0).map((_, index) => {
+      let pageData = new Array(pageCount).fill(0).map((_, index) => {
+
         if (index === pageCount - 1) {
-          const lastLeft = 1 + index * pageItemsCount;
-          return [lastLeft, listLen];
+          const lastLeft = index * pageItemsCount;
+          return [lastLeft, listLen - 1];
         }
-        return [1 + index * pageItemsCount, (index + 1) * pageItemsCount];
+        return [index * pageItemsCount, (index + 1) * pageItemsCount - 1];
       });
+
+      pageData = pageData.map(([left, right]) => {
+        return listData.slice(left, right + 1).map(_ => _.bedname)
+      })
 
       yield put({ type: 'setState', payload: { pageData } });
     },

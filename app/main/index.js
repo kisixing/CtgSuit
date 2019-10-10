@@ -1,6 +1,6 @@
 // Modules to control application life and create native browser window
 const { app, BrowserWindow, ipcMain, Menu, dialog } = require('electron');
-const { getMainPath, getNewPath } = require('./config/window');
+const { getMainPath, getNewPath, getPDFviewPath } = require('./config/window');
 const menus = require('./config/menu');
 const fs = require('fs');
 const constant = require('./config/constant');
@@ -38,10 +38,19 @@ ipcMain.on('newWindow', (event) => {
 });
 
 ipcMain.on('printWindow', (event, file) => {
-  const printWindow = new BrowserWindow({ show: false });
-  printWindow.loadURL('http://localhost:1702/example1.pdf');
+  const printWindow = new BrowserWindow({
+    show: false,
+    width: 1920,
+    height: 1080,
+  });
+  printWindow.loadURL(`${getPDFviewPath()}?file=${file}`);
   printWindow.webContents.on('did-finish-load', () => {
-    printWindow.print({ silent: true, deviceName: '' });
+    setTimeout(() => {
+      printWindow.webContents.print({ silent: false }, e => {
+        console.log('print callback', e);
+      });
+      // printWindow.webContents.executeJavaScript('window.print()');
+    }, 5000);
   });
 })
 

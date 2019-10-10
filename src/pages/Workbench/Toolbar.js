@@ -39,7 +39,7 @@ class Toolbar extends Component {
     // 判断是否已建档
     const isCreated = pregnancy && pregnancy.id && data && documentno === data.docid;
     // 判断是否已开始监护
-    const isMonitor = data && data.starttime !== '';
+    const isMonitor = data && data.status !== 0 && data.starttime !== '';
     this.setState({ isCreated, isMonitor });
   }
 

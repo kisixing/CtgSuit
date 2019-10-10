@@ -32,13 +32,12 @@ const joinSymbol = ' x '
 class BasicLayout extends Component {
   constructor(props) {
     super(props);
-    this.colorIndex = ~~(Math.random()*colors.length)
-
     this.state = {
       current: '',
     };
-    const ws = new WsService(settingData)
-    ws.connect()
+    const ws = new WsService(settingData);
+    ws.connect();
+    this.colorIndex = ~~(Math.random() * colors.length);
     this.interval = null;
   }
 
@@ -60,18 +59,18 @@ class BasicLayout extends Component {
       clearAll: () => store.clearAll(),
     });
     // 每1min请求一次床位信息列表
-    this.interval = setInterval(() => this.getBeds(), 30000);
+    this.interval = setInterval(() => this.updateBeds(), 5000);
   }
 
   componentWillUnmount() {
     clearInterval(this.interval);
   }
 
-  getBeds = () => {
+  updateBeds = () => {
     this.props.dispatch({
-      type: 'list/getlist',
+      type: 'list/updateBeds',
     });
-  }
+  };
 
   handleMenuClick = key => {
     this.setState({
@@ -79,7 +78,7 @@ class BasicLayout extends Component {
     });
     if (key === '操作说明') {
       // router.push('/testCtg');
-      ipcRenderer.send('newWindow', '新窗口');
+      ipcRenderer.send('newWindow', '操作说明');
     }
     if (key === '档案管理') {
       router.push('/Archives');
@@ -100,7 +99,7 @@ class BasicLayout extends Component {
         content: '确认退出系统？',
         okText: '确认',
         cancelText: '取消',
-        onOk: function () {
+        onOk: function() {
           // 清除sessionStorage
           // store.clearAll();
           // 退出登录，关闭应用
@@ -116,7 +115,7 @@ class BasicLayout extends Component {
         content: '确认退出登录？',
         okText: '确认',
         cancelText: '取消',
-        onOk: function () {
+        onOk: function() {
           // 清除sessionStorage
           store.clearAll();
           // 退出登录，回到登录页面
@@ -222,7 +221,12 @@ class BasicLayout extends Component {
   render() {
     const primaryColor = colors[this.colorIndex]
     const { children, wsStatus, loading } = this.props;
-    const wsStatusColor = wsStatus === EWsStatus.Pendding ? 'transparent' : (wsStatus === EWsStatus.Success ? 'green' : 'red')
+    const wsStatusColor =
+      wsStatus === EWsStatus.Pendding
+        ? 'transparent'
+        : wsStatus === EWsStatus.Success
+        ? 'green'
+        : 'red';
     return (
       <Layout className={styles.container}>
         <Header className={styles.header}>
@@ -233,9 +237,16 @@ class BasicLayout extends Component {
             </Link>
             <div style={{ display: 'flex', lineHeight: '24px', justifyContent: 'space-around' }}>
               <this.ListLayout />
-              <div style={{ marginLeft: 6, borderRadius: 2, overflow: 'hidden', display: 'flex', alignItems: 'center' }} >
-
-                <Spin spinning={wsStatus === EWsStatus.Pendding} >
+              <div
+                style={{
+                  marginLeft: 6,
+                  borderRadius: 2,
+                  overflow: 'hidden',
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                <Spin spinning={wsStatus === EWsStatus.Pendding}>
                   {
                     <div
                       style={{
@@ -267,7 +278,6 @@ class BasicLayout extends Component {
             Copyright <Icon type="copyright" /> {config.copyright}
           </span>
           <AntdThemeManipulator primaryColor={primaryColor} placement="topLeft" />
-
         </Footer>
       </Layout>
     );
