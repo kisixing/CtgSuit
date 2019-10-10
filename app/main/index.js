@@ -37,6 +37,14 @@ ipcMain.on('newWindow', (event) => {
   });
 });
 
+ipcMain.on('printWindow', (event, file) => {
+  const printWindow = new BrowserWindow({ show: false });
+  printWindow.loadURL('http://localhost:1702/example1.pdf');
+  printWindow.webContents.on('did-finish-load', () => {
+    printWindow.print({ silent: true, deviceName: '' });
+  });
+})
+
 ipcMain.on('closeMainWindow', (event) => {
   mainWindow = null;
   // 所有的窗口会被立刻关闭，不会询问用户。
