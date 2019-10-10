@@ -45,7 +45,7 @@ function Beds({ dispatch, listData }) {
         flexWrap: 'wrap',
       }}
     >
-      {listData.map(({ index, id, pageIndex, status, unitId }) => {
+      {listData.map(({ bedname, id, pageIndex, status, unitId }) => {
         return (
           <Button
             key={id}
@@ -54,8 +54,8 @@ function Beds({ dispatch, listData }) {
               marginLeft: 4,
               marginTop: 4,
               padding: 0,
-              width: 24,
-              height: 24,
+              width: 40,
+              // height: 40,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -64,7 +64,7 @@ function Beds({ dispatch, listData }) {
             }}
             onClick={handleClicks({ pageIndex, unitId })}
           >
-            {index + 1}
+            {bedname}
           </Button>
         );
       })}
