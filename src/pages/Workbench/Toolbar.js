@@ -107,21 +107,11 @@ class Toolbar extends Component {
     const { deviceno, bedno, bedname } = item;
     const _this = this;
     console.log('start Device -- ', item);
-    Modal.confirm({
-      centered: true,
-      title: <span className="confirm-title">提示</span>,
-      content: <span className="confirm-content">{`确认床号: ${bedname} 开始监护 ?`}</span>,
-      okText: '确认',
-      cancelText: '取消',
-      onOk: function() {
-        socket.startwork(deviceno, bedno);
-        _this.setState({ isMonitor: true });
-        // this.props.dispatch({
-        //   type: 'archives/updateExams',
-        //   payload: {},
-        // });
-      },
-    });
+    const bool = window.confirm(`确认床号: ${bedname} 开始监护 ?`)
+    if (bool) {
+      socket.startwork(deviceno, bedno);
+      _this.setState({ isMonitor: true });
+    }
   };
 
   // 停止监护
@@ -129,44 +119,39 @@ class Toolbar extends Component {
     const { isCreated } = this.state;
     const _this = this;
     const { deviceno, bedno, bedname, pregnancy, data, prenatalVisit = {} } = item;
-    debugger
+
     const pregnancyId = pregnancy.id;
+    const bool = window.confirm(`确认床号: ${bedname} 开始监护 ?`)
+
     console.log('end Device -- ', item);
-    Modal.confirm({
-      centered: true,
-      title: <span className="confirm-title">提示</span>,
-      content: <span className="confirm-content">{`确认床号: ${bedname} 停止监护 ?`}</span>,
-      okText: '确认',
-      cancelText: '取消',
-      onOk: function() {
-        socket.endwork(deviceno, bedno);
-        if (isCreated) {
-          // 已经建档
-          this.props.dispatch({
-            type: 'archives/updateExams',
-            payload: {
-              id: prenatalVisit.id,
-              pregnancy: {
-                id: pregnancyId,
-              },
-              ctgexam: {
-                ...prenatalVisit.ctgexam,
-                endTime: moment(),
-                note: data.docid,
-              },
+    if (bool) {
+      socket.endwork(deviceno, bedno);
+      if (isCreated) {
+        // 已经建档
+        this.props.dispatch({
+          type: 'archives/updateExams',
+          payload: {
+            id: prenatalVisit.id,
+            pregnancy: {
+              id: pregnancyId,
             },
-            callback: res => {
-              if (res && res.id) {
-                // 将监护状态改为未监护状态
-                _this.setState({ isMonitor: false });
-              }
+            ctgexam: {
+              ...prenatalVisit.ctgexam,
+              endTime: moment(),
+              note: data.docid,
             },
-          });
-        } else {
-          _this.setState({ isMonitor: false });
-        }
-      },
-    });
+          },
+          callback: res => {
+            if (res && res.id) {
+              // 将监护状态改为未监护状态
+              _this.setState({ isMonitor: false });
+            }
+          },
+        });
+      } else {
+        _this.setState({ isMonitor: false });
+      }
+    }
   };
 
   render() {
