@@ -10,6 +10,7 @@ import config from "@/utils/config";
 console.log('zz config')
 const request = r.config({
   prefix:config.apiPrefix,
+  hideErr:true,
   errHandler({ status, errortext, url }) {
     if (status === 401) {
       // @HACK
@@ -19,18 +20,18 @@ const request = r.config({
       });
       return;
     }
-    // environment should not be used
-    if (status === 403) {
-      router.push('/exception/403');
-      return;
-    }
-    if (status <= 504 && status >= 500) {
-      router.push('/exception/500');
-      return;
-    }
-    if (status >= 404 && status < 422) {
-      router.push('/exception/404');
-    }
+    // // environment should not be used
+    // if (status === 403) {
+    //   router.push('/exception/403');
+    //   return;
+    // }
+    // if (status <= 504 && status >= 500) {
+    //   router.push('/exception/500');
+    //   return;
+    // }
+    // if (status >= 404 && status < 422) {
+    //   router.push('/exception/404');
+    // }
   },
 });
 

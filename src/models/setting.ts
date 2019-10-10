@@ -4,7 +4,7 @@ export default {
   state: {
     listLayout: store.get('listLayout') || [2, 2],
     listLayoutOptions: [
-      [2, 1],
+      [1, 2],
       [2, 2],
       [3, 2],
       [3, 3],

@@ -1,6 +1,6 @@
 import React, { useRef, useCallback, useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
-import { Card, Col, Button, Tag } from 'antd';
+import { Card, Col, Button, Tag, Tooltip } from 'antd';
 import { Ctg as L } from '@lianmed/lmg';
 import { mapStatusToColor, mapStatusToText } from '@/constant';
 import Toolbar from './Toolbar';
@@ -46,15 +46,23 @@ const WorkbenchItem = props => {
   // 床位信息
   const renderTilte = (item) => {
     const { data, pregnancy, documentno, bedname } = item;
-    // 是否已经建档绑定孕册
     const isCreated = pregnancy && pregnancy.id && data // && documentno === data.docid;
-    return (
-      <div className={styles.title}>
+
+    const text = (
+      <span className={styles.title}>
         床号: <span>{bedname}</span>
         住院号: <span>{isCreated ? pregnancy.inpatientNO : ''}</span>
         姓名: <span>{isCreated ? pregnancy.name : ''}</span>
         开始时间: <span>{data && data.starttime}</span>
-      </div>
+      </span>
+    )
+    // 是否已经建档绑定孕册
+    return (
+
+      <Tooltip title={text}>
+        {text}
+      </Tooltip>
+
     );
   };
 
