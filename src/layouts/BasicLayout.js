@@ -293,5 +293,6 @@ export default connect(({ global, list, loading, setting, ws }) => ({
   listData: list.listData,
   listLayout: setting.listLayout,
   listLayoutOptions: setting.listLayoutOptions,
-  wsStatus: ws.status
+  wsStatus: ws.status,
+  wsData:ws.data
 }))(BasicLayout);
