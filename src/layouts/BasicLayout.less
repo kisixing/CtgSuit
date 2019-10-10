@@ -4,15 +4,14 @@
 
 .container {
   height: 100%;
-  background: #58a5f0;
+  background: var(--theme-light-color);
 }
 
 .header {
   display: flex;
   height: @header-height;
   padding: 0 24px;
-  color: #fff;
-  background-color: @primary-color;
+  background-color:var(--theme-color) ;
   :global {
     .ant-btn-primary {
       box-shadow: none;
@@ -93,7 +92,9 @@
     }
   }
 }
-
+.name {
+  color:#fff
+}
 .main {
   overflow: auto;
 }
@@ -101,8 +102,12 @@
 .footer {
   height: @footer-height;
   overflow: hidden;
+  display:flex;
   padding: 8px;
-  text-align: center;
-  background-color: #0277bd;
-  color:#fff
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--theme-color);
+  span{
+    color:#fff
+  }
 }
