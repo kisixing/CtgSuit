@@ -23,7 +23,7 @@ class PrintPreview extends Component {
         width="92%"
         height="96%"
         visible={visible}
-        title={`【${dataSource.index + 1}】 打印`}
+        title={`【${dataSource.bedname}】 打印`}
         okText="创建"
         cancelText="取消"
         footer={null}
@@ -32,9 +32,7 @@ class PrintPreview extends Component {
         onCancel={() => onCancel('printVisible')}
         onOk={onCreate}
       >
-        <div className={styles.top}>
-          {/* <Setting /> */}
-        </div>
+        <div className={styles.top}>{/* <Setting /> */}</div>
         <div className={styles.bottom}>
           <Preview />
         </div>

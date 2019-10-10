@@ -76,7 +76,7 @@ const CollectionCreateForm = Form.create({
           destroyOnClose
           width={800}
           visible={visible}
-          title={`【${dataSource.index + 1}】 建档（绑定）`}
+          title={`【${dataSource.bedname}】 建档（绑定）`}
           footer={null}
           okText="创建"
           cancelText="取消"

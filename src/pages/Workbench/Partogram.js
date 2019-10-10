@@ -20,7 +20,7 @@ class C extends Component {
         width="92%"
         height="96%"
         visible={visible}
-        title={`【${dataSource.index + 1}】 产程图`}
+        title={`【${dataSource.bedname}】 产程图`}
         okText="创建"
         cancelText="取消"
         footer={null}
@@ -30,10 +30,13 @@ class C extends Component {
         onCancel={() => onCancel('partogramVisible')}
       >
         <div style={{ height: 450 }}>
-          
           <Partogram />
         </div>
-        <PartogramTable url="/prenatal-visits" style={{ padding: '20px' }} id={dataSource.pregnancy && dataSource.pregnancy.id} />
+        <PartogramTable
+          url="/prenatal-visits"
+          style={{ padding: '20px' }}
+          id={dataSource.pregnancy && dataSource.pregnancy.id}
+        />
       </Modal>
     );
   }
