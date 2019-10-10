@@ -25,7 +25,7 @@ function Tabs({ pageData, page, dispatch }) {
             type={page === index ? 'default' : 'primary'}
           >
             {
-              index
+              `第 ${index} 组`
             }
           </Button>
         );

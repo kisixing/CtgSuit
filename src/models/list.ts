@@ -90,7 +90,6 @@ export default {
         list: { listData },
       } = state;
       const listLen = listData.length;
-
       const pageItemsCount: number = listLayout[0] * listLayout[1];
       const pageCount: number = Math.ceil(listLen / pageItemsCount);
       let pageData = new Array(pageCount).fill(0).map((_, index) => {
