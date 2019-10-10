@@ -6,6 +6,7 @@ import BasicSetting from './BasicSetting';
 import ScoreSet from './ScoreSet';
 import Network from './Network';
 import Alarm from './Alarm';
+import BedInfo from './BedInfo';
 
 import styles from './index.less';
 
@@ -80,7 +81,7 @@ class Setting extends Component {
         <Menu.Item key="3">打印设置</Menu.Item>
         <Menu.Item key="4">事件设置</Menu.Item>
         <Menu.Item key="5">网络设置</Menu.Item>
-        <Menu.Item key="7">床位信息设置</Menu.Item>
+        <Menu.Item key="7">床位设置</Menu.Item>
         <Menu.Item key="6">医院设置</Menu.Item>
         <Menu.Item key="8">版本信息</Menu.Item>
         <Menu.Item key="9">报警设置</Menu.Item>
@@ -108,7 +109,9 @@ class Setting extends Component {
       case '2':
         return <ScoreSet wrappedComponentRef={form => (this.form2 = form)} />;
       case '5':
-        return <Network id="form5" wrappedComponentRef={form => (this.form5 = form)} />;
+        return <Network wrappedComponentRef={form => (this.form5 = form)} />;
+      case '7':
+        return <BedInfo />
       case '9':
         return <Alarm  wrappedComponentRef={form => (this.form9 = form)} />;
       default:
