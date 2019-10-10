@@ -26,7 +26,7 @@ import settingStore from "@/utils/SettingStore";
 import { WsService } from "@lianmed/lmg";
 const EWsStatus = WsService.wsStatus
 const settingData = settingStore.cache
-
+const colors = AntdThemeManipulator.colors
 const { Header, Footer, Content } = Layout;
 const joinSymbol = ' x '
 class BasicLayout extends Component {
@@ -218,6 +218,8 @@ class BasicLayout extends Component {
   };
 
   render() {
+    const colorIndex = ~~(Math.random()*colors.length)
+    const primaryColor = colors[colorIndex]
     const { children, wsStatus, loading } = this.props;
     const wsStatusColor = wsStatus === EWsStatus.Pendding ? 'transparent' : (wsStatus === EWsStatus.Success ? 'green' : 'red')
     return (
@@ -263,7 +265,7 @@ class BasicLayout extends Component {
           <span>
             Copyright <Icon type="copyright" /> {config.copyright}
           </span>
-          <AntdThemeManipulator primaryColor='#004c8c' placement="topLeft" />
+          <AntdThemeManipulator primaryColor={primaryColor} placement="topLeft" />
 
         </Footer>
       </Layout>

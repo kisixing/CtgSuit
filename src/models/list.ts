@@ -16,36 +16,51 @@ export default {
     *getlist(_, { put, call, select }) {
       // get bed information
       let rawData: IDevice[] = yield call(getList);
-      rawData =
-        (rawData &&
-          rawData.map(_ => {
-            const unitId = `${_.deviceno}-${_.subdevice}`;
-            return { ..._,  unitId };
-          })) ||
-        [];
-
       yield put({
         type: 'setState',
-        payload: { listData: rawData }
+        payload: { listData: rawData || [] }
       });
+      yield put({ type: 'processListData' });
+    },
+    *processListData(payload, { put, select }) {
+      const state = yield select();
+      let {
+        setting: { listLayout },
+        list: { listData },
+        ws: { data }
+      } = state;
+      const pageItemsCount: number = listLayout[0] * listLayout[1];
+
+      listData = (listData as IDevice[])
+        .map(_ => {
+          const unitId = `${_.deviceno}-${_.subdevice}`;
+          return { ..._, unitId };
+        })
+        .filter(_ => (data as Map<any, any>).has(_.unitId))
+        .map((_, index) => {
+          return { ..._, index, pageIndex: Math.floor(index / pageItemsCount) };
+        });
+
+      yield put({ type: 'setState', payload: { listData } });
       yield put({ type: 'computeLayout' });
     },
-    *computeLayout({ }: { rawData: IDevice[] }, { put, select }) {
+    *computeLayout({ }, { put, select }) {
       const state = yield select();
       const {
         setting: { listLayout },
         list: { listData: oldListData },
+        ws: { data }
       } = state;
       const pageItemsCount: number = listLayout[0] * listLayout[1];
 
-      const listData = oldListData.map((_, index) => {
+      const listData = (oldListData as IDevice[]).map((_, index) => {
         return { ..._, index, pageIndex: Math.floor(index / pageItemsCount) };
-      });
-
+      }).filter(_ => (data as Map<any, any>).has(_.unitId));
       yield put({
         type: 'setState',
         payload: { listData }
       });
+
       yield put({ type: 'setPageData' });
       yield put({ type: 'setPageItems', page: 0 });
     },
@@ -73,7 +88,7 @@ export default {
       const state = yield select();
       const {
         setting: { listLayout },
-        list: { listData, page: oldPage },
+        list: { listData },
       } = state;
       const pageItemsCount: number = listLayout[0] * listLayout[1];
       const pageItems = listData.slice(page * pageItemsCount, (page + 1) * pageItemsCount);

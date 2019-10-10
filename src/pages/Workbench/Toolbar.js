@@ -208,7 +208,7 @@ class Toolbar extends Component {
           <Button icon="printer" type="link" onClick={() => this.showModal('printVisible')}>
             打印
           </Button>
-          <Button icon="line-chart" type="link" onClick={() => this.showModal('partogramVisible')}>
+          <Button disabled={!isCreated} icon="line-chart" type="link" onClick={() => this.showModal('partogramVisible')}>
             产程图
           </Button>
           <Link to="">

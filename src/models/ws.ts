@@ -20,8 +20,8 @@ export default {
       
       let data = yield call(wsService.getDatacache.bind(wsService));
 
-      console.log('ws',data);
       yield put({ type: 'setState', payload: { data } });
+      yield put({ type: 'list/processListData'});
 
     }
   },

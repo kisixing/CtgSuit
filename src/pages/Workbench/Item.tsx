@@ -8,9 +8,10 @@ import Toolbar from './Toolbar';
 let styles = require('./Item.less')
 
 const WorkbenchItem = props => {
+  console.log('item render')
   const { dispatch, fullScreenId, itemHeight, itemSpan, dataSource, outPadding } = props;
   const { data, unitId } = dataSource;
-  const [showSettingBar, setShowSettingBar] = useState(false)
+  const [showSettingBar, setShowSettingBar] = useState(true)
   const ref = useRef(null)
   const suitObject = { suit: null };
 
@@ -74,11 +75,15 @@ const WorkbenchItem = props => {
       className={styles.col}
       ref={ref}
       style={{ padding: outPadding, height: itemHeight }}
-      onMouseOver={() => {
-        showSettingBar || setShowSettingBar(true)
+      onMouseOver={e => {
+        if (e.target === ref.current) {
+          showSettingBar || setShowSettingBar(true)
+        }
       }}
-      onMouseOut={() => {
-        showSettingBar && setShowSettingBar(false)
+      onMouseOut={e => {
+        if (e.target === ref.current) {
+          showSettingBar && setShowSettingBar(false)
+        }
       }}
     >
       <Toolbar {...props} showSettingBar={showSettingBar} />
