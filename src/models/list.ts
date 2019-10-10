@@ -74,13 +74,18 @@ export default {
 
       const pageItemsCount: number = listLayout[0] * listLayout[1];
       const pageCount: number = Math.ceil(listLen / pageItemsCount);
-      const pageData = new Array(pageCount).fill(0).map((_, index) => {
+      let pageData = new Array(pageCount).fill(0).map((_, index) => {
+
         if (index === pageCount - 1) {
-          const lastLeft = 1 + index * pageItemsCount;
-          return [lastLeft, listLen];
+          const lastLeft = index * pageItemsCount;
+          return [lastLeft, listLen - 1];
         }
-        return [1 + index * pageItemsCount, (index + 1) * pageItemsCount];
+        return [index * pageItemsCount, (index + 1) * pageItemsCount - 1];
       });
+
+      pageData = pageData.map(([left, right]) => {
+        return listData.slice(left, right + 1).map(_ => _.bedname)
+      })
 
       yield put({ type: 'setState', payload: { pageData } });
     },

@@ -7,14 +7,15 @@
 import React from 'react';
 import { Button } from 'antd';
 import { router } from 'umi';
+let styles = require('./Tabs.less')
 
 function Tabs({ pageData, page, dispatch }) {
   return (
-    <div style={{ display: 'flex', lineHeight: '24px' }}>
-      {pageData.map(([left, rigth], index) => {
+    <div className={styles.tabs} >
+      {pageData.map((bednames:string[], index) => {
         return (
           <Button
-            key={left}
+            key={bednames.join(' ')}
             onClick={e => {
               dispatch({ type: 'list/setPageItems', page: index });
               router.replace('/workbench');
@@ -23,7 +24,9 @@ function Tabs({ pageData, page, dispatch }) {
             size="small"
             type={page === index ? 'default' : 'primary'}
           >
-            {left === rigth ? left : `${left}~${rigth}`}
+            {
+              index
+            }
           </Button>
         );
       })}
