@@ -12,7 +12,7 @@ let styles = require('./Tabs.less')
 function Tabs({ pageData, page, dispatch }) {
   return (
     <div className={styles.tabs} >
-      {pageData.map((bednames:string[], index) => {
+      {pageData.map((bednames: string[], index) => {
         return (
           <Button
             key={bednames.join(' ')}
@@ -25,7 +25,7 @@ function Tabs({ pageData, page, dispatch }) {
             type={page === index ? 'default' : 'primary'}
           >
             {
-              index
+              `第 ${index + 1} 组`
             }
           </Button>
         );
