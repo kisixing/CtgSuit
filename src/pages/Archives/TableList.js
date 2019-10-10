@@ -18,7 +18,7 @@ class TableList extends Component {
         title: '编号',
         dataIndex: 'id',
         key: 'id',
-        width: 80,
+        width: 100,
         align: 'center',
       },
       // {
@@ -39,14 +39,14 @@ class TableList extends Component {
         title: '年龄',
         dataIndex: 'age',
         key: 'age',
-        width: 80,
+        width: 100,
         render: (text, record) => record.pregnancy && record.pregnancy.age,
       },
       {
         title: '孕周',
         dataIndex: 'gestationalWeek',
         key: 'gestationalWeek',
-        width: 80,
+        width: 100,
       },
       // {
       //   title: '门诊号',
@@ -66,7 +66,7 @@ class TableList extends Component {
         title: '床号',
         dataIndex: 'bedNumber',
         key: 'bedNumber',
-        width: 80,
+        width: 100,
         render: (text, record) => record.ctgexam.id,
       },
       {
@@ -92,7 +92,7 @@ class TableList extends Component {
         title: '档案号',
         dataIndex: 'comment',
         key: 'comment',
-        width: 180,
+        width: 150,
         align: 'center',
         render: (text, record) => record.ctgexam.note,
       },
@@ -216,7 +216,7 @@ class TableList extends Component {
         <Table
           bordered
           size="small"
-          scroll={{ x: 1400, y: 240 }}
+          scroll={{ x: 1200, y: 240 }}
           pagination={false}
           columns={this.columns}
           dataSource={dataSource}

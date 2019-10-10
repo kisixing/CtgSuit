@@ -26,20 +26,29 @@ export default {
       let data = yield call(getList);
       const oldData = yield select(_ => _.list.listData);
       // const isDdifference = data !== oldData;
-      // if (isDdifference) {
-      //   yield put({
-      //     type: 'setState',
-      //     payload: {
-      //       listData: data || []
-      //     }
-      //   })
-      // }
-      yield put({
-        type: 'setState',
-        payload: {
-          listData: data || []
-        }
-      })
+      if (data && data.length) {
+        const d = oldData.map((item) => {
+          const id = item.id;
+          const filterArr = data.filter(e => e.id === id);
+          let filterObj = {};
+          if (filterArr && filterArr.length) {
+            filterObj = { ...item, ...data };
+          }
+          return filterObj;
+        })
+        yield put({
+          type: 'setState',
+          payload: {
+            listData: d
+          }
+        })
+      }
+      // yield put({
+      //   type: 'setState',
+      //   payload: {
+      //     listData: data
+      //   }
+      // })
     },
     *processListData(payload, { put, select }) {
       const state = yield select();

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
+import { Spin } from 'antd';
 import moment from 'moment';
 import { Ctg as L } from '@lianmed/lmg';
 
@@ -9,7 +10,8 @@ class CurveChart extends Component {
   render() {
     const {
       selected: { id, visitType, ctgexam, ...rest },
-      dataSource
+      dataSource,
+      loading,
     } = this.props;
     console.log('TCL: CurveChart -> render -> dataSource', dataSource);
 
@@ -40,9 +42,12 @@ class CurveChart extends Component {
             </span>
           </div>
         </div>
-        <div className={styles.chart}>
+        <Spin
+          className={styles.chart}
+          spinning={loading.effects['archives/fetchCTGrecordData']}
+        >
           <L type={1} data={dataSource}></L>
-        </div>
+        </Spin>
       </div>
     );
   }
