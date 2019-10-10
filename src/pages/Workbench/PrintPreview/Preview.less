@@ -1,13 +1,24 @@
+.wrapper {
+  position: relative;
 
-.page {
-  display: inline-block;
-}
+  .button {
+    position: absolute;
+    bottom: 24px;
+    right: 24px;
+  }
 
-.pagination {
-  :global {
-    .ant-pagination-item-active {
-      border: none;
-      background-color: transparent;
+  .page {
+    display: inline-block;
+  }
+
+  .pagination {
+    :global {
+      .ant-pagination-item-active {
+        border: none;
+        background-color: transparent;
+      }
     }
   }
 }
+
+

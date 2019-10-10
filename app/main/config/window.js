@@ -17,4 +17,12 @@ function getNewPath(params) {
   return filePath;
 }
 
-module.exports = { getMainPath, getNewPath };
+function getPDFviewPath (params){
+  let filePath = `file://${path.join(__dirname, '..', '..', 'render/pdfjs/web/viewer.html')}`;
+  if (is.dev()) {
+    filePath = 'http://127.0.0.1:1702/pdfjs/web/viewer.html';
+  }
+  return filePath;
+}
+
+module.exports = { getMainPath, getNewPath, getPDFviewPath };

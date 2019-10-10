@@ -1,7 +1,9 @@
 import printElement from './printElement';
 import React, { Fragment, Component } from 'react';
 import { Document, Page } from 'react-pdf';
-import { Pagination, Button } from 'antd';
+import { Pagination, Button, Spin } from 'antd';
+import { ipcRenderer } from 'electron';
+
 import pdf from './pdfBase64';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import styles from './Preview.less';
@@ -21,14 +23,20 @@ export default class Preview extends Component {
     this.setState({ pageNumber: page });
   };
 
+  handlePrint = (file = 'http://127.0.0.1:1702/example1.pdf') => {
+    ipcRenderer.send('printWindow', file);
+  }
+
   render() {
     const { pdfBase64, numPages, pageNumber } = this.state;
     return (
-      <Fragment>
-        {/* <Button onClick={this.click}>打印</Button> */}
+      <div className={styles.wrapper}>
+        <Button type="primary" className={styles.button} onClick={this.handlePrint}>
+          打印
+        </Button>
         <Document
           className={styles.preview}
-          loading="正在加载..."
+          loading={<Spin style={{ margin: '120px 0' }} />}
           onLoadSuccess={this.onDocumentLoad}
           file={pdfBase64}
           renderMode="canvas"
@@ -48,7 +56,7 @@ export default class Preview extends Component {
           size="small"
           onChange={this.onChangePage}
         />
-      </Fragment>
+      </div>
     );
   }
 }
