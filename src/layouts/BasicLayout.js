@@ -26,7 +26,7 @@ import settingStore from "@/utils/SettingStore";
 import { WsService } from "@lianmed/lmg";
 const EWsStatus = WsService.wsStatus
 const settingData = settingStore.cache
-
+const colors = AntdThemeManipulator.colors
 const { Header, Footer, Content } = Layout;
 const joinSymbol = ' x '
 class BasicLayout extends Component {
@@ -37,6 +37,7 @@ class BasicLayout extends Component {
     };
     const ws = new WsService(settingData);
     ws.connect();
+    this.colorIndex = ~~(Math.random() * colors.length);
     this.interval = null;
   }
 
@@ -218,6 +219,7 @@ class BasicLayout extends Component {
   };
 
   render() {
+    const primaryColor = colors[this.colorIndex]
     const { children, wsStatus, loading } = this.props;
     const wsStatusColor =
       wsStatus === EWsStatus.Pendding
@@ -229,7 +231,7 @@ class BasicLayout extends Component {
       <Layout className={styles.container}>
         <Header className={styles.header}>
           <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <Link to="/" className={styles.logo}>
+            <Link to="/workbench" className={styles.logo}>
               {/* <img alt="logo" src={logo} /> */}
               <h1>胎监工作站</h1>
             </Link>
@@ -275,7 +277,7 @@ class BasicLayout extends Component {
           <span>
             Copyright <Icon type="copyright" /> {config.copyright}
           </span>
-          <AntdThemeManipulator primaryColor="#004c8c" placement="topLeft" />
+          <AntdThemeManipulator primaryColor={primaryColor} placement="topLeft" />
         </Footer>
       </Layout>
     );

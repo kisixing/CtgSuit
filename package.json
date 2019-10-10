@@ -15,7 +15,7 @@
     "pack-linux": "npm run build:render && npm run rebuild && electron-builder build --linux ",
     "dist": "electron-builder",
     "precommit": "lint-staged",
-    "update:lianmed": "shx rm -rf  node_modules/@lianmed yarn.lock && yarn"
+    "update:lianmed": "yarn upgrade @lianmed/lmg @lianmed/components @lianmed/utils @lianmed/request"
   },
   "main": "./app/main/index.js",
   "dependencies": {
