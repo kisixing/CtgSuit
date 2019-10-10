@@ -39,7 +39,7 @@ class Toolbar extends Component {
     // 判断是否已建档
     const isCreated = pregnancy && pregnancy.id && data && documentno === data.docid;
     // 判断是否已开始监护
-    const isMonitor = data && data.status !== 0 && data.starttime !== '';
+    const isMonitor = data && data.status === 1;
     this.setState({ isCreated, isMonitor });
   }
 
@@ -129,7 +129,7 @@ class Toolbar extends Component {
     const { isCreated } = this.state;
     const _this = this;
     const { deviceno, bedno, bedname, pregnancy, data, prenatalVisit = {} } = item;
-
+    debugger
     const pregnancyId = pregnancy.id;
     console.log('end Device -- ', item);
     Modal.confirm({

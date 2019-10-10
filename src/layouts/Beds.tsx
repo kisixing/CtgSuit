@@ -9,7 +9,7 @@ import { Button } from 'antd';
 import { router } from 'umi';
 import { mapStatusToColor } from '@/constant';
 
-function Beds({ dispatch, listData }) {
+function Beds({ dispatch, listData, wsData }) {
   let clickTimeout = null;
 
   const handleClicks = ({ pageIndex, unitId }) => {
@@ -45,7 +45,7 @@ function Beds({ dispatch, listData }) {
         flexWrap: 'wrap',
       }}
     >
-      {listData.map(({ bedname, id, pageIndex, status, unitId }) => {
+      {listData.map(({ bedname, id, pageIndex, unitId }) => {
         return (
           <Button
             key={id}
@@ -59,7 +59,7 @@ function Beds({ dispatch, listData }) {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              background: mapStatusToColor[status],
+              background: wsData.get(unitId) && mapStatusToColor[wsData.get(unitId).status],
               color: '#fff',
             }}
             onClick={handleClicks({ pageIndex, unitId })}
