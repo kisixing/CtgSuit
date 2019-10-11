@@ -192,14 +192,14 @@ class Toolbar extends Component {
               停止监护
             </Button>
           ) : (
-            <Button icon="play-circle" type="link" onClick={() => this.start(dataSource)}>
-              开始监护
+              <Button icon="play-circle" type="link" onClick={() => this.start(dataSource)}>
+                开始监护
             </Button>
-          )}
+            )}
           <Button
             icon="user-add"
             type="link"
-            disabled={isCreated}
+            disabled={isCreated || !isMonitor}
             onClick={() => this.showModal('visible')}
           >
             {isCreated ? '已建档' : '建档'}
@@ -288,15 +288,15 @@ class Toolbar extends Component {
               isCreated ? (
                 `确认床号: ${bedname} 停止监护 ?`
               ) : (
-                <span>
-                  床号: {bedname} 即将停止监护，但还
+                  <span>
+                    床号: {bedname} 即将停止监护，但还
                   <span style={{ color: '#f00' }}>未建立档案</span>
-                  ，建档请选择“建档”按钮，放弃请选择“确认”按钮 ?
+                    ，建档请选择“建档”按钮，放弃请选择“确认”按钮 ?
                 </span>
-              )
+                )
             ) : (
-              `确认床号: ${bedname} 开始监护 ?`
-            )
+                `确认床号: ${bedname} 开始监护 ?`
+              )
           }
           onCancel={this.handleCancel}
           onOk={this.end}

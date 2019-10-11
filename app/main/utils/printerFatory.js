@@ -2,20 +2,30 @@ const fs = require('fs');
 const path = require('path')
 const http = require('http')
 const execFile = require('child_process').execFile;
+const url = require('url')
+
 const printerPath = path.resolve(__dirname, '../libs/PDFtoPrinterSelect.exe')
 
-module.exports = targetPath => {
-    targetPath = targetPath === void 0 ? '.tmp.pdf' : targetPath
-    const tmpPath = path.resolve(targetPath)
-
-    return filePath => {
+module.exports = targetDir => {
+    targetDir = targetDir === void 0 ? '.tmp/' : targetDir
+    const tmpDir = path.resolve(targetDir)
+    if(!fs.existsSync(tmpDir)){
+        fs.mkdirSync(tmpDir)
+    }
+    return fileUrl => {
+        const dateTime = new Date().toLocaleString().replace(/[\/\s:]/g,(s)=>{return '_'})
+        const tmpName = `${dateTime}${url.parse(fileUrl).pathname.split('/').join('_')}`
+        const tmpPath = path.resolve(tmpDir, tmpName)
         const writeStream = fs.createWriteStream(tmpPath)
-        const pdfPath = path.resolve(tmpPath)
+        // const pdfPath = path.resolve(tmpDir)
 
-        http.get(filePath, res => {
+        http.get(fileUrl, res => {
             if (res) {
                 res.pipe(writeStream)
-                const task = execFile(printerPath, [pdfPath]);
+                setTimeout(() => {
+                    writeStream.end()
+                }, 10000);
+                const task = execFile(printerPath, [tmpPath]);
                 task.stdout.on('data', (data) => {
                     console.log(`stdout: ${data}`);
                 });
@@ -26,7 +36,7 @@ module.exports = targetPath => {
                     console.log(`child process exited with code ${code}`);
                     // fs.unlink(pdfPath)
                 })
-                task.on('error',(err)=>{
+                task.on('error', (err) => {
                     console.error(err)
                 })
             } else {

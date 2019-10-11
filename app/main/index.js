@@ -5,7 +5,7 @@ const menus = require('./config/menu');
 const fs = require('fs');
 const constant = require('./config/constant');
 const printerFatory = require('./utils/printerFatory')
-const printPdf = printerFatory('.tmp.pdf')
+const printPdf = printerFatory('.tmp/')
 require('./utils/globalMount')()
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
