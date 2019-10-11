@@ -19,7 +19,7 @@ export default {
       if (status === EWsStatus.Success) return; 
       
       let data = yield call(wsService.getDatacache.bind(wsService));
-
+      console.log('datacache',data)
       yield put({ type: 'setState', payload: { data } });
       yield put({ type: 'list/processListData'});
 

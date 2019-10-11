@@ -37,7 +37,7 @@ class BasicLayout extends Component {
     };
     const ws = new WsService(settingData);
     ws.connect();
-    this.colorIndex = ~~(Math.random() * colors.length);
+    this.colorIndex = ~~(Math.random() * colors.length)>>5;
     this.interval = null;
   }
 
