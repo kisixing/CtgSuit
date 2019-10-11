@@ -16,7 +16,7 @@ const xhrUrl = _xhrUrl
 
 export default {
   siteName: '胎监工作站',
-  copyright: '2019 莲印医疗科技',
+  copyright: '2019',
   logoPath: require('../assets/logo.png'),
   avatar: '',
   apiPrefix: `http://${xhrUrl}/api`,
