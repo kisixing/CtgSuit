@@ -13,7 +13,8 @@ module.exports = targetDir => {
         fs.mkdirSync(tmpDir)
     }
     return fileUrl => {
-        const tmpName = url.parse(fileUrl).pathname.split('/').join('_')
+        const dateTime = new Date().toLocaleString().replace(/[\/\s:]/g,(s)=>{return '_'})
+        const tmpName = `${dateTime}${url.parse(fileUrl).pathname.split('/').join('_')}`
         const tmpPath = path.resolve(tmpDir, tmpName)
         const writeStream = fs.createWriteStream(tmpPath)
         // const pdfPath = path.resolve(tmpDir)
