@@ -114,12 +114,10 @@ class Toolbar extends Component {
     const { deviceno, bedno } = item;
     console.log('start Device -- ', item);
     socket.startwork(deviceno, bedno);
-    this.setState({ confirmVisible: false });
   };
 
   // 停止监护
   end = item => {
-    console.log('99999999999999999999999', item);
     const { isCreated } = this.state;
     const _this = this;
     const { deviceno, bedno, pregnancy, data, prenatalVisit = {} } = item;
@@ -150,7 +148,6 @@ class Toolbar extends Component {
     } else {
       // _this.setState({ isMonitor: false });
     }
-    this.setState({ confirmVisible: false });
   };
 
   render() {
@@ -259,7 +256,7 @@ class Toolbar extends Component {
           onCreate={this.handleCreate}
           dataSource={dataSource}
         />
-        {confirmVisible ? (
+        {/* {confirmVisible ? (
           <ModalConfirm
             visible={confirmVisible}
             dataSource={dataSource}
@@ -269,7 +266,16 @@ class Toolbar extends Component {
             onCancel={this.handleCancel}
             onOk={isMonitor ? this.end : this.start}
           />
-        ) : null}
+        ) : null} */}
+        <ModalConfirm
+          visible={confirmVisible}
+          dataSource={dataSource}
+          content={
+            isMonitor ? `确认床号: ${bedname} 停止监护 ?` : `确认床号: ${bedname} 开始监护 ?`
+          }
+          onCancel={this.handleCancel}
+          onOk={isMonitor ? this.end : this.start}
+        />
       </>
     );
   }

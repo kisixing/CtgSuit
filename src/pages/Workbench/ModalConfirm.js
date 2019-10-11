@@ -10,6 +10,10 @@ export default function ModalConfirm({
   onCancel = () => {},
   onOk = () => {}
 }) {
+  const handleOk = () => {
+    onOk(dataSource);
+    onCancel('confirmVisible');
+  }
   return (
     <Modal
       getContainer={false}
@@ -29,7 +33,7 @@ export default function ModalConfirm({
       <div className={styles.content}>{content}</div>
       <div className={styles.buttons}>
         <Button onClick={() => onCancel('confirmVisible')}>取消</Button>
-        <Button type="primary" onClick={() => onOk(dataSource)}>
+        <Button type="primary" onClick={handleOk}>
           确认
         </Button>
       </div>

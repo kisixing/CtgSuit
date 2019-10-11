@@ -29,6 +29,11 @@ const CollectionCreateForm = Form.create({
       }
     }
 
+    reset = () => {
+      const { form } = this.props;
+      form.resetFields();
+    }
+
     // modal里面的搜索按钮事件
     handleSearch = () => {
       const { dispatch, form } = this.props;
@@ -140,6 +145,7 @@ const CollectionCreateForm = Form.create({
               </Col>
               <Col span={24} className={styles.buttons}>
                 <Button onClick={() => onCancel('visible')}>取消</Button>
+                <Button onClick={this.reset}>重置</Button>
                 {!dataSource.documentno ? null : <Button onClick={this.handleSearch}>搜索</Button>}
                 <Button type="primary" onClick={() => this.handleCreate(dataSource)}>
                   确定
