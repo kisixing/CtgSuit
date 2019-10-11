@@ -38,9 +38,9 @@ class Toolbar extends Component {
     const {
       dataSource: { data, documentno, pregnancy },
     } = this.props;
-    console.log('TCL: Toolbar -> componentDidMount -> this.props', this.props.dataSource);
     // 判断是否已建档
-    const isCreated = pregnancy && pregnancy.id && data && documentno === data.docid;
+    const isCreated =
+      pregnancy && pregnancy.id && data && documentno === data.docid;
     this.setState({ isCreated });
   }
 
@@ -120,13 +120,14 @@ class Toolbar extends Component {
   end = item => {
     const { isCreated } = this.state;
     const _this = this;
-    const { deviceno, bedno, pregnancy, data, prenatalVisit = {} } = item;
+    const { deviceno, bedno, pregnancy, data, documentno, prenatalVisit = {} } = item;
+    // const isCreated = pregnancy && pregnancy.id && data && documentno === data.docid;
     socket.endwork(deviceno, bedno);
     if (isCreated) {
-      // 已经建档
+      // 已经建档 ,修改结束时间
       const pregnancyId = pregnancy.id;
       this.props.dispatch({
-        type: 'archives/updateExams',
+        type: 'archives/update',
         payload: {
           id: prenatalVisit.id,
           pregnancy: {
@@ -141,7 +142,10 @@ class Toolbar extends Component {
         callback: res => {
           if (res && res.id) {
             // 将监护状态改为未监护状态
-            _this.setState({ isMonitor: false });
+            _this.setState({
+              isMonitor: false,
+              isCreated: false,
+            });
           }
         },
       });
