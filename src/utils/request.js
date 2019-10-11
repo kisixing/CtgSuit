@@ -2,12 +2,12 @@
  * request 网络请求工具
  * 更详细的 api 文档: https://github.com/umijs/umi-request
  */
-import router from 'umi/router';
+// import router from 'umi/router';
 import store from 'store';
 import { TOKEN } from '@/utils/constant';
 import r from '@lianmed/request';
 import config from "@/utils/config";
-console.log('zz config')
+
 const request = r.config({
   prefix:config.apiPrefix,
   hideErr:true,

@@ -1,12 +1,11 @@
 // Modules to control application life and create native browser window
 const { app, BrowserWindow, ipcMain, Menu, dialog } = require('electron');
-const { getMainPath, getNewPath, getPDFviewPath } = require('./config/window');
+const { getMainPath, getNewPath } = require('./config/window');
 const menus = require('./config/menu');
 const fs = require('fs');
 const constant = require('./config/constant');
-const path = require('path')
-
-
+const printerFatory = require('./utils/printerFatory')
+const printPdf = printerFatory('.tmp.pdf')
 require('./utils/globalMount')()
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -41,39 +40,8 @@ ipcMain.on('newWindow', (event) => {
 });
 
 ipcMain.on('printWindow', (event, file) => {
-  // const spawn = require('child_process').spawn;
-  const execFile = require('child_process').execFile;
-  const printerPaht = path.resolve(__dirname, './PDFtoPrinter.exe')
-  const pdfPath = path.resolve(__dirname, './ggg.pdf')
-  const task = execFile(printerPaht, [pdfPath]);
-  task.stdout.on('data', (data) => {
-    console.log(`stdout: ${data}`);
-  });
-  task.stderr.on('data', (data) => {
-    console.log(`stderr: ${data}`);
-  });
-
-  task.on('close', (code) => {
-    console.log(`child process exited with code ${code}`);
-  })
-
-
-  // const printWindow = new BrowserWindow({
-  //   show: false,
-  //   width: 1920,
-  //   height: 1080,
-  // });
-  // printWindow.loadURL(`${getPDFviewPath()}?file=${file}`);
-  // printWindow.webContents.on('did-finish-load', () => {
-  //   setTimeout(() => {
-  //     printWindow.webContents.print({ silent: false }, e => {
-  //       console.log('print callback', e);
-  //     });
-  //     // printWindow.webContents.executeJavaScript('window.print()');
-  //   }, 5000);
-  // });
+  printPdf(file)
 })
-
 ipcMain.on('closeMainWindow', (event) => {
   mainWindow = null;
   // 所有的窗口会被立刻关闭，不会询问用户。

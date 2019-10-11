@@ -32,7 +32,8 @@ class Preview extends Component {
     const { dataSource } = this.props;
     const pdfurl = dataSource.data && dataSource.data.docid;
     // console.log('88888888888', `${config.apiPrefix}/ctg-exams-pdfurl/${pdfurl}`);
-    ipcRenderer.send('printWindow', `${config.apiPrefix}/ctg-exams-pdfurl/${pdfurl}`);
+    const filePath = `${config.apiPrefix}/ctg-exams-pdfurl/${pdfurl}` || 'http://www.orimi.com/pdf-test.pdf'
+    ipcRenderer.send('printWindow', filePath);
   }
 
   render() {
