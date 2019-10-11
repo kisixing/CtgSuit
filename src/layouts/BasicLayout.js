@@ -25,7 +25,7 @@ import settingStore from "@/utils/SettingStore";
 import { WsService } from "@lianmed/lmg";
 
 window.gg = (str)=>{
-  ipcRenderer.send('printWindow','str')
+  ipcRenderer.send('printWindow','http://www.orimi.com/pdf-test.pdf')
 }
 
 
