@@ -14,6 +14,7 @@ import CollectionCreateForm from './CollectionCreateForm';
 import Analysis from './Analysis';
 import PrintPreview from './PrintPreview';
 import Partogram from './Partogram';
+import ModalConfirm from './ModalConfirm';
 import styles from './Item.less';
 import { WsService } from '@lianmed/lmg';
 const socket = WsService._this;
@@ -27,6 +28,7 @@ class Toolbar extends Component {
       analysisVisible: false, // 电脑分析modal
       printVisible: false,
       partogramVisible: false,
+      confirmVisible:false,
       isCreated: false, // 默认未建档
       // isMonitor: false, // 是否已经开始监护
     };
@@ -57,6 +59,7 @@ class Toolbar extends Component {
 
   handleCreate = item => {
     // 建档/确定action
+    const _this = this;
     const { dispatch } = this.props;
     const { form } = this.formRef.props;
     form.validateFields((err, values) => {
@@ -93,6 +96,11 @@ class Toolbar extends Component {
             dispatch({
               type: 'archives/create',
               payload: d,
+              callback: (res) => {
+                if (res && res.id) {
+                  _this.setState({ isCreated: true });
+                }
+              }
             });
           }
         },
@@ -103,52 +111,42 @@ class Toolbar extends Component {
   };
 
   start = item => {
-    const { deviceno, bedno, bedname } = item;
-    const _this = this;
+    const { deviceno, bedno } = item;
     console.log('start Device -- ', item);
-    const bool = window.confirm(`确认床号: ${bedname} 开始监护 ?`)
-    if (bool) {
-      socket.startwork(deviceno, bedno);
-      // _this.setState({ isMonitor: true });
-    }
+    socket.startwork(deviceno, bedno);
   };
 
   // 停止监护
   end = item => {
     const { isCreated } = this.state;
     const _this = this;
-    const { deviceno, bedno, bedname, pregnancy, data, prenatalVisit = {} } = item;
-    const bool = window.confirm(`确认床号: ${bedname} 开始监护 ?`)
-
-    console.log('end Device -- ', item);
-    if (bool) {
-      socket.endwork(deviceno, bedno);
-      if (isCreated) {
-        // 已经建档
-        const pregnancyId = pregnancy.id;
-        this.props.dispatch({
-          type: 'archives/updateExams',
-          payload: {
-            id: prenatalVisit.id,
-            pregnancy: {
-              id: pregnancyId,
-            },
-            ctgexam: {
-              ...prenatalVisit.ctgexam,
-              endTime: moment(),
-              note: data.docid,
-            },
+    const { deviceno, bedno, pregnancy, data, prenatalVisit = {} } = item;
+    socket.endwork(deviceno, bedno);
+    if (isCreated) {
+      // 已经建档
+      const pregnancyId = pregnancy.id;
+      this.props.dispatch({
+        type: 'archives/updateExams',
+        payload: {
+          id: prenatalVisit.id,
+          pregnancy: {
+            id: pregnancyId,
           },
-          callback: res => {
-            if (res && res.id) {
-              // 将监护状态改为未监护状态
-              // _this.setState({ isMonitor: false });
-            }
+          ctgexam: {
+            ...prenatalVisit.ctgexam,
+            endTime: moment(),
+            note: data.docid,
           },
-        });
-      } else {
-        // _this.setState({ isMonitor: false });
-      }
+        },
+        callback: res => {
+          if (res && res.id) {
+            // 将监护状态改为未监护状态
+            _this.setState({ isMonitor: false });
+          }
+        },
+      });
+    } else {
+      // _this.setState({ isMonitor: false });
     }
   };
 
@@ -160,25 +158,31 @@ class Toolbar extends Component {
       analysisVisible,
       printVisible,
       partogramVisible,
+      confirmVisible,
       isCreated,
       // isMonitor,
     } = this.state;
-    const { data } = dataSource
+    const { data, bedname, pregnancy, documentno } = dataSource;
 
     const isMonitor = data && data.status === 1;
+    // const isCreated = pregnancy && pregnancy.id && data && documentno === data.docid;
 
     return (
       <>
         <div className={cx(styles.toolbar, { [styles.show]: showSetting })}>
           {isMonitor ? (
-            <Button icon="pause-circle" type="link" onClick={() => this.end(dataSource)}>
+            <Button
+              icon="pause-circle"
+              type="link"
+              onClick={() => this.showModal('confirmVisible')}
+            >
               停止监护
             </Button>
           ) : (
-              <Button icon="play-circle" type="link" onClick={() => this.start(dataSource)}>
-                开始监护
+            <Button icon="play-circle" type="link" onClick={() => this.showModal('confirmVisible')}>
+              开始监护
             </Button>
-            )}
+          )}
           <Button
             icon="user-add"
             type="link"
@@ -251,6 +255,26 @@ class Toolbar extends Component {
           onCancel={this.handleCancel}
           onCreate={this.handleCreate}
           dataSource={dataSource}
+        />
+        {/* {confirmVisible ? (
+          <ModalConfirm
+            visible={confirmVisible}
+            dataSource={dataSource}
+            content={
+              isMonitor ? `确认床号: ${bedname} 停止监护 ?` : `确认床号: ${bedname} 开始监护 ?`
+            }
+            onCancel={this.handleCancel}
+            onOk={isMonitor ? this.end : this.start}
+          />
+        ) : null} */}
+        <ModalConfirm
+          visible={confirmVisible}
+          dataSource={dataSource}
+          content={
+            isMonitor ? `确认床号: ${bedname} 停止监护 ?` : `确认床号: ${bedname} 开始监护 ?`
+          }
+          onCancel={this.handleCancel}
+          onOk={isMonitor ? this.end : this.start}
         />
       </>
     );
