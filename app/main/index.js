@@ -5,7 +5,6 @@ const menus = require('./config/menu');
 const fs = require('fs');
 const constant = require('./config/constant');
 const path = require('path')
-const PDFWindow = require('electron-pdf-window')
 
 
 require('./utils/globalMount')()
@@ -42,30 +41,37 @@ ipcMain.on('newWindow', (event) => {
 });
 
 ipcMain.on('printWindow', (event, file) => {
+  // const spawn = require('child_process').spawn;
+  const execFile = require('child_process').execFile;
+  const printerPaht = path.resolve(__dirname, './PDFtoPrinter.exe')
+  const pdfPath = path.resolve(__dirname, './ggg.pdf')
+  const task = execFile(printerPaht, [pdfPath]);
+  task.stdout.on('data', (data) => {
+    console.log(`stdout: ${data}`);
+  });
+  task.stderr.on('data', (data) => {
+    console.log(`stderr: ${data}`);
+  });
 
-
-  const win = new PDFWindow({
-    width: 800,
-    height: 600
+  task.on('close', (code) => {
+    console.log(`child process exited with code ${code}`);
   })
-  
-  win.loadURL(path.resolve('bbb.pdf'))
 
 
-  const printWindow = new BrowserWindow({
-    show: false,
-    width: 1920,
-    height: 1080,
-  });
-  printWindow.loadURL(`${getPDFviewPath()}?file=${file}`);
-  printWindow.webContents.on('did-finish-load', () => {
-    setTimeout(() => {
-      printWindow.webContents.print({ silent: false }, e => {
-        console.log('print callback', e);
-      });
-      // printWindow.webContents.executeJavaScript('window.print()');
-    }, 5000);
-  });
+  // const printWindow = new BrowserWindow({
+  //   show: false,
+  //   width: 1920,
+  //   height: 1080,
+  // });
+  // printWindow.loadURL(`${getPDFviewPath()}?file=${file}`);
+  // printWindow.webContents.on('did-finish-load', () => {
+  //   setTimeout(() => {
+  //     printWindow.webContents.print({ silent: false }, e => {
+  //       console.log('print callback', e);
+  //     });
+  //     // printWindow.webContents.executeJavaScript('window.print()');
+  //   }, 5000);
+  // });
 })
 
 ipcMain.on('closeMainWindow', (event) => {
