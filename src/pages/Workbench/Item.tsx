@@ -10,7 +10,7 @@ let styles = require('./Item.less')
 const WorkbenchItem = props => {
   console.log('item render')
   const { dispatch, fullScreenId, itemHeight, itemSpan, dataSource, outPadding } = props;
-  const { data ={}, unitId } = dataSource;
+  const { data = {}, unitId, type } = dataSource;
   const [showSettingBar, setShowSettingBar] = useState(true)
   const ref = useRef(null)
   const suitObject = { suit: null };
@@ -103,7 +103,7 @@ const WorkbenchItem = props => {
         headStyle={{ background: 'var(--theme-color)', color: '#fff' }}
         bodyStyle={{ padding: 0, height: 'calc(100% - 40px)' }}
       >
-        <L data={data} mutableSuitObject={suitObject} itemHeight={itemHeight}></L>
+        <L data={data} showEcg={type === 'k9'} mutableSuitObject={suitObject} itemHeight={itemHeight}></L>
       </Card>
     </Col>
   );

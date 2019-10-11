@@ -121,7 +121,7 @@ class Toolbar extends Component {
     const { deviceno, bedno, bedname, pregnancy, data, prenatalVisit = {} } = item;
 
     const pregnancyId = pregnancy.id;
-    const bool = window.confirm(`确认床号: ${bedname} 开始监护 ?`)
+    const bool = window.confirm(`确认床号: ${bedname} 停止监护 ?`)
 
     console.log('end Device -- ', item);
     if (bool) {
