@@ -23,6 +23,12 @@ import Tabs from './Tabs';
 import settingStore from "@/utils/SettingStore";
 // import { WsService } from '@/services/WsService';
 import { WsService } from "@lianmed/lmg";
+
+window.gg = (str)=>{
+  ipcRenderer.send('printWindow','str')
+}
+
+
 const EWsStatus = WsService.wsStatus
 const settingData = settingStore.cache
 const colors = AntdThemeManipulator.colors

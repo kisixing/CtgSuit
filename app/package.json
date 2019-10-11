@@ -6,10 +6,12 @@
   "author": "Timdan",
   "license": "ISC",
   "dependencies": {
-    "electron-is": "^3.0.0",
     "electron-config": "^1.0.0",
     "electron-debug": "^2.0.0",
-    "electron-log": "^2.2.14"
+    "electron-is": "^3.0.0",
+    "electron-log": "^2.2.14",
+    "electron-pdf-window": "^1.0.12",
+    "i": "^0.3.6",
+    "npm": "^6.12.0"
   }
-
 }

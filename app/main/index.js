@@ -4,6 +4,10 @@ const { getMainPath, getNewPath, getPDFviewPath } = require('./config/window');
 const menus = require('./config/menu');
 const fs = require('fs');
 const constant = require('./config/constant');
+const path = require('path')
+const PDFWindow = require('electron-pdf-window')
+
+
 require('./utils/globalMount')()
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -38,6 +42,16 @@ ipcMain.on('newWindow', (event) => {
 });
 
 ipcMain.on('printWindow', (event, file) => {
+
+
+  const win = new PDFWindow({
+    width: 800,
+    height: 600
+  })
+  
+  win.loadURL(path.resolve('bbb.pdf'))
+
+
   const printWindow = new BrowserWindow({
     show: false,
     width: 1920,
