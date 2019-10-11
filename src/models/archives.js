@@ -89,6 +89,7 @@ export default {
           if (item.bedno === bedno && item.deviceno === deviceno) {
             return {
               ...item,
+              documentno: ctgexam.note, // 确保信息更新 要求docid documentno一致
               pregnancy,
             };
           }

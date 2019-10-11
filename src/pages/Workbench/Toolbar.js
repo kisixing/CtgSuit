@@ -28,7 +28,7 @@ class Toolbar extends Component {
       analysisVisible: false, // 电脑分析modal
       printVisible: false,
       partogramVisible: false,
-      confirmVisible:false,
+      confirmVisible: false,
       isCreated: false, // 默认未建档
       // isMonitor: false, // 是否已经开始监护
     };
@@ -96,11 +96,11 @@ class Toolbar extends Component {
             dispatch({
               type: 'archives/create',
               payload: d,
-              callback: (res) => {
+              callback: res => {
                 if (res && res.id) {
                   _this.setState({ isCreated: true });
                 }
-              }
+              },
             });
           }
         },
@@ -146,8 +146,17 @@ class Toolbar extends Component {
         },
       });
     } else {
-      // _this.setState({ isMonitor: false });
+      // 未建档提示简单保存或者放弃保存
+      _this.setState({ isCreated: false });
     }
+  };
+
+  // 重定向打开建档窗口
+  redirectCreate = () => {
+    this.setState({
+      confirmVisible: false,
+      visible: true
+    });
   };
 
   render() {
@@ -179,7 +188,7 @@ class Toolbar extends Component {
               停止监护
             </Button>
           ) : (
-            <Button icon="play-circle" type="link" onClick={() => this.showModal('confirmVisible')}>
+            <Button icon="play-circle" type="link" onClick={() => this.start(dataSource)}>
               开始监护
             </Button>
           )}
@@ -271,10 +280,23 @@ class Toolbar extends Component {
           visible={confirmVisible}
           dataSource={dataSource}
           content={
-            isMonitor ? `确认床号: ${bedname} 停止监护 ?` : `确认床号: ${bedname} 开始监护 ?`
+            isMonitor ? (
+              isCreated ? (
+                `确认床号: ${bedname} 停止监护 ?`
+              ) : (
+                <span>
+                  床号: {bedname} 即将停止监护，但还
+                  <span style={{ color: '#f00' }}>未建立档案</span>
+                  ，建档请选择“建档”按钮，放弃请选择“确认”按钮 ?
+                </span>
+              )
+            ) : (
+              `确认床号: ${bedname} 开始监护 ?`
+            )
           }
           onCancel={this.handleCancel}
-          onOk={isMonitor ? this.end : this.start}
+          onOk={this.end}
+          onCreate={this.redirectCreate}
         />
       </>
     );
