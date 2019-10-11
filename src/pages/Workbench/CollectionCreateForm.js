@@ -39,7 +39,7 @@ const CollectionCreateForm = Form.create({
       const { dispatch, form } = this.props;
       this.setState({ required: false }, () => {
         form.validateFields((err, values) => {
-          if (err) {
+          if (err || values.inpatientNO === undefined) {
             return;
           }
           // 获取孕册信息
@@ -57,7 +57,9 @@ const CollectionCreateForm = Form.create({
             },
           });
         });
+        this.setState({ required: true });
       });
+
     };
 
     handleCreate = (dataSource) => {
@@ -66,7 +68,6 @@ const CollectionCreateForm = Form.create({
       this.setState({ required: true }, () => {
         onCreate(dataSource);
       });
-
     };
 
     render() {
@@ -145,7 +146,6 @@ const CollectionCreateForm = Form.create({
               </Col>
               <Col span={24} className={styles.buttons}>
                 <Button onClick={() => onCancel('visible')}>取消</Button>
-                <Button onClick={this.reset}>重置</Button>
                 {!dataSource.documentno ? null : <Button onClick={this.handleSearch}>搜索</Button>}
                 <Button type="primary" onClick={() => this.handleCreate(dataSource)}>
                   确定

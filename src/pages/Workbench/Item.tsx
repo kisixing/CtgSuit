@@ -46,7 +46,7 @@ const WorkbenchItem = props => {
   // 床位信息
   const renderTilte = (item) => {
     const { data, pregnancy, documentno, bedname } = item;
-    const isCreated = pregnancy && pregnancy.id && data // && documentno === data.docid;
+    const isCreated = pregnancy && pregnancy.id && data && documentno === data.docid;
 
     const text = (
       <span className={styles.title}>
@@ -103,7 +103,7 @@ const WorkbenchItem = props => {
         headStyle={{ background: 'var(--theme-color)', color: '#fff' }}
         bodyStyle={{ padding: 0, height: 'calc(100% - 40px)' }}
       >
-        <L data={data} showEcg={type === 'k9'} mutableSuitObject={suitObject} itemHeight={itemHeight}></L>
+        <L data={data} mutableSuitObject={suitObject} itemHeight={itemHeight}></L>
       </Card>
     </Col>
   );
