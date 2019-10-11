@@ -103,7 +103,7 @@ const WorkbenchItem = props => {
         headStyle={{ background: 'var(--theme-color)', color: '#fff' }}
         bodyStyle={{ padding: 0, height: 'calc(100% - 40px)' }}
       >
-        <L data={data} mutableSuitObject={suitObject} itemHeight={itemHeight}></L>
+        <L data={data} showEcg={false} mutableSuitObject={suitObject} itemHeight={itemHeight}></L>
       </Card>
     </Col>
   );
