@@ -37,9 +37,9 @@ class Preview extends Component {
 
   render() {
     const { pdfflow, numPages, pageNumber } = this.state;
-    // if (!pdfflow) {
-    //   return <div> 暂无数据...</div>;
-    // }
+    if (!pdfflow) {
+      return <div> 暂无数据...</div>;
+    }
 
     return (
       <div className={styles.wrapper}>

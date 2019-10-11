@@ -36,6 +36,7 @@ class Toolbar extends Component {
     const {
       dataSource: { data, documentno, pregnancy },
     } = this.props;
+    console.log('TCL: Toolbar -> componentDidMount -> this.props', this.props.dataSource);
     // 判断是否已建档
     const isCreated = pregnancy && pregnancy.id && data && documentno === data.docid;
     this.setState({ isCreated });

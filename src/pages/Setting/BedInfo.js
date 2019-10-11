@@ -4,7 +4,10 @@
  * @Date: 2019-10-10 20:37:05
  */
 
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import { connect } from 'dva';
+import { Table } from 'antd';
+import styles from './index.less';
 
 class BedInfo extends Component {
   constructor(props) {
@@ -15,48 +18,67 @@ class BedInfo extends Component {
     this.columns = [
       {
         title: '编号',
-        dataIndex: 'id',
-        key: 'id',
+        dataIndex: 'bedno',
+        key: 'bedno',
         width: 100,
         align: 'center',
       },
       {
-        title: '检查次数',
-        dataIndex: 'visitType',
-        key: 'visitType',
+        title: '名称',
+        dataIndex: 'bedname',
+        key: 'bedname',
         width: 80,
         align: 'center',
       },
       {
-        title: '姓名',
-        dataIndex: 'name',
-        key: 'name',
+        title: '设备编号',
+        dataIndex: 'deviceno',
+        key: 'deviceno',
         width: 100,
-        render: (text, record) => record.pregnancy && record.pregnancy.name,
+        align: 'center',
       },
       {
-        title: '年龄',
-        dataIndex: 'age',
-        key: 'age',
+        title: '状态',
+        dataIndex: 'status',
+        key: 'status',
         width: 100,
-        render: (text, record) => record.pregnancy && record.pregnancy.age,
+        align: 'center',
+        render: (text, record) => text,
       },
       {
-        title: '孕周',
-        dataIndex: 'gestationalWeek',
-        key: 'gestationalWeek',
+        title: '设备类型',
+        dataIndex: 'type',
+        key: 'type',
+        align: 'center',
         width: 100,
       },
     ];
   }
 
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'setting/fetchBed',
+    });
+  }
+
   render() {
+    const { loading, data } = this.props;
     return (
-      <div>
-        BedInfo
+      <div className={styles.table}>
+        <Table
+          bordered
+          size="small"
+          loading={loading.effects['setting/fetchBed']}
+          columns={this.columns}
+          dataSource={data}
+        />
       </div>
-    )
+    );
   }
 }
 
-export default BedInfo;
+export default connect(({ loading, setting }) => ({
+  data: setting.bedinfo,
+  loading: loading,
+}))(BedInfo);
