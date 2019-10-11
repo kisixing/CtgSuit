@@ -75,7 +75,7 @@ export default {
         },
       });
     },
-    *create({ payload }, { call, put, select }) {
+    *create({ payload, callback }, { call, put, select }) {
       const res = yield call(newCTGrecord, payload);
       if (res && res.id) {
         message.success('创建成功！');
@@ -94,14 +94,15 @@ export default {
           }
           return item;
         });
-        console.log('111111111111111', pregnancy, newBedinfo);
-
         yield put({
           type: 'list/setState',
           payload: {
             pageItems: newBedinfo,
           },
         });
+      }
+      if (callback && typeof callback === 'function') {
+        callback(res); // 返回结果
       }
     },
     *update({ payload, callback }, { call, put }) {

@@ -19,10 +19,11 @@ export default {
     },
     *fetchPDFflow({ payload }, { call, put }) {
       const res = yield call(getPDFflow, payload);
+      const pdfData = `data:application/pdf;base64,${res.pdfdata}`;
       yield put({
         type: 'updateState',
         payload: {
-          pdfflow: res.pdfdata || "",
+          pdfflow: pdfData || "",
         },
       });
     },

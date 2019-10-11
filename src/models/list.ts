@@ -32,7 +32,7 @@ export default {
           const filterArr = data.filter(e => e.id === id);
           let filterObj = {};
           if (filterArr && filterArr.length) {
-            filterObj = { ...item, ...data };
+            filterObj = { ...item, ...filterArr[0] };
           }
           return filterObj;
         })

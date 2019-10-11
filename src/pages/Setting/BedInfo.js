@@ -43,7 +43,17 @@ class BedInfo extends Component {
         key: 'status',
         width: 100,
         align: 'center',
-        render: (text, record) => text,
+        render: (text, record) => {
+          let status = '其它';
+          if (text === '0') {
+            status = '离线'
+          } else if (text === '1') {
+            status = '在线'
+          } else if (text === '2') {
+            status = '工作中'
+          }
+          return status;
+        },
       },
       {
         title: '设备类型',
