@@ -6,6 +6,15 @@
     padding: 24px;
     margin-bottom: 24px;
     background: #ddd;
+
+    :global {
+      .ant-spin-nested-loading {
+        height: 100%;
+      }
+      .ant-spin-container {
+        height: 100%;
+      }
+    }
   }
 
   .bottom {
@@ -40,5 +49,12 @@
       width: 40px;
       line-height: 40px;
     }
+  }
+}
+
+.modalTitle {
+  span {
+    margin-left: 12px;
+    margin-right: 12px;
   }
 }

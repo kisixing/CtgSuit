@@ -119,8 +119,6 @@ class Toolbar extends Component {
     const { isCreated } = this.state;
     const _this = this;
     const { deviceno, bedno, bedname, pregnancy, data, prenatalVisit = {} } = item;
-
-    const pregnancyId = pregnancy.id;
     const bool = window.confirm(`确认床号: ${bedname} 开始监护 ?`)
 
     console.log('end Device -- ', item);
@@ -128,6 +126,7 @@ class Toolbar extends Component {
       socket.endwork(deviceno, bedno);
       if (isCreated) {
         // 已经建档
+        const pregnancyId = pregnancy.id;
         this.props.dispatch({
           type: 'archives/updateExams',
           payload: {
@@ -149,7 +148,7 @@ class Toolbar extends Component {
           },
         });
       } else {
-        _this.setState({ isMonitor: false });
+        // _this.setState({ isMonitor: false });
       }
     }
   };
@@ -174,10 +173,10 @@ class Toolbar extends Component {
               停止监护
             </Button>
           ) : (
-              <Button icon="play-circle" type="link" onClick={() => this.start(dataSource)}>
-                开始监护
+            <Button icon="play-circle" type="link" onClick={() => this.start(dataSource)}>
+              开始监护
             </Button>
-            )}
+          )}
           <Button
             icon="user-add"
             type="link"
@@ -192,7 +191,12 @@ class Toolbar extends Component {
           <Button icon="printer" type="link" onClick={() => this.showModal('printVisible')}>
             打印
           </Button>
-          <Button disabled={!isCreated} icon="line-chart" type="link" onClick={() => this.showModal('partogramVisible')}>
+          <Button
+            disabled={!isCreated}
+            icon="line-chart"
+            type="link"
+            onClick={() => this.showModal('partogramVisible')}
+          >
             产程图
           </Button>
           {/* <Link to="">
@@ -201,7 +205,10 @@ class Toolbar extends Component {
             </Button>
           </Link> */}
         </div>
-        <div className={styles.actionButton} style={{ opacity: showSetting || showSettingBar ? 1 : 0 }}>
+        <div
+          className={styles.actionButton}
+          style={{ opacity: showSetting || showSettingBar ? 1 : 0 }}
+        >
           <Button
             icon={showSetting ? 'left' : 'right'}
             shape={showSetting ? 'circle' : null}
@@ -227,13 +234,15 @@ class Toolbar extends Component {
           onCreate={this.handleCreate}
           dataSource={dataSource}
         />
-        <PrintPreview
-          wrappedComponentRef={form => (this.printRef = form)}
-          visible={printVisible}
-          onCancel={this.handleCancel}
-          onCreate={this.handleCreate}
-          dataSource={dataSource}
-        />
+        {printVisible ? (
+          <PrintPreview
+            wrappedComponentRef={form => (this.printRef = form)}
+            visible={printVisible}
+            onCancel={this.handleCancel}
+            onCreate={this.handleCreate}
+            dataSource={dataSource}
+          />
+        ) : null}
         <Partogram
           wrappedComponentRef={form => (this.partogramRef = form)}
           visible={partogramVisible}

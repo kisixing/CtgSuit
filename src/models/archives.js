@@ -31,7 +31,7 @@ export default {
       let CTGDATA = { fhr: [[], [], []], toco: [], fm: [], fetal_num: 2, index: 0 ,starttime:''};
       if(pureidarr.length>2){
         let pureid = pureidarr[2];
-        CTGDATA.starttime = 
+        CTGDATA.starttime =
         '20' +
         pureid.substring(0, 2) +
         '-' +
@@ -94,6 +94,7 @@ export default {
           }
           return item;
         });
+        console.log('111111111111111', pregnancy, newBedinfo);
 
         yield put({
           type: 'list/setState',

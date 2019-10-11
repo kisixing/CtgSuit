@@ -1,5 +1,6 @@
 import request from '@/utils/request';
 import { stringify } from 'qs';
+import { async } from 'q';
 
 /**
  * 验证账户登录
@@ -94,4 +95,23 @@ export async function updateCTGexams(params) {
   return request.put(`/ctg-exams`, {
     data: params,
   });
+}
+
+/**
+ * 获取流
+ * @param {*} params
+ */
+export async function getPDFflow(params) {
+  // api/ctg-exams-pdfurl/190930222541
+  return request.post(`/ctg-exams-pdf/${params.docid}`, {
+    data: params,
+  });
+}
+
+/**
+ * 获取PDF文件
+ * @param {*} note 档案号
+ */
+export async function getPDF(note) {
+  return request.get(`/ctg-exams-pdfurl/${note}`);
 }

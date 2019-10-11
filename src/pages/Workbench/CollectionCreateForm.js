@@ -14,7 +14,7 @@ const CollectionCreateForm = Form.create({
     constructor(props) {
       super(props);
       this.state = {
-        required: false,
+        required: true,
       };
     }
 
@@ -32,25 +32,28 @@ const CollectionCreateForm = Form.create({
     // modal里面的搜索按钮事件
     handleSearch = () => {
       const { dispatch, form } = this.props;
-      form.validateFields((err, values) => {
-        if (err) {
-          return;
-        }
-        // 获取孕册信息
-        let obj = {};
-        Object.keys(values).forEach(function (key) {
-          const k = `${key}.contains`;
-          const value = values[key];
-          obj[k] = value;
+      this.setState({ required: false });
+      setTimeout(() => {
+        form.validateFields((err, values) => {
+          if (err) {
+            return;
+          }
+          // 获取孕册信息
+          let obj = {};
+          Object.keys(values).forEach(function(key) {
+            const k = `${key}.contains`;
+            const value = values[key];
+            obj[k] = value;
+          });
+          dispatch({
+            type: 'list/fetchPregnancy',
+            payload: obj,
+            callback: res => {
+              form.setFieldsValue(res);
+            },
+          });
         });
-        dispatch({
-          type: 'list/fetchPregnancy',
-          payload: obj,
-          callback: res => {
-            form.setFieldsValue(res);
-          },
-        });
-      });
+      }, 500);
     };
 
     render() {
@@ -118,14 +121,14 @@ const CollectionCreateForm = Form.create({
                 <Form.Item label="孕次">
                   {getFieldDecorator('gravidity', {
                     rules: [{ required: required, message: '请输入孕次!' }],
-                  })(<InputNumber placeholder="请输入孕次..." />)}
+                  })(<InputNumber min={1} max={10} placeholder="请输入孕次..." />)}
                 </Form.Item>
               </Col>
               <Col span={12}>
                 <Form.Item label="产次">
                   {getFieldDecorator('parity', {
                     rules: [{ required: required, message: '请输入产次!' }],
-                  })(<InputNumber placeholder="请输入产次..." />)}
+                  })(<InputNumber min={0} max={10} placeholder="请输入产次..." />)}
                 </Form.Item>
               </Col>
               <Col span={24} className={styles.buttons}>

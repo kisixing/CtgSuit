@@ -1,19 +1,24 @@
 import printElement from './printElement';
 import React, { Fragment, Component } from 'react';
+import { connect } from 'dva';
 import { Document, Page } from 'react-pdf';
 import { Pagination, Button, Spin } from 'antd';
 import { ipcRenderer } from 'electron';
+import config from '@/utils/config';
 
 import pdf from './pdfBase64';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import styles from './Preview.less';
 
-export default class Preview extends Component {
+class Preview extends Component {
   state = {
     pdfBase64: `data:application/pdf;base64,${pdf}`,
     numPages: 0,
     pageNumber: 1,
   };
+
+  componentDidMount() {
+  }
 
   onDocumentLoad = ({ numPages }) => {
     this.setState({ numPages });
@@ -23,12 +28,19 @@ export default class Preview extends Component {
     this.setState({ pageNumber: page });
   };
 
-  handlePrint = (file = 'http://127.0.0.1:1702/example1.pdf') => {
-    ipcRenderer.send('printWindow', 'http://192.168.0.208:9986/api/ctg-exams-pdfurl/190930222541');
+  handlePrint = (file) => {
+    const { dataSource } = this.props;
+    const pdfurl = dataSource.data && dataSource.data.docid;
+    // console.log('88888888888', `${config.apiPrefix}/ctg-exams-pdfurl/${pdfurl}`);
+    ipcRenderer.send('printWindow', `${config.apiPrefix}/ctg-exams-pdfurl/${pdfurl}`);
   }
 
   render() {
-    const { pdfBase64, numPages, pageNumber } = this.state;
+    const { pdfflow, numPages, pageNumber } = this.state;
+    // if (!pdfflow) {
+    //   return <div> 暂无数据...</div>;
+    // }
+
     return (
       <div className={styles.wrapper}>
         <Button type="primary" className={styles.button} onClick={this.handlePrint}>
@@ -38,7 +50,7 @@ export default class Preview extends Component {
           className={styles.preview}
           loading={<Spin style={{ margin: '120px 0' }} />}
           onLoadSuccess={this.onDocumentLoad}
-          file={pdfBase64}
+          file={pdfflow}
           renderMode="canvas"
           options={{
             cMapUrl: 'cmaps/',
@@ -60,3 +72,8 @@ export default class Preview extends Component {
     );
   }
 }
+
+export default connect(({ item, loading }) => ({
+  loading: loading,
+  pdfflow: item.pdfflow,
+}))(Preview);

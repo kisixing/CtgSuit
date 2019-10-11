@@ -13,7 +13,6 @@ class CurveChart extends Component {
       dataSource,
       loading,
     } = this.props;
-    console.log('TCL: CurveChart -> render -> dataSource', dataSource);
 
     return (
       <div className={styles.wrapper}>
