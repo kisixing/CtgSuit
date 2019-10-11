@@ -90,7 +90,7 @@ class Login extends PureComponent {
                 <span>password：123456</span>
               </p>
             </Row>
-            {error.status === '401' ? (
+            {error && error.status === '401' ? (
               <Alert message={error.message} type="error" closable />
             ) : null}
           </Form>

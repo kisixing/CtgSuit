@@ -4,7 +4,10 @@
  * @Date: 2019-10-10 20:37:05
  */
 
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import { connect } from 'dva';
+import { Table } from 'antd';
+import styles from './index.less';
 
 class BedInfo extends Component {
   constructor(props) {
@@ -50,13 +53,30 @@ class BedInfo extends Component {
     ];
   }
 
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'setting/fetchBed',
+    });
+  }
+
   render() {
+    const { loading, data } = this.props;
     return (
-      <div>
-        BedInfo
+      <div className={styles.table}>
+        <Table
+          bordered
+          size="small"
+          loading={loading.effects['setting/fetchBed']}
+          columns={this.columns}
+          dataSource={data}
+        />
       </div>
-    )
+    );
   }
 }
 
-export default BedInfo;
+export default connect(({ loading, setting }) => ({
+  data: setting.bedinfo,
+  loading: loading,
+}))(BedInfo);

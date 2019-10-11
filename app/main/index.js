@@ -39,7 +39,7 @@ ipcMain.on('newWindow', (event) => {
 
 ipcMain.on('printWindow', (event, file) => {
   const printWindow = new BrowserWindow({
-    show: true,
+    show: false,
     width: 1920,
     height: 1080,
   });

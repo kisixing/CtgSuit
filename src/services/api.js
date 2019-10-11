@@ -115,3 +115,7 @@ export async function getPDFflow(params) {
 export async function getPDF(note) {
   return request.get(`/ctg-exams-pdfurl/${note}`);
 }
+
+export async function getBedIfo(note) {
+  return request.get('/bedinfos');
+}
