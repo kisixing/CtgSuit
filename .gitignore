@@ -20,3 +20,6 @@
 .umi-production
 /release
 /public/pdfjs
+
+.tmp/
+.setting
