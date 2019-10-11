@@ -7,7 +7,6 @@
 import React, { Component, Fragment } from 'react';
 import { AntdThemeManipulator } from '@lianmed/components';
 
-
 import { Layout, Menu, Icon, Button, Modal, Avatar, Spin, Select } from 'antd';
 import { connect } from 'dva';
 import { router } from 'umi';
@@ -37,7 +36,7 @@ class BasicLayout extends Component {
     };
     const ws = new WsService(settingData);
     ws.connect();
-    this.colorIndex = ~~(Math.random() * colors.length)>>5;
+    this.colorIndex = ~~(Math.random() * colors.length) >> 5;
     this.interval = null;
   }
 
@@ -99,7 +98,7 @@ class BasicLayout extends Component {
         content: '确认退出系统？',
         okText: '确认',
         cancelText: '取消',
-        onOk: function() {
+        onOk: function () {
           // 清除sessionStorage
           // store.clearAll();
           // 退出登录，关闭应用
@@ -115,7 +114,7 @@ class BasicLayout extends Component {
         content: '确认退出登录？',
         okText: '确认',
         cancelText: '取消',
-        onOk: function() {
+        onOk: function () {
           // 清除sessionStorage
           store.clearAll();
           // 退出登录，回到登录页面
@@ -220,14 +219,14 @@ class BasicLayout extends Component {
   };
 
   render() {
-    const primaryColor = colors[this.colorIndex]
+    const primaryColor = settingData.theme || colors[this.colorIndex]
     const { children, wsStatus, loading } = this.props;
     const wsStatusColor =
       wsStatus === EWsStatus.Pendding
         ? 'transparent'
         : wsStatus === EWsStatus.Success
-        ? 'green'
-        : 'red';
+          ? 'green'
+          : 'red';
     return (
       <Layout className={styles.container}>
         <Header className={styles.header}>
@@ -278,7 +277,9 @@ class BasicLayout extends Component {
           <span>
             Copyright <Icon type="copyright" /> {config.copyright}
           </span>
-          <AntdThemeManipulator primaryColor={primaryColor} placement="topLeft" />
+          <AntdThemeManipulator primaryColor={primaryColor} placement="topLeft" onChange={color => {
+            settingStore.set('theme', color)
+          }} />
         </Footer>
       </Layout>
     );
@@ -294,5 +295,5 @@ export default connect(({ global, list, loading, setting, ws }) => ({
   listLayout: setting.listLayout,
   listLayoutOptions: setting.listLayoutOptions,
   wsStatus: ws.status,
-  wsData:ws.data
+  wsData: ws.data
 }))(BasicLayout);

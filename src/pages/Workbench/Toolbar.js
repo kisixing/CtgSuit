@@ -28,7 +28,7 @@ class Toolbar extends Component {
       printVisible: false,
       partogramVisible: false,
       isCreated: false, // 默认未建档
-      isMonitor: false, // 是否已经开始监护
+      // isMonitor: false, // 是否已经开始监护
     };
   }
 
@@ -36,11 +36,10 @@ class Toolbar extends Component {
     const {
       dataSource: { data, documentno, pregnancy },
     } = this.props;
+    console.log('TCL: Toolbar -> componentDidMount -> this.props', this.props.dataSource);
     // 判断是否已建档
     const isCreated = pregnancy && pregnancy.id && data && documentno === data.docid;
-    // 判断是否已开始监护
-    const isMonitor = data && data.status === 1;
-    this.setState({ isCreated, isMonitor });
+    this.setState({ isCreated });
   }
 
   toggleTool = () => {
@@ -110,7 +109,7 @@ class Toolbar extends Component {
     const bool = window.confirm(`确认床号: ${bedname} 开始监护 ?`)
     if (bool) {
       socket.startwork(deviceno, bedno);
-      _this.setState({ isMonitor: true });
+      // _this.setState({ isMonitor: true });
     }
   };
 
@@ -143,7 +142,7 @@ class Toolbar extends Component {
           callback: res => {
             if (res && res.id) {
               // 将监护状态改为未监护状态
-              _this.setState({ isMonitor: false });
+              // _this.setState({ isMonitor: false });
             }
           },
         });
@@ -162,8 +161,11 @@ class Toolbar extends Component {
       printVisible,
       partogramVisible,
       isCreated,
-      isMonitor,
+      // isMonitor,
     } = this.state;
+    const { data } = dataSource
+
+    const isMonitor = data && data.status === 1;
 
     return (
       <>
@@ -173,10 +175,10 @@ class Toolbar extends Component {
               停止监护
             </Button>
           ) : (
-            <Button icon="play-circle" type="link" onClick={() => this.start(dataSource)}>
-              开始监护
+              <Button icon="play-circle" type="link" onClick={() => this.start(dataSource)}>
+                开始监护
             </Button>
-          )}
+            )}
           <Button
             icon="user-add"
             type="link"
