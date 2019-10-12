@@ -3,7 +3,7 @@
  */
 import React from 'react';
 import moment from 'moment';
-import { Button, Modal, Form, Input, Row, Col, Select, DatePicker, InputNumber } from 'antd';
+import { Button, Modal, Form, Input, Row, Col, Select, DatePicker, InputNumber, message } from 'antd';
 import styles from './index.less';
 
 const CollectionCreateForm = Form.create({
@@ -53,6 +53,9 @@ const CollectionCreateForm = Form.create({
             type: 'list/fetchPregnancy',
             payload: obj,
             callback: res => {
+              if (!res.length) {
+                message.info('没有这个孕册');
+              }
               form.setFieldsValue(res);
             },
           });

@@ -8,10 +8,11 @@ import Toolbar from './Toolbar';
 let styles = require('./Item.less')
 
 const WorkbenchItem = props => {
-  console.log('item render')
+  // console.log('item render')
   const { dispatch, fullScreenId, itemHeight, itemSpan, dataSource, outPadding } = props;
   const { data = {}, unitId, type } = dataSource;
-  const [showSettingBar, setShowSettingBar] = useState(true)
+  const [showSettingBar, setShowSettingBar] = useState(true);
+  const [showTitle, setShowTitle] = useState(true)
   const ref = useRef(null)
   const suitObject = { suit: null };
 
@@ -46,7 +47,7 @@ const WorkbenchItem = props => {
   // 床位信息
   const renderTilte = (item) => {
     const { data, pregnancy, documentno, bedname } = item;
-    const isCreated = pregnancy && pregnancy.id && data && documentno === data.docid;
+    const isCreated = pregnancy && pregnancy.id && data && documentno === data.docid && showTitle;
 
     const text = (
       <span className={styles.title}>
@@ -94,7 +95,7 @@ const WorkbenchItem = props => {
         }
       }}
     >
-      <Toolbar {...props} showSettingBar={showSettingBar} />
+      <Toolbar {...props} showSettingBar={showSettingBar} setShowTitle={setShowTitle} />
       <Card
         title={renderTilte(dataSource)}
         size="small"

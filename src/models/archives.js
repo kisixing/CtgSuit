@@ -5,6 +5,7 @@ import {
   newCTGrecord,
   updateCTGrecord,
 } from '@/services/api';
+import moment from 'moment';
 
 export default {
   namespace: 'archives',
@@ -81,7 +82,7 @@ export default {
         message.success('创建成功！');
         // 创建成功后更新bed information
         const bedinfo = yield select(state => state.list.pageItems);
-        const { ctgexam, pregnancy } = res;
+        const { ctgexam, pregnancy, visitTime, id } = res;
         const note = ctgexam.note.split('_');
         const [bedno, deviceno, ...rest] = note;
         // const selected = bedinfo.filter(item => item.bedno === bedno && item.deviceno === deviceno);
@@ -89,8 +90,19 @@ export default {
           if (item.bedno === bedno && item.deviceno === deviceno) {
             return {
               ...item,
-              documentno: ctgexam.note, // 确保信息更新 要求docid documentno一致
               pregnancy,
+              documentno: ctgexam.note, // 确保信息更新 要求docid documentno一致
+              prenatalVisit: {
+                doctor: null,
+                gestationalWeek: null,
+                id: id,
+                visitTime: moment(visitTime),
+                visitType: null,
+                ctgexam: {
+                  ...ctgexam,
+                  startTime: moment(ctgexam.startTime),
+                },
+              },
             };
           }
           return item;

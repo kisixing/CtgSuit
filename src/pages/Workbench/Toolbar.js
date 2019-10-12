@@ -60,7 +60,8 @@ class Toolbar extends Component {
   handleCreate = item => {
     // 建档/确定action
     const _this = this;
-    const { dispatch } = this.props;
+    const { dispatch, setShowTitle } = this.props;
+    setShowTitle(true);
     const { form } = this.formRef.props;
     form.validateFields((err, values) => {
       if (err) {
@@ -112,13 +113,13 @@ class Toolbar extends Component {
 
   start = item => {
     const { deviceno, bedno } = item;
-    console.log('start Device -- ', item);
     socket.startwork(deviceno, bedno);
   };
 
   // 停止监护
   end = item => {
     const { isCreated } = this.state;
+    const { dispatch, setShowTitle } = this.props;
     const _this = this;
     const { deviceno, bedno, pregnancy, data, documentno, prenatalVisit = {} } = item;
     // const isCreated = pregnancy && pregnancy.id && data && documentno === data.docid;
@@ -126,7 +127,7 @@ class Toolbar extends Component {
     if (isCreated) {
       // 已经建档 ,修改结束时间
       const pregnancyId = pregnancy.id;
-      this.props.dispatch({
+      dispatch({
         type: 'archives/update',
         payload: {
           id: prenatalVisit.id,
@@ -146,6 +147,7 @@ class Toolbar extends Component {
               isMonitor: false,
               isCreated: false,
             });
+            setShowTitle(false);
           }
         },
       });
@@ -291,7 +293,7 @@ class Toolbar extends Component {
                   <span>
                     床号: {bedname} 即将停止监护，但还
                   <span style={{ color: '#f00' }}>未建立档案</span>
-                    ，建档请选择“建档”按钮，放弃请选择“确认”按钮 ?
+                    ，建档请选择“建档”按钮，放弃请选择“放弃存档”按钮 ?
                 </span>
                 )
             ) : (
