@@ -85,10 +85,7 @@ class Login extends PureComponent {
               <Button type="primary" htmlType="submit" loading={loading.effects['login/login']}>
                 登陆
               </Button>
-              <p>
-                <span>username：admin</span>
-                <span>password：123456</span>
-              </p>
+        
             </Row>
             {error && error.status === '401' ? (
               <Alert message={error.message} type="error" closable />
