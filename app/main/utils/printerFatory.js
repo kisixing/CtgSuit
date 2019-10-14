@@ -9,38 +9,31 @@ const printerPath = path.resolve(__dirname, '../libs/PDFtoPrinterSelect.exe')
 module.exports = targetDir => {
     targetDir = targetDir === void 0 ? '.tmp/' : targetDir
     const tmpDir = path.resolve(targetDir)
-    if(!fs.existsSync(tmpDir)){
+    if (!fs.existsSync(tmpDir)) {
         fs.mkdirSync(tmpDir)
     }
     return fileUrl => {
-        const dateTime = new Date().toLocaleString().replace(/[\/\s:]/g,(s)=>{return '_'})
+        const dateTime = new Date().toLocaleString().replace(/[\/\s:]/g, (s) => { return '_' })
         const tmpName = `${dateTime}${url.parse(fileUrl).pathname.split('/').join('_')}`
         const tmpPath = path.resolve(tmpDir, tmpName)
-        const writeStream = fs.createWriteStream(tmpPath)
-        // const pdfPath = path.resolve(tmpDir)
-
+        const writeStream = fs.createWriteStream(tmpPath).on('close', () => {
+            const task = execFile(printerPath, [tmpPath]);
+            task.stdout.on('data', (data) => {
+                console.log(`stdout: ${data}`);
+            });
+            task.on('close', (code) => {
+                console.log(`write clonse: ${code}`);
+            })
+            task.on('error', (err) => {
+                console.log(`write error: ${err}`);
+            })
+        })
         http.get(fileUrl, res => {
             if (res) {
                 res.pipe(writeStream)
-                setTimeout(() => {
+                res.on('end', () => {
                     writeStream.end()
-                }, 10000);
-                const task = execFile(printerPath, [tmpPath]);
-                task.stdout.on('data', (data) => {
-                    console.log(`stdout: ${data}`);
-                });
-                task.stderr.on('data', (data) => {
-                    console.log(`stderr: ${data}`);
-                });
-                task.on('close', (code) => {
-                    console.log(`child process exited with code ${code}`);
-                    // fs.unlink(pdfPath)
                 })
-                task.on('error', (err) => {
-                    console.error(err)
-                })
-            } else {
-                alert('request for pdf failed')
             }
         })
     }
