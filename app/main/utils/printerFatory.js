@@ -15,7 +15,7 @@ module.exports = targetDir => {
     return fileUrl => {
         const dateTime = new Date().toLocaleString().replace(/[\/\s:]/g, (s) => { return '_' })
         const tmpName = `${dateTime}${url.parse(fileUrl).pathname.split('/').join('_')}`
-        const tmpPath = path.resolve(tmpDir, tmpName)
+        const tmpPath = path.resolve(tmpDir, `${tmpName}${tmpName.endsWith('.pdf') ? '' : '.pdf'}`)
         const writeStream = fs.createWriteStream(tmpPath).on('close', () => {
             const task = execFile(printerPath, [tmpPath]);
             task.stdout.on('data', (data) => {
