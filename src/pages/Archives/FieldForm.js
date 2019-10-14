@@ -20,6 +20,7 @@ class FieldForm extends Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
+        //TODO 检索条件未成熟
         this.props.dispatch({
           type: 'archives/fetchRecords',
           payload: {
@@ -41,7 +42,6 @@ class FieldForm extends Component {
     } = this.props;
     return (
       <Form layout="inline" className={styles.form} onSubmit={this.handleSubmit}>
-        <p>搜索条件</p>
         <Row>
           <Col span={5}>
             <Form.Item label="档案号">{getFieldDecorator('docid')(<Input type="text" />)}</Form.Item>

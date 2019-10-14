@@ -126,3 +126,13 @@ export async function getBedIfo(note) {
 export async function getPregnancies(params) {
   return request.get(`/pregnancies?${stringify(params)}`);
 }
+
+/**
+ * 更新孕册信息
+ * @param {*} params
+ */
+export async function updatePregnancy(params) {
+  return request.put(`/pregnancies`, {
+    data: params
+  });
+}

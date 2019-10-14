@@ -1,4 +1,4 @@
-import { getPregnancies } from '@/services/api';
+import { getPregnancies, updatePregnancy } from '@/services/api';
 
 export default {
   namespace: 'pregnancy',
@@ -11,9 +11,14 @@ export default {
       yield put({
         type: 'updateState',
         payload: {
-          pregnancies: res
+          pregnancies: res,
         },
       });
+    },
+    *update({ payload }, { call, put }) {
+      const res = yield call(updatePregnancy, payload);
+      console.log("TCL: *update -> res", res)
+
     },
   },
   reducers: {

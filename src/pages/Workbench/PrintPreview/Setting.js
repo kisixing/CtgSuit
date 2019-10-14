@@ -12,32 +12,43 @@ class Setting extends Component {
   }
 
   componentDidMount() {
-    const { dispatch, dataSource } = this.props;
-    console.log('00000000000000', dataSource);
-    if (dataSource.data && dataSource.data.docid) {
-      dispatch({
-        type: 'item/fetchCTGData',
-        payload: {
-          ctgexamid: dataSource.data.docid,
-        },
-      });
+    const {
+      dispatch,
+      dataSource: {
+        data,
+        pregnancy,
+        ctgexam /* 由档案入口 */
+      }
+    } = this.props;
+    let docid = '';
+    if (data && data.docid && !ctgexam.note) {
+      docid = data.docid;
     }
+    if (ctgexam && ctgexam.note) {
+      docid = ctgexam.note;
+    }
+    dispatch({
+      type: 'item/fetchCTGData',
+      payload: {
+        ctgexamid: docid,
+      },
+    });
     if (
-      dataSource.data &&
-      dataSource.data.docid &&
-      dataSource.pregnancy &&
-      dataSource.pregnancy.id
+      data &&
+      data.docid &&
+      pregnancy &&
+      pregnancy.id
     ) {
       dispatch({
         type: 'item/fetchPDFflow',
         payload: {
-          docid: dataSource.data.docid,
-          name: dataSource.pregnancy.name,
-          age: dataSource.pregnancy.age,
-          gestationalWeek: dataSource.pregnancy.gestationalWeek,
-          inpatientNO: dataSource.pregnancy.inpatientNO,
-          startdate: moment(dataSource.data.starttime).format('YYYY-MM-DD HH:mm:ss'),
-          fetalcount: dataSource.data.fetal_num,
+          docid: data.docid,
+          name: pregnancy.name,
+          age: pregnancy.age,
+          gestationalWeek: pregnancy.gestationalWeek,
+          inpatientNO: pregnancy.inpatientNO,
+          startdate: moment(data.starttime).format('YYYY-MM-DD HH:mm:ss'),
+          fetalcount: data.fetal_num,
           start: 0,
           end: 2000,
         },

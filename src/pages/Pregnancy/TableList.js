@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table, Divider, Button } from 'antd';
+import { Table, Divider, Popconfirm } from 'antd';
 import { connect } from 'dva';
 import EditModal from './EditModal';
 import styles from './TableList.less';
@@ -61,10 +61,13 @@ class TableList extends Component {
         render: (text, record) => {
           return (
             <>
-              <Button type="link" onClick={() =>this.showEdit(record)}>
+              <span className="primary" onClick={() => this.showEdit(record)}>
                 编辑
-              </Button>
-              <Button type="link">删除</Button>
+              </span>
+              <Divider type="vertical" />
+              <Popconfirm title="确认删除此条孕册信息？" okText="确定" cancelText="取消">
+                <span className="delete">删除</span>
+              </Popconfirm>
             </>
           );
         },
@@ -94,8 +97,12 @@ class TableList extends Component {
     );
   }
 
-  handleUpdate = () => {
-
+  handleUpdate = (values) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'pregnancy/update',
+      payload: values
+    });
   }
 
 
@@ -107,11 +114,19 @@ class TableList extends Component {
         <Table
           bordered
           size="small"
+          rowKey="inpatientNO"
           loading={loading.effects['pregnancy/fetchPregnancies']}
           dataSource={pregnancies}
           columns={this.columns}
         />
-        <EditModal visible={visible} dataSource={current} onCancel={this.hideEdit} onOk={this.handleUpdate} />
+        {visible ? (
+          <EditModal
+            visible={visible}
+            dataSource={current}
+            onCancel={this.hideEdit}
+            onOk={this.handleUpdate}
+          />
+        ) : null}
       </div>
     );
   }

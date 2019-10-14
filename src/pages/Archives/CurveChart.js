@@ -7,9 +7,6 @@ import { Ctg as L } from '@lianmed/lmg';
 import styles from './CurveChart.less';
 
 class CurveChart extends Component {
-  handlePrint = () => {
-
-  }
   render() {
     const {
       selected: { id, visitType, ctgexam, ...rest },
@@ -42,9 +39,6 @@ class CurveChart extends Component {
               ~{' '}
               {ctgexam && ctgexam.endTime && moment(ctgexam.endTime).format('YYYY-MM-DD HH:mm:ss')}
             </span>
-            <Button type="primary" onClick={this.handlePrint}>
-              打印
-            </Button>
           </div>
         </div>
         <Spin

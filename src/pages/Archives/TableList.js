@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Table, Divider, Button } from 'antd';
+import { Table, Divider, Button, Popconfirm } from 'antd';
 import moment from 'moment';
 import CreateRecordModal from './CreateRecordModal';
+import PrintPreview from '../Workbench/PrintPreview';
 
 import styles from './TableList.less';
 
@@ -11,7 +12,9 @@ class TableList extends Component {
     super(props);
     this.state = {
       visible: false,
+      printVisible:false,
       type: 'edit',
+      current: {} // 当前行
     };
     this.columns = [
       {
@@ -108,9 +111,13 @@ class TableList extends Component {
         render: (text, record) => {
           return (
             <span>
-              <span>打印</span>
+              <span onClick={() => this.showPrint(record)}>
+                打印
+              </span>
               <Divider type="vertical" />
-              <span>删除</span>
+              <Popconfirm title="确认删除该条信息？" okText="确定" cancelText="取消">
+                <span>删除</span>
+              </Popconfirm>
             </span>
           );
         },
@@ -130,15 +137,17 @@ class TableList extends Component {
     });
   };
 
-  showDetailModal = () => {
-    this.setState({
-      visible: true,
-      type: 'update',
+  showPrint = (record) => {
+    this.setState({ current: record }, () => {
+      this.setState({ printVisible: true });
     });
   }
 
   handleCancel = () => {
-    this.setState({ visible: false });
+    this.setState({
+      visible: false,
+      printVisible: false,
+    });
   };
 
   saveFormRef = formRef => {
@@ -197,46 +206,33 @@ class TableList extends Component {
     });
   };
 
-  renderTitle = () => {
-    return (
-      <>
-        <Button type="primary" onClick={() => this.showModal('visible')}>
-          新建
-        </Button>
-        <Button style={{ marginLeft: '12px' }}>导入</Button>
-      </>
-    );
-  };
-
   render() {
     const { selected, dataSource, loading } = this.props;
-    const { visible, type } = this.state;
+    const { visible, printVisible, type, current } = this.state;
 
     return (
       <div className={styles.tableList}>
         <Table
           bordered
           size="small"
-          scroll={{ x: 1250, y: 240 }}
           pagination={false}
           columns={this.columns}
           dataSource={dataSource}
-          onRow={record => {
-            return {
-              onClick: event => this.handleRow(record), // 点击行
-              onDoubleClick: event => {},
-            };
-          }}
+          // onRow={record => {
+          //   return {
+          //     onClick: event => this.handleRow(record), // 点击行
+          //     onDoubleClick: event => {},
+          //   };
+          // }}
           loading={loading.effects['archives/fetchRecords']}
           rowKey="id"
           rowClassName={record => (record.id === selected.id ? styles.selectedRow : '')}
           rowSelection={{
-            columnWidth: '38px',
+            // columnWidth: '38px',
             type: 'radio',
             selectedRowKeys: [selected.id],
             onSelect: (record, selected, selectedRows) => this.handleRow(record),
           }}
-          // title={this.renderTitle}
         />
         {visible ? (
           <CreateRecordModal
@@ -246,6 +242,15 @@ class TableList extends Component {
             onCancel={this.handleCancel}
             onOk={this.handleOk}
             dataSource={selected}
+          />
+        ) : null}
+        {printVisible ? (
+          <PrintPreview
+            wrappedComponentRef={form => (this.printRef = form)}
+            visible={printVisible}
+            onCancel={this.handleCancel}
+            onCreate={this.handleCreate}
+            dataSource={current}
           />
         ) : null}
       </div>

@@ -49,22 +49,24 @@ class SearchForm extends Component {
     } = this.props;
     return (
       <Form layout="inline" className={styles.searchForm} onSubmit={this.handleSubmit}>
-        <p>搜索条件</p>
         <Row>
           <Col span={5}>
             <Form.Item label="住院号">
               {getFieldDecorator('inpatientNO', {
                 rules: [{ required: false, message: '请输入住院号!' }],
-              })(<Input type="text" />)}
+              })(<Input style={{ minWidth: '150px' }} type="text" />)}
             </Form.Item>
           </Col>
           <Col span={5}>
-            <Form.Item label="姓名">{getFieldDecorator('name')(<Input type="text" />)}</Form.Item>
+            <Form.Item label="姓名">
+              {getFieldDecorator('name')(<Input type="text" style={{ minWidth: '150px' }} />)}
+            </Form.Item>
           </Col>
           <Col span={5}>
             <Form.Item label="孕产期">
               {getFieldDecorator('edd')(
                 <DatePicker
+                  style={{ minWidth: '150px' }}
                   format="YYYY-MM-DD HH:mm:ss"
                   placeholder="请选择日期"
                   showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
@@ -73,7 +75,7 @@ class SearchForm extends Component {
             </Form.Item>
           </Col>
           <Col span={5}>
-            <Form.Item>
+            <Form.Item label="姓名">
               <Button type="primary" htmlType="submit">
                 搜索
               </Button>

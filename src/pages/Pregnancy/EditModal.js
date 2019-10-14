@@ -27,25 +27,33 @@ const EditModal = Form.create({
       this.state = {};
     }
 
-    componentDidMount() {}
-
-    handleUpdate = dataSource => {
-      // 编辑修改
-    };
-
-    renderTitle = (record) => {
-      return (
-        <div>
-          <span>编辑</span>
-          <span>住院号：{record.inpatientNO}</span>
-          <span>姓名：{record.name}</span>
-        </div>
-      );
+    componentDidMount() {
+      const { form, dataSource } = this.props;
+      const { inpatientNO, name, age, telephone, gravidity, parity } = dataSource;
+      form.setFieldsValue({
+        inpatientNO,
+        name,
+        age,
+        telephone,
+        gravidity,
+        parity,
+      });
     }
 
+    handleUpdate = () => {
+      // 编辑修改
+      const { form, onOk, onCancel, dataSource } = this.props;
+      const { id } = dataSource;
+      form.validateFields((err, values) => {
+        if (!err) {
+          onOk({ id, ...values });
+        }
+      });
+      onCancel();
+    };
+
     render() {
-      const { visible, onCancel, form, dataSource } = this.props;
-      console.log("TCL: dataSource", dataSource)
+      const { visible, onCancel, form } = this.props;
       const { getFieldDecorator } = form;
 
       const formItemLayout = {
@@ -66,14 +74,14 @@ const EditModal = Form.create({
           destroyOnClose
           width={860}
           visible={visible}
-          title={() => this.renderTitle(dataSource)}
+          title="修改孕册"
           footer={null}
           okText="创建"
           cancelText="取消"
           bodyStyle={{ paddingRight: '48px' }}
           onCancel={onCancel}
         >
-          <Form layout="horizontal" {...formItemLayout}>
+          <Form className={styles.modalForm} layout="horizontal" {...formItemLayout}>
             <Row gutter={24}>
               <Col span={12}>
                 <Form.Item label="住院号">
@@ -90,9 +98,16 @@ const EditModal = Form.create({
                 </Form.Item>
               </Col>
               <Col span={12}>
+                <Form.Item label="出生年月">
+                  {getFieldDecorator('birth', {
+                    rules: [{ required: false, message: '请填写孕妇出生日期!' }],
+                  })(<DatePicker placeholder="输入孕妇出生日期..." />)}
+                </Form.Item>
+              </Col>
+              <Col span={12}>
                 <Form.Item label="孕妇年龄">
                   {getFieldDecorator('age', {
-                    rules: [{ required: false, message: '请填写孕妇住年龄!' }],
+                    rules: [{ required: false, message: '请填写孕妇年龄!' }],
                   })(<InputNumber min={1} max={99} placeholder="输入孕妇年龄..." />)}
                 </Form.Item>
               </Col>
@@ -118,10 +133,17 @@ const EditModal = Form.create({
                 </Form.Item>
               </Col>
               <Col span={24} className={styles.buttons}>
-                <Button onClick={() => onCancel('visible')}>取消</Button>
-                <Button type="primary" onClick={() => this.handleUpdate(dataSource)}>
+                <Button onClick={onCancel}>取消</Button>
+                <Button type="primary" onClick={this.handleUpdate}>
                   确定
                 </Button>
+              </Col>
+              <Col span={24}>
+                <Form.Item label="居住地址">
+                  {getFieldDecorator('address', {
+                    rules: [{ required: true, message: '请填写现居住详细地址!' }],
+                  })(<Input placeholder="输入现居住详细地址" />)}
+                </Form.Item>
               </Col>
             </Row>
           </Form>
