@@ -72,6 +72,12 @@ export default [
         component: './TestCtg',
       },
       {
+        path: '/pregnancy',
+        name: 'Pregnancy',
+        title: '胎监-孕产妇管理',
+        component: './Pregnancy',
+      },
+      {
         path: '/account',
         name: 'account',
         title: '账户设置',

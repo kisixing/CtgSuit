@@ -22,7 +22,9 @@ class FieldForm extends Component {
         console.log('Received values of form: ', values);
         this.props.dispatch({
           type: 'archives/fetchRecords',
-          payload: {},
+          payload: {
+
+          },
         });
       }
     });
@@ -41,25 +43,12 @@ class FieldForm extends Component {
       <Form layout="inline" className={styles.form} onSubmit={this.handleSubmit}>
         <p>搜索条件</p>
         <Row>
-          <Col span={4}>
-            <Form.Item label="姓名">{getFieldDecorator('name')(<Input type="text" />)}</Form.Item>
+          <Col span={5}>
+            <Form.Item label="档案号">{getFieldDecorator('docid')(<Input type="text" />)}</Form.Item>
           </Col>
-          <Col span={4}>
-            <Form.Item label="门诊号">
-              {getFieldDecorator('patientNumber')(<Input type="text" />)}
-            </Form.Item>
-          </Col>
-          <Col span={4}>
-            <Form.Item label="住院号">{getFieldDecorator('AD')(<Input type="text" />)}</Form.Item>
-          </Col>
-          <Col span={4}>
-            <Form.Item label="床号">
-              {getFieldDecorator('bedNumber')(<Input type="text" />)}
-            </Form.Item>
-          </Col>
-          <Col span={4}>
-            <Form.Item label="日期">
-              {getFieldDecorator('date')(
+          <Col span={5}>
+            <Form.Item label="开始时间">
+              {getFieldDecorator('startTime')(
                 <DatePicker
                   format="YYYY-MM-DD HH:mm:ss"
                   placeholder="请选择日期"
@@ -68,7 +57,18 @@ class FieldForm extends Component {
               )}
             </Form.Item>
           </Col>
-          <Col span={4}>
+          <Col span={5}>
+            <Form.Item label="结束时间">
+              {getFieldDecorator('endTime')(
+                <DatePicker
+                  format="YYYY-MM-DD HH:mm:ss"
+                  placeholder="请选择日期"
+                  showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
+                />,
+              )}
+            </Form.Item>
+          </Col>
+          <Col span={5}>
             <Form.Item>
               <Button type="primary" htmlType="submit">
                 搜索

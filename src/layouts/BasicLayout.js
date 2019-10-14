@@ -91,6 +91,9 @@ class BasicLayout extends Component {
     if (key === '系统设置') {
       router.push('/setting');
     }
+    if (key === '孕产妇管理') {
+      router.push('/pregnancy');
+    }
   };
 
   onMenuClick = e => {
@@ -201,7 +204,7 @@ class BasicLayout extends Component {
         {[
           ['档案管理', 'ordered-list', '/Archives'],
           ['系统设置', 'setting', '/setting'],
-          ['', ''],
+          ['孕产妇管理', 'usergroup-add', '/pregnancy'],
           ['用户信息', 'user'],
         ].map(([title, icon, path]) => {
           if (title === '用户信息') {

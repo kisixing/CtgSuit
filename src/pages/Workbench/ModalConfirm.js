@@ -38,9 +38,7 @@ export default function ModalConfirm({
       <div className={styles.buttons}>
         <Button onClick={() => onCancel('confirmVisible')}>取消</Button>
         {isCreate ? null : <Button onClick={onCreate}>建档</Button>}
-        <Button type="primary" onClick={handleOk}>
-          放弃存档
-        </Button>
+        <Button type="primary" onClick={handleOk}>确定</Button>
       </div>
     </Modal>
   );

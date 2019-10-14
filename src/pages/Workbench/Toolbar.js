@@ -114,6 +114,7 @@ class Toolbar extends Component {
   start = item => {
     const { deviceno, bedno } = item;
     socket.startwork(deviceno, bedno);
+    this.setState({ isCreated: false });
   };
 
   // 停止监护
@@ -271,17 +272,6 @@ class Toolbar extends Component {
           onCreate={this.handleCreate}
           dataSource={dataSource}
         />
-        {/* {confirmVisible ? (
-          <ModalConfirm
-            visible={confirmVisible}
-            dataSource={dataSource}
-            content={
-              isMonitor ? `确认床号: ${bedname} 停止监护 ?` : `确认床号: ${bedname} 开始监护 ?`
-            }
-            onCancel={this.handleCancel}
-            onOk={isMonitor ? this.end : this.start}
-          />
-        ) : null} */}
         <ModalConfirm
           visible={confirmVisible}
           dataSource={dataSource}
@@ -293,7 +283,7 @@ class Toolbar extends Component {
                   <span>
                     床号: {bedname} 即将停止监护，但还
                   <span style={{ color: '#f00' }}>未建立档案</span>
-                    ，建档请选择“建档”按钮，放弃请选择“放弃存档”按钮 ?
+                    ，建档请选择“建档”按钮，放弃请选择“确定”按钮 ?
                 </span>
                 )
             ) : (

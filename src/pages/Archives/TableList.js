@@ -33,7 +33,12 @@ class TableList extends Component {
         dataIndex: 'name',
         key: 'name',
         width: 100,
-        render: (text, record) => record.pregnancy && record.pregnancy.name,
+        className: 'name',
+        render: (text, record) => (
+          <div style={{ width: '100px', overflow: 'hidden' }}>
+            {record.pregnancy && record.pregnancy.name}
+          </div>
+        ),
       },
       {
         title: '年龄',
@@ -48,25 +53,23 @@ class TableList extends Component {
         key: 'gestationalWeek',
         width: 100,
       },
-      // {
-      //   title: '门诊号',
-      //   dataIndex: 'outpatientNO',
-      //   key: 'outpatientNO',
-      //   width: 100,
-      //   render: (text, record) => record.pregnancy && record.pregnancy.outpatientNO,
-      // },
       {
         title: '住院号',
         dataIndex: 'inpatientNO',
         key: 'inpatientNO',
         width: 100,
-        render: (text, record) => record.pregnancy && record.pregnancy.inpatientNO,
+        render: (text, record) => (
+          <div style={{ width: '100px', overflow: 'hidden' }}>
+            {record.pregnancy && record.pregnancy.inpatientNO}
+          </div>
+        ),
       },
       {
         title: '床号',
         dataIndex: 'bedNumber',
         key: 'bedNumber',
         width: 100,
+        className: 'bedNumber',
         render: (text, record) => record.ctgexam.id,
       },
       {
@@ -86,7 +89,7 @@ class TableList extends Component {
             return `${record.pregnancy.gravidity} / ${record.pregnancy.parity}`;
           }
           return;
-        }
+        },
       },
       {
         title: '档案号',
@@ -96,24 +99,22 @@ class TableList extends Component {
         align: 'center',
         render: (text, record) => record.ctgexam.note,
       },
-      // {
-      //   title: '操作',
-      //   dataIndex: 'action',
-      //   key: 'action',
-      //   align: 'center',
-      //   width: 150,
-      //   render: (text, record) => {
-      //     return (
-      //       <span>
-      //         <span onClick={this.showDetailModal}>修改</span>
-      //         <Divider type="vertical" />
-      //         <span>导出</span>
-      //         <Divider type="vertical" />
-      //         <span>删除</span>
-      //       </span>
-      //     );
-      //   },
-      // },
+      {
+        title: '操作',
+        dataIndex: 'action',
+        key: 'action',
+        align: 'center',
+        width: 150,
+        render: (text, record) => {
+          return (
+            <span>
+              <span>打印</span>
+              <Divider type="vertical" />
+              <span>删除</span>
+            </span>
+          );
+        },
+      },
     ];
   }
 
@@ -216,7 +217,7 @@ class TableList extends Component {
         <Table
           bordered
           size="small"
-          scroll={{ x: 1200, y: 240 }}
+          scroll={{ x: 1250, y: 240 }}
           pagination={false}
           columns={this.columns}
           dataSource={dataSource}

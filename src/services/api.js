@@ -119,3 +119,10 @@ export async function getPDF(note) {
 export async function getBedIfo(note) {
   return request.get('/bedinfos');
 }
+
+/**
+ * 获取孕册数据
+ */
+export async function getPregnancies(params) {
+  return request.get(`/pregnancies?${stringify(params)}`);
+}
