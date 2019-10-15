@@ -18,7 +18,7 @@ const Home = props => {
   const itemSpan = 24 / listLayout[0];
   const outPadding = 6;
   const itemHeight =
-    (parseInt(getComputedStyle(document.body).height) - 36 - 106 - outPadding * 2) / listLayout[1];
+    (parseInt(getComputedStyle(document.body).height) - 28 - 106 - outPadding * 2) / listLayout[1];
   return (
     <div style={{ height: '100%', overflow: 'hidden' }} ref={wrap}>
       <Row style={{ padding: outPadding }}>

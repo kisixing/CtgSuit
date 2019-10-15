@@ -21,7 +21,7 @@ export default {
     *setListLayout({ payload }, { put }) {
       store.set('listLayout', payload.listLayout)
       yield put({ type: 'setState', payload })
-      yield put({ type: 'list/computeLayout' })
+      yield put({ type: 'list/processListData' })
     },
     *fetchBed({ payload }, { call, put }) {
       const res = yield call(getBedIfo);
