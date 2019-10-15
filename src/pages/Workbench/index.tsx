@@ -3,6 +3,7 @@ import { Row } from 'antd';
 import { connect } from 'react-redux';
 import './index.less';
 import Item from './Item';
+import { Spin } from 'antd';
 import { IDevice } from '@/models/list';
 import { event } from "@lianmed/utils";
 import request from "@lianmed/request";
@@ -27,27 +28,34 @@ const Home = props => {
   }, []);
   const itemSpan = 24 / listLayout[0];
   const outPadding = 6;
+  const contentHeight = parseInt(getComputedStyle(document.body).height) - 28 - 106
   const itemHeight =
-    (parseInt(getComputedStyle(document.body).height) - 28 - 106 - outPadding * 2) / listLayout[1];
+    (contentHeight - outPadding * 2) / listLayout[1];
+  const items = (showCompleted ? completedData : pageItems) as IDevice[];
   return (
     <div style={{ height: '100%' }} ref={wrap}>
-      <Row style={{ padding: outPadding }}>
-        {((showCompleted ? completedData : pageItems) as IDevice[]).map(item => {
-          console.log('item', item)
-          return (
-            <Item
-              key={item.id}
-              dataSource={item}
-              itemHeight={itemHeight}
-              itemSpan={itemSpan}
-              outPadding={outPadding}
-              fullScreenId={fullScreenId}
-              dispatch={dispatch}
-            />
-          );
-        })}
-      </Row>
+      <Spin spinning={items.length === 0} size="large" >
+
+        <Row style={{ padding: outPadding, height: contentHeight }}>
+          {items.map(item => {
+            console.log('item', item)
+            return (
+              <Item
+                key={item.id}
+                dataSource={item}
+                itemHeight={itemHeight}
+                itemSpan={itemSpan}
+                outPadding={outPadding}
+                fullScreenId={fullScreenId}
+                dispatch={dispatch}
+              />
+            );
+          })}
+        </Row>
+      </Spin>
+
     </div>
+
   );
 };
 
