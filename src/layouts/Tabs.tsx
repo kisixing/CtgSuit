@@ -1,15 +1,17 @@
-/*
- * @Description: 上下布局，主要页面布局 header-main
- * @Author: Zhong Jun
- * @Date: 2019-09-23 20:34:58
- */
-
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import { Button } from 'antd';
 import { router } from 'umi';
+import { event } from "@lianmed/utils";
 let styles = require('./Tabs.less')
 
 function Tabs({ pageData, page, dispatch }) {
+
+  const [showCompleted, setShowCompleted] = useState(false)
+
+  const toggleCompleted = useCallback((status) => {
+    setShowCompleted(status)
+    event.emit('workbench:toggle_completed', status)
+  }, [])
   return (
     <div className={styles.tabs} >
       {pageData.map((bednames: string[], index) => {
@@ -17,12 +19,13 @@ function Tabs({ pageData, page, dispatch }) {
           <Button
             key={bednames.join(' ')}
             onClick={e => {
+              toggleCompleted(false)
               dispatch({ type: 'list/setPageItems', page: index });
               router.replace('/workbench');
             }}
             style={{ margin: '4px' }}
             size="small"
-            type={page === index ? 'default' : 'primary'}
+            type={(!showCompleted && page === index) ? 'default' : 'primary'}
           >
             {
               `第 ${index + 1} 组`
@@ -30,6 +33,12 @@ function Tabs({ pageData, page, dispatch }) {
           </Button>
         );
       })}
+      {pageData.length > 0 && (
+        <Button size="small" style={{ margin: '4px' }} onClick={() => {
+          toggleCompleted(true)
+        }} type={showCompleted ? 'default' : 'primary'}>结束监护</ Button>
+      )}
+
     </div>
   );
 }
