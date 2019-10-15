@@ -7,10 +7,11 @@ import ScoreSet from './ScoreSet';
 import Network from './Network';
 import Alarm from './Alarm';
 import BedInfo from './BedInfo';
+import Account from './Account';
 
 import styles from './index.less';
 
-const { Header, Sider, Footer } = Layout;
+const { Header, Sider } = Layout;
 
 class Setting extends Component {
   constructor(props) {
@@ -33,41 +34,6 @@ class Setting extends Component {
     this.setState({ current });
   };
 
-  handleSubmit = e => {
-    e.preventDefault();
-    // 获取全部表单数据
-    let form1 = {};
-    let form2 = {};
-    let form3 = {};
-    let form4 = {};
-    let form5 = {};
-    let form6 = {};
-    let form7 = {};
-    this.form1.props.form.validateFields((err, values) => {
-      if (!err) {
-        form1 = values;
-        console.log('Received values of form: ', values);
-      }
-    });
-    this.form2.props.form.validateFields((err, values) => {
-      if (!err) {
-        form2 = values;
-        console.log('Received values of form: ', values);
-      }
-    });
-    this.setState({
-      results: {
-        form1,
-        form2,
-        form3,
-        form4,
-        form5,
-        form6,
-        form7,
-      },
-    });
-  };
-
   menus = () => {
     const { current } = this.state;
     return (
@@ -83,7 +49,7 @@ class Setting extends Component {
         <Menu.Item key="5">网络设置</Menu.Item>
         <Menu.Item key="7">床位设置</Menu.Item>
         <Menu.Item key="6">医院设置</Menu.Item>
-        <Menu.Item key="8">版本信息</Menu.Item>
+        <Menu.Item key="8">账号管理</Menu.Item>
         <Menu.Item key="9">报警设置</Menu.Item>
       </Menu>
     );
@@ -105,15 +71,17 @@ class Setting extends Component {
     const { current } = this.state;
     switch (current.value) {
       case '1':
-        return <BasicSetting wrappedComponentRef={form => (this.form1 = form)} />;
+        return <BasicSetting />;
       case '2':
-        return <ScoreSet wrappedComponentRef={form => (this.form2 = form)} />;
+        return <ScoreSet />;
       case '5':
-        return <Network wrappedComponentRef={form => (this.form5 = form)} />;
+        return <Network />;
       case '7':
         return <BedInfo />
+      case '8':
+        return <Account />
       case '9':
-        return <Alarm  wrappedComponentRef={form => (this.form9 = form)} />;
+        return <Alarm />;
       default:
         break;
     }

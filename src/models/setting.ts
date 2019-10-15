@@ -1,6 +1,22 @@
 import store from 'store';
 import { getBedIfo } from '@/services/api';
 
+const fakeData = [{
+  key: '1',
+  name: 'John Brown',
+  status: '0',
+},
+{
+  key: '2',
+  name: 'Jim Green',
+  status: '1',
+},
+{
+  key: '3',
+  name: 'Joe Black',
+  status: '2',
+},]
+
 export default {
   namespace: 'setting',
   state: {
@@ -16,6 +32,7 @@ export default {
       [4, 4],
     ],
     bedinfo: [], // 床位信息
+    accounts: fakeData || [], // 所有账户信息列表
   },
   effects: {
     *setListLayout({ payload }, { put }) {
