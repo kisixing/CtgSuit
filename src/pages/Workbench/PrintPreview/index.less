@@ -3,9 +3,17 @@
 .modal {
 
   .top {
-    flex: 1.5;
+    height: 200px;
+
+    // padding: 24px;
+    text-align: center;
+    // background: #dfdfdf;
+    overflow: auto;
+  }
+  .bottom {
+    flex: 1;
     padding: 24px;
-    margin-bottom: 24px;
+    margin-top: 24px;
     background: #fff;
 
     :global {
@@ -17,15 +25,6 @@
       }
     }
   }
-
-  .bottom {
-    flex: 1;
-    padding: 24px;
-    text-align: center;
-    background: #dfdfdf;
-    overflow: auto;
-  }
-
   :global {
     .ant-modal {
       padding-bottom: 0;

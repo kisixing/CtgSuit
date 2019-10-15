@@ -4,16 +4,16 @@
  * @Date: 2019-10-02 20:10:21
  */
 
-import React, { Component } from 'react';
+import React, { useMemo } from 'react';
 import { Modal } from 'antd';
 
 import Setting from './Setting';
 import Preview from './Preview';
 
 import styles from './index.less';
-
-class PrintPreview extends Component {
-  renderTitle = (data) => {
+export const Context = React.createContext({})
+const PrintPreview = (props) => {
+  const renderTitle = (data) => {
     return (
       <div className={styles.modalTitle}>
         <span>【${data.bedname}】 打印</span>
@@ -23,9 +23,10 @@ class PrintPreview extends Component {
       </div>
     );
   }
-  render() {
-    const { visible, onCancel, onCreate, dataSource } = this.props;
-    return (
+  const { visible, onCancel, onCreate, dataSource } = props;
+  const v = useMemo(() => { return {} }, [])
+  return (
+    <Context.Provider value={v}>
       <Modal
         getContainer={false}
         destroyOnClose
@@ -33,7 +34,7 @@ class PrintPreview extends Component {
         width="92%"
         height="96%"
         visible={visible}
-        title={this.renderTitle(dataSource)}
+        title={renderTitle(dataSource)}
         okText="创建"
         cancelText="取消"
         footer={null}
@@ -43,14 +44,15 @@ class PrintPreview extends Component {
         onOk={onCreate}
       >
         <div className={styles.top}>
-          <Setting dataSource={dataSource} />
-        </div>
-        <div className={styles.bottom}>
           <Preview dataSource={dataSource} />
         </div>
+        <div className={styles.bottom}>
+          <Setting dataSource={dataSource} />
+        </div>
       </Modal>
-    );
-  }
+    </Context.Provider>
+
+  );
 }
 
 export default PrintPreview;

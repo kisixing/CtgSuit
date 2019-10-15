@@ -4,7 +4,7 @@ import { Spin } from 'antd';
 import { Ctg as L } from '@lianmed/lmg';
 import styles from './index.less';
 import moment from 'moment';
-
+import { Context } from './index'
 class Setting extends Component {
   constructor(props) {
     super(props)
@@ -60,12 +60,19 @@ class Setting extends Component {
     const { ctgData, loading } = this.props;
 
     return (
-      <Spin
-        wrapperClassName={styles.chart}
-        spinning={loading.effects['item/fetchCTGData']}
-      >
-        <L type={1} data={ctgData}></L>
-      </Spin>
+      <Context.Consumer>
+        {
+          value => (
+            <Spin
+              wrapperClassName={styles.chart}
+              spinning={loading.effects['item/fetchCTGData']}
+            >
+              <L type={1} data={ctgData} mutableSuitObject={value}></L>
+            </Spin>
+          )
+        }
+      </Context.Consumer>
+
     );
   }
 }

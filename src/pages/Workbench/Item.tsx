@@ -10,7 +10,7 @@ let styles = require('./Item.less')
 const WorkbenchItem = props => {
   // console.log('item render')
   const { dispatch, fullScreenId, itemHeight, itemSpan, dataSource, outPadding } = props;
-  const { data = {}, unitId, type } = dataSource;
+  const { data, unitId, type } = dataSource;
   const [showSettingBar, setShowSettingBar] = useState(true);
   const [showTitle, setShowTitle] = useState(true)
   const ref = useRef(null)
@@ -29,9 +29,14 @@ const WorkbenchItem = props => {
 
   // item右上角icon
   const renderExtra = (status: React.ReactText) => {
+
     return (
       <div className={styles.extra}>
-        <Tag color={mapStatusToColor[status]}>{mapStatusToText[status]}</Tag>
+        {
+          status !== void 0 && (
+            <Tag color={mapStatusToColor[status]}>{mapStatusToText[status]}</Tag>
+          )
+        }
         <Button
           title="全屏展示"
           icon="fullscreen"
@@ -100,9 +105,9 @@ const WorkbenchItem = props => {
         title={renderTilte(dataSource)}
         size="small"
         className={styles.card}
-        extra={renderExtra(data.status)}
+        extra={renderExtra(data && data.status)}
         headStyle={{ background: 'var(--theme-color)', color: '#fff' }}
-        bodyStyle={{ padding: 0, height: 'calc(100% - 40px)' }}
+        bodyStyle={{ padding: 0, height: 'calc(100% - 38px)' }}
       >
         <L data={data} showEcg={false} mutableSuitObject={suitObject} itemHeight={itemHeight}></L>
       </Card>
