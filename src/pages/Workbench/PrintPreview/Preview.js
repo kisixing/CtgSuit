@@ -2,7 +2,7 @@ import printElement from './printElement';
 import React, { Fragment, Component } from 'react';
 import { connect } from 'dva';
 import { Document, Page } from 'react-pdf';
-import { Pagination, Button, Spin } from 'antd';
+import { Pagination, Button, Spin, Empty } from 'antd';
 import { ipcRenderer } from 'electron';
 import config from '@/utils/config';
 
@@ -41,36 +41,42 @@ class Preview extends Component {
     const { pdfflow } = this.props;
 
     if (!pdfflow) {
-      return <div> 暂无数据...</div>;
+      return <Empty style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', margin: 0 }} />;
     }
 
     return (
-      <div className={styles.wrapper}>
-        <Button type="primary" className={styles.button} onClick={this.handlePrint}>
-          打印
+      <div style={{ display: 'flex', height: '100%' }}>
+        <div className={styles.wrapper}>
+
+          <Document
+            className={styles.preview}
+            loading={<Spin style={{ margin: '120px 0' }} />}
+            onLoadSuccess={this.onDocumentLoad}
+            file={pdfflow}
+            renderMode="canvas"
+            options={{
+              cMapUrl: 'cmaps/',
+              cMapPacked: true,
+            }}
+          >
+            <Page className={styles.page} pageNumber={pageNumber} scale={1.5} height={340} />
+          </Document>
+          <Pagination
+            className={styles.pagination}
+            total={numPages}
+            showTotal={total => `共 ${total} 页`}
+            current={pageNumber}
+            pageSize={1}
+            size="small"
+            onChange={this.onChangePage}
+          />
+        </div>
+        <div style={{ width: 300,background:'#fff',display:'flex',alignItems:'center',justifyContent:'center'}}>
+          <Button type="primary" className={styles.button} onClick={this.handlePrint}>
+            打印
         </Button>
-        <Document
-          className={styles.preview}
-          loading={<Spin style={{ margin: '120px 0' }} />}
-          onLoadSuccess={this.onDocumentLoad}
-          file={pdfflow}
-          renderMode="canvas"
-          options={{
-            cMapUrl: 'cmaps/',
-            cMapPacked: true,
-          }}
-        >
-          <Page className={styles.page} pageNumber={pageNumber} scale={1.5} height={340} />
-        </Document>
-        <Pagination
-          className={styles.pagination}
-          total={numPages}
-          showTotal={total => `共 ${total} 页`}
-          current={pageNumber}
-          pageSize={1}
-          size="small"
-          onChange={this.onChangePage}
-        />
+          打印按钮区域
+          </div>
       </div>
     );
   }
