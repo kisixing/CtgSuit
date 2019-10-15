@@ -132,18 +132,18 @@ const EditModal = Form.create({
                   })(<InputNumber min={0} max={10} placeholder="请输入产次..." />)}
                 </Form.Item>
               </Col>
+              <Col span={12}>
+                <Form.Item label="居住地址">
+                  {getFieldDecorator('address', {
+                    rules: [{ required: false, message: '请填写现居住详细地址!' }],
+                  })(<Input placeholder="输入现居住详细地址" />)}
+                </Form.Item>
+              </Col>
               <Col span={24} className={styles.buttons}>
                 <Button onClick={onCancel}>取消</Button>
                 <Button type="primary" onClick={this.handleUpdate}>
                   确定
                 </Button>
-              </Col>
-              <Col span={24}>
-                <Form.Item label="居住地址">
-                  {getFieldDecorator('address', {
-                    rules: [{ required: true, message: '请填写现居住详细地址!' }],
-                  })(<Input placeholder="输入现居住详细地址" />)}
-                </Form.Item>
               </Col>
             </Row>
           </Form>

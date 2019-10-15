@@ -1,27 +1,15 @@
 @import '../../utils/utils.less';
 
 .tableList {
+  height: 323px;
   padding: 24px;
   background: #fff;
 
-  table th,
-  table td {
-    white-space: nowrap;
-  }
-
-  :global {
-    .ant-table-body {
-      height: 262px;
-    }
-
-    .ant-table-row {
-      cursor: pointer;
-    }
-  }
+  :global {}
 
   .selectedRow {
     & > td {
-      background-color: #f0f5ff !important;
+      background-color: @select-item-active-bg !important;
     }
   }
 }

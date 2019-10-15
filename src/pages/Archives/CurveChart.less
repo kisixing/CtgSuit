@@ -2,6 +2,8 @@
 
 .wrapper {
   height: 100%;
+  background: #fff;
+  transition: all 0.3s;
 
   h2 {
     margin-bottom: 12px;
@@ -13,7 +15,8 @@
   .header {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 12px;
+    align-items: center;
+    padding-bottom: 12px;
 
     .var {
       display: inline-block;
@@ -35,11 +38,37 @@
       }
       .ant-spin-container {
         height: 100%;
-
-        & > div {
-
-        }
       }
     }
+  }
+}
+
+.fullscreen {
+  height: 100vh;
+  padding: 24px;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+
+  .header {
+    background-color: @primary-color;
+    padding: 24px;
+    font-size: 18px;
+    color: #fff;
+
+    .var {
+      color: #fff;
+    }
+
+    button {
+      color: #fff;
+    }
+  }
+
+  .chart {
+    height: calc(100% - 88px);
   }
 }

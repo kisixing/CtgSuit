@@ -50,30 +50,35 @@ export default [
       {
         path: '/workbench', // Archives
         name: 'workbench',
+        exact: true,
         title: '胎监-主页',
         component: './Workbench/index',
       },
       {
         path: '/archives',
         name: 'workbench',
+        exact: true,
         title: '胎监-档案管理',
         component: './Archives/index',
       },
       {
         path: '/setting',
         name: 'workbench',
+        exact: true,
         title: '胎监-系统设置',
         component: './Setting/index',
       },
       {
         path: '/testCtg',
         name: 'testCtg',
+        exact: true,
         title: '胎监-系统设置',
         component: './TestCtg',
       },
       {
         path: '/pregnancy',
         name: 'Pregnancy',
+        exact: true,
         title: '胎监-孕产妇管理',
         component: './Pregnancy',
       },

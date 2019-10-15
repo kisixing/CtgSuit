@@ -4,6 +4,7 @@ import { Table, Divider, Button, Popconfirm } from 'antd';
 import moment from 'moment';
 import CreateRecordModal from './CreateRecordModal';
 import PrintPreview from '../Workbench/PrintPreview';
+import Analysis from '../Workbench/Analysis';
 
 import styles from './TableList.less';
 
@@ -12,9 +13,10 @@ class TableList extends Component {
     super(props);
     this.state = {
       visible: false,
-      printVisible:false,
+      printVisible: false,
+      analysisVisible: false,
       type: 'edit',
-      current: {} // 当前行
+      current: {}, // 当前行
     };
     this.columns = [
       {
@@ -36,12 +38,7 @@ class TableList extends Component {
         dataIndex: 'name',
         key: 'name',
         width: 100,
-        className: 'name',
-        render: (text, record) => (
-          <div style={{ width: '100px', overflow: 'hidden' }}>
-            {record.pregnancy && record.pregnancy.name}
-          </div>
-        ),
+        render: (text, record) => record.pregnancy && record.pregnancy.name,
       },
       {
         title: '年龄',
@@ -62,7 +59,7 @@ class TableList extends Component {
         key: 'inpatientNO',
         width: 100,
         render: (text, record) => (
-          <div style={{ width: '100px', overflow: 'hidden' }}>
+          <div style={{ wordWrap: 'break-word', wordBreak: 'break-word' }}>
             {record.pregnancy && record.pregnancy.inpatientNO}
           </div>
         ),
@@ -72,7 +69,6 @@ class TableList extends Component {
         dataIndex: 'bedNumber',
         key: 'bedNumber',
         width: 100,
-        className: 'bedNumber',
         render: (text, record) => record.ctgexam.id,
       },
       {
@@ -107,16 +103,24 @@ class TableList extends Component {
         dataIndex: 'action',
         key: 'action',
         align: 'center',
-        width: 150,
+        width: 200,
         render: (text, record) => {
           return (
             <span>
-              <span onClick={() => this.showPrint(record)}>
+              <span className="primary-link" onClick={() => this.showPrint(record)}>
                 打印
               </span>
               <Divider type="vertical" />
+              <span className="primary-link" onClick={() => this.showAnalysis(record)}>
+                分析
+              </span>
+              <Divider type="vertical" />
+              <span className="delete-link" onClick={() => this.switchFullscreen(record)}>
+                详情
+              </span>
+              <Divider type="vertical" />
               <Popconfirm title="确认删除该条信息？" okText="确定" cancelText="取消">
-                <span>删除</span>
+                <span className="delete-link">删除</span>
               </Popconfirm>
             </span>
           );
@@ -137,16 +141,25 @@ class TableList extends Component {
     });
   };
 
-  showPrint = (record) => {
+  showPrint = record => {
     this.setState({ current: record }, () => {
       this.setState({ printVisible: true });
+      this.handleRow(record);
     });
-  }
+  };
+
+  showAnalysis = record => {
+    this.setState({ current: record }, () => {
+      this.setState({ analysisVisible: true });
+      this.handleRow(record);
+    });
+  };
 
   handleCancel = () => {
     this.setState({
       visible: false,
       printVisible: false,
+      analysisVisible: false,
     });
   };
 
@@ -155,7 +168,7 @@ class TableList extends Component {
   };
 
   // 创建档案
-  handleOk = (item) => {
+  handleOk = item => {
     const { dispatch } = this.props;
     const { form } = this.formRef.props;
     form.validateFields((err, values) => {
@@ -180,7 +193,7 @@ class TableList extends Component {
         type: 'archives/update',
         payload: {
           ...p,
-        }
+        },
       });
       form.resetFields();
       this.setState({ visible: false });
@@ -206,9 +219,20 @@ class TableList extends Component {
     });
   };
 
+  switchFullscreen = record => {
+    const { dispatch, isFullscreen } = this.props;
+    dispatch({
+      type: 'archives/updateState',
+      payload: {
+        isFullscreen: !isFullscreen,
+      },
+    });
+    this.handleRow(record);
+  };
+
   render() {
     const { selected, dataSource, loading } = this.props;
-    const { visible, printVisible, type, current } = this.state;
+    const { visible, printVisible, analysisVisible, type, current } = this.state;
 
     return (
       <div className={styles.tableList}>
@@ -216,6 +240,7 @@ class TableList extends Component {
           bordered
           size="small"
           pagination={false}
+          scroll={{ x: 1210, y: 235 }}
           columns={this.columns}
           dataSource={dataSource}
           // onRow={record => {
@@ -228,7 +253,7 @@ class TableList extends Component {
           rowKey="id"
           rowClassName={record => (record.id === selected.id ? styles.selectedRow : '')}
           rowSelection={{
-            // columnWidth: '38px',
+            // columnWidth: '67px',
             type: 'radio',
             selectedRowKeys: [selected.id],
             onSelect: (record, selected, selectedRows) => this.handleRow(record),
@@ -246,11 +271,18 @@ class TableList extends Component {
         ) : null}
         {printVisible ? (
           <PrintPreview
-            wrappedComponentRef={form => (this.printRef = form)}
             visible={printVisible}
             onCancel={this.handleCancel}
             onCreate={this.handleCreate}
             dataSource={current}
+          />
+        ) : null}
+        {analysisVisible ? (
+          <Analysis
+            visible={analysisVisible}
+            onCancel={this.handleCancel}
+            onCreate={this.handleCreate}
+            dataSource={dataSource}
           />
         ) : null}
       </div>
@@ -261,5 +293,6 @@ class TableList extends Component {
 export default connect(({ archives, loading }) => ({
   selected: archives.current,
   dataSource: archives.dataSource,
+  isFullscreen: archives.isFullscreen,
   loading: loading,
 }))(TableList);

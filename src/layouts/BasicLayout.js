@@ -10,6 +10,7 @@ import { AntdThemeManipulator } from '@lianmed/components';
 import { Layout, Menu, Icon, Button, Modal, Avatar, Spin, Select } from 'antd';
 import { connect } from 'dva';
 import { router } from 'umi';
+import withRouter from 'umi/withRouter';
 import Link from 'umi/link';
 import store from 'store';
 import { ipcRenderer } from 'electron';
@@ -34,6 +35,7 @@ const settingData = settingStore.cache
 const colors = AntdThemeManipulator.colors
 const { Header, Footer, Content } = Layout;
 const joinSymbol = ' x '
+
 class BasicLayout extends Component {
   constructor(props) {
     super(props);
@@ -64,7 +66,7 @@ class BasicLayout extends Component {
       clearAll: () => store.clearAll(),
     });
     // 每1min请求一次床位信息列表
-    this.interval = setInterval(() => this.updateBeds(), 10000);
+    // this.interval = setInterval(() => this.updateBeds(), 10000);
   }
 
   componentWillUnmount() {
@@ -81,18 +83,18 @@ class BasicLayout extends Component {
     this.setState({
       current: key,
     });
+    // let timestamp = Date.parse(new Date());
     if (key === '操作说明') {
-      // router.push('/testCtg');
       ipcRenderer.send('newWindow', '操作说明');
     }
     if (key === '档案管理') {
-      router.push('/Archives');
+      router.replace('/archives');
     }
     if (key === '系统设置') {
-      router.push('/setting');
+      router.replace('/setting');
     }
     if (key === '孕产妇管理') {
-      router.push('/pregnancy');
+      router.replace('/pregnancy');
     }
   };
 
@@ -107,7 +109,7 @@ class BasicLayout extends Component {
         content: '确认退出系统？',
         okText: '确认',
         cancelText: '取消',
-        onOk: function () {
+        onOk: function() {
           // 清除sessionStorage
           // store.clearAll();
           // 退出登录，关闭应用
@@ -123,7 +125,7 @@ class BasicLayout extends Component {
         content: '确认退出登录？',
         okText: '确认',
         cancelText: '取消',
-        onOk: function () {
+        onOk: function() {
           // 清除sessionStorage
           store.clearAll();
           // 退出登录，回到登录页面
@@ -228,19 +230,19 @@ class BasicLayout extends Component {
   };
 
   render() {
-    const primaryColor = settingData.theme || colors[this.colorIndex]
+    const primaryColor = settingData.theme || colors[this.colorIndex];
     const { children, wsStatus, loading } = this.props;
     const wsStatusColor =
       wsStatus === EWsStatus.Pendding
         ? 'transparent'
         : wsStatus === EWsStatus.Success
-          ? 'green'
-          : 'red';
+        ? 'green'
+        : 'red';
     return (
       <Layout className={styles.container}>
         <Header className={styles.header}>
           <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <Link to="/workbench" className={styles.logo}>
+            <Link to="/" className={styles.logo}>
               {/* <img alt="logo" src={logo} /> */}
               <h1>胎监工作站</h1>
             </Link>
@@ -286,9 +288,13 @@ class BasicLayout extends Component {
           <span>
             Copyright <Icon type="copyright" /> {config.copyright}
           </span>
-          <AntdThemeManipulator primaryColor={primaryColor} placement="topLeft" onChange={color => {
-            settingStore.set('theme', color)
-          }} />
+          <AntdThemeManipulator
+            primaryColor={primaryColor}
+            placement="topLeft"
+            onChange={color => {
+              settingStore.set('theme', color);
+            }}
+          />
         </Footer>
       </Layout>
     );
@@ -304,5 +310,5 @@ export default connect(({ global, list, loading, setting, ws }) => ({
   listLayout: setting.listLayout,
   listLayoutOptions: setting.listLayoutOptions,
   wsStatus: ws.status,
-  wsData: ws.data
-}))(BasicLayout);
+  wsData: ws.data,
+}))(withRouter(BasicLayout));

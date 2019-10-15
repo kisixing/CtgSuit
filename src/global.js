@@ -1,6 +1,5 @@
-import 'antd/dist/antd.css';
 import { message } from 'antd';
-import '@/utils/request'
+
 message.config({
     top: 150,
     duration: 2,
