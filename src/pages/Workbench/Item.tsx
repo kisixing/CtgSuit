@@ -29,12 +29,14 @@ const WorkbenchItem = props => {
 
   // item右上角icon
   const renderExtra = (status: React.ReactText) => {
-    if (status === void 0) {
-      return null
-    }
+
     return (
       <div className={styles.extra}>
-        <Tag color={mapStatusToColor[status]}>{mapStatusToText[status]}</Tag>
+        {
+          status !== void 0 && (
+            <Tag color={mapStatusToColor[status]}>{mapStatusToText[status]}</Tag>
+          )
+        }
         <Button
           title="全屏展示"
           icon="fullscreen"

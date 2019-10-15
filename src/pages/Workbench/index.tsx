@@ -14,12 +14,16 @@ const Home = props => {
   // const [wrapRec, setWrapRec] = useState({ height: 0, width: 0 });
 
   useEffect(() => {
-    event.on('workbench:toggle_completed', status => {
+    const cb = status => {
       setShowCompleted(status)
       status && request.get('/').finally(() => {
         setCompletedData(Array(6).fill({}))
       })
-    })
+    }
+    event.on('workbench:toggle_completed', cb)
+    return () => {
+      event.off('workbench:toggle_completed', cb)
+    }
   }, []);
   const itemSpan = 24 / listLayout[0];
   const outPadding = 6;
@@ -29,7 +33,7 @@ const Home = props => {
     <div style={{ height: '100%' }} ref={wrap}>
       <Row style={{ padding: outPadding }}>
         {((showCompleted ? completedData : pageItems) as IDevice[]).map(item => {
-          console.log('item',item)
+          console.log('item', item)
           return (
             <Item
               key={item.id}
