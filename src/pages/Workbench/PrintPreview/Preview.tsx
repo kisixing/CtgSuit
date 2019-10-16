@@ -22,13 +22,20 @@ const Preview = props => {
   const [pageNumber, setPageNumber] = useState(1)
 
   const [startingTime, setStartingTime] = useState(0)
+  const [endingTime, setEndingTime] = useState(0)
+
   const [value, setValue] = useState<{ suit: any }>({ suit: null })
   const [lock, setLock] = useState(false)
   useEffect(() => {
 
     const cb = startingTime => {
+      const interval = settingData.print_interval
       setStartingTime(
         startingTime
+      )
+      //TODO: 计算结束时间
+      setEndingTime(
+        startingTime + interval
       )
     }
     value.suit && value.suit.on('suit:startTime', v => {
@@ -71,7 +78,7 @@ const Preview = props => {
         startdate: moment(starttime).format('YYYY-MM-DD HH:mm:ss'),
         fetalcount: 2,
         start: startingTime,
-        end: 900,
+        end: endingTime,
       },
     });
 
@@ -133,8 +140,10 @@ const Preview = props => {
                     }
                   </Button>
                 </div>
+
+                {/* TODO: 计算显示时间 */}
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span>开始：123</span>
+                  <span>结束：123</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <span>时长：{settingData.print_interval || 0}分</span>
