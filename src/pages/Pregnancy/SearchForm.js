@@ -22,10 +22,6 @@ class SearchForm extends Component {
       if (!err) {
         console.log('Received values of form: ', values);
         const { inpatientNO, name, recordstate, edd } = values;
-        // if (inpatientNO === undefined && name === undefined && edd === undefined) {
-        //   message.info('请输入检索条件');
-        //   return;
-        // }
         this.props.dispatch({
           type: 'pregnancy/fetchPregnancies',
           payload: {
@@ -55,11 +51,13 @@ class SearchForm extends Component {
             <Form.Item label="住院号">
               {getFieldDecorator('inpatientNO', {
                 rules: [{ required: false, message: '请输入住院号!' }],
-              })(<Input type="text" />)}
+              })(<Input allowClear type="text" />)}
             </Form.Item>
           </Col>
           <Col span={5}>
-            <Form.Item label="姓名">{getFieldDecorator('name')(<Input type="text" />)}</Form.Item>
+            <Form.Item label="姓名">
+              {getFieldDecorator('name')(<Input allowClear type="text" />)}
+            </Form.Item>
           </Col>
           <Col span={5}>
             <Form.Item label="住院状态">
@@ -75,6 +73,7 @@ class SearchForm extends Component {
             <Form.Item label="孕产期">
               {getFieldDecorator('edd')(
                 <DatePicker
+                  allowClear
                   style={{ minWidth: '168px' }}
                   format="YYYY-MM-DD HH:mm:ss"
                   placeholder="请选择日期"

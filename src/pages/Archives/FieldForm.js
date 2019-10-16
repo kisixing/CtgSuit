@@ -54,13 +54,14 @@ class FieldForm extends Component {
         <Row>
           <Col span={5}>
             <Form.Item label="孕册ID">
-              {getFieldDecorator('pregnancyId')(<Input type="text" />)}
+              {getFieldDecorator('pregnancyId')(<Input allowClear type="text" />)}
             </Form.Item>
           </Col>
           <Col span={5}>
             <Form.Item label="开始时间">
               {getFieldDecorator('startTime')(
                 <DatePicker
+                  allowClear
                   format="YYYY-MM-DD HH:mm:ss"
                   placeholder="请选择日期"
                   showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
@@ -72,6 +73,7 @@ class FieldForm extends Component {
             <Form.Item label="结束时间">
               {getFieldDecorator('endTime')(
                 <DatePicker
+                  allowClear
                   format="YYYY-MM-DD HH:mm:ss"
                   placeholder="请选择日期"
                   showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}

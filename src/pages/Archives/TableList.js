@@ -39,7 +39,11 @@ class TableList extends Component {
         dataIndex: 'name',
         key: 'name',
         width: 100,
-        render: (text, record) => record.pregnancy && record.pregnancy.name,
+        render: (text, record) => (
+          <span style={{ width: '84px' }} className={styles.textOver}>
+            {record.pregnancy && record.pregnancy.name}
+          </span>
+        ),
       },
       {
         title: '年龄',
@@ -60,7 +64,7 @@ class TableList extends Component {
         key: 'inpatientNO',
         width: 100,
         render: (text, record) => (
-          <div style={{ wordWrap: 'break-word', wordBreak: 'break-word' }}>
+          <div style={{ width: '84px' }} className={styles.textOver}>
             {record.pregnancy && record.pregnancy.inpatientNO}
           </div>
         ),
@@ -70,7 +74,7 @@ class TableList extends Component {
         dataIndex: 'bedNumber',
         key: 'bedNumber',
         width: 100,
-        render: (text, record) => record.ctgexam.id,
+        render: (text, record) => record.pregnancy && record.pregnancy.bedNO,
       },
       {
         title: '日期',

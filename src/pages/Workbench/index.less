@@ -1,3 +1,5 @@
+@import '../../utils/utils.less';
+
 :global {
   .ant-card-actions > li {
     margin: 6px 0;
@@ -5,10 +7,23 @@
 }
 
 .buttons {
+  margin-bottom: 24px;
   text-align: center;
 
   button {
     margin-left: 12px;
     margin-right: 12px;
   }
+}
+
+.tips {
+  position: relative;
+  color: #999;
+  text-align: center;
+}
+
+.error {
+  position: absolute;
+  left: 0;
+  color: @error-color;
 }
