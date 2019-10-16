@@ -9,7 +9,7 @@ import { connect } from 'dva';
 import moment from 'moment';
 import Link from 'umi/link';
 import cx from 'classnames';
-
+import { event } from "@lianmed/utils";
 import CollectionCreateForm from './CollectionCreateForm';
 import Analysis from './Analysis';
 import PrintPreview from './PrintPreview';
@@ -33,8 +33,13 @@ class Toolbar extends Component {
       // isMonitor: false, // 是否已经开始监护
     };
   }
-
+  onclose = (cb) => {
+    this.endCb = cb
+    this.showModal('confirmVisible')
+  }
   componentDidMount() {
+    this.unitId = this.props.dataSource.unitId
+    event.on(`bedClose:${this.unitId}`, this.onclose)
     const {
       dataSource: { data, documentno, pregnancy },
     } = this.props;
@@ -43,7 +48,9 @@ class Toolbar extends Component {
       pregnancy && pregnancy.id && data && documentno === data.docid;
     this.setState({ isCreated });
   }
-
+  componentWillUnmount() {
+    event.on(`bedClose:${this.unitId}`, this.onclose)
+  }
   toggleTool = () => {
     const { showSetting } = this.state;
     this.setState({ showSetting: !showSetting });
@@ -121,8 +128,14 @@ class Toolbar extends Component {
   end = item => {
     const { isCreated } = this.state;
     const { dispatch, setShowTitle } = this.props;
+    const { deviceno, bedno, pregnancy, data, documentno, prenatalVisit = {}, unitId } = item;
+
+    dispatch({
+      type: 'list/appendDirty', unitId
+    })
+
+
     const _this = this;
-    const { deviceno, bedno, pregnancy, data, documentno, prenatalVisit = {} } = item;
     // const isCreated = pregnancy && pregnancy.id && data && documentno === data.docid;
     socket.endwork(deviceno, bedno);
     if (isCreated) {
@@ -155,6 +168,10 @@ class Toolbar extends Component {
     } else {
       // 未建档提示简单保存或者放弃保存
       _this.setState({ isCreated: false });
+    }
+    if (this.endCb) {
+      this.endCb()
+      this.endCb = null
     }
   };
 
