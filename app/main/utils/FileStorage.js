@@ -88,7 +88,7 @@ FileStorage.prototype = {
         const o = { ...obj }
         key.forEach((k, index) => {
             const v = value[index] || ''
-            o[k] = v
+            o[k] = String(v)
         })
 
         return this.box(o)

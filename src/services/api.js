@@ -104,7 +104,7 @@ export async function updateCTGexams(params) {
  */
 export async function getPDFflow(params) {
   // api/ctg-exams-pdfurl/190930222541
-  return request.post(`/ctg-exams-pdf/${params.docid}`, {
+  return request.post(`/ctg-exams-pdf`, {
     data: params,
   });
 }
