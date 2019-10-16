@@ -4,16 +4,19 @@ import { getBedIfo } from '@/services/api';
 const fakeData = [{
   key: '1',
   name: 'John Brown',
+  password: '123456',
   status: '0',
 },
 {
   key: '2',
   name: 'Jim Green',
+  password: '123456',
   status: '1',
 },
 {
   key: '3',
   name: 'Joe Black',
+  password: '123456',
   status: '2',
 },]
 

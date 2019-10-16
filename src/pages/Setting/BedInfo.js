@@ -117,7 +117,7 @@ class EditableTable extends React.Component {
         },
       ].map(_ => ({ ..._, editable: true, align: 'center' })),
       {
-        title: 'operation',
+        title: '操作',
         dataIndex: 'operation',
         render: (text, record) => {
           const { editingKey } = this.state;
@@ -132,17 +132,17 @@ class EditableTable extends React.Component {
                     onClick={() => this.save(form, record.id)}
                     style={{ marginRight: 8 }}
                   >
-                    Save
+                    保存
                   </Button>
                 )}
               </EditableContext.Consumer>
               <Popconfirm title="Sure to cancel?" onConfirm={() => this.cancel(record.id)}>
-                <Button size="small" type="link">Cancel</Button>
+                <Button size="small" type="link">取消</Button>
               </Popconfirm>
             </span>
           ) : (
               <Button size="small" type="link" disabled={editingKey !== ''} onClick={() => this.edit(record.id)}>
-                Edit
+                编辑
             </Button>
             );
         },
