@@ -20,8 +20,8 @@ class Network extends Component {
   }
   fetchData = () => {
     const { form } = this.props;
-    store.get(['alarm_high', 'alarm_low', 'alarm_on_window', 'alarm_on_sound']).then(([alarm_high, alarm_low, alarm_on_window, alarm_on_sound]) => {
-      form.setFieldsValue({ alarm_high, alarm_low, alarm_on_window: alarm_on_window, alarm_on_sound: alarm_on_sound });
+    store.getObj().then(({ alarm_high, alarm_low, alarm_on_window, alarm_on_sound }) => {
+      form.setFieldsValue({ alarm_high, alarm_low, alarm_on_window, alarm_on_sound });
     })
   }
   handleSubmit = () => {
