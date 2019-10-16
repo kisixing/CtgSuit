@@ -20,11 +20,20 @@ class FieldForm extends Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
+        let { pregnancyId, startTime, endTime } = values;
+        if (startTime) {
+          startTime = moment(startTime).format('YYYY-MM-DD');
+        }
+        if (endTime) {
+          endTime = moment(endTime).format('YYYY-MM-DD');
+        }
         //TODO 检索条件未成熟
         this.props.dispatch({
           type: 'archives/fetchRecords',
           payload: {
-
+            'pregnancyId.equals': pregnancyId,
+            'visitDate.greaterOrEqualThan': startTime,
+            'visitDate.lessOrEqualThan': endTime,
           },
         });
       }
@@ -44,12 +53,15 @@ class FieldForm extends Component {
       <Form layout="inline" className={styles.form} onSubmit={this.handleSubmit}>
         <Row>
           <Col span={5}>
-            <Form.Item label="档案号">{getFieldDecorator('docid')(<Input type="text" />)}</Form.Item>
+            <Form.Item label="孕册ID">
+              {getFieldDecorator('pregnancyId')(<Input allowClear type="text" />)}
+            </Form.Item>
           </Col>
           <Col span={5}>
             <Form.Item label="开始时间">
               {getFieldDecorator('startTime')(
                 <DatePicker
+                  allowClear
                   format="YYYY-MM-DD HH:mm:ss"
                   placeholder="请选择日期"
                   showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
@@ -61,6 +73,7 @@ class FieldForm extends Component {
             <Form.Item label="结束时间">
               {getFieldDecorator('endTime')(
                 <DatePicker
+                  allowClear
                   format="YYYY-MM-DD HH:mm:ss"
                   placeholder="请选择日期"
                   showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}

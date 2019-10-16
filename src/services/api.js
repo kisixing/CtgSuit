@@ -1,6 +1,5 @@
 import request from '@/utils/request';
 import { stringify } from 'qs';
-import { async } from 'q';
 
 /**
  * 验证账户登录
@@ -35,7 +34,7 @@ export async function getAccount() {
  *
  * 孕妇建档、绑定床号
  * @export
- * @param {*} params
+ * @param {*} params 新建参数
  * @returns
  */
 export async function newPregnancies(params) {
@@ -44,24 +43,26 @@ export async function newPregnancies(params) {
   });
 }
 
+/**
+ * 获取孕册信息
+ * @param {*} params 条件参数
+ */
 export async function getPregnancy(params) {
   return request.get(`/pregnancies?${stringify(params)}`);
 }
 
 /**
- * 胎监档案记录接口
+ * 胎监历史档案记录接口
  * @export
  * @returns
  */
 export async function getCTGrecords(params) {
+  // CTGExamId有ctg数据，pregnancyId有孕妇信息即已经绑定
+  const string = stringify(params);
   return request.get(
-    `/prenatal-visits?CTGExamId.specified=true&pregnancyId.specified=true${params ? '&' : ''}${stringify(
-      params,
-    )}`,
+    `/prenatal-visits?CTGExamId.specified=true&pregnancyId.specified=true${string ? '&' : ''}${string}`,
   );
 }
-
-
 
 export async function newCTGrecord(params) {
   return request.post(`/prenatal-visits`, {
@@ -78,7 +79,7 @@ export async function updateCTGrecord(params) {
 /**
  * 根据档案列表获取的胎儿监护图数据
  * @export
- * @param {*} params
+ * @param {*} params ctgexamid ctg曲线id
  * @returns
  */
 export async function getCTGrecordData(params) {
@@ -98,8 +99,8 @@ export async function updateCTGexams(params) {
 }
 
 /**
- * 获取流
- * @param {*} params
+ * 获取pdf二进制数据
+ * @param {*} params docid
  */
 export async function getPDFflow(params) {
   // api/ctg-exams-pdfurl/190930222541
@@ -116,7 +117,12 @@ export async function getPDF(note) {
   return request.get(`/ctg-exams-pdfurl/${note}`);
 }
 
-export async function getBedIfo(note) {
+/**
+ * 获取床位设备信息
+ * @export
+ * @returns
+ */
+export async function getBedIfo() {
   return request.get('/bedinfos');
 }
 

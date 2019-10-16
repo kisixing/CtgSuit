@@ -117,7 +117,7 @@ class EditableTable extends React.Component {
         },
       ].map(_ => ({ ..._, editable: true, align: 'center' })),
       {
-        title: 'operation',
+        title: '操作',
         dataIndex: 'operation',
         render: (text, record) => {
           const { editingKey } = this.state;

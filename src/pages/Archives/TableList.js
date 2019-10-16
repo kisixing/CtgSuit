@@ -26,32 +26,37 @@ class TableList extends Component {
         width: 100,
         align: 'center',
       },
-      // {
-      //   title: '检查次数',
-      //   dataIndex: 'visitType',
-      //   key: 'visitType',
-      //   width: 80,
-      //   align: 'center',
-      // },
+      {
+        title: '孕册ID',
+        dataIndex: 'pregnancyId',
+        key: 'pregnancyId',
+        width: 68,
+        align: 'center',
+        render: (text, record) => record.pregnancy && record.pregnancy.id,
+      },
       {
         title: '姓名',
         dataIndex: 'name',
         key: 'name',
         width: 100,
-        render: (text, record) => record.pregnancy && record.pregnancy.name,
+        render: (text, record) => (
+          <span style={{ width: '84px' }} className={styles.textOver}>
+            {record.pregnancy && record.pregnancy.name}
+          </span>
+        ),
       },
       {
         title: '年龄',
         dataIndex: 'age',
         key: 'age',
-        width: 100,
+        width: 68,
         render: (text, record) => record.pregnancy && record.pregnancy.age,
       },
       {
         title: '孕周',
         dataIndex: 'gestationalWeek',
         key: 'gestationalWeek',
-        width: 100,
+        width: 68,
       },
       {
         title: '住院号',
@@ -59,7 +64,7 @@ class TableList extends Component {
         key: 'inpatientNO',
         width: 100,
         render: (text, record) => (
-          <div style={{ wordWrap: 'break-word', wordBreak: 'break-word' }}>
+          <div style={{ width: '84px' }} className={styles.textOver}>
             {record.pregnancy && record.pregnancy.inpatientNO}
           </div>
         ),
@@ -69,7 +74,7 @@ class TableList extends Component {
         dataIndex: 'bedNumber',
         key: 'bedNumber',
         width: 100,
-        render: (text, record) => record.ctgexam.id,
+        render: (text, record) => record.pregnancy && record.pregnancy.bedNO,
       },
       {
         title: '日期',
@@ -240,7 +245,7 @@ class TableList extends Component {
           bordered
           size="small"
           pagination={false}
-          scroll={{ x: 1210, y: 235 }}
+          scroll={{ x: 1250, y: 235 }}
           columns={this.columns}
           dataSource={dataSource}
           // onRow={record => {

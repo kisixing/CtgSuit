@@ -65,6 +65,7 @@ class TableList extends Component {
         title: '住址',
         dataIndex: 'address',
         key: 'address',
+        width: 200,
         ...this.getColumnSearchProps('address'),
       },
       {

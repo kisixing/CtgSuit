@@ -5,18 +5,32 @@ import styles from './ModalConfirm.less';
 export default function ModalConfirm({
   visible = false,
   title = "提示窗口",
-  content,
   dataSource,
+  isCreated,
+  isMonitor,
   onCancel = () => {},
   onOk = () => {},
   onCreate = () => {}
 }) {
-  const { data, documentno, pregnancy } = dataSource;
+  const { bedname, data, documentno, pregnancy } = dataSource;
   const isCreate = pregnancy && pregnancy.id && data && documentno === data.docid;
   const handleOk = () => {
     onOk(dataSource);
     onCancel('confirmVisible');
   }
+  const content = isMonitor ? (
+    isCreated ? (
+      `确认床号: ${bedname} 停止监护 ?`
+    ) : (
+      <span>
+        床号: {bedname} 即将停止监护，但还
+        <span style={{ color: '#f00' }}>未建立档案</span>
+        ，建档请选择“建档”按钮，放弃请选择“确定”按钮 ?
+      </span>
+    )
+  ) : (
+    `确认床号: ${bedname} 开始监护 ?`
+  );
 
   return (
     <Modal
@@ -37,8 +51,14 @@ export default function ModalConfirm({
       <div className={styles.content}>{content}</div>
       <div className={styles.buttons}>
         <Button onClick={() => onCancel('confirmVisible')}>取消</Button>
-        {isCreate ? null : <Button onClick={onCreate}>建档</Button>}
-        <Button type="primary" onClick={handleOk}>确定</Button>
+        <Button onClick={handleOk}>
+          {isCreate ? '确定' : '放弃'}
+        </Button>
+        {isCreate ? null : (
+          <Button type="primary" onClick={onCreate}>
+            建档
+          </Button>
+        )}
       </div>
     </Modal>
   );

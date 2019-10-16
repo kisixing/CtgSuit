@@ -4,10 +4,9 @@
  * @Date: 2019-10-07 16:14:11
  */
 import React, { Component } from 'react';
-import { Button, Modal } from 'antd';
+import { Button, message } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
-import Link from 'umi/link';
 import cx from 'classnames';
 import { event } from "@lianmed/utils";
 import CollectionCreateForm from './CollectionCreateForm';
@@ -30,7 +29,8 @@ class Toolbar extends Component {
       partogramVisible: false,
       confirmVisible: false,
       isCreated: false, // 默认未建档
-      // isMonitor: false, // 是否已经开始监护
+      isMonitor: false, // 是否已经开始监护
+      isStopMonitorWhenCreated: false,
     };
   }
   onclose = (cb) => {
@@ -44,8 +44,7 @@ class Toolbar extends Component {
       dataSource: { data, documentno, pregnancy },
     } = this.props;
     // 判断是否已建档
-    const isCreated =
-      pregnancy && pregnancy.id && data && documentno === data.docid;
+    const isCreated = pregnancy && pregnancy.id && data && documentno === data.docid;
     this.setState({ isCreated });
   }
   componentWillUnmount() {
@@ -66,7 +65,6 @@ class Toolbar extends Component {
 
   handleCreate = item => {
     // 建档/确定action
-    const _this = this;
     const { dispatch, setShowTitle } = this.props;
     setShowTitle(true);
     const { form } = this.formRef.props;
@@ -74,47 +72,71 @@ class Toolbar extends Component {
       if (err) {
         return;
       }
-      // 新建孕册
-      dispatch({
-        type: 'list/createPregnancy',
-        payload: { ...values },
-        callback: res => {
-          if (res && res.id) {
-            // console.log('call back', res); // 请求完成后返回的结果
-            const {
-              data: { starttime, docid },
-            } = item;
-            const d = {
-              visitType: values.visitTime,
-              visitTime: moment(values.values).format(),
-              gestationalWeek: values.gestationalWeek,
-              pregnancy: {
-                id: res.id,
-              },
-              ctgexam: {
-                startTime: moment(starttime),
-                endTime: null,
-                result: null,
-                note: docid, // docid
-                diagnosis: null,
-                report: null,
-              },
-            };
-            // 新建档案, 在modal模块写
-            dispatch({
-              type: 'archives/create',
-              payload: d,
-              callback: res => {
-                if (res && res.id) {
-                  _this.setState({ isCreated: true });
-                }
-              },
-            });
-          }
+      // 新建孕册 后台检验孕册是否已经存在
+      // ture -> 提示孕册已经存在，是否
+      const pregnancyId = values.id;
+      const {
+        data: { starttime, docid },
+      } = item;
+      const d = {
+        visitType: values.visitTime,
+        visitTime: moment(values.values).format(),
+        gestationalWeek: values.gestationalWeek,
+        pregnancy: {
+          id: '',
         },
-      });
+        ctgexam: {
+          startTime: moment(starttime),
+          endTime: null,
+          result: null,
+          note: docid, // docid
+          diagnosis: null,
+          report: null,
+        },
+      };
+      if (pregnancyId) {
+        // 调入孕册信息后获取的 有孕册pregnancyId
+        const data = { ...d, pregnancy: { id: pregnancyId } };
+        this.newArchive(data)
+        this.end(item);
+      } else {
+        // 无孕册pregnancyId 新建孕册获取pregnancyId
+        dispatch({
+          type: 'list/createPregnancy',
+          payload: { ...values },
+          callback: res => {
+            if (res && res.id) {
+              // 新建孕册成功
+              const data = { ...d, pregnancy: { id: res.id } };
+              // 新建档案
+              this.newArchive(data);
+              this.end(item);
+            } else {
+              // 孕册存在，取到孕册信息
+              message.info('改患者信息已存在！');
+            }
+          },
+        });
+      }
+
       form.resetFields();
-      this.setState({ visible: false });
+      this.setState({
+        visible: false,
+        isStopMonitorWhenCreated: false
+      });
+    });
+  };
+
+  newArchive = params => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'archives/create',
+      payload: params,
+      callback: res => {
+        if (res && res.id) {
+          this.setState({ isCreated: true });
+        }
+      },
     });
   };
 
@@ -167,7 +189,7 @@ class Toolbar extends Component {
       });
     } else {
       // 未建档提示简单保存或者放弃保存
-      _this.setState({ isCreated: false });
+      this.setState({ isCreated: false });
     }
     if (this.endCb) {
       this.endCb()
@@ -178,8 +200,9 @@ class Toolbar extends Component {
   // 重定向打开建档窗口
   redirectCreate = () => {
     this.setState({
+      isStopMonitorWhenCreated: true,
       confirmVisible: false,
-      visible: true
+      visible: true,
     });
   };
 
@@ -212,10 +235,10 @@ class Toolbar extends Component {
               停止监护
             </Button>
           ) : (
-              <Button icon="play-circle" type="link" onClick={() => this.start(dataSource)}>
-                开始监护
+            <Button icon="play-circle" type="link" onClick={() => this.start(dataSource)}>
+              开始监护
             </Button>
-            )}
+          )}
           <Button
             icon="user-add"
             type="link"
@@ -292,21 +315,8 @@ class Toolbar extends Component {
         <ModalConfirm
           visible={confirmVisible}
           dataSource={dataSource}
-          content={
-            isMonitor ? (
-              isCreated ? (
-                `确认床号: ${bedname} 停止监护 ?`
-              ) : (
-                  <span>
-                    床号: {bedname} 即将停止监护，但还
-                  <span style={{ color: '#f00' }}>未建立档案</span>
-                    ，建档请选择“建档”按钮，放弃请选择“确定”按钮 ?
-                </span>
-                )
-            ) : (
-                `确认床号: ${bedname} 开始监护 ?`
-              )
-          }
+          isCreated={isCreated}
+          isMonitor={isMonitor}
           onCancel={this.handleCancel}
           onOk={this.end}
           onCreate={this.redirectCreate}

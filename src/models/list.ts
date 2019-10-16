@@ -149,14 +149,16 @@ export default {
     *fetchPregnancy({ payload, callback }, { call, put }) {
       const res = yield call(getPregnancy, payload);
       if (callback && typeof callback === 'function') {
-        callback(res[0]); // 返回结果
+        callback(res); // 返回结果
       }
-      yield put({
-        type: 'setState',
-        payload: {
-          pregnancy: res[0],
-        },
-      });
+      if (res.length) {
+        yield put({
+          type: 'setState',
+          payload: {
+            pregnancy: res[0],
+          },
+        });
+      }
     },
     // 新建孕册
     *createPregnancy({ payload, callback }, { call, put, select }) {
