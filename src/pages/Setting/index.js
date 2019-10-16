@@ -6,6 +6,7 @@ import BasicSetting from './BasicSetting';
 import ScoreSet from './ScoreSet';
 import Network from './Network';
 import Alarm from './Alarm';
+import Print from './Print';
 import BedInfo from './BedInfo';
 import Account from './Account';
 
@@ -74,6 +75,8 @@ class Setting extends Component {
         return <BasicSetting />;
       case '2':
         return <ScoreSet />;
+      case '3':
+        return <Print />;
       case '5':
         return <Network />;
       case '7':

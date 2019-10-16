@@ -3,7 +3,6 @@ import { connect } from 'dva';
 import { Spin } from 'antd';
 import { Ctg as L } from '@lianmed/lmg';
 import styles from './index.less';
-import moment from 'moment';
 import { Context } from './index'
 class Setting extends Component {
   constructor(props) {
@@ -16,12 +15,11 @@ class Setting extends Component {
       dispatch,
       dataSource: {
         data,
-        pregnancy,
         ctgexam /* 由档案入口 */
       }
     } = this.props;
     let docid = '';
-    if (data && data.docid && !ctgexam.note) {
+    if (data && data.docid && !(ctgexam && ctgexam.note)) {
       docid = data.docid;
     }
     if (ctgexam && ctgexam.note) {
@@ -33,27 +31,7 @@ class Setting extends Component {
         ctgexamid: docid,
       },
     });
-    if (
-      data &&
-      data.docid &&
-      pregnancy &&
-      pregnancy.id
-    ) {
-      dispatch({
-        type: 'item/fetchPDFflow',
-        payload: {
-          docid: data.docid,
-          name: pregnancy.name,
-          age: pregnancy.age,
-          gestationalWeek: pregnancy.gestationalWeek,
-          inpatientNO: pregnancy.inpatientNO,
-          startdate: moment(data.starttime).format('YYYY-MM-DD HH:mm:ss'),
-          fetalcount: data.fetal_num,
-          start: 0,
-          end: 2000,
-        },
-      });
-    }
+  
   }
 
   render() {
