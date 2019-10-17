@@ -8,7 +8,7 @@ import React from 'react';
 import { Button } from 'antd';
 import { router } from 'umi';
 import { mapStatusToColor } from '@/constant';
-
+import { BedStatus } from "@lianmed/lmg/lib/services/WsService";
 function Beds({ dispatch, listData, wsData }) {
   let clickTimeout = null;
 
@@ -45,29 +45,36 @@ function Beds({ dispatch, listData, wsData }) {
         flexWrap: 'wrap',
       }}
     >
-      {listData.map(({ bedname, id, pageIndex, unitId }) => {
-        return (
-          <Button
-            key={id}
-            size="small"
-            style={{
-              marginLeft: 4,
-              marginTop: 4,
-              padding: 0,
-              width: 40,
-              // height: 40,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              background: wsData.get(unitId) && mapStatusToColor[wsData.get(unitId).status],
-              color: '#fff',
-            }}
-            onClick={handleClicks({ pageIndex, unitId })}
-          >
-            {bedname}
-          </Button>
-        );
-      })}
+      {
+        listData.filter(({ unitId }) => {
+          const status = wsData.get(unitId) && wsData.get(unitId).status
+          return [BedStatus.Working, BedStatus.Stopped].includes(status)
+        })
+          .map(({ bedname, id, pageIndex, unitId }) => {
+            const status = wsData.get(unitId) && wsData.get(unitId).status
+            return (
+              <Button
+                key={id}
+                size="small"
+                style={{
+                  marginLeft: 4,
+                  marginTop: 4,
+                  padding: 0,
+                  width: 40,
+                  // height: 40,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: mapStatusToColor[status],
+                  color: '#fff',
+                }}
+                onClick={handleClicks({ pageIndex, unitId })}
+              >
+                {bedname}
+              </Button>
+            );
+          })
+      }
     </div>
   );
 }
