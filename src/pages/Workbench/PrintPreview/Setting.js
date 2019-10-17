@@ -45,7 +45,7 @@ class Setting extends Component {
               wrapperClassName={styles.chart}
               spinning={loading.effects['item/fetchCTGData']}
             >
-              <L type={1} data={ctgData} mutableSuitObject={value}></L>
+              <L suitType={2} data={ctgData} mutableSuitObject={value}></L>
             </Spin>
           )
         }

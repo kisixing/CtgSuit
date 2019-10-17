@@ -68,7 +68,7 @@ class CurveChart extends Component {
           wrapperClassName={styles.chart}
           spinning={loading.effects['archives/fetchCTGrecordData'] || false}
         >
-          <L type={1} data={dataSource}></L>
+          <L suitType={1} data={dataSource}></L>
         </Spin>
       </div>
     );
