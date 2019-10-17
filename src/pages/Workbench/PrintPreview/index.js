@@ -42,6 +42,7 @@ const PrintPreview = (props) => {
         wrapClassName={styles.modal}
         onCancel={() => onCancel('printVisible')}
         onOk={onCreate}
+        maskClosable={false}
       >
         <div className={styles.top}>
           <Preview dataSource={dataSource} />

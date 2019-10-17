@@ -40,7 +40,7 @@ class Setting extends Component {
               loading.effects['item/fetchCTGData'] || loading.effects['archives/fetchCTGrecordData']
             }
           >
-            <L type={1} data={data} mutableSuitObject={value}></L>
+            <L suitType={2} data={ctgData} mutableSuitObject={value}></L>
           </Spin>
         )}
       </Context.Consumer>

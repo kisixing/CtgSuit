@@ -25,7 +25,6 @@ const WorkbenchItem = props => {
     }
   }
 
-  const fullScreenEvent = useCallback(() => { suitObject.suit.resize(); }, [suitObject.suit])
 
   // item右上角icon
   const renderExtra = (status: React.ReactText) => {
@@ -89,15 +88,13 @@ const WorkbenchItem = props => {
       fullScreen();
       dispatch({ type: 'list/setState', payload: { fullScreenId: null } });
     }
-    document.addEventListener('fullscreenchange', fullScreenEvent);
     return () => {
-      document.removeEventListener('fullscreenchange', fullScreenEvent);
     };
   }, [fullScreenId])
 
   return (
     <Col
-      onDoubleClick={fullScreen}
+
       span={itemSpan}
       className={styles.col}
       ref={ref}
@@ -115,6 +112,7 @@ const WorkbenchItem = props => {
     >
       <Toolbar {...props} showSettingBar={showSettingBar} setShowTitle={setShowTitle} />
       <Card
+
         title={renderTilte(dataSource)}
         size="small"
         className={styles.card}
@@ -122,7 +120,7 @@ const WorkbenchItem = props => {
         headStyle={{ background: 'var(--theme-color)', color: '#fff' }}
         bodyStyle={{ padding: 0, height: 'calc(100% - 38px)' }}
       >
-        <L data={data} showEcg={false} mutableSuitObject={suitObject} itemHeight={itemHeight}></L>
+        <L data={data} showEcg={false} mutableSuitObject={suitObject} itemHeight={itemHeight} onDoubleClick={fullScreen}></L>
       </Card>
     </Col>
   );

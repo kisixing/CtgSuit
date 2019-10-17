@@ -12,6 +12,11 @@ import 'react-pdf/dist/Page/AnnotationLayer.css';
 import store from "@/utils/SettingStore";
 const settingData = store.cache
 const styles = require('./Preview.less')
+
+
+const COEFFICIENT = 240
+
+
 const Preview = props => {
   const { pdfflow, dataSource, dispatch, } = props;
   const { pregnancy, data, ctgexam } = dataSource
@@ -21,13 +26,14 @@ const Preview = props => {
   const [numPages, setNumPages] = useState(0)
   const [pageNumber, setPageNumber] = useState(1)
 
-  const [startingTime, setStartingTime] = useState(0)
-  const [endingTime, setEndingTime] = useState(0)
+  const [startingTime, setStartingTime] = useState<number>(0)
+  const [endingTime, setEndingTime] = useState<number>(0)
 
   const [value, setValue] = useState<{ suit: any }>({ suit: null })
-  const [lock, setLock] = useState(false)
-  useEffect(() => {
 
+  const [locking, setLocking] = useState(false)
+  const [customizable, setCustomizable] = useState(false)
+  useEffect(() => {
     const cb = startingTime => {
       const interval = settingData.print_interval
       setStartingTime(
@@ -35,12 +41,11 @@ const Preview = props => {
       )
       //TODO: 计算结束时间
       setEndingTime(
-        startingTime + interval
+        startingTime + Number(interval) * COEFFICIENT
       )
+      //console.log('kisi',startingTime,startingTime + Number(interval)*240);
     }
-    value.suit && value.suit.on('suit:startTime', v => {
-      cb(v)
-    })
+    value.suit && value.suit.on('suit:startTime', cb)
     return () => {
       value.suit && value.suit.off('suit:startTime', cb)
     };
@@ -53,10 +58,17 @@ const Preview = props => {
       ipcRenderer.send('printWindow', filePath);
     }, [filePath])
 
-  const toggleLock = () => {
-    const nextV = !lock
-    setLock(nextV)
-    value.suit.emit('suit:receive', nextV)
+  const toggleLocking = () => {
+    const nextV = !locking
+    setLocking(nextV)
+    value.suit.emit('locking', nextV)
+  }
+  const toggleCustomiz = () => {
+    const nextV = !customizable
+    setCustomizable(nextV)
+    value.suit.emit('customizing', nextV)
+  }
+  const handlePreview = () => {
     let docid = '';
     let starttime = '';
     if (data) {
@@ -66,8 +78,7 @@ const Preview = props => {
       docid = ctgexam.note;
       starttime = ctgexam.startTime
     }
-
-    nextV && dispatch({
+    locking && dispatch({
       type: 'item/fetchPDFflow',
       payload: {
         docid: docid,
@@ -81,9 +92,7 @@ const Preview = props => {
         end: endingTime,
       },
     });
-
   }
-
 
   const PreivewContent = () => {
     console.log('zzzz pdfflow', pdfflow)
@@ -133,25 +142,40 @@ const Preview = props => {
               <PreivewContent />
               <div style={{ width: 300, padding: 24, background: '#fff', display: 'flex', flexDirection: 'column', justifyContent: 'space-around' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span>开始：{startingTime}</span>
-                  <Button type={lock ? 'danger' : 'primary'} onClick={toggleLock} size="small">
+                  <span>开始时间：{(startingTime / COEFFICIENT).toFixed(1)}分</span>
+                  <Button type={locking ? 'danger' : 'primary'} onClick={toggleLocking} size="small">
                     {
-                      lock ? '重置' : '确定'
+                      locking ? '重置' : '确定'
                     }
                   </Button>
                 </div>
 
                 {/* TODO: 计算显示时间 */}
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span>结束：123</span>
+                  <span>结束时间：{(endingTime / COEFFICIENT).toFixed(1)}分</span>
+                  {
+                    locking && (
+                      <Button type={customizable ? 'danger' : 'primary'} onClick={toggleCustomiz} size="small">
+                        {
+                          customizable ? '取消' : '自定义'
+                        }
+                      </Button>
+                    )
+                  }
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <span>时长：{settingData.print_interval || 0}分</span>
                 </div>
-                <Button disabled={!pdfflow} type="primary" className={styles.button} onClick={handlePrint}>
-                  打印
-                </Button>
+                <div style={{ display: 'flex' }}>
+                  <Button block disabled={!locking} type="primary" onClick={handlePreview} style={{ marginRight: 10 }}>
+                    预览
+                  </Button>
 
+                  <Button block disabled={!pdfflow} type="primary" onClick={handlePrint}>
+                    打印
+                  </Button>
+
+                </div>
               </div>
             </div>
 
