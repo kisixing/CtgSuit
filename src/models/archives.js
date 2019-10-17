@@ -12,7 +12,7 @@ export default {
   state: {
     dataSource: [],
     current: {},
-    currentData: null,
+    CTGData: null, // ctg曲线数据
     isFullscreen: false,
   },
   effects: {
@@ -73,7 +73,7 @@ export default {
       yield put({
         type: 'updateState',
         payload: {
-          currentData: CTGDATA,
+          CTGData: CTGDATA,
         },
       });
     },

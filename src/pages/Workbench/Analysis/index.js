@@ -10,12 +10,19 @@ import { Ctg as L } from '@lianmed/lmg';
 
 import ScoringMethod from './ScoringMethod';
 import Setting from './Setting';
+import CTGChart from './CTGChart';
 
 import styles from './index.less';
 
 class Analysis extends Component {
   render() {
-    const { visible, onCancel, onCreate, form, dataSource } = this.props;
+    const {
+      visible,
+      onCancel,
+      onCreate,
+      dataSource,
+      from, // 判断从哪里跳转过来的
+    } = this.props;
     return (
       <Modal
         getContainer={false}
@@ -34,7 +41,7 @@ class Analysis extends Component {
       >
         <Layout style={{ height: '100%' }}>
           <div className={styles.chart}>
-            <L data={null}></L>
+            <CTGChart from={from} dataSource={dataSource} />
           </div>
           <div className={styles.content}>
             <Row gutter={24}>

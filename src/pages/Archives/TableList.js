@@ -26,14 +26,14 @@ class TableList extends Component {
         width: 100,
         align: 'center',
       },
-      {
-        title: '孕册ID',
-        dataIndex: 'pregnancyId',
-        key: 'pregnancyId',
-        width: 68,
-        align: 'center',
-        render: (text, record) => record.pregnancy && record.pregnancy.id,
-      },
+      // {
+      //   title: '孕册ID',
+      //   dataIndex: 'pregnancyId',
+      //   key: 'pregnancyId',
+      //   width: 68,
+      //   align: 'center',
+      //   render: (text, record) => record.pregnancy && record.pregnancy.id,
+      // },
       {
         title: '姓名',
         dataIndex: 'name',
@@ -120,9 +120,9 @@ class TableList extends Component {
                 分析
               </span>
               <Divider type="vertical" />
-              <span className="delete-link" onClick={() => this.switchFullscreen(record)}>
+              {/* <span className="delete-link" onClick={() => this.switchFullscreen(record)}>
                 详情
-              </span>
+              </span> */}
               <Divider type="vertical" />
               <Popconfirm title="确认删除该条信息？" okText="确定" cancelText="取消">
                 <span className="delete-link">删除</span>
@@ -249,6 +249,7 @@ class TableList extends Component {
           columns={this.columns}
           dataSource={dataSource}
           // onRow={record => {
+          // // 当存在action时，会触发多个事件
           //   return {
           //     onClick: event => this.handleRow(record), // 点击行
           //     onDoubleClick: event => {},
@@ -259,6 +260,7 @@ class TableList extends Component {
           rowClassName={record => (record.id === selected.id ? styles.selectedRow : '')}
           rowSelection={{
             // columnWidth: '67px',
+            columnTitle: '选择行',
             type: 'radio',
             selectedRowKeys: [selected.id],
             onSelect: (record, selected, selectedRows) => this.handleRow(record),
@@ -276,6 +278,7 @@ class TableList extends Component {
         ) : null}
         {printVisible ? (
           <PrintPreview
+            from="archives"
             visible={printVisible}
             onCancel={this.handleCancel}
             onCreate={this.handleCreate}
@@ -284,6 +287,7 @@ class TableList extends Component {
         ) : null}
         {analysisVisible ? (
           <Analysis
+            from="archives"
             visible={analysisVisible}
             onCancel={this.handleCancel}
             onCreate={this.handleCreate}

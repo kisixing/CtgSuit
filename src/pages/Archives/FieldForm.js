@@ -20,7 +20,7 @@ class FieldForm extends Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
-        let { pregnancyId, startTime, endTime } = values;
+        let { startTime, endTime } = values;
         if (startTime) {
           startTime = moment(startTime).format('YYYY-MM-DD');
         }
@@ -31,7 +31,7 @@ class FieldForm extends Component {
         this.props.dispatch({
           type: 'archives/fetchRecords',
           payload: {
-            'pregnancyId.equals': pregnancyId,
+            // 'pregnancyId.equals': pregnancyId,
             'visitDate.greaterOrEqualThan': startTime,
             'visitDate.lessOrEqualThan': endTime,
           },
@@ -52,11 +52,11 @@ class FieldForm extends Component {
     return (
       <Form layout="inline" className={styles.form} onSubmit={this.handleSubmit}>
         <Row>
-          <Col span={5}>
+          {/* <Col span={5}>
             <Form.Item label="孕册ID">
               {getFieldDecorator('pregnancyId')(<Input allowClear type="text" />)}
             </Form.Item>
-          </Col>
+          </Col> */}
           <Col span={5}>
             <Form.Item label="开始时间">
               {getFieldDecorator('startTime')(

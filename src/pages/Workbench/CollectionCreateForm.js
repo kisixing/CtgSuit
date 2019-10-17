@@ -5,6 +5,8 @@ import React from 'react';
 import { Button, Modal, Form, Input, Row, Col, InputNumber, message } from 'antd';
 import styles from './index.less';
 
+const width = '200px';
+
 const CollectionCreateForm = Form.create({
   name: 'create_form',
 })(
@@ -132,7 +134,7 @@ const CollectionCreateForm = Form.create({
           getContainer={false}
           centered
           destroyOnClose
-          width={860}
+          width={760}
           visible={visible}
           title={`【${dataSource.bedname}】 建档`}
           footer={null}
@@ -158,14 +160,14 @@ const CollectionCreateForm = Form.create({
                       { max: 10, message: '床号的最大长度为10' },
                       { validator: this.validateNoChinese },
                     ],
-                  })(<Input placeholder="输入床号..." />)}
+                  })(<Input placeholder="输入床号..." style={{ width }} />)}
                 </Form.Item>
               </Col>
               <Col span={12}>
                 <Form.Item label="孕妇姓名">
                   {getFieldDecorator('name', {
                     rules: [{ required: required, message: '请填写孕妇姓名!' }],
-                  })(<Input placeholder="输入孕妇姓名..." />)}
+                  })(<Input placeholder="输入孕妇姓名..." style={{ width }} />)}
                 </Form.Item>
               </Col>
               <Col span={12}>
@@ -175,14 +177,21 @@ const CollectionCreateForm = Form.create({
                       { required: false, message: '请填写孕妇住院号!' },
                       { validator: this.validateNoChinese },
                     ],
-                  })(<Input placeholder="输入住院号..." />)}
+                  })(<Input placeholder="输入住院号..." style={{ width }} />)}
                 </Form.Item>
               </Col>
               <Col span={12}>
                 <Form.Item label="孕妇年龄">
                   {getFieldDecorator('age', {
                     rules: [{ required: false, message: '请填写孕妇住年龄!' }],
-                  })(<InputNumber min={1} max={99} placeholder="输入孕妇年龄..." />)}
+                  })(
+                    <InputNumber
+                      min={1}
+                      max={99}
+                      placeholder="输入孕妇年龄..."
+                      style={{ width }}
+                    />,
+                  )}
                 </Form.Item>
               </Col>
               <Col span={12}>
@@ -192,7 +201,9 @@ const CollectionCreateForm = Form.create({
                       { required: false, message: '请输入孕次!' },
                       { validator: this.validateMaxMin },
                     ],
-                  })(<InputNumber min={1} max={99} placeholder="请输入孕次..." />)}
+                  })(
+                    <InputNumber min={1} max={99} placeholder="请输入孕次..." style={{ width }} />,
+                  )}
                 </Form.Item>
               </Col>
               <Col span={12}>
@@ -202,7 +213,9 @@ const CollectionCreateForm = Form.create({
                       { required: false, message: '请输入产次!' },
                       { validator: this.validateMaxMin },
                     ],
-                  })(<InputNumber min={0} max={99} placeholder="请输入产次..." />)}
+                  })(
+                    <InputNumber min={0} max={99} placeholder="请输入产次..." style={{ width }} />,
+                  )}
                 </Form.Item>
               </Col>
               {/* <Col span={12}>
@@ -225,7 +238,7 @@ const CollectionCreateForm = Form.create({
                   调入
                 </Button>
                 <Button type="primary" onClick={() => this.handleCreate(dataSource)}>
-                  新建
+                  确认
                 </Button>
               </Col>
               <Col span={24} className={styles.tips}>

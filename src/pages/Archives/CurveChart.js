@@ -79,5 +79,5 @@ export default connect(({ loading, archives }) => ({
   loading: loading,
   selected: archives.current,
   isFullscreen: archives.isFullscreen,
-  dataSource: archives.currentData,
+  dataSource: archives.CTGData,
 }))(CurveChart);
