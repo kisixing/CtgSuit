@@ -19,11 +19,9 @@ class FieldForm extends Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
         let sTime = moment()
           .subtract(7, 'd')
           .format('YYYY-MM-DD');
-        console.log("TCL: FieldForm -> sTime", sTime)
         let eTime = moment().format('YYYY-MM-DD');
         let { startTime, endTime } = values;
         if (startTime) {

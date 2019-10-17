@@ -136,7 +136,18 @@ class TableList extends Component {
 
   componentDidMount() {
     const { dispatch } = this.props;
-    dispatch({ type: 'archives/fetchRecords' });
+    // 默认请求近一周的数据
+    let sTime = moment()
+      .subtract(7, 'd')
+      .format('YYYY-MM-DD');
+    let eTime = moment().format('YYYY-MM-DD');
+    dispatch({
+      type: 'archives/fetchRecords',
+      payload: {
+        'visitDate.greaterOrEqualThan': sTime,
+        'visitDate.lessOrEqualThan': eTime,
+      },
+    });
   }
 
   showModal = () => {
