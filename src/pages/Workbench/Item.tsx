@@ -13,7 +13,6 @@ const WorkbenchItem = props => {
   const { dispatch, fullScreenId, itemHeight, itemSpan, dataSource, outPadding } = props;
   const { data, unitId, status } = dataSource;
   const [showSettingBar, setShowSettingBar] = useState(true);
-  const [showTitle, setShowTitle] = useState(true)
   const ref = useRef(null)
   const suitObject = { suit: null };
   console.log('list item', dataSource);
@@ -63,8 +62,10 @@ const WorkbenchItem = props => {
 
   // 床位信息
   const renderTilte = (item) => {
-    const { data, pregnancy, documentno, bedname } = item;
-    const isCreated = pregnancy && pregnancy.id && data && documentno === data.docid && showTitle;
+    const { documentno, bedname, data } = item;
+    const havePregnancy = data && data.pregnancy
+    const pregnancy = havePregnancy && JSON.parse(data.pregnancy.replace(/'/g, '"'));
+    const isCreated = pregnancy && pregnancy.id && data && data.pregnancy && documentno === data.docid;
     const text = (
       <span className={styles.title}>
         床号: <span>{bedname}</span>
@@ -107,7 +108,7 @@ const WorkbenchItem = props => {
         }
       }}
     >
-      <Toolbar {...props} showSettingBar={showSettingBar} setShowTitle={setShowTitle} />
+      <Toolbar {...props} showSettingBar={showSettingBar} />
       <Card
         title={renderTilte(dataSource)}
         size="small"

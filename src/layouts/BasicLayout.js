@@ -88,13 +88,13 @@ class BasicLayout extends Component {
       ipcRenderer.send('newWindow', '操作说明');
     }
     if (key === '档案管理') {
-      router.push('/archives');
+      router.replace('/archives');
     }
     if (key === '系统设置') {
-      router.push('/setting');
+      router.replace('/setting');
     }
     if (key === '孕产妇管理') {
-      router.push('/pregnancy');
+      router.replace('/pregnancy');
     }
   };
 

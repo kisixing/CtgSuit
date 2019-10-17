@@ -136,6 +136,7 @@ class TableList extends Component {
 
   componentDidMount() {
     const { dispatch } = this.props;
+    console.log('7777777777777777', this.props);
     // 默认请求近一周的数据
     let sTime = moment()
       .subtract(7, 'd')

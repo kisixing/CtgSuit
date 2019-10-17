@@ -65,8 +65,7 @@ class Toolbar extends Component {
 
   // 建档（绑定孕册信息）
   handleCreate = item => {
-    const { dispatch, setShowTitle } = this.props;
-    setShowTitle(true);
+    const { dispatch } = this.props;
     const { form } = this.formRef.props;
     form.validateFields((err, values) => {
       if (err) {
@@ -165,15 +164,17 @@ class Toolbar extends Component {
 
   // 停止监护
   end = item => {
-    const { dispatch, setShowTitle } = this.props;
-    const { deviceno, bedno, pregnancy, data, documentno, prenatalVisit = {}, unitId } = item;
-    const isCreated = pregnancy && pregnancy.id && data && documentno === data.docid;
+    const { dispatch } = this.props;
+    const { deviceno, bedno, data, documentno, prenatalVisit = {}, unitId } = item;
+    const havePregnancy = data && data.pregnancy;
+    const pregnancy = havePregnancy && JSON.parse(data.pregnancy.replace(/'/g, '"'));
+    const isCreated =
+      pregnancy && pregnancy.id && data && data.pregnancy && documentno === data.docid;
 
     dispatch({
       type: 'list/appendDirty',
       unitId,
     });
-    const _this = this;
     socket.endwork(deviceno, bedno);
     // socket.datacache.delete(unitId);
     if (isCreated) {
@@ -226,12 +227,15 @@ class Toolbar extends Component {
       partogramVisible,
       confirmVisible,
     } = this.state;
-    const { data, bedname, pregnancy, documentno } = dataSource;
+    const { data, documentno } = dataSource;
 
     // 处于监护状态
     const isMonitor = data && data.status === 1;
     // 已建档状态
-    const isCreated = pregnancy && pregnancy.id && data && documentno === data.docid;
+    const havePregnancy = data && data.pregnancy;
+    const pregnancy = havePregnancy && JSON.parse(data.pregnancy.replace(/'/g, '"'));
+    const isCreated =
+      pregnancy && pregnancy.id && data && data.pregnancy && documentno === data.docid;
     return (
       <>
         <div className={cx(styles.toolbar, { [styles.show]: showSetting })}>
