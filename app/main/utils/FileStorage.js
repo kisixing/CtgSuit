@@ -7,6 +7,7 @@ function FileStorage(path, resetPath, encoding) {
     resetPath && new FileStorage(resetPath).getObj().then(obj => {
         this.resetObj = obj
     })
+    this.getObjSync()
 }
 FileStorage.prototype = {
     constructor: FileStorage,
