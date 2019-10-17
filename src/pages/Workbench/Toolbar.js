@@ -29,7 +29,6 @@ class Toolbar extends Component {
       partogramVisible: false,
       confirmVisible: false,
       isCreated: false, // 默认未建档
-      isMonitor: false, // 是否已经开始监护
       isStopMonitorWhenCreated: false, // 建档后是否停止监护
     };
   }
@@ -166,7 +165,6 @@ class Toolbar extends Component {
     const { isCreated } = this.state;
     const { dispatch, setShowTitle } = this.props;
     const { deviceno, bedno, pregnancy, data, documentno, prenatalVisit = {}, unitId } = item;
-
     dispatch({
       type: 'list/appendDirty',
       unitId,
@@ -195,7 +193,6 @@ class Toolbar extends Component {
           if (res && res.id) {
             // 将监护状态改为未监护状态
             _this.setState({
-              isMonitor: false,
               isCreated: false,
             });
             setShowTitle(false);
@@ -231,7 +228,6 @@ class Toolbar extends Component {
       partogramVisible,
       confirmVisible,
       isCreated,
-      // isMonitor,
     } = this.state;
     const { data, bedname, pregnancy, documentno } = dataSource;
 

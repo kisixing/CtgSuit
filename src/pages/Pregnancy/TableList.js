@@ -83,10 +83,10 @@ class TableList extends Component {
                 编辑
               </span>
               <Divider type="vertical" />
-              <span className="primary-link" onClick={() => this.showEdit(record)}>
+              {/* <span className="primary-link" onClick={() => this.showEdit(record)}>
                 档案
               </span>
-              <Divider type="vertical" />
+              <Divider type="vertical" /> */}
               <Popconfirm title="确认删除此条孕册信息？" okText="确定" cancelText="取消">
                 <span className="delete-link">删除</span>
               </Popconfirm>

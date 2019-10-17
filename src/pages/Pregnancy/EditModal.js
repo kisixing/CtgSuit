@@ -17,6 +17,8 @@ import {
 } from 'antd';
 import styles from './index.less';
 
+const width = '200px';
+
 const EditModal = Form.create({
   name: 'editor_form',
 })(
@@ -72,7 +74,7 @@ const EditModal = Form.create({
           getContainer={false}
           centered
           destroyOnClose
-          width={860}
+          width={800}
           visible={visible}
           title="修改孕册"
           footer={null}
@@ -87,56 +89,67 @@ const EditModal = Form.create({
                 <Form.Item label="住院号">
                   {getFieldDecorator('inpatientNO', {
                     rules: [{ required: true, message: '请填写孕妇住院号!' }],
-                  })(<Input disabled placeholder="输入住院号" />)}
+                  })(<Input disabled placeholder="输入住院号" style={{ width }} />)}
                 </Form.Item>
               </Col>
               <Col span={12}>
                 <Form.Item label="孕妇姓名">
                   {getFieldDecorator('name', {
                     rules: [{ required: true, message: '请填写孕妇姓名!' }],
-                  })(<Input placeholder="输入孕妇姓名" />)}
+                  })(<Input placeholder="输入孕妇姓名" style={{ width }} />)}
                 </Form.Item>
               </Col>
               <Col span={12}>
                 <Form.Item label="出生年月">
                   {getFieldDecorator('birth', {
                     rules: [{ required: false, message: '请填写孕妇出生日期!' }],
-                  })(<DatePicker placeholder="输入孕妇出生日期..." />)}
+                  })(<DatePicker placeholder="输入孕妇出生日期..." style={{ width }} />)}
                 </Form.Item>
               </Col>
               <Col span={12}>
                 <Form.Item label="孕妇年龄">
                   {getFieldDecorator('age', {
                     rules: [{ required: false, message: '请填写孕妇年龄!' }],
-                  })(<InputNumber min={1} max={99} placeholder="输入孕妇年龄..." />)}
+                  })(
+                    <InputNumber
+                      min={1}
+                      max={99}
+                      placeholder="输入孕妇年龄..."
+                      style={{ width }}
+                    />,
+                  )}
                 </Form.Item>
               </Col>
               <Col span={12}>
                 <Form.Item label="联系电话">
                   {getFieldDecorator('telephone', {
                     rules: [{ required: false, message: '请填写孕妇联系电话!' }],
-                  })(<Input placeholder="请输入联系电话..." />)}
+                  })(<Input placeholder="请输入联系电话..." style={{ width }} />)}
                 </Form.Item>
               </Col>
               <Col span={12}>
                 <Form.Item label="孕次">
                   {getFieldDecorator('gravidity', {
                     rules: [{ required: false, message: '请输入孕次!' }],
-                  })(<InputNumber min={1} max={10} placeholder="请输入孕次..." />)}
+                  })(
+                    <InputNumber min={1} max={10} placeholder="请输入孕次..." style={{ width }} />,
+                  )}
                 </Form.Item>
               </Col>
               <Col span={12}>
                 <Form.Item label="产次">
                   {getFieldDecorator('parity', {
                     rules: [{ required: false, message: '请输入产次!' }],
-                  })(<InputNumber min={0} max={10} placeholder="请输入产次..." />)}
+                  })(
+                    <InputNumber min={0} max={10} placeholder="请输入产次..." style={{ width }} />,
+                  )}
                 </Form.Item>
               </Col>
               <Col span={12}>
                 <Form.Item label="居住地址">
                   {getFieldDecorator('address', {
                     rules: [{ required: false, message: '请填写现居住详细地址!' }],
-                  })(<Input placeholder="输入现居住详细地址" />)}
+                  })(<Input placeholder="输入现居住详细地址" style={{ width }} />)}
                 </Form.Item>
               </Col>
               <Col span={24} className={styles.buttons}>
