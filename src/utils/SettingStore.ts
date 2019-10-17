@@ -8,5 +8,4 @@ const {
 } = constant
 
 const store = new FileStorage(SETTING_PATH, DEFAULT_SETTING_PATH)
-
 export default store

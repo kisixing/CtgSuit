@@ -1,5 +1,7 @@
 import { message } from 'antd';
-
+import { Suit } from "@lianmed/lmg/lib/Ctg/Suit";
+import store from "@/utils/SettingStore";
+Suit.option = store.cache
 message.config({
     top: 150,
     duration: 2,
