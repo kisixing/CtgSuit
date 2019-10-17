@@ -49,9 +49,10 @@ const CollectionCreateForm = Form.create({
               }
               form.setFieldsValue(res);
             },
+          }).then(() => {
+            this.setState({ required: true });
           });
         });
-        this.setState({ required: true });
       });
     };
 
@@ -114,7 +115,7 @@ const CollectionCreateForm = Form.create({
     };
 
     render() {
-      const { visible, onCancel, form, dataSource } = this.props;
+      const { visible, onCancel, form, dataSource, loading } = this.props;
       const { getFieldDecorator } = form;
       const { required, errorText } = this.state;
 
@@ -166,7 +167,7 @@ const CollectionCreateForm = Form.create({
               <Col span={12}>
                 <Form.Item label="孕妇姓名">
                   {getFieldDecorator('name', {
-                    rules: [{ required: required, message: '请填写孕妇姓名!' }],
+                    rules: [{ required: false, message: '请填写孕妇姓名!' }],
                   })(<Input placeholder="输入孕妇姓名..." style={{ width }} />)}
                 </Form.Item>
               </Col>
@@ -234,10 +235,18 @@ const CollectionCreateForm = Form.create({
                 {/* <Button onClick={this.reset}>重置</Button> */}
                 <Button onClick={() => onCancel('visible')}>取消</Button>
                 {/* 建档后，不支持再次修改信息 */}
-                <Button type="primary" onClick={this.handleSearch}>
+                <Button
+                  type="primary"
+                  loading={loading.effects['list/fetchPregnancy']}
+                  onClick={this.handleSearch}
+                >
                   调入
                 </Button>
-                <Button type="primary" onClick={() => this.handleCreate(dataSource)}>
+                <Button
+                  type="primary"
+                  loading={loading.effects['archives/create']}
+                  onClick={() => this.handleCreate(dataSource)}
+                >
                   确认
                 </Button>
               </Col>

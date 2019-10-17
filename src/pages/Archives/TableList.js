@@ -19,13 +19,13 @@ class TableList extends Component {
       current: {}, // 当前行
     };
     this.columns = [
-      {
-        title: '编号',
-        dataIndex: 'id',
-        key: 'id',
-        width: 100,
-        align: 'center',
-      },
+      // {
+      //   title: '编号',
+      //   dataIndex: 'id',
+      //   key: 'id',
+      //   width: 100,
+      //   align: 'center',
+      // },
       // {
       //   title: '孕册ID',
       //   dataIndex: 'pregnancyId',
@@ -245,7 +245,7 @@ class TableList extends Component {
           bordered
           size="small"
           pagination={false}
-          scroll={{ x: 1250, y: 235 }}
+          scroll={{ x: 1250, y: 218 }}
           columns={this.columns}
           dataSource={dataSource}
           // onRow={record => {
@@ -260,7 +260,7 @@ class TableList extends Component {
           rowClassName={record => (record.id === selected.id ? styles.selectedRow : '')}
           rowSelection={{
             // columnWidth: '67px',
-            columnTitle: '选择行',
+            columnTitle: '选中',
             type: 'radio',
             selectedRowKeys: [selected.id],
             onSelect: (record, selected, selectedRows) => this.handleRow(record),

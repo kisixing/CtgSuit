@@ -4,6 +4,7 @@ import { Table, Divider, Popconfirm, Input, Button, Icon } from 'antd';
 import Highlighter from 'react-highlight-words';
 import EditModal from './EditModal';
 import styles from './TableList.less';
+import moment from 'moment';
 
 class TableList extends Component {
   constructor(props) {
@@ -39,12 +40,6 @@ class TableList extends Component {
         sorter: (a, b) => a.age - b.age,
       },
       {
-        title: '检查次数',
-        dataIndex: 'checkupNO',
-        key: 'checkupNO',
-        sorter: (a, b) => a.checkupNO - b.checkupNO,
-      },
-      {
         title: '孕次',
         dataIndex: 'gravidity',
         key: 'gravidity',
@@ -57,17 +52,24 @@ class TableList extends Component {
         sorter: (a, b) => a.parity - b.parity,
       },
       {
+        title: '孕产期',
+        dataIndex: 'edd',
+        key: 'edd',
+        render: text => text ? moment(text).format('YYYY-MM-DD') : null
+        // sorter: (a, b) => a.edd - b.edd,
+      },
+      {
         title: '手机号码',
         dataIndex: 'telephone',
         key: 'telephone',
       },
-      {
-        title: '住址',
-        dataIndex: 'address',
-        key: 'address',
-        width: 200,
-        ...this.getColumnSearchProps('address'),
-      },
+      // {
+      //   title: '住址',
+      //   dataIndex: 'address',
+      //   key: 'address',
+      //   width: 200,
+      //   ...this.getColumnSearchProps('address'),
+      // },
       {
         title: '操作',
         dataIndex: 'action',

@@ -88,13 +88,13 @@ class BasicLayout extends Component {
       ipcRenderer.send('newWindow', '操作说明');
     }
     if (key === '档案管理') {
-      router.replace('/archives');
+      router.push('/archives');
     }
     if (key === '系统设置') {
-      router.replace('/setting');
+      router.push('/setting');
     }
     if (key === '孕产妇管理') {
-      router.replace('/pregnancy');
+      router.push('/pregnancy');
     }
   };
 
@@ -204,7 +204,7 @@ class BasicLayout extends Component {
     return (
       <Fragment>
         {[
-          ['档案管理', 'ordered-list', '/Archives'],
+          ['档案管理', 'ordered-list', '/archives'],
           ['系统设置', 'setting', '/setting'],
           ['孕产妇管理', 'usergroup-add', '/pregnancy'],
           ['用户信息', 'user'],

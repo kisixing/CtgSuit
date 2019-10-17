@@ -47,19 +47,19 @@ class SearchForm extends Component {
     return (
       <Form layout="inline" className={styles.searchForm} onSubmit={this.handleSubmit}>
         <Row>
-          <Col span={5}>
+          <Col span={4}>
             <Form.Item label="住院号">
               {getFieldDecorator('inpatientNO', {
                 rules: [{ required: false, message: '请输入住院号!' }],
               })(<Input allowClear type="text" />)}
             </Form.Item>
           </Col>
-          <Col span={5}>
+          <Col span={4}>
             <Form.Item label="姓名">
               {getFieldDecorator('name')(<Input allowClear type="text" />)}
             </Form.Item>
           </Col>
-          <Col span={5}>
+          <Col span={4}>
             <Form.Item label="住院状态">
               {getFieldDecorator('recordstate')(
                 <Select allowClear style={{ width: 174 }}>
@@ -69,25 +69,26 @@ class SearchForm extends Component {
               )}
             </Form.Item>
           </Col>
-          <Col span={5}>
+          <Col span={4}>
             <Form.Item label="孕产期">
               {getFieldDecorator('edd')(
                 <DatePicker
                   allowClear
                   style={{ minWidth: '168px' }}
-                  format="YYYY-MM-DD HH:mm:ss"
+                  format="YYYY-MM-DD"
                   placeholder="请选择日期"
-                  showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
+                  // showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
                 />,
               )}
             </Form.Item>
           </Col>
-          <Col span={4}>
+          <Col span={5}>
             <Form.Item label="">
               <Button type="primary" htmlType="submit">
                 搜索
               </Button>
               <Button onClick={this.handleReset}>重置</Button>
+              <Button>建档</Button>
             </Form.Item>
           </Col>
         </Row>
