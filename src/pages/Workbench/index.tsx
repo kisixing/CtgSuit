@@ -35,7 +35,6 @@ const Home = props => {
   return (
     <div style={{ height: '100%' }} ref={wrap}>
       <Spin spinning={items.length === 0} size="large" >
-
         <Row style={{ padding: outPadding, height: contentHeight }}>
           {items.map(item => {
             // console.log('item', item)
@@ -65,7 +64,6 @@ export default connect(({ setting, list, ws }: any) => {
     listLayout: setting.listLayout,
     pageItems: list.pageItems.map(_ => {
       const data = (datacache as Map<string, any>).get(_.unitId);
-
       return {
         ..._, data, status: data && data.status
       }

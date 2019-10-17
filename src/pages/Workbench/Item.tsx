@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { Card, Col, Button, Tag, Tooltip } from 'antd';
 import { Ctg as L } from '@lianmed/lmg';
@@ -9,7 +9,6 @@ let styles = require('./Item.less')
 import { BedStatus } from "@lianmed/lmg/lib/services/WsService";
 
 const WorkbenchItem = props => {
-  // console.log('item render')
   const { dispatch, fullScreenId, itemHeight, itemSpan, dataSource, outPadding } = props;
   const { data, unitId } = dataSource;
   const [showSettingBar, setShowSettingBar] = useState(true);
