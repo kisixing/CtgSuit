@@ -9,7 +9,7 @@ export default {
     listData: [], // 所有bed数据
     dirty: new Set(), // 受保护的床位
     pageData: [], // [[1,4],[5,8]]
-    page: null, //当前页码
+    page: 0, //当前页码
     pageItems: [], // [listItem,...] 床位信息
     fullScreenId: null,
     pregnancy: {}, // 初始化，暂无使用
@@ -47,9 +47,12 @@ export default {
       yield put({ type: 'computeLayout' });
     },
     *computeLayout({ }, { put, select }) {
-
+      const state = yield select();
+      let {
+        list: { page },
+      } = state;
       yield put({ type: 'setPageData' });
-      yield put({ type: 'setPageItems', page: 0 });
+      yield put({ type: 'setPageItems', page });
     },
     *setPageData(payload, { put, select }) {
       const state = yield select();

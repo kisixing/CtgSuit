@@ -49,9 +49,17 @@ class Toolbar extends Component {
   componentWillUnmount() {
     event.on(`bedClose:${this.unitId}`, this.onclose);
   }
+  timeout = null
+  autoHide = () => {
+    clearTimeout(this.timeout)
+    this.timeout = setTimeout(() => {
+      this.setState({ showSetting: false });
+    }, 5000);
+  }
   toggleTool = () => {
     const { showSetting } = this.state;
     this.setState({ showSetting: !showSetting });
+    this.autoHide()
   };
 
   showModal = name => {
@@ -246,10 +254,10 @@ class Toolbar extends Component {
               停止监护
             </Button>
           ) : (
-            <Button icon="play-circle" type="link" onClick={() => this.start(dataSource)}>
-              开始监护
+              <Button icon="play-circle" type="link" onClick={() => this.start(dataSource)}>
+                开始监护
             </Button>
-          )}
+            )}
           <Button
             icon="user-add"
             type="link"
