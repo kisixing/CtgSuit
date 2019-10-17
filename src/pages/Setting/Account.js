@@ -118,6 +118,7 @@ class Account extends PureComponent {
         title: '操作',
         dataIndex: 'actions',
         key: 'actions',
+        width: 150,
         render: (text, record) => {
           const { loading } = this.state;
           if (!!record.editable && loading) {
@@ -300,6 +301,7 @@ class Account extends PureComponent {
     const { data, loading } = this.state;
     return (
       <>
+        <p style={{ fontWeight: 600, lineHeight: '40px', marginBottom: '24px' }}>账户管理</p>
         <Table
           loading={loading}
           size="small"
