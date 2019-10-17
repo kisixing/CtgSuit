@@ -7,6 +7,7 @@ import Toolbar from './Toolbar';
 import { event } from "@lianmed/utils";
 let styles = require('./Item.less')
 import { BedStatus } from "@lianmed/lmg/lib/services/WsService";
+
 const WorkbenchItem = props => {
   // console.log('item render')
   const { dispatch, fullScreenId, itemHeight, itemSpan, dataSource, outPadding } = props;
@@ -15,6 +16,7 @@ const WorkbenchItem = props => {
   const [showTitle, setShowTitle] = useState(true)
   const ref = useRef(null)
   const suitObject = { suit: null };
+  console.log('list item', dataSource);
 
   const fullScreen = () => {
     const el = ReactDOM.findDOMNode(ref.current);
@@ -28,7 +30,6 @@ const WorkbenchItem = props => {
 
   // item右上角icon
   const renderExtra = (status: React.ReactText) => {
-
     return (
       <div className={styles.extra}>
         {
@@ -64,7 +65,6 @@ const WorkbenchItem = props => {
   const renderTilte = (item) => {
     const { data, pregnancy, documentno, bedname } = item;
     const isCreated = pregnancy && pregnancy.id && data && documentno === data.docid && showTitle;
-
     const text = (
       <span className={styles.title}>
         床号: <span>{bedname}</span>
@@ -75,11 +75,9 @@ const WorkbenchItem = props => {
     )
     // 是否已经建档绑定孕册
     return (
-
       <Tooltip title={text}>
         {text}
       </Tooltip>
-
     );
   };
 
@@ -94,7 +92,6 @@ const WorkbenchItem = props => {
 
   return (
     <Col
-
       span={itemSpan}
       className={styles.col}
       ref={ref}
@@ -112,7 +109,6 @@ const WorkbenchItem = props => {
     >
       <Toolbar {...props} showSettingBar={showSettingBar} setShowTitle={setShowTitle} />
       <Card
-
         title={renderTilte(dataSource)}
         size="small"
         className={styles.card}

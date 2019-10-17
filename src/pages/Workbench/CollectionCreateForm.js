@@ -47,7 +47,7 @@ const CollectionCreateForm = Form.create({
               if (!res.length) {
                 this.setState({ errorText: '没有这个孕册，请新建孕册。' });
               }
-              form.setFieldsValue(res);
+              form.setFieldsValue(res[0]);
             },
           }).then(() => {
             this.setState({ required: true });

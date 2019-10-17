@@ -28,7 +28,6 @@ class Toolbar extends Component {
       printVisible: false,
       partogramVisible: false,
       confirmVisible: false,
-      isCreated: false, // 默认未建档
       isStopMonitorWhenCreated: false, // 建档后是否停止监护
     };
   }
@@ -39,12 +38,6 @@ class Toolbar extends Component {
   componentDidMount() {
     this.unitId = this.props.dataSource.unitId;
     event.on(`bedClose:${this.unitId}`, this.onclose);
-    const {
-      dataSource: { data, documentno, pregnancy },
-    } = this.props;
-    // 判断是否已建档
-    const isCreated = pregnancy && pregnancy.id && data && documentno === data.docid;
-    this.setState({ isCreated });
   }
   componentWillUnmount() {
     event.on(`bedClose:${this.unitId}`, this.onclose);
@@ -84,6 +77,9 @@ class Toolbar extends Component {
       }
       if (!values.name) {
         return message.error('请输入患者姓名！');
+      }
+      if (!values.inpatientNO) {
+        return message.error('请输入患者住院号！');
       }
       // 新建孕册 后台检验孕册是否已经存在
       // ture -> 提示孕册已经存在，是否
@@ -150,7 +146,7 @@ class Toolbar extends Component {
       payload: params,
       callback: res => {
         if (res && res.id) {
-          this.setState({ isCreated: true });
+          // this.setState({ isCreated: true });
         }
       },
     }).then(() => {
@@ -165,22 +161,21 @@ class Toolbar extends Component {
   start = item => {
     const { deviceno, bedno } = item;
     socket.startwork(deviceno, bedno);
-    this.setState({ isCreated: false });
   };
 
   // 停止监护
   end = item => {
-    const { isCreated } = this.state;
     const { dispatch, setShowTitle } = this.props;
     const { deviceno, bedno, pregnancy, data, documentno, prenatalVisit = {}, unitId } = item;
+    const isCreated = pregnancy && pregnancy.id && data && documentno === data.docid;
+
     dispatch({
       type: 'list/appendDirty',
       unitId,
     });
-
     const _this = this;
-    // const isCreated = pregnancy && pregnancy.id && data && documentno === data.docid;
     socket.endwork(deviceno, bedno);
+    // socket.datacache.delete(unitId);
     if (isCreated) {
       // 已经建档 ,修改结束时间
       const pregnancyId = pregnancy.id;
@@ -200,16 +195,11 @@ class Toolbar extends Component {
         callback: res => {
           if (res && res.id) {
             // 将监护状态改为未监护状态
-            _this.setState({
-              isCreated: false,
-            });
-            setShowTitle(false);
           }
         },
       });
     } else {
       // 未建档提示简单保存或者放弃保存
-      this.setState({ isCreated: false });
     }
     if (this.endCb) {
       this.endCb();
@@ -235,13 +225,13 @@ class Toolbar extends Component {
       printVisible,
       partogramVisible,
       confirmVisible,
-      isCreated,
     } = this.state;
     const { data, bedname, pregnancy, documentno } = dataSource;
 
+    // 处于监护状态
     const isMonitor = data && data.status === 1;
-    // const isCreated = pregnancy && pregnancy.id && data && documentno === data.docid;
-
+    // 已建档状态
+    const isCreated = pregnancy && pregnancy.id && data && documentno === data.docid;
     return (
       <>
         <div className={cx(styles.toolbar, { [styles.show]: showSetting })}>

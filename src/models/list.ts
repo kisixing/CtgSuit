@@ -184,7 +184,7 @@ export default {
   },
   subscriptions: {
     deviceStatus({ dispatch }) {
-      console.log('dispatch', dispatch)
+      // console.log('dispatch', dispatch)
     }
   }
 };
