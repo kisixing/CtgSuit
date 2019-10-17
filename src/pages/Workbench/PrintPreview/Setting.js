@@ -27,7 +27,15 @@ class Setting extends Component {
       });
     }
   }
+  componentWillMount() {
+    this.props.dispatch({
+      type: 'item/updateState',
+      payload: {
+        ctgData: null
+      },
+    });
 
+  }
   render() {
     const { ctgData, CTGData, from, loading } = this.props;
     const data = from === 'archives' ? CTGData : ctgData;

@@ -6,6 +6,7 @@ import { Pagination, Button, Spin, Empty } from 'antd';
 import { ipcRenderer } from 'electron';
 import config from '@/utils/config';
 import { Context } from './index'
+import request from "@lianmed/request";
 // import pdf from './pdfBase64';
 import moment from 'moment'
 import 'react-pdf/dist/Page/AnnotationLayer.css';
@@ -18,21 +19,29 @@ const COEFFICIENT = 240
 
 
 const Preview = props => {
-  const { pdfflow, dataSource, dispatch, } = props;
+  const { dataSource } = props;
   const { pregnancy, data, ctgexam } = dataSource
-  const pdfurl = dataSource.data && dataSource.data.docid;
-  const filePath = `${config.apiPrefix}/ctg-exams-pdfurl/${pdfurl}` || 'http://www.orimi.com/pdf-test.pdf'
+  let docid = '';
+  let starttime = '';
+  if (data) {
+    docid = data.docid;
+    starttime = data.starttime
+  } else if (ctgexam) {
+    docid = ctgexam.note;
+    starttime = ctgexam.startTime
+  }
+  const filePath = `${config.apiPrefix}/ctg-exams-pdfurl/${docid}` || 'http://www.orimi.com/pdf-test.pdf'
   // const [pdfBase64, setPdfBase64] = useState(`data:application/pdf;base64,${pdf}`)
   const [numPages, setNumPages] = useState(0)
   const [pageNumber, setPageNumber] = useState(1)
-
   const [startingTime, setStartingTime] = useState<number>(0)
   const [endingTime, setEndingTime] = useState<number>(0)
-
+  const [pdfflow, setPdfflow] = useState('')
   const [value, setValue] = useState<{ suit: any }>({ suit: null })
-
   const [locking, setLocking] = useState(false)
   const [customizable, setCustomizable] = useState(false)
+
+
   useEffect(() => {
     const cb = startingTime => {
       const interval = settingData.print_interval
@@ -53,10 +62,7 @@ const Preview = props => {
 
   const onDocumentLoad = useCallback(({ numPages }) => { setNumPages(numPages) }, [])
   const onChangePage = useCallback(page => { setPageNumber(page) }, [])
-  const handlePrint = useCallback(
-    (file) => {
-      ipcRenderer.send('printWindow', filePath);
-    }, [filePath])
+  const handlePrint = useCallback((e) => { ipcRenderer.send('printWindow', filePath) }, [filePath])
 
   const toggleLocking = () => {
     const nextV = !locking
@@ -69,33 +75,26 @@ const Preview = props => {
     value.suit.emit('customizing', nextV)
   }
   const handlePreview = () => {
-    let docid = '';
-    let starttime = '';
-    if (data) {
-      docid = data.docid;
-      starttime = data.starttime
-    } else if (ctgexam) {
-      docid = ctgexam.note;
-      starttime = ctgexam.startTime
+    const params = {
+      docid: docid,
+      name: pregnancy.name,
+      age: pregnancy.age,
+      gestationalWeek: pregnancy.gestationalWeek,
+      inpatientNO: pregnancy.inpatientNO,
+      startdate: moment(starttime).format('YYYY-MM-DD HH:mm:ss'),
+      fetalcount: 2,
+      start: startingTime,
+      end: endingTime,
     }
-    locking && dispatch({
-      type: 'item/fetchPDFflow',
-      payload: {
-        docid: docid,
-        name: pregnancy.name,
-        age: pregnancy.age,
-        gestationalWeek: pregnancy.gestationalWeek,
-        inpatientNO: pregnancy.inpatientNO,
-        startdate: moment(starttime).format('YYYY-MM-DD HH:mm:ss'),
-        fetalcount: 2,
-        start: startingTime,
-        end: endingTime,
-      },
-    });
+    request.post(`/ctg-exams-pdf`, {
+      data: params,
+    }).then(res => {
+      const pdfData = res.pdfdata && `data:application/pdf;base64,${res.pdfdata}`;
+      setPdfflow(pdfData)
+    })
   }
 
   const PreivewContent = () => {
-    console.log('zzzz pdfflow', pdfflow)
     const content = pdfflow ? (
       <>
         <Document
@@ -109,7 +108,7 @@ const Preview = props => {
             cMapPacked: true,
           }}
         >
-          <Page className={styles.page} pageNumber={pageNumber} scale={1.5} height={340} />
+          <Page className={styles.page} pageNumber={pageNumber} scale={1.5} height={130} />
         </Document>
         <Pagination
           className={styles.pagination}
@@ -189,5 +188,4 @@ const Preview = props => {
 
 export default connect(({ item, loading }: any) => ({
   loading: loading,
-  pdfflow: item.pdfflow,
 }))(Preview);

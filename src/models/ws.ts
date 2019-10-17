@@ -26,7 +26,6 @@ export default {
     *updateData({ payload }, { put }) {
       yield put({ type: 'setState', payload });
       yield put({ type: 'list/processListData' });
-
     }
   },
   reducers: {
