@@ -21,15 +21,15 @@ const Preview = props => {
   const [numPages, setNumPages] = useState(0)
   const [pageNumber, setPageNumber] = useState(1)
 
-  const [startingTime, setStartingTime] = useState(0)
-  const [endingTime, setEndingTime] = useState(0)
+  const [startingTime, setStartingTime] = useState<number>(0)
+  const [endingTime, setEndingTime] = useState<number>(0)
 
   const [value, setValue] = useState<{ suit: any }>({ suit: null })
   const [lock, setLock] = useState(false)
   useEffect(() => {
 
-    const cb = startingTime => {
-      const interval = settingData.print_interval
+    const cb = (startingTime: number) => {
+      const interval = parseInt(settingData.print_interval)
       setStartingTime(
         startingTime
       )
@@ -38,9 +38,7 @@ const Preview = props => {
         startingTime + interval
       )
     }
-    value.suit && value.suit.on('suit:startTime', v => {
-      cb(v)
-    })
+    value.suit && value.suit.on('suit:startTime', cb)
     return () => {
       value.suit && value.suit.off('suit:startTime', cb)
     };
