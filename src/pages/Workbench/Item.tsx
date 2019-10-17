@@ -11,7 +11,7 @@ import { BedStatus } from "@lianmed/lmg/lib/services/WsService";
 const WorkbenchItem = props => {
   // console.log('item render')
   const { dispatch, fullScreenId, itemHeight, itemSpan, dataSource, outPadding } = props;
-  const { data, unitId, status } = dataSource;
+  const { data, unitId } = dataSource;
   const [showSettingBar, setShowSettingBar] = useState(true);
   const ref = useRef(null)
   const suitObject = { suit: null };
@@ -62,15 +62,22 @@ const WorkbenchItem = props => {
 
   // 床位信息
   const renderTilte = (item) => {
-    const { documentno, bedname, data } = item;
+    const { bedname, data } = item;
     const havePregnancy = data && data.pregnancy
     const pregnancy = havePregnancy && JSON.parse(data.pregnancy.replace(/'/g, '"'));
-    const isCreated = pregnancy && pregnancy.id && data && data.pregnancy && documentno === data.docid;
+    // 处理“null”
+    // Object.keys(pregnancy).forEach(key => {
+    //   const value = pregnancy[key];
+    //   if (value === 'null') {
+    //     pregnancy[key] = '';
+    //   }
+    //   pregnancy[key] = value;
+    // })
     const text = (
       <span className={styles.title}>
         床号: <span>{bedname}</span>
-        住院号: <span>{isCreated ? pregnancy.inpatientNO : ''}</span>
-        姓名: <span>{isCreated ? pregnancy.name : ''}</span>
+        住院号: <span>{ pregnancy && pregnancy.inpatientNO}</span>
+        姓名: <span>{pregnancy && pregnancy.name}</span>
         开始时间: <span>{data && data.starttime}</span>
       </span>
     )
@@ -90,7 +97,6 @@ const WorkbenchItem = props => {
     return () => {
     };
   }, [fullScreenId])
-
   return (
     <Col
       span={itemSpan}

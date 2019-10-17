@@ -235,7 +235,7 @@ class Toolbar extends Component {
     const havePregnancy = data && data.pregnancy;
     const pregnancy = havePregnancy && JSON.parse(data.pregnancy.replace(/'/g, '"'));
     const isCreated =
-      pregnancy && pregnancy.id && data && data.pregnancy && documentno === data.docid;
+      pregnancy && pregnancy.id && data && data.pregnancy;
     return (
       <>
         <div className={cx(styles.toolbar, { [styles.show]: showSetting })}>

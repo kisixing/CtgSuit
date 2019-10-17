@@ -12,8 +12,10 @@ export default function ModalConfirm({
   onOk = () => {},
   onCreate = () => {}
 }) {
-  const { bedname, data, documentno, pregnancy } = dataSource;
-  const isCreate = pregnancy && pregnancy.id && data && documentno === data.docid;
+  const { bedname, data } = dataSource;
+  const havePregnancy = data && data.pregnancy;
+  const pregnancy = havePregnancy && JSON.parse(data.pregnancy.replace(/'/g, '"'));
+  const isCreate = pregnancy && pregnancy.id && data && data.pregnancy;
   const handleOk = () => {
     onOk(dataSource);
     onCancel('confirmVisible');
@@ -51,9 +53,7 @@ export default function ModalConfirm({
       <div className={styles.content}>{content}</div>
       <div className={styles.buttons}>
         <Button onClick={() => onCancel('confirmVisible')}>取消</Button>
-        <Button onClick={handleOk}>
-          {isCreate ? '确定' : '放弃'}
-        </Button>
+        {isCreate ? <Button type="primary" onClick={handleOk}>确定</Button> : <Button onClick={handleOk}>放弃</Button>}
         {isCreate ? null : (
           <Button type="primary" onClick={onCreate}>
             建档
