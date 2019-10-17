@@ -1,11 +1,13 @@
 import { message } from 'antd';
 import { newPregnancies, getPregnancy } from '@/services/api';
 import { getList } from '@/services/list';
+import { BedStatus } from "@lianmed/lmg/lib/services/WsService";
 
 export default {
   namespace: 'list',
   state: {
     listData: [], // 所有bed数据
+    dirty: new Set(), // 受保护的床位
     pageData: [], // [[1,4],[5,8]]
     page: null, //当前页码
     pageItems: [], // [listItem,...] 床位信息
@@ -22,6 +24,105 @@ export default {
       });
       yield put({ type: 'processListData' });
     },
+
+    *processListData(payload, { put, select }) {
+      const state = yield select();
+      let {
+        setting: { listLayout },
+        list: { listData },
+        ws: { data }
+      } = state;
+      const pageItemsCount: number = listLayout[0] * listLayout[1];
+
+      listData = (listData as IDevice[])
+        .map(_ => {
+          const unitId = `${_.deviceno}-${_.subdevice}`;
+          return { ..._, unitId, data: (data as Map<any, any>).get(unitId) };
+        })
+        .filter(_ => !!_.data)
+        .map((_, index) => {
+          return { ..._, index, pageIndex: Math.floor(index / pageItemsCount), status: _.data.status };
+        });
+      yield put({ type: 'setState', payload: { listData } });
+      yield put({ type: 'computeLayout' });
+    },
+    *computeLayout({ }, { put, select }) {
+
+      yield put({ type: 'setPageData' });
+      yield put({ type: 'setPageItems', page: 0 });
+    },
+    *setPageData(payload, { put, select }) {
+      const state = yield select();
+      const {
+        setting: { listLayout },
+        list: { listData },
+      } = state;
+      const listLen = listData.length;
+      const pageItemsCount: number = listLayout[0] * listLayout[1];
+      const pageCount: number = Math.ceil(listLen / pageItemsCount);
+      let pageData = new Array(pageCount).fill(0).map((_, index) => {
+        if (index === pageCount - 1) {
+          const lastLeft = index * pageItemsCount;
+          return [lastLeft, listLen - 1];
+        }
+        return [index * pageItemsCount, (index + 1) * pageItemsCount - 1];
+      });
+
+      pageData = pageData.map(([left, right]) => {
+        return listData.slice(left, right + 1).map(_ => _.bedname)
+      })
+
+      yield put({ type: 'setState', payload: { pageData } });
+    },
+    *setPageItems({ page }, { put, select }) {
+      const state = yield select();
+      let {
+        setting: { listLayout },
+        list: { listData, dirty },
+      } = state;
+
+      listData = listData.filter(_ => {
+        return _.status === BedStatus.Working || (dirty as Set<string>).has(_.unitId)
+      })
+      const pageItemsCount: number = listLayout[0] * listLayout[1];
+      const pageItems = listData.slice(page * pageItemsCount, (page + 1) * pageItemsCount);
+      yield put({
+        type: 'setState',
+        payload: { pageItems, page }
+      });
+    },
+    *removeDirty({ unitId }, { call, put, select }) {
+      console.log('removeDirty')
+      const state = yield select();
+      let {
+        list: { dirty },
+      } = state;
+      dirty = new Set(dirty)
+      dirty.delete(unitId)
+      yield put({
+        type: 'setState', payload: {
+          dirty
+        }
+      })
+      yield put({
+        type: 'processListData'
+      })
+    },
+    *appendDirty({ unitId }, { call, put, select }) {
+      const state = yield select();
+      let {
+        list: { dirty },
+      } = state;
+      dirty = new Set(dirty)
+      dirty.add(unitId)
+      yield put({
+        type: 'setState', payload: {
+          dirty
+        }
+      })
+    },
+
+    //
     *updateBeds({ payload }, { call, put, select }) {
       let data = yield call(getList);
       const oldData = yield select(_ => _.list.listData);
@@ -43,75 +144,6 @@ export default {
           }
         })
       }
-      // yield put({
-      //   type: 'setState',
-      //   payload: {
-      //     listData: data
-      //   }
-      // })
-    },
-    *processListData(payload, { put, select }) {
-      const state = yield select();
-      let {
-        setting: { listLayout },
-        list: { listData },
-        ws: { data }
-      } = state;
-      const pageItemsCount: number = listLayout[0] * listLayout[1];
-
-      listData = (listData as IDevice[])
-        .map(_ => {
-          const unitId = `${_.deviceno}-${_.subdevice}`;
-          return { ..._, unitId };
-        })
-        .filter(_ => (data as Map<any, any>).has(_.unitId))
-        .map((_, index) => {
-          return { ..._, index, pageIndex: Math.floor(index / pageItemsCount) };
-        });
-      yield put({ type: 'setState', payload: { listData } });
-      yield put({ type: 'computeLayout' });
-    },
-    *computeLayout({ }, { put, select }) {
-
-      yield put({ type: 'setPageData' });
-      yield put({ type: 'setPageItems', page: 0 });
-    },
-    *setPageData(payload, { put, select }) {
-      const state = yield select();
-      const {
-        setting: { listLayout },
-        list: { listData },
-      } = state;
-      const listLen = listData.length;
-      const pageItemsCount: number = listLayout[0] * listLayout[1];
-      const pageCount: number = Math.ceil(listLen / pageItemsCount);
-      let pageData = new Array(pageCount).fill(0).map((_, index) => {
-
-        if (index === pageCount - 1) {
-          const lastLeft = index * pageItemsCount;
-          return [lastLeft, listLen - 1];
-        }
-        return [index * pageItemsCount, (index + 1) * pageItemsCount - 1];
-      });
-
-      pageData = pageData.map(([left, right]) => {
-        return listData.slice(left, right + 1).map(_ => _.bedname)
-      })
-
-      yield put({ type: 'setState', payload: { pageData } });
-    },
-    *setPageItems({ page }, { put, select }) {
-      const state = yield select();
-      const {
-        setting: { listLayout },
-        list: { listData },
-      } = state;
-      const pageItemsCount: number = listLayout[0] * listLayout[1];
-      const pageItems = listData.slice(page * pageItemsCount, (page + 1) * pageItemsCount);
-      yield put({
-        type: 'setState',
-        payload: { pageItems, page }
-      });
     },
     // 新建档案modal页面的搜索功能，检索个人孕册信息
     *fetchPregnancy({ payload, callback }, { call, put }) {
@@ -147,6 +179,11 @@ export default {
       };
     },
   },
+  subscriptions: {
+    deviceStatus({ dispatch }) {
+      console.log('dispatch', dispatch)
+    }
+  }
 };
 
 export interface IDevice {

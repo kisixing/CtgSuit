@@ -16,12 +16,16 @@ export default {
       const {
         ws: { status },
       } = state;
-      if (status === EWsStatus.Success) return; 
-      
+      if (status === EWsStatus.Success) return;
+
       let data = yield call(wsService.getDatacache.bind(wsService));
-      console.log('datacache',data)
+      console.log('datacache', data)
       yield put({ type: 'setState', payload: { data } });
-      yield put({ type: 'list/processListData'});
+      yield put({ type: 'list/processListData' });
+    },
+    *updateData({ payload }, { put }) {
+      yield put({ type: 'setState', payload });
+      yield put({ type: 'list/processListData' });
 
     }
   },

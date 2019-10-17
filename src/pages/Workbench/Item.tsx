@@ -4,13 +4,13 @@ import { Card, Col, Button, Tag, Tooltip } from 'antd';
 import { Ctg as L } from '@lianmed/lmg';
 import { mapStatusToColor, mapStatusToText } from '@/constant';
 import Toolbar from './Toolbar';
-
+import { event } from "@lianmed/utils";
 let styles = require('./Item.less')
-
+import { BedStatus } from "@lianmed/lmg/lib/services/WsService";
 const WorkbenchItem = props => {
   // console.log('item render')
   const { dispatch, fullScreenId, itemHeight, itemSpan, dataSource, outPadding } = props;
-  const { data, unitId, type } = dataSource;
+  const { data, unitId, status } = dataSource;
   const [showSettingBar, setShowSettingBar] = useState(true);
   const [showTitle, setShowTitle] = useState(true)
   const ref = useRef(null)
@@ -39,11 +39,23 @@ const WorkbenchItem = props => {
         }
         <Button
           title="全屏展示"
-          icon="fullscreen"
+          icon="close"
           size="small"
           type="link"
           style={{ color: "#fff" }}
-          onClick={fullScreen.bind(this)}
+          onClick={(
+            () => {
+              const s = status === BedStatus.Working
+              return () => {
+                const cb = () => {
+                  dispatch({
+                    type: 'list/removeDirty', unitId
+                  })
+                }
+                s ? event.emit(`bedClose:${unitId}`, cb) : cb()
+              }
+            }
+          )()}
         ></Button>
       </div>
     );
@@ -85,6 +97,7 @@ const WorkbenchItem = props => {
 
   return (
     <Col
+      onDoubleClick={fullScreen}
       span={itemSpan}
       className={styles.col}
       ref={ref}
