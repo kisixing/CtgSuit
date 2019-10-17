@@ -20,20 +20,25 @@ class FieldForm extends Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
-        let { pregnancyId, startTime, endTime } = values;
+        let sTime = moment()
+          .subtract(7, 'd')
+          .format('YYYY-MM-DD');
+        console.log("TCL: FieldForm -> sTime", sTime)
+        let eTime = moment().format('YYYY-MM-DD');
+        let { startTime, endTime } = values;
         if (startTime) {
-          startTime = moment(startTime).format('YYYY-MM-DD');
+          sTime = moment(startTime).format('YYYY-MM-DD');
         }
         if (endTime) {
-          endTime = moment(endTime).format('YYYY-MM-DD');
+          eTime = moment(endTime).format('YYYY-MM-DD');
         }
-        //TODO 检索条件未成熟
+        //TODO
         this.props.dispatch({
           type: 'archives/fetchRecords',
           payload: {
-            'pregnancyId.equals': pregnancyId,
-            'visitDate.greaterOrEqualThan': startTime,
-            'visitDate.lessOrEqualThan': endTime,
+            // 'pregnancyId.equals': pregnancyId,
+            'visitDate.greaterOrEqualThan': sTime,
+            'visitDate.lessOrEqualThan': eTime,
           },
         });
       }
@@ -52,30 +57,30 @@ class FieldForm extends Component {
     return (
       <Form layout="inline" className={styles.form} onSubmit={this.handleSubmit}>
         <Row>
-          <Col span={5}>
+          {/* <Col span={5}>
             <Form.Item label="孕册ID">
               {getFieldDecorator('pregnancyId')(<Input allowClear type="text" />)}
             </Form.Item>
-          </Col>
+          </Col> */}
           <Col span={5}>
-            <Form.Item label="开始时间">
+            <Form.Item label="开始日期">
               {getFieldDecorator('startTime')(
                 <DatePicker
                   allowClear
                   format="YYYY-MM-DD HH:mm:ss"
-                  placeholder="请选择日期"
+                  placeholder="请选择开始日期"
                   showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
                 />,
               )}
             </Form.Item>
           </Col>
           <Col span={5}>
-            <Form.Item label="结束时间">
+            <Form.Item label="结束日期">
               {getFieldDecorator('endTime')(
                 <DatePicker
                   allowClear
                   format="YYYY-MM-DD HH:mm:ss"
-                  placeholder="请选择日期"
+                  placeholder="请选择结束日期"
                   showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
                 />,
               )}

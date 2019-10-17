@@ -30,16 +30,16 @@ class Toolbar extends Component {
       confirmVisible: false,
       isCreated: false, // 默认未建档
       isMonitor: false, // 是否已经开始监护
-      isStopMonitorWhenCreated: false,
+      isStopMonitorWhenCreated: false, // 建档后是否停止监护
     };
   }
-  onclose = (cb) => {
-    this.endCb = cb
-    this.showModal('confirmVisible')
-  }
+  onclose = cb => {
+    this.endCb = cb;
+    this.showModal('confirmVisible');
+  };
   componentDidMount() {
-    this.unitId = this.props.dataSource.unitId
-    event.on(`bedClose:${this.unitId}`, this.onclose)
+    this.unitId = this.props.dataSource.unitId;
+    event.on(`bedClose:${this.unitId}`, this.onclose);
     const {
       dataSource: { data, documentno, pregnancy },
     } = this.props;
@@ -48,7 +48,7 @@ class Toolbar extends Component {
     this.setState({ isCreated });
   }
   componentWillUnmount() {
-    event.on(`bedClose:${this.unitId}`, this.onclose)
+    event.on(`bedClose:${this.unitId}`, this.onclose);
   }
   toggleTool = () => {
     const { showSetting } = this.state;
@@ -63,14 +63,20 @@ class Toolbar extends Component {
     this.setState({ [name]: false });
   };
 
+  // 建档（绑定孕册信息）
   handleCreate = item => {
-    // 建档/确定action
     const { dispatch, setShowTitle } = this.props;
     setShowTitle(true);
     const { form } = this.formRef.props;
     form.validateFields((err, values) => {
       if (err) {
         return;
+      }
+      if (!values.bedNO) {
+        return message.error('请输入患者床号！');
+      }
+      if (!values.name) {
+        return message.error('请输入患者姓名！');
       }
       // 新建孕册 后台检验孕册是否已经存在
       // ture -> 提示孕册已经存在，是否
@@ -97,20 +103,18 @@ class Toolbar extends Component {
       if (pregnancyId) {
         // 调入孕册信息后获取的 有孕册pregnancyId
         const data = { ...d, pregnancy: { id: pregnancyId } };
-        this.newArchive(data)
-        this.end(item);
+        this.newArchive(data, item);
       } else {
         // 无孕册pregnancyId 新建孕册获取pregnancyId
         dispatch({
           type: 'list/createPregnancy',
-          payload: { ...values },
+          payload: { ...values, areaNO: '01', recordstate: '10' },
           callback: res => {
             if (res && res.id) {
               // 新建孕册成功
               const data = { ...d, pregnancy: { id: res.id } };
               // 新建档案
-              this.newArchive(data);
-              this.end(item);
+              this.newArchive(data, item);
             } else {
               // 孕册存在，取到孕册信息
               message.info('改患者信息已存在！');
@@ -122,12 +126,17 @@ class Toolbar extends Component {
       form.resetFields();
       this.setState({
         visible: false,
-        isStopMonitorWhenCreated: false
+        isStopMonitorWhenCreated: false,
       });
     });
   };
 
-  newArchive = params => {
+  /**
+   * 绑定孕册信息
+   * @param {object} params 条件参数
+   * @param {object} item item原始数据
+   */
+  newArchive = (params, item) => {
     const { dispatch } = this.props;
     dispatch({
       type: 'archives/create',
@@ -137,6 +146,12 @@ class Toolbar extends Component {
           this.setState({ isCreated: true });
         }
       },
+    }).then(() => {
+      // 完成绑定后判断是否停止监护工作
+      const { isStopMonitorWhenCreated } = this.state;
+      if (isStopMonitorWhenCreated) {
+        this.end(item);
+      }
     });
   };
 
@@ -153,9 +168,9 @@ class Toolbar extends Component {
     const { deviceno, bedno, pregnancy, data, documentno, prenatalVisit = {}, unitId } = item;
 
     dispatch({
-      type: 'list/appendDirty', unitId
-    })
-
+      type: 'list/appendDirty',
+      unitId,
+    });
 
     const _this = this;
     // const isCreated = pregnancy && pregnancy.id && data && documentno === data.docid;
@@ -192,16 +207,16 @@ class Toolbar extends Component {
       this.setState({ isCreated: false });
     }
     if (this.endCb) {
-      this.endCb()
-      this.endCb = null
+      this.endCb();
+      this.endCb = null;
     }
   };
 
   // 重定向打开建档窗口
   redirectCreate = () => {
     this.setState({
-      isStopMonitorWhenCreated: true,
       confirmVisible: false,
+      isStopMonitorWhenCreated: true,
       visible: true,
     });
   };

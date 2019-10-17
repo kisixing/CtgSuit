@@ -13,49 +13,43 @@ class Setting extends Component {
   componentDidMount() {
     const {
       dispatch,
+      from,
       dataSource: {
         data,
-        ctgexam /* 由档案入口 */
       }
     } = this.props;
-    let docid = '';
-    if (data && data.docid && !(ctgexam && ctgexam.note)) {
-      docid = data.docid;
+    if (from !== "archives") {
+      dispatch({
+        type: 'item/fetchCTGData',
+        payload: {
+          ctgexamid: data.docid,
+        },
+      });
     }
-    if (ctgexam && ctgexam.note) {
-      docid = ctgexam.note;
-    }
-    dispatch({
-      type: 'item/fetchCTGData',
-      payload: {
-        ctgexamid: docid,
-      },
-    });
-  
   }
 
   render() {
-    const { ctgData, loading } = this.props;
-
+    const { ctgData, CTGData, from, loading } = this.props;
+    const data = from === 'archives' ? CTGData : ctgData;
     return (
       <Context.Consumer>
-        {
-          value => (
-            <Spin
-              wrapperClassName={styles.chart}
-              spinning={loading.effects['item/fetchCTGData']}
-            >
-              <L suitType={2} data={ctgData} mutableSuitObject={value}></L>
-            </Spin>
-          )
-        }
+        {value => (
+          <Spin
+            wrapperClassName={styles.chart}
+            spinning={
+              loading.effects['item/fetchCTGData'] || loading.effects['archives/fetchCTGrecordData']
+            }
+          >
+            <L suitType={2} data={ctgData} mutableSuitObject={value}></L>
+          </Spin>
+        )}
       </Context.Consumer>
-
     );
   }
 }
 
-export default connect(({ item, loading }) => ({
+export default connect(({ item, archives, loading }) => ({
   loading: loading,
   ctgData: item.ctgData,
+  CTGData: archives.CTGData,
 }))(Setting);

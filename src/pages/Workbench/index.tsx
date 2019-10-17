@@ -38,7 +38,7 @@ const Home = props => {
 
         <Row style={{ padding: outPadding, height: contentHeight }}>
           {items.map(item => {
-            console.log('item', item)
+            // console.log('item', item)
             return (
               <Item
                 key={item.id}

@@ -23,7 +23,7 @@ const PrintPreview = (props) => {
       </div>
     );
   }
-  const { visible, onCancel, onCreate, dataSource } = props;
+  const { visible, onCancel, onCreate, dataSource, from } = props;
   const v = useMemo(() => { return {} }, [])
   return (
     <Context.Provider value={v}>
@@ -48,11 +48,10 @@ const PrintPreview = (props) => {
           <Preview dataSource={dataSource} />
         </div>
         <div className={styles.bottom}>
-          <Setting dataSource={dataSource} />
+          <Setting from={from} dataSource={dataSource} />
         </div>
       </Modal>
     </Context.Provider>
-
   );
 }
 

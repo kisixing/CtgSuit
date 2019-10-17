@@ -16,7 +16,6 @@ import styles from './style.less';
 class Network extends Component {
   componentDidMount() {
     this.fetchData()
-
   }
   fetchData = () => {
     const { form } = this.props;

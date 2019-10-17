@@ -3,6 +3,7 @@ import { Table, Input, InputNumber, Popconfirm, Form, Button, Select } from 'ant
 import { connect } from "dva";
 import { mapStatusToText } from '@/constant'
 import request from "@lianmed/request";
+
 const data = [];
 for (let i = 0; i < 100; i++) {
   data.push({
@@ -221,10 +222,12 @@ class EditableTable extends React.Component {
     });
     return (
       <EditableContext.Provider value={this.props.form}>
+        <p style={{ fontWeight: 600, lineHeight: '40px', marginBottom: '24px' }}>账户管理</p>
         <Table
           size="small"
           components={components}
           bordered
+          rowKey="id"
           dataSource={this.props.data}
           columns={columns}
           rowClassName="editable-row"

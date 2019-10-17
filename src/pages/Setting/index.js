@@ -9,6 +9,7 @@ import Alarm from './Alarm';
 import Print from './Print';
 import BedInfo from './BedInfo';
 import Account from './Account';
+import Hospital from './Hospital';
 
 import styles from './index.less';
 
@@ -79,6 +80,8 @@ class Setting extends Component {
         return <Print />;
       case '5':
         return <Network />;
+      case '6':
+        return <Hospital />
       case '7':
         return <BedInfo />
       case '8':

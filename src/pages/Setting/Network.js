@@ -20,7 +20,6 @@ class Network extends Component {
     store.get(['ws_url', 'xhr_url']).then(([ws_url,xhr_url])=> {
       form.setFieldsValue({ xhr_url, ws_url });
     })
-    
   }
 
   handleSubmit = () => {
