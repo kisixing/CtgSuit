@@ -7,7 +7,7 @@
 import React, { Component, Fragment } from 'react';
 import { AntdThemeManipulator } from '@lianmed/components';
 
-import { Layout, Menu, Icon, Button, Modal, Avatar, Spin, Select } from 'antd';
+import { Layout, Menu, Icon, Button, Modal, Avatar, Spin, Select, notification } from 'antd';
 import { connect } from 'dva';
 import { router } from 'umi';
 import withRouter from 'umi/withRouter';
@@ -25,8 +25,8 @@ import settingStore from "@/utils/SettingStore";
 // import { WsService } from '@/services/WsService';
 import { WsService } from "@lianmed/lmg";
 
-window.gg = (str)=>{
-  ipcRenderer.send('printWindow','http://www.orimi.com/pdf-test.pdf')
+window.gg = (str) => {
+  ipcRenderer.send('printWindow', 'http://www.orimi.com/pdf-test.pdf')
 }
 
 
@@ -49,6 +49,7 @@ class BasicLayout extends Component {
   }
 
   componentDidMount() {
+
     const { dispatch } = this.props;
     dispatch({
       type: 'global/fetchAccount',
@@ -109,7 +110,7 @@ class BasicLayout extends Component {
         content: '确认退出系统？',
         okText: '确认',
         cancelText: '取消',
-        onOk: function() {
+        onOk: function () {
           // 清除sessionStorage
           // store.clearAll();
           // 退出登录，关闭应用
@@ -125,7 +126,7 @@ class BasicLayout extends Component {
         content: '确认退出登录？',
         okText: '确认',
         cancelText: '取消',
-        onOk: function() {
+        onOk: function () {
           // 清除sessionStorage
           store.clearAll();
           // 退出登录，回到登录页面
@@ -236,10 +237,17 @@ class BasicLayout extends Component {
       wsStatus === EWsStatus.Pendding
         ? 'transparent'
         : wsStatus === EWsStatus.Success
-        ? 'green'
-        : 'red';
+          ? 'green'
+          : 'red';
     return (
-      <Layout className={styles.container}>
+      <Layout className={styles.container} onClickCapture={e => {
+        if (wsStatus !== EWsStatus.Success) {
+          // e.stopPropagation()
+          notification.warning({
+            message: '未建立链接, 请联系支持人员'
+          })
+        }
+      }}>
         <Header className={styles.header}>
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             <Link to="/" className={styles.logo}>
