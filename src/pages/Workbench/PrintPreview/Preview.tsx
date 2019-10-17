@@ -27,7 +27,6 @@ const Preview = props => {
   const [value, setValue] = useState<{ suit: any }>({ suit: null })
   const [lock, setLock] = useState(false)
   useEffect(() => {
-
     const cb = startingTime => {
       const interval = settingData.print_interval
       setStartingTime(
@@ -35,8 +34,9 @@ const Preview = props => {
       )
       //TODO: 计算结束时间
       setEndingTime(
-        startingTime + interval
+        startingTime + Number(interval)*240
       )
+      //console.log('kisi',startingTime,startingTime + Number(interval)*240);
     }
     value.suit && value.suit.on('suit:startTime', v => {
       cb(v)
@@ -133,7 +133,7 @@ const Preview = props => {
               <PreivewContent />
               <div style={{ width: 300, padding: 24, background: '#fff', display: 'flex', flexDirection: 'column', justifyContent: 'space-around' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span>开始：{startingTime}</span>
+                  <span>开始时间：{startingTime}</span>
                   <Button type={lock ? 'danger' : 'primary'} onClick={toggleLock} size="small">
                     {
                       lock ? '重置' : '确定'
@@ -143,7 +143,7 @@ const Preview = props => {
 
                 {/* TODO: 计算显示时间 */}
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span>结束：123</span>
+                  <span>结束时间：{endingTime}</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <span>时长：{settingData.print_interval || 0}分</span>
