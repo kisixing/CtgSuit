@@ -20,13 +20,6 @@ class TableList extends Component {
     };
     this.columns = [
       // {
-      //   title: '编号',
-      //   dataIndex: 'id',
-      //   key: 'id',
-      //   width: 100,
-      //   align: 'center',
-      // },
-      // {
       //   title: '孕册ID',
       //   dataIndex: 'pregnancyId',
       //   key: 'pregnancyId',
@@ -135,20 +128,30 @@ class TableList extends Component {
   }
 
   componentDidMount() {
-    const { dispatch } = this.props;
-    console.log('7777777777777777', this.props);
-    // 默认请求近一周的数据
-    let sTime = moment()
-      .subtract(7, 'd')
-      .format('YYYY-MM-DD');
-    let eTime = moment().format('YYYY-MM-DD');
-    dispatch({
-      type: 'archives/fetchRecords',
-      payload: {
-        'visitDate.greaterOrEqualThan': sTime,
-        'visitDate.lessOrEqualThan': eTime,
-      },
-    });
+    const { dispatch, router } = this.props;
+    const query = router.location.query;
+    if (query.pregnancyId) {
+      // 从孕产妇列表进入时，取得该孕产妇的孕产id，获得ctg档案信息
+      dispatch({
+        type: 'archives/fetchRecords',
+        payload: {
+          'pregnancyId.equals': query.pregnancyId,
+        },
+      });
+    } else {
+      // 默认请求近一周的数据
+      const sTime = moment()
+        .subtract(7, 'd')
+        .format('YYYY-MM-DD');
+      const eTime = moment().format('YYYY-MM-DD');
+      dispatch({
+        type: 'archives/fetchRecords',
+        payload: {
+          'visitDate.greaterOrEqualThan': sTime,
+          'visitDate.lessOrEqualThan': eTime,
+        },
+      });
+    }
   }
 
   showModal = () => {
@@ -311,9 +314,10 @@ class TableList extends Component {
   }
 }
 
-export default connect(({ archives, loading }) => ({
+export default connect(({ archives, loading, router }) => ({
   selected: archives.current,
   dataSource: archives.dataSource,
   isFullscreen: archives.isFullscreen,
   loading: loading,
+  router,
 }))(TableList);

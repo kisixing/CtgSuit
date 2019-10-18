@@ -89,13 +89,13 @@ class BasicLayout extends Component {
       ipcRenderer.send('newWindow', '操作说明');
     }
     if (key === '档案管理') {
-      router.replace('/archives');
+      router.push('/a');
     }
     if (key === '系统设置') {
-      router.replace('/setting');
+      router.push('/s');
     }
     if (key === '孕产妇管理') {
-      router.replace('/pregnancy');
+      router.push('/p');
     }
   };
 
@@ -232,7 +232,7 @@ class BasicLayout extends Component {
 
   render() {
     const primaryColor = settingData.theme || colors[this.colorIndex];
-    const { children, wsStatus, loading } = this.props;
+    const { children, wsStatus } = this.props;
     const wsStatusColor =
       wsStatus === EWsStatus.Pendding
         ? 'transparent'
@@ -309,7 +309,7 @@ class BasicLayout extends Component {
   }
 }
 
-export default connect(({ global, list, loading, setting, ws }) => ({
+export default connect(({ global, list, loading, setting, ws, ...rest }) => ({
   loading: loading,
   account: global.account || {},
   pageData: list.pageData,

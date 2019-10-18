@@ -127,10 +127,7 @@ class Toolbar extends Component {
       }
 
       form.resetFields();
-      this.setState({
-        visible: false,
-        isStopMonitorWhenCreated: false,
-      });
+      this.setState({ visible: false });
     });
   };
 
@@ -150,14 +147,16 @@ class Toolbar extends Component {
           // this.setState({ isCreated: true });
 
           event.emit('newArchive', res)
+          // 完成绑定后判断是否停止监护工作
+          const { isStopMonitorWhenCreated } = this.state;
+          if (isStopMonitorWhenCreated) {
+            this.end(item);
+            this.setState({ isStopMonitorWhenCreated: false });
+          }
+        } else {
+          message.error('建档失败！')
         }
       },
-    }).then(() => {
-      // 完成绑定后判断是否停止监护工作
-      const { isStopMonitorWhenCreated } = this.state;
-      if (isStopMonitorWhenCreated) {
-        this.end(item);
-      }
     });
   };
 
@@ -231,7 +230,7 @@ class Toolbar extends Component {
       partogramVisible,
       confirmVisible,
     } = this.state;
-    const { data, documentno } = dataSource;
+    const { data } = dataSource;
 
     // 处于监护状态
     const isMonitor = data && data.status === 1;

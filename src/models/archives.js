@@ -21,7 +21,7 @@ export default {
       yield put({
         type: 'updateState',
         payload: {
-          dataSource: res,
+          dataSource: res.reverse(),
         },
       });
     },
@@ -132,6 +132,22 @@ export default {
         ...state,
         ...payload,
       };
+    },
+  },
+  subscriptions: {
+    // 进入该页面 清空内容
+    setup({ dispatch, history }) {
+      return history.listen(({ pathname, search }) => {
+        if (pathname === '/archives') {
+          dispatch({
+            type: 'updateState',
+            payload: {
+              current: {},
+              CTGData: null,
+            },
+          });
+        }
+      });
     },
   },
 };

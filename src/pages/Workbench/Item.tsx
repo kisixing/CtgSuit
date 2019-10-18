@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { Card, Col, Button, Tag, Tooltip } from 'antd';
 import { Ctg as L } from '@lianmed/lmg';

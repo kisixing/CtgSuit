@@ -3,8 +3,9 @@ import request from "@lianmed/request";
 import { event } from "@lianmed/utils";
 
 
-export default function useTodo(): [IRemain[], () => any] {
+export default function useTodo(showTodo: boolean): [IRemain[], boolean] {
     const [todo, setTodo] = useState<IRemain[]>([])
+    const [todoLoading, setTodoLoading] = useState(false)
     const cb = useCallback(
         (value: INewArchive) => {
             const target = todo.find(_ => _.note === value.ctgexam.note)
@@ -30,6 +31,10 @@ export default function useTodo(): [IRemain[], () => any] {
         [todo],
     )
     useEffect(() => {
+        showTodo && fetchTodo()
+    }, [showTodo]);
+
+    useEffect(() => {
         event.on('newArchive', cb)
         event.on('todo:discard', discard)
         return () => {
@@ -38,18 +43,20 @@ export default function useTodo(): [IRemain[], () => any] {
         };
     }, [todo])
     const fetchTodo = useCallback(
-        () => (
+        () => {
+            setTodoLoading(true);
             request.get('/ctg-exams-remain').then((res: IRemain[]) => {
                 return Promise.all(res.map(_ => request.get(`/ctg-exams-data/${_.note}`))).then(all => {
+                    setTodoLoading(false);
                     setTodo(res.map((_, index) => ({ ..._, isTodo: true, id: _.note, data: { ...all[index], docid: _.note } })))
                 })
             })
 
-        ),
+        },
         []
     )
     return [
-        todo, fetchTodo
+        todo, todoLoading
     ]
 }
 export interface IRemain {

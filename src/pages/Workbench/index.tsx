@@ -14,14 +14,13 @@ interface IProps {
 
 
 const Home = (props: IProps) => {
-  const [todo, fetchTodo] = useTodo()
   const { listLayout = [], pageItems, fullScreenId, dispatch, showTodo } = props;
+  const [todo, todoLoading] = useTodo(showTodo)
+
   const wrap = useRef(null);
   // const [wrapRec, setWrapRec] = useState({ height: 0, width: 0 });
 
-  useEffect(() => {
-    showTodo && fetchTodo()
-  }, [showTodo]);
+
   const itemSpan = 24 / listLayout[0];
   const outPadding = 6;
   const contentHeight = parseInt(getComputedStyle(document.body).height) - 28 - 106
@@ -31,8 +30,7 @@ const Home = (props: IProps) => {
 
   return (
     <div style={{ height: '100%' }} ref={wrap}>
-      <Spin spinning={items.length === 0} size="large" >
-
+      <Spin spinning={pageItems.length === 0 || todoLoading} size="large" >
         <Row style={{ padding: outPadding, height: contentHeight }}>
           {items.map((item: IDevice | IRemain) => {
             // console.log('item', item)
@@ -64,7 +62,6 @@ export default connect(({ setting, list, ws }: any) => {
     listLayout: setting.listLayout,
     pageItems: list.pageItems.map(_ => {
       const data = (datacache as Map<string, any>).get(_.unitId);
-
       return {
         ..._, data, status: data && data.status
       }

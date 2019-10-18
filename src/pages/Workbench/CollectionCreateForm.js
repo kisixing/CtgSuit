@@ -27,7 +27,7 @@ const CollectionCreateForm = Form.create({
       form.resetFields();
     };
 
-    // modal里面的搜索按钮事件
+    // modal里面的搜索按钮事件、调入
     handleSearch = () => {
       const { dispatch, form } = this.props;
       this.setState({ required: false }, () => {
@@ -61,6 +61,7 @@ const CollectionCreateForm = Form.create({
       const { onCreate } = this.props;
       this.setState({ required: true }, () => {
         onCreate(dataSource);
+        this.setState({ required: true });
       });
     };
 
@@ -144,7 +145,7 @@ const CollectionCreateForm = Form.create({
           bodyStyle={{ paddingRight: '48px' }}
           onCancel={() => onCancel('visible')}
         >
-          <Form layout="horizontal" {...formItemLayout}>
+          <Form id="Modal_Message_Container" layout="horizontal" {...formItemLayout}>
             <Row gutter={24}>
               <Col span={0}>
                 <Form.Item label="">
@@ -165,14 +166,14 @@ const CollectionCreateForm = Form.create({
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item label="孕妇姓名">
+                <Form.Item label={<span className="required">姓名</span>}>
                   {getFieldDecorator('name', {
                     rules: [{ required: false, message: '请填写孕妇姓名!' }],
                   })(<Input placeholder="输入孕妇姓名..." style={{ width }} />)}
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item label="住院号">
+                <Form.Item label={<span className="required">住院号</span>}>
                   {getFieldDecorator('inpatientNO', {
                     rules: [
                       { required: false, message: '请填写孕妇住院号!' },
