@@ -34,7 +34,7 @@ function Tabs({ pageData, page, dispatch, showTodo }) {
           }, 0);
 
 
-        }} type={showTodo ? 'default' : 'primary'}>待处理档案列表</ Button>
+        }} type={showTodo ? 'default' : 'primary'}>待处理</ Button>
       )}
 
     </div>
