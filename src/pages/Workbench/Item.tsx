@@ -7,10 +7,16 @@ import Toolbar from './Toolbar';
 import { event } from "@lianmed/utils";
 let styles = require('./Item.less')
 import { BedStatus } from "@lianmed/lmg/lib/services/WsService";
-
-const WorkbenchItem = props => {
+import { IDevice } from "@/models/list";
+import { IRemain } from './useTodo';
+interface IProps {
+  dataSource: IDevice | IRemain;
+  [x: string]: any
+}
+const WorkbenchItem = (props: IProps) => {
+  // console.log('item render')
   const { dispatch, fullScreenId, itemHeight, itemSpan, dataSource, outPadding } = props;
-  const { data, unitId } = dataSource;
+  const { data, id } = dataSource;
   const [showSettingBar, setShowSettingBar] = useState(true);
   const ref = useRef(null)
   const suitObject = { suit: null };
@@ -23,7 +29,8 @@ const WorkbenchItem = props => {
       el.requestFullscreen();
     }
   }
-
+  const unitId = (dataSource as IDevice).unitId
+  const { isTodo, note } = (dataSource as IRemain)
 
   // item右上角icon
   const renderExtra = (status: React.ReactText) => {
@@ -44,12 +51,16 @@ const WorkbenchItem = props => {
             () => {
               const s = status === BedStatus.Working
               return () => {
-                const cb = () => {
-                  dispatch({
-                    type: 'list/removeDirty', unitId
-                  })
+                if (isTodo) {
+                  event.emit('todo:discard', note)
+                } else {
+                  const cb = () => {
+                    dispatch({
+                      type: 'list/removeDirty', unitId
+                    })
+                  }
+                  s ? event.emit(`bedClose:${unitId}`, cb) : cb()
                 }
-                s ? event.emit(`bedClose:${unitId}`, cb) : cb()
               }
             }
           )()}
@@ -62,7 +73,7 @@ const WorkbenchItem = props => {
   const renderTilte = (item) => {
     const { bedname, data } = item;
     const havePregnancy = data && data.pregnancy
-    const pregnancy = havePregnancy && JSON.parse(data.pregnancy.replace(/'/g, '"'));
+    const pregnancy = (typeof havePregnancy === 'object') ? havePregnancy : havePregnancy && JSON.parse(havePregnancy.replace(/'/g, '"'));
     // 处理“null”
     // Object.keys(pregnancy).forEach(key => {
     //   const value = pregnancy[key];
@@ -96,6 +107,7 @@ const WorkbenchItem = props => {
     return () => {
     };
   }, [fullScreenId])
+  // console.log('zzzzzzz', data)
   return (
     <Col
       span={itemSpan}

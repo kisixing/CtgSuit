@@ -1,17 +1,10 @@
 import React, { useState, useCallback } from 'react';
 import { Button } from 'antd';
 import { router } from 'umi';
-import { event } from "@lianmed/utils";
+import { connect } from 'dva';
 let styles = require('./Tabs.less')
 
-function Tabs({ pageData, page, dispatch }) {
-
-  const [showCompleted, setShowCompleted] = useState(false)
-
-  const toggleCompleted = useCallback((status) => {
-    setShowCompleted(status)
-    event.emit('workbench:toggle_completed', status)
-  }, [])
+function Tabs({ pageData, page, dispatch, showTodo }) {
   return (
     <div className={styles.tabs} >
       {pageData.map((bednames: string[], index) => {
@@ -19,13 +12,13 @@ function Tabs({ pageData, page, dispatch }) {
           <Button
             key={bednames.join(' ')}
             onClick={e => {
-              toggleCompleted(false)
-              dispatch({ type: 'list/setPageItems', page: index });
+              dispatch({ type: 'list/setState', payload: { showTodo: false } })
+              dispatch({ type: 'list/setPage', page: index });
               router.replace('/workbench');
             }}
             style={{ margin: '4px' }}
             size="small"
-            type={(!showCompleted && page === index) ? 'default' : 'primary'}
+            type={(!showTodo && page === index) ? 'default' : 'primary'}
           >
             {
               `第 ${index + 1} 组`
@@ -34,13 +27,22 @@ function Tabs({ pageData, page, dispatch }) {
         );
       })}
       {pageData.length > 0 && (
-        <Button size="small" style={{ margin: '4px' }} onClick={() => {
-          toggleCompleted(true)
-        }} type={showCompleted ? 'default' : 'primary'}>结束监护</ Button>
+        <Button size="small" style={{ margin: '4px', marginLeft: 80, background: showTodo ? 'white' : 'var(--theme-hover-color)' }} onClick={() => {
+          router.replace('/workbench');
+          setTimeout(() => {
+            dispatch({ type: 'list/setState', payload: { showTodo: true } })
+          }, 0);
+
+
+        }} type={showTodo ? 'default' : 'primary'}>待处理档案列表</ Button>
       )}
 
     </div>
   );
 }
 
-export default Tabs;
+export default connect(({ list }) => {
+  return {
+    showTodo: list.showTodo
+  }
+})(Tabs);

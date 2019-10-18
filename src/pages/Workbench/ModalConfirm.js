@@ -14,7 +14,7 @@ export default function ModalConfirm({
 }) {
   const { bedname, data } = dataSource;
   const havePregnancy = data && data.pregnancy;
-  const pregnancy = havePregnancy && JSON.parse(data.pregnancy.replace(/'/g, '"'));
+  const pregnancy = typeof havePregnancy === 'object' ? havePregnancy : havePregnancy && JSON.parse(data.pregnancy.replace(/'/g, '"'));
   const isCreate = pregnancy && pregnancy.id && data && data.pregnancy;
   const handleOk = () => {
     onOk(dataSource);

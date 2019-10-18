@@ -14,14 +14,12 @@ function Beds({ dispatch, listData, wsData }) {
 
   const handleClicks = ({ pageIndex, unitId }) => {
     return () => {
-      const data = { type: 'list/setPageItems', page: pageIndex };
-
+      const data = { type: 'list/setPage', page: pageIndex };
       if (clickTimeout !== null) {
         clearTimeout(clickTimeout);
         clickTimeout = null;
         dispatch(data);
         dispatch({ type: 'list/setState', payload: { fullScreenId: unitId } });
-
         router.replace('/workbench');
       } else {
         clickTimeout = setTimeout(() => {
