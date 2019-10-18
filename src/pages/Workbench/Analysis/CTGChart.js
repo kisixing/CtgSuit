@@ -5,10 +5,12 @@
  */
 
 import React, { PureComponent } from 'react';
+import { Context } from './index';
 import { connect } from 'dva';
 import { Spin } from 'antd';
 import { Ctg as L } from '@lianmed/lmg';
 import styles from './index.less';
+
 
 class CTGChart extends PureComponent {
   constructor(props) {
@@ -38,14 +40,19 @@ class CTGChart extends PureComponent {
     const { ctgData, CTGData, from, loading } = this.props;
     const data = from === 'archives' ? CTGData : ctgData;
     return (
-      <Spin
-        wrapperClassName={styles.spinWrapper}
-        spinning={
-          loading.effects['item/fetchCTGData'] || loading.effects['archives/fetchCTGrecordData']
-        }
-      >
-        <L type={1} data={data}></L>
-      </Spin>
+      <Context.Consumer>
+        {value => (
+          <Spin
+            wrapperClassName={styles.spinWrapper}
+            // spinning={
+            //   loading.effects['item/fetchCTGData'] || loading.effects['archives/fetchCTGrecordData']
+            // }
+            spinning={!data}
+          >
+            <L suitType={2} data={data} mutableSuitObject={value}></L>
+          </Spin>
+        )}
+      </Context.Consumer>
     );
   }
 }

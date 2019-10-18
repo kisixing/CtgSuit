@@ -4,6 +4,7 @@ import {
   getCTGrecordData,
   newCTGrecord,
   updateCTGrecord,
+  nosaveCTG,
 } from '@/services/api';
 import moment from 'moment';
 
@@ -125,6 +126,9 @@ export default {
         callback(res); // 返回结果
       }
     },
+    *noSaveCTG({ payload }, { call }) {
+      const res = yield call(nosaveCTG, payload)
+    }
   },
   reducers: {
     updateState(state, { payload }) {

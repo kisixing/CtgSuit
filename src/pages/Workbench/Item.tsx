@@ -73,10 +73,11 @@ const WorkbenchItem = props => {
     // })
     const text = (
       <span className={styles.title}>
-        床号: <span>{bedname}</span>
-        住院号: <span>{ pregnancy && pregnancy.inpatientNO}</span>
+        床号: <span>{pregnancy && pregnancy.bedNO}</span>
+        {/* 住院号: <span>{ pregnancy && pregnancy.inpatientNO}</span> */}
         姓名: <span>{pregnancy && pregnancy.name}</span>
         开始时间: <span>{data && data.starttime}</span>
+        <span style={{ float: 'right' }}>{bedname}</span>
       </span>
     )
     // 是否已经建档绑定孕册

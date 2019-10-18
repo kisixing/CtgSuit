@@ -20,9 +20,7 @@ import config from '@/utils/config';
 import styles from './BasicLayout.less';
 import Beds from './Beds';
 import Tabs from './Tabs';
-// import { wsStatus } from "@lianmed/lmg";
 import settingStore from "@/utils/SettingStore";
-// import { WsService } from '@/services/WsService';
 import { WsService } from "@lianmed/lmg";
 
 window.gg = (str) => {
@@ -240,14 +238,17 @@ class BasicLayout extends Component {
           ? 'green'
           : 'red';
     return (
-      <Layout className={styles.container} onClickCapture={e => {
-        if (wsStatus !== EWsStatus.Success) {
-          // e.stopPropagation()
-          notification.warning({
-            message: '未建立链接, 请联系支持人员'
-          })
-        }
-      }}>
+      <Layout
+        className={styles.container}
+        onClickCapture={e => {
+          if (wsStatus !== EWsStatus.Success) {
+            // e.stopPropagation()
+            notification.warning({
+              message: '未建立链接, 请联系支持人员',
+            });
+          }
+        }}
+      >
         <Header className={styles.header}>
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             <Link to="/" className={styles.logo}>
@@ -292,7 +293,9 @@ class BasicLayout extends Component {
         </Header>
         <Content className={styles.main}>{children}</Content>
         <Footer className={styles.footer}>
-          <span />
+          <span className={styles.question} onClick={() => ipcRenderer.send('newWindow', '操作说明')}>
+            <Icon type="question-circle" />
+          </span>
           <span>
             Copyright <Icon type="copyright" /> {config.copyright}
           </span>

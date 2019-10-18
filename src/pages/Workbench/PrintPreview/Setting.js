@@ -3,7 +3,8 @@ import { connect } from 'dva';
 import { Spin } from 'antd';
 import { Ctg as L } from '@lianmed/lmg';
 import styles from './index.less';
-import { Context } from './index'
+import { Context } from './index';
+
 class Setting extends Component {
   constructor(props) {
     super(props)

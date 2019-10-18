@@ -10,9 +10,9 @@ function getMainPath() {
 }
 
 function getNewPath(params) {
-  let filePath = `file://${path.join(__dirname, '..', '..', 'render/book.html')}`;
+  let filePath = `file://${path.join(__dirname, '..', '..', 'render/handbook/index.html')}`;
   if (is.dev()) {
-    filePath = 'http://127.0.0.1:1702/book.html';
+    filePath = 'http://127.0.0.1:1702/handbook/index.html';
   }
   return filePath;
 }

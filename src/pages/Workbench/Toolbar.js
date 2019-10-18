@@ -163,12 +163,12 @@ class Toolbar extends Component {
 
   // 停止监护
   end = item => {
+    // TODO 逻辑混乱
     const { dispatch } = this.props;
-    const { deviceno, bedno, data, documentno, prenatalVisit = {}, unitId } = item;
+    const { deviceno, bedno, data, prenatalVisit = {}, unitId } = item;
     const havePregnancy = data && data.pregnancy;
     const pregnancy = havePregnancy && JSON.parse(data.pregnancy.replace(/'/g, '"'));
-    const isCreated =
-      pregnancy && pregnancy.id && data && data.pregnancy && documentno === data.docid;
+    const isCreated = pregnancy && pregnancy.id && data && data.pregnancy;
 
     dispatch({
       type: 'list/appendDirty',
@@ -200,6 +200,10 @@ class Toolbar extends Component {
       });
     } else {
       // 未建档提示简单保存或者放弃保存
+      dispatch({
+        type: 'archives/noSaveCTG',
+        payload: data.docid,
+      });
     }
     if (this.endCb) {
       this.endCb();
@@ -233,8 +237,8 @@ class Toolbar extends Component {
     // 已建档状态
     const havePregnancy = data && data.pregnancy;
     const pregnancy = havePregnancy && JSON.parse(data.pregnancy.replace(/'/g, '"'));
-    const isCreated =
-      pregnancy && pregnancy.id && data && data.pregnancy;
+    const isCreated = pregnancy && pregnancy.id && data && data.pregnancy;
+
     return (
       <>
         <div className={cx(styles.toolbar, { [styles.show]: showSetting })}>

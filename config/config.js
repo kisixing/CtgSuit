@@ -3,6 +3,7 @@
 // Instantiate the configuration with a new API
 import { join } from 'path';
 import slash from 'slash';
+import path from 'path';
 import pageRoutes from './routes';
 
 export default {
@@ -47,8 +48,9 @@ export default {
   ],
   copy: [
     {
-      from: 'node_modules/pdfjs-dist/cmaps/',
-      to: 'cmaps/',
+      // build时才会copy
+      from: path.join(__dirname, '../docs/_book/'),
+      to: path.join(__dirname, '../public/handbook/'),
     },
   ],
   proxy: {

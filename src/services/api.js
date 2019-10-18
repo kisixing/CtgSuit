@@ -142,3 +142,11 @@ export async function updatePregnancy(params) {
     data: params
   });
 }
+
+/**
+ * 停止监护室调用
+ * @param {string} params 档案号
+ */
+export async function nosaveCTG(params) {
+  return request.get(`/ctg-exams-nosaving/${params}`);
+}

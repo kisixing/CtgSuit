@@ -4,26 +4,27 @@
  * @Date: 2019-10-02 10:49:29
  */
 
-import React, { Component } from 'react';
+import React, { useMemo } from 'react';
 import { Layout, Modal, Row, Col } from 'antd';
-import { Ctg as L } from '@lianmed/lmg';
-
 import ScoringMethod from './ScoringMethod';
 import Setting from './Setting';
 import CTGChart from './CTGChart';
-
 import styles from './index.less';
 
-class Analysis extends Component {
-  render() {
-    const {
-      visible,
-      onCancel,
-      onCreate,
-      dataSource,
-      from, // 判断从哪里跳转过来的
-    } = this.props;
-    return (
+export const Context = React.createContext({});
+
+function Analysis({
+  visible,
+  onCancel,
+  onCreate,
+  dataSource,
+  from, // 判断从哪里跳转过来的
+}) {
+  const v = useMemo(() => {
+    return {};
+  }, []);
+  return (
+    <Context.Provider value={v}>
       <Modal
         getContainer={false}
         destroyOnClose
@@ -55,8 +56,8 @@ class Analysis extends Component {
           </div>
         </Layout>
       </Modal>
-    );
-  }
+    </Context.Provider>
+  );
 }
 
 export default Analysis;

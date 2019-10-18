@@ -6,12 +6,12 @@
 
 import React, { useMemo } from 'react';
 import { Modal } from 'antd';
-
 import Setting from './Setting';
 import Preview from './Preview';
-
 import styles from './index.less';
+
 export const Context = React.createContext({})
+
 const PrintPreview = (props) => {
   const renderTitle = (data) => {
     return (
@@ -24,7 +24,8 @@ const PrintPreview = (props) => {
     );
   }
   const { visible, onCancel, onCreate, dataSource, from } = props;
-  const v = useMemo(() => { return {} }, [])
+  const v = useMemo(() => { return {} }, []);
+
   return (
     <Context.Provider value={v}>
       <Modal
