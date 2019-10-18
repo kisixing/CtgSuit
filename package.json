@@ -15,7 +15,8 @@
     "pack-linux": "npm run build:render && npm run rebuild && electron-builder build --linux ",
     "dist": "electron-builder",
     "precommit": "lint-staged",
-    "update:lianmed": "yarn upgrade @lianmed/lmg @lianmed/components @lianmed/utils @lianmed/request"
+    "update:lianmed": "yarn upgrade @lianmed/lmg @lianmed/components @lianmed/utils @lianmed/request",
+    "link:lianmed": "npm link @lianmed/lmg @lianmed/components @lianmed/utils @lianmed/request"
   },
   "main": "./app/main/index.js",
   "dependencies": {

@@ -85,7 +85,7 @@ export default {
       } = state;
 
       listData = listData.filter(_ => {
-        return _.status === BedStatus.Working || (dirty as Set<string>).has(_.unitId)
+        return [BedStatus.Working, BedStatus.Offline].includes(_.status) || (dirty as Set<string>).has(_.unitId)
       })
       const pageItemsCount: number = listLayout[0] * listLayout[1];
       const pageItems = listData.slice(page * pageItemsCount, (page + 1) * pageItemsCount);
