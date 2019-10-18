@@ -36,6 +36,7 @@ class Toolbar extends Component {
     this.showModal('confirmVisible');
   };
   componentDidMount() {
+
     this.unitId = this.props.dataSource.unitId;
     event.on(`bedClose:${this.unitId}`, this.onclose);
   }
@@ -139,6 +140,7 @@ class Toolbar extends Component {
    * @param {object} item item原始数据
    */
   newArchive = (params, item) => {
+
     const { dispatch } = this.props;
     dispatch({
       type: 'archives/create',
@@ -146,6 +148,8 @@ class Toolbar extends Component {
       callback: res => {
         if (res && res.id) {
           // this.setState({ isCreated: true });
+
+          event.emit('newArchive', res)
         }
       },
     }).then(() => {
@@ -167,7 +171,7 @@ class Toolbar extends Component {
     const { dispatch } = this.props;
     const { deviceno, bedno, data, documentno, prenatalVisit = {}, unitId } = item;
     const havePregnancy = data && data.pregnancy;
-    const pregnancy = havePregnancy && JSON.parse(data.pregnancy.replace(/'/g, '"'));
+    const pregnancy = typeof havePregnancy === 'object' ? havePregnancy : havePregnancy && JSON.parse(data.pregnancy.replace(/'/g, '"'));
     const isCreated =
       pregnancy && pregnancy.id && data && data.pregnancy && documentno === data.docid;
 
@@ -233,7 +237,7 @@ class Toolbar extends Component {
     const isMonitor = data && data.status === 1;
     // 已建档状态
     const havePregnancy = data && data.pregnancy;
-    const pregnancy = havePregnancy && JSON.parse(data.pregnancy.replace(/'/g, '"'));
+    const pregnancy = typeof havePregnancy === 'object' ? havePregnancy : havePregnancy && JSON.parse(data.pregnancy.replace(/'/g, '"'));
     const isCreated =
       pregnancy && pregnancy.id && data && data.pregnancy;
     return (
@@ -248,22 +252,22 @@ class Toolbar extends Component {
               停止监护
             </Button>
           ) : (
-              <Button icon="play-circle" type="link" onClick={() => this.start(dataSource)}>
+              <Button disabled={(data.index === undefined)} icon="play-circle" type="link" onClick={() => this.start(dataSource)}>
                 开始监护
             </Button>
             )}
           <Button
             icon="user-add"
             type="link"
-            disabled={isCreated || !isMonitor}
+            disabled={isCreated || (!isMonitor && (data.index !== undefined))}
             onClick={() => this.showModal('visible')}
           >
             {isCreated ? '已建档' : '建档'}
           </Button>
-          <Button icon="pie-chart" type="link" onClick={() => this.showModal('analysisVisible')}>
+          <Button disabled={!isCreated} icon="pie-chart" type="link" onClick={() => this.showModal('analysisVisible')}>
             电脑分析
           </Button>
-          <Button icon="printer" type="link" onClick={() => this.showModal('printVisible')}>
+          <Button disabled={!isCreated} icon="printer" type="link" onClick={() => this.showModal('printVisible')}>
             打印
           </Button>
           <Button

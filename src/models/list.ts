@@ -2,6 +2,11 @@ import { message } from 'antd';
 import { newPregnancies, getPregnancy } from '@/services/api';
 import { getList } from '@/services/list';
 import { BedStatus } from "@lianmed/lmg/lib/services/WsService";
+const downStatus = [BedStatus.Working, BedStatus.Offline];
+
+function checkVisible(_: IDevice, dirty: Set<string>): boolean {
+  return downStatus.includes(_.status) || dirty.has(_.unitId)
+};
 
 export default {
   namespace: 'list',
@@ -10,9 +15,11 @@ export default {
     dirty: new Set(), // 受保护的床位
     pageData: [], // [[1,4],[5,8]]
     page: 0, //当前页码
+    pageCount: 0, // 页码长度
     pageItems: [], // [listItem,...] 床位信息
     fullScreenId: null,
     pregnancy: {}, // 初始化，暂无使用
+    showTodo: false
   },
   effects: {
     *getlist(_, { put, call, select }) {
@@ -29,20 +36,30 @@ export default {
       const state = yield select();
       let {
         setting: { listLayout },
-        list: { listData },
-        ws: { data }
+        list,
+        ws: { data: datacache }
       } = state;
+      let { listData, dirty } = list as IListState
       const pageItemsCount: number = listLayout[0] * listLayout[1];
 
-      listData = (listData as IDevice[])
+      listData = listData
         .map(_ => {
           const unitId = `${_.deviceno}-${_.subdevice}`;
-          return { ..._, unitId, data: (data as Map<any, any>).get(unitId) };
+          const data = (datacache as Map<any, any>).get(unitId)
+          return { ..._, unitId, data, status: data && data.status };
         })
         .filter(_ => !!_.data)
-        .map((_, index) => {
-          return { ..._, index, pageIndex: Math.floor(index / pageItemsCount), status: _.data.status };
-        });
+      // .map((_, index) => {
+      //   return { ..._, index, pageIndex: Math.floor(index / pageItemsCount) };
+      // });
+      listData.reduce((pre, cur) => {
+        if (checkVisible(cur, dirty)) {
+          cur.pageIndex = Math.floor(pre / pageItemsCount)
+          return pre + 1
+        }
+        cur.pageIndex = null
+        return pre
+      }, 0)
       yield put({ type: 'setState', payload: { listData } });
       yield put({ type: 'computeLayout' });
     },
@@ -52,14 +69,15 @@ export default {
         list: { page },
       } = state;
       yield put({ type: 'setPageData' });
-      yield put({ type: 'setPageItems', page });
+      yield put({ type: 'setPage', page });
     },
     *setPageData(payload, { put, select }) {
       const state = yield select();
-      const {
+      let {
         setting: { listLayout },
         list: { listData },
       } = state;
+      listData = listData.filter(_ => _.pageIndex !== null)
       const listLen = listData.length;
       const pageItemsCount: number = listLayout[0] * listLayout[1];
       const pageCount: number = Math.ceil(listLen / pageItemsCount);
@@ -75,25 +93,41 @@ export default {
         return listData.slice(left, right + 1).map(_ => _.bedname)
       })
 
-      yield put({ type: 'setState', payload: { pageData } });
+      yield put({ type: 'setState', payload: { pageData, pageCount } });
     },
-    *setPageItems({ page }, { put, select }) {
+    *setPage({ page }, { put, select }) {
+      const state = yield select();
+      let {
+        list,
+      } = state;
+      let { pageCount } = list as IListState
+      page = page > pageCount ? pageCount - 1 : page
+      yield put({
+        type: 'setState',
+        payload: { page }
+      });
+      yield put({
+        type: 'setPageItems',
+      });
+    },
+    *setPageItems(payload, { put, select }) {
       const state = yield select();
       let {
         setting: { listLayout },
-        list: { listData, dirty },
+        list,
       } = state;
-
+      let { listData, dirty, page } = list as IListState
       listData = listData.filter(_ => {
-        return [BedStatus.Working, BedStatus.Offline].includes(_.status) || (dirty as Set<string>).has(_.unitId)
+        return checkVisible(_, dirty)
       })
       const pageItemsCount: number = listLayout[0] * listLayout[1];
       const pageItems = listData.slice(page * pageItemsCount, (page + 1) * pageItemsCount);
       yield put({
         type: 'setState',
-        payload: { pageItems, page }
+        payload: { pageItems }
       });
     },
+
     *removeDirty({ unitId }, { call, put, select }) {
       console.log('removeDirty')
       const state = yield select();
@@ -176,6 +210,8 @@ export default {
   },
   reducers: {
     setState(state, { payload }) {
+  console.log('list setState')
+
       return {
         ...state,
         ...payload,
@@ -187,7 +223,18 @@ export default {
       // console.log('dispatch', dispatch)
     }
   }
-};
+} as { state: IListState };
+
+interface IListState {
+  listData: IDevice[],
+  dirty: Set<string>,
+  pageData: any[],
+  pageCount: number,
+  page: number,
+  pageItems: IDevice[],
+  fullScreenId: string,
+  pregnancy: object,
+}
 
 export interface IDevice {
   bedname: string;
@@ -196,6 +243,7 @@ export interface IDevice {
   documentno: string;
   id: number;
   unitId: string;
+  pageIndex: number;
   data: any;
   pregnancy: {
     age: number;
@@ -220,7 +268,7 @@ export interface IDevice {
     sureEdd: any;
     telephone: string;
   };
-  status: string;
+  status: number;
   subdevice: string;
   type: string;
   updateTime: string;

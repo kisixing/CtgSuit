@@ -30,6 +30,8 @@ export default {
   },
   reducers: {
     setState(state, { payload }) {
+  console.log('ws setState')
+
       return {
         ...state,
         ...payload,
