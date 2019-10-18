@@ -14,7 +14,6 @@ const WorkbenchItem = props => {
   const [showSettingBar, setShowSettingBar] = useState(true);
   const ref = useRef(null)
   const suitObject = { suit: null };
-  console.log('list item', dataSource);
 
   const fullScreen = () => {
     const el = ReactDOM.findDOMNode(ref.current);

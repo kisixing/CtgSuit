@@ -232,7 +232,7 @@ class BasicLayout extends Component {
 
   render() {
     const primaryColor = settingData.theme || colors[this.colorIndex];
-    const { children, wsStatus, loading } = this.props;
+    const { children, wsStatus } = this.props;
     const wsStatusColor =
       wsStatus === EWsStatus.Pendding
         ? 'transparent'
@@ -309,7 +309,7 @@ class BasicLayout extends Component {
   }
 }
 
-export default connect(({ global, list, loading, setting, ws }) => ({
+export default connect(({ global, list, loading, setting, ws, ...rest }) => ({
   loading: loading,
   account: global.account || {},
   pageData: list.pageData,

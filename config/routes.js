@@ -46,7 +46,7 @@ export default [
     component: '../layouts/BasicLayout',
     Routes: ['src/pages/Authorized'], // 可以做用户登录验证
     routes: [
-      // fixed reload
+      // reload
       { path: '/', redirect: '/workbench' },
       { path: '/a', redirect: '/archives' },
       { path: '/s', redirect: '/setting' },
