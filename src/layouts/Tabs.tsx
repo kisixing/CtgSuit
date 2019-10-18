@@ -34,9 +34,9 @@ function Tabs({ pageData, page, dispatch }) {
         );
       })}
       {pageData.length > 0 && (
-        <Button size="small" style={{ margin: '4px' }} onClick={() => {
+        <Button size="small" style={{ margin: '4px', marginLeft: 80, background: showCompleted ? 'white' : 'var(--theme-hover-color)' }} onClick={() => {
           toggleCompleted(true)
-        }} type={showCompleted ? 'default' : 'primary'}>结束监护</ Button>
+        }} type={showCompleted ? 'default' : 'primary'}>待处理档案列表</ Button>
       )}
 
     </div>
