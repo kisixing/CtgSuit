@@ -52,11 +52,15 @@ const Preview = props => {
       setEndingTime(
         startingTime + Number(interval) * COEFFICIENT
       )
-      //console.log('kisi',startingTime,startingTime + Number(interval)*240);
     }
-    value.suit && value.suit.on('suit:startTime', cb)
+    const cbe = endingTime => {
+      setEndingTime(
+        endingTime
+      )
+    }
+    value.suit && value.suit.on('suit:startTime', cb).on('suit:endTime', cbe)
     return () => {
-      value.suit && value.suit.off('suit:startTime', cb)
+      value.suit && value.suit.off('suit:startTime', cb).on('suit:endTime', cb)
     };
   }, [value])
 
@@ -156,14 +160,14 @@ const Preview = props => {
                     locking && (
                       <Button type={customizable ? 'danger' : 'primary'} onClick={toggleCustomiz} size="small">
                         {
-                          customizable ? '取消' : '自定义'
+                          customizable ? '取消' : '选择'
                         }
                       </Button>
                     )
                   }
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span>时长：{settingData.print_interval || 0}分</span>
+                  <span>时长：{((endingTime-startingTime) / COEFFICIENT).toFixed(1) || 0}分</span>
                 </div>
                 <div style={{ display: 'flex' }}>
                   <Button block disabled={!locking} type="primary" onClick={handlePreview} style={{ marginRight: 10 }}>
