@@ -47,7 +47,7 @@ class Toolbar extends Component {
     clearTimeout(this.timeout)
     this.timeout = setTimeout(() => {
       this.setState({ showSetting: false });
-    }, 5000);
+    }, 15000);
   }
   toggleTool = () => {
     const { showSetting } = this.state;
@@ -285,7 +285,7 @@ class Toolbar extends Component {
           style={{ opacity: showSetting || showSettingBar ? 1 : 0 }}
         >
           <Button
-            icon={showSetting ? 'left' : 'right'}
+            icon={showSetting ? 'right' : 'left'}
             shape={showSetting ? 'circle' : null}
             style={{ boxShadow: '#aaa 3px 3px 5px 1px' }}
             type="primary"
