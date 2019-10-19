@@ -44,15 +44,15 @@ class Setting extends Component {
         selectedKeys={[current.value]}
         onClick={this.handleMenuClick}
       >
-        <Menu.Item key="1">基础设置</Menu.Item>
-        <Menu.Item key="2">评分设置</Menu.Item>
-        <Menu.Item key="3">打印设置</Menu.Item>
-        <Menu.Item key="4">事件设置</Menu.Item>
         <Menu.Item key="5">网络设置</Menu.Item>
         <Menu.Item key="7">床位设置</Menu.Item>
         <Menu.Item key="6">医院设置</Menu.Item>
         <Menu.Item key="8">账号管理</Menu.Item>
-        <Menu.Item key="9">报警设置</Menu.Item>
+        <Menu.Item key="9">CTG设置</Menu.Item>
+        <Menu.Item key="3">打印设置</Menu.Item>
+        <Menu.Item key="2">评分设置</Menu.Item>
+        <Menu.Item key="4">事件设置</Menu.Item>
+        <Menu.Item key="1">维护设置</Menu.Item>
       </Menu>
     );
   };
