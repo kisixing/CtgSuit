@@ -5,24 +5,34 @@ import { Form, Row, Col, Input, DatePicker, Button } from 'antd';
 
 import styles from './FieldForm.less';
 
+// 默认时间
+const ENDTIME = moment();
+const STARTTIME = moment().subtract(7, 'd');
+
 @Form.create()
 class FieldForm extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      values: {},
-    };
+    this.state = {};
   }
+
+  componentDidMount() {
+    const { form } = this.props;
+    console.log('init time', STARTTIME, ENDTIME);
+    form.setFieldsValue({
+      startTime: STARTTIME,
+      endTime: ENDTIME,
+    });
+  }
+
 
   // 检索
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        let sTime = moment()
-          .subtract(7, 'd')
-          .format('YYYY-MM-DD');
-        let eTime = moment().format('YYYY-MM-DD');
+        let sTime = STARTTIME.format('YYYY-MM-DD');
+        let eTime = ENDTIME.format('YYYY-MM-DD');
         let { startTime, endTime } = values;
         if (startTime) {
           sTime = moment(startTime).format('YYYY-MM-DD');
@@ -30,6 +40,7 @@ class FieldForm extends Component {
         if (endTime) {
           eTime = moment(endTime).format('YYYY-MM-DD');
         }
+        console.log('888888888888', sTime, eTime);
         //TODO
         this.props.dispatch({
           type: 'archives/fetchRecords',
@@ -50,43 +61,33 @@ class FieldForm extends Component {
 
   render() {
     const {
+      loading,
       form: { getFieldDecorator },
     } = this.props;
     return (
       <Form layout="inline" className={styles.form} onSubmit={this.handleSubmit}>
         <Row>
-          {/* <Col span={5}>
-            <Form.Item label="孕册ID">
-              {getFieldDecorator('pregnancyId')(<Input allowClear type="text" />)}
-            </Form.Item>
-          </Col> */}
           <Col span={5}>
             <Form.Item label="开始日期">
               {getFieldDecorator('startTime')(
-                <DatePicker
-                  allowClear
-                  format="YYYY-MM-DD HH:mm:ss"
-                  placeholder="请选择开始日期"
-                  showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
-                />,
+                <DatePicker allowClear format="YYYY-MM-DD" placeholder="请选择开始日期" />,
               )}
             </Form.Item>
           </Col>
           <Col span={5}>
             <Form.Item label="结束日期">
               {getFieldDecorator('endTime')(
-                <DatePicker
-                  allowClear
-                  format="YYYY-MM-DD HH:mm:ss"
-                  placeholder="请选择结束日期"
-                  showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
-                />,
+                <DatePicker allowClear format="YYYY-MM-DD" placeholder="请选择结束日期" />,
               )}
             </Form.Item>
           </Col>
           <Col span={5}>
             <Form.Item>
-              <Button type="primary" htmlType="submit">
+              <Button
+                type="primary"
+                htmlType="submit"
+                loading={loading.effects['archives/fetchRecords']}
+              >
                 搜索
               </Button>
               <Button onClick={this.handleReset}>重置</Button>
@@ -101,40 +102,3 @@ class FieldForm extends Component {
 export default connect(({ loading }) => ({
   loading: loading,
 }))(FieldForm);
-
-// mapPropsToFields ({ values }) {
-//   return values && values['NO']
-//     ? {
-//         NO: Form.createFormField({
-//           value: values.NO,
-//         }),
-//         name: Form.createFormField({
-//           value: values.name,
-//         }),
-//         age: Form.createFormField({
-//           value: values.age,
-//         }),
-//         gestweek: Form.createFormField({
-//           value: values.gestweek,
-//         }),
-//         patientNumber: Form.createFormField({
-//           value: values.patientNumber,
-//         }),
-//         AD: Form.createFormField({
-//           value: values.AD,
-//         }),
-//         bedNumber: Form.createFormField({
-//           value: values.bedNumber,
-//         }),
-//         date: Form.createFormField({
-//           value: moment(values.date),
-//         }),
-//         GP: Form.createFormField({
-//           value: values.GP,
-//         }),
-//         comment: Form.createFormField({
-//           value: values.comment,
-//         }),
-//       }
-//     : {};
-// }

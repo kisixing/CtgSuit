@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Form, Input, Button } from 'antd';
+import { ipcRenderer } from 'electron';
 
 import { formItemLayout, tailFormItemLayout } from './utils';
 import styles from './style.less';
@@ -22,6 +23,9 @@ class BasicSetting extends Component {
       <Form {...formItemLayout} layout="horizontal" className={styles.form}>
         <Form.Item>
           <div className={styles.subTitle}>基本设置</div>
+        </Form.Item>
+        <Form.Item label="Open Developer Tool">
+          <Button onClick={() => ipcRenderer.send('openDevTools')}>开发者工具</Button>
         </Form.Item>
         <Form.Item label="Title">
           {getFieldDecorator('title', {

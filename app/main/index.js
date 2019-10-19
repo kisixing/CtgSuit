@@ -50,6 +50,11 @@ ipcMain.on('closeMainWindow', (event) => {
   // app.quit();
 })
 
+ipcMain.on('openDevTools', (event) => {
+  // Open the DevTools.打开开发者工具
+  mainWindow.webContents.openDevTools();
+});
+
 function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({

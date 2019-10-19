@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { Card, Col, Button, Tag, Tooltip } from 'antd';
+import moment from 'moment';
 import { Ctg as L } from '@lianmed/lmg';
 import { mapStatusToColor, mapStatusToText } from '@/constant';
 import Toolbar from './Toolbar';
@@ -71,9 +72,9 @@ const WorkbenchItem = (props: IProps) => {
 
   // 床位信息
   const renderTilte = (item) => {
-    const { bedname, data } = item;
+    const { bedname, data = {} } = item;
     const havePregnancy = data && data.pregnancy
-    const pregnancy = (typeof havePregnancy === 'object') ? havePregnancy : havePregnancy && JSON.parse(havePregnancy.replace(/'/g, '"'));
+    const pregnancy = (typeof havePregnancy === 'object') ? havePregnancy : havePregnancy && JSON.parse(havePregnancy.replace(/'/g, '"')) || {};
     // 处理“null”
     // Object.keys(pregnancy).forEach(key => {
     //   const value = pregnancy[key];
@@ -84,11 +85,13 @@ const WorkbenchItem = (props: IProps) => {
     // })
     const text = (
       <span className={styles.title}>
-        床号: <span>{pregnancy && pregnancy.bedNO}</span>
+        床号: <span>{pregnancy.bedNO}</span>
         {/* 住院号: <span>{ pregnancy && pregnancy.inpatientNO}</span> */}
-        姓名: <span>{pregnancy && pregnancy.name}</span>
-        开始时间: <span>{data && data.starttime}</span>
-        <span style={{ float: 'right' }}>{bedname}</span>
+        姓名: <span>{pregnancy.name}</span>
+        年龄：<span>{pregnancy.age}</span>
+        G/P：<span>{pregnancy.GP}</span>
+        开始时间: <span>{moment(data.starttime).format('HH:mm')}</span>
+        <span style={{ float: 'right', marginRight: '5px' }}>{bedname}号</span>
       </span>
     )
     // 是否已经建档绑定孕册

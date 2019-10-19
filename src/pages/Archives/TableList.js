@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Table, Divider, Button, Popconfirm } from 'antd';
+import { Table, Divider, Button, Popconfirm, Icon, Input } from 'antd';
 import moment from 'moment';
+import Highlighter from 'react-highlight-words';
 import CreateRecordModal from './CreateRecordModal';
 import PrintPreview from '../Workbench/PrintPreview';
 import Analysis from '../Workbench/Analysis';
@@ -19,24 +20,12 @@ class TableList extends Component {
       current: {}, // 当前行
     };
     this.columns = [
-      // {
-      //   title: '孕册ID',
-      //   dataIndex: 'pregnancyId',
-      //   key: 'pregnancyId',
-      //   width: 68,
-      //   align: 'center',
-      //   render: (text, record) => record.pregnancy && record.pregnancy.id,
-      // },
       {
         title: '姓名',
         dataIndex: 'name',
         key: 'name',
-        width: 100,
-        render: (text, record) => (
-          <span style={{ width: '84px' }} className={styles.textOver}>
-            {record.pregnancy && record.pregnancy.name}
-          </span>
-        ),
+        width: 150,
+        ...this.getColumnSearchProps('name'),
       },
       {
         title: '年龄',
@@ -248,6 +237,78 @@ class TableList extends Component {
       },
     });
     this.handleRow(record);
+  };
+
+  getColumnSearchProps = dataIndex => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+      <div style={{ padding: 8 }}>
+        <Input
+          ref={node => {
+            this.searchInput = node;
+          }}
+          placeholder="输入搜索值..."
+          value={selectedKeys[0]}
+          onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onPressEnter={() => this.handleSearch(selectedKeys, confirm)}
+          style={{  marginBottom: 8, display: 'block' }}
+        />
+        <Button
+          type="primary"
+          onClick={() => this.handleSearch(selectedKeys, confirm)}
+          icon="search"
+          size="small"
+          style={{ width: 90, marginRight: 8 }}
+        >
+          搜索
+        </Button>
+        <Button onClick={() => this.handleReset(clearFilters)} size="small" style={{ width: 90 }}>
+          重置
+        </Button>
+      </div>
+    ),
+    filterIcon: filtered => (
+      <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />
+    ),
+    onFilter: (value, record) => {
+      let attributeValue = record[dataIndex];
+      if (dataIndex === 'name' || dataIndex === 'age' || dataIndex === 'outpatientNO') {
+        attributeValue = record['pregnancy'][dataIndex];
+      }
+      if (attributeValue) {
+        return attributeValue
+          .toString()
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      }
+    },
+    onFilterDropdownVisibleChange: visible => {
+      if (visible) {
+        setTimeout(() => this.searchInput.select());
+      }
+    },
+    render: (text, record) => (
+      <Highlighter
+        className={styles.textOver}
+        highlightStyle={{ backgroundColor: '#ffc069', padding: 0, width: '134px' }}
+        searchWords={[this.state.searchText]}
+        autoEscape
+        textToHighlight={
+          record.pregnancy && record.pregnancy.name && record.pregnancy.name.toString()
+        }
+      />
+    ),
+  });
+
+  // 帅选条件的搜索事件
+  handleSearch = (selectedKeys, confirm) => {
+    confirm();
+    this.setState({ searchText: selectedKeys[0] });
+  };
+
+  // 帅选条件的重置事件
+  handleReset = clearFilters => {
+    clearFilters();
+    this.setState({ searchText: '' });
   };
 
   render() {
