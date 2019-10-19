@@ -27,7 +27,7 @@ export default {
       let rawData: IDevice[] = yield call(getList);
       yield put({
         type: 'setState',
-        payload: { listData: rawData || [] }
+        payload: { listData: rawData || [],rawData }
       });
       yield put({ type: 'processListData' });
     },
@@ -39,9 +39,9 @@ export default {
         list,
         ws: { data: datacache }
       } = state;
-      let { listData, dirty } = list as IListState
+      let { rawData:listData, dirty } = list as any
       const pageItemsCount: number = listLayout[0] * listLayout[1];
-
+      console.log('update',datacache,listData)
       listData = listData
         .map(_ => {
           const unitId = `${_.deviceno}-${_.subdevice}`;
