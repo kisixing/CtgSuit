@@ -1,17 +1,12 @@
-/*
- * @Description: 上下布局，主要页面布局 header-main
- * @Author: Zhong Jun
- * @Date: 2019-09-23 20:34:58
- */
-
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button } from 'antd';
 import { router } from 'umi';
 import { mapStatusToColor } from '@/constant';
 import { BedStatus } from "@lianmed/lmg/lib/services/WsService";
+import useAlarm from "./useAlarm";
 function Beds({ dispatch, listData, wsData }) {
   let clickTimeout = null;
-
+  useAlarm()
   const handleClicks = ({ pageIndex, unitId }) => {
     return () => {
       const data = { type: 'list/setPage', page: pageIndex };
