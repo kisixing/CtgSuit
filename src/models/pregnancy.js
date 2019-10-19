@@ -15,7 +15,7 @@ export default {
       yield put({
         type: 'updateState',
         payload: {
-          pregnancies: res,
+          pregnancies: res.reverse(),
         },
       });
     },

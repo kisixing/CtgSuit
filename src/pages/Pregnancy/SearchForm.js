@@ -16,6 +16,11 @@ class SearchForm extends Component {
     };
   }
 
+  componentDidMount() {
+    this.props.form.setFieldsValue({ recordstate: '10' });
+  }
+
+
   hide = () => {
     this.setState({ visible: false });
   };
@@ -55,7 +60,7 @@ class SearchForm extends Component {
     dispatch({
       type: 'pregnancy/update',
       payload: values,
-    });
+    }).then(() => this.reloadData());
   };
 
   // ADT创建孕册
@@ -64,8 +69,20 @@ class SearchForm extends Component {
     dispatch({
       type: 'pregnancy/create',
       payload: values,
+    }).then(() => {
+      this.reloadData();
     });
   };
+
+  reloadData = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'pregnancy/fetchPregnancies',
+      payload: {
+        'recordstate.equals': '10',
+      },
+    });
+  }
 
   render() {
     const { visible } = this.state;

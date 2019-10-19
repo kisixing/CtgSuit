@@ -99,9 +99,17 @@ class TableList extends Component {
   }
 
   componentDidMount() {
+    // 默认检索住院状态的
+    this.fetchData();
+  }
+
+  fetchData = () => {
     const { dispatch } = this.props;
     dispatch({
       type: 'pregnancy/fetchPregnancies',
+      payload: {
+        'recordstate.equals': '10',
+      },
     });
   }
 
@@ -129,6 +137,8 @@ class TableList extends Component {
     dispatch({
       type: 'pregnancy/update',
       payload: values,
+    }).then(() => {
+      this.fetchData();
     });
   };
 
