@@ -12,6 +12,7 @@ import {
   Select,
   DatePicker,
   InputNumber,
+  message,
 } from 'antd';
 import styles from './index.less';
 
@@ -69,6 +70,7 @@ const EditModal = Form.create({
         if (!err) {
           if (dataSource) {
             onUpdate({ id: dataSource.id, ...values });
+            onCancel();
           } else {
             // ADT
             if (searchValues.id) {
@@ -76,10 +78,20 @@ const EditModal = Form.create({
               onUpdate({ id: searchValues.id, ...values });
             } else {
               // 新建
+              const { inpatientNO, name, bedNO } = values;
+              if (!inpatientNO) {
+                return message.error('请输入住院号！')
+              }
+              if (!name) {
+                return message.error('请输入姓名！');
+              }
+              if (!bedNO) {
+                return message.error('请输入床号！');
+              }
               onCreate(values);
+              onCancel();
             }
           }
-          onCancel();
         }
       });
     }
@@ -129,21 +141,29 @@ const EditModal = Form.create({
           <Form className={styles.modalForm} layout="horizontal" {...formItemLayout}>
             <Row gutter={24}>
               <Col span={12}>
-                <Form.Item label="住院号">
+                <Form.Item
+                  label={required ? <span>住院号</span> : <span className="required">住院号</span>}
+                >
                   {getFieldDecorator('inpatientNO', {
                     rules: [{ required: required, message: '请填写孕妇住院号!' }],
                   })(<Input placeholder="输入住院号" style={{ width }} />)}
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item label="孕妇姓名">
+                <Form.Item
+                  label={
+                    required ? <span>孕妇姓名</span> : <span className="required">孕妇姓名</span>
+                  }
+                >
                   {getFieldDecorator('name', {
                     rules: [{ required: required, message: '请填写孕妇姓名!' }],
                   })(<Input placeholder="输入孕妇姓名" style={{ width }} />)}
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item label="床号">
+                <Form.Item
+                  label={required ? <span>床号</span> : <span className="required">床号</span>}
+                >
                   {getFieldDecorator('bedNO', {
                     rules: [{ required: required, message: '请填写孕妇床号!' }],
                   })(<Input placeholder="请输入床号..." style={{ width }} />)}
