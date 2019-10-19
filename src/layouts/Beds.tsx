@@ -16,6 +16,7 @@ function Beds({ dispatch, listData, wsData }) {
         dispatch(data);
         //kisi 2019-10-18 add
         dispatch({ type: 'list/appendDirty', unitId });
+        dispatch({ type: 'list/processListData' });
         dispatch({ type: 'list/setState', payload: { fullScreenId: unitId } });
         router.replace('/workbench');
       } else {
@@ -25,6 +26,7 @@ function Beds({ dispatch, listData, wsData }) {
           dispatch(data);
           //kisi 2019-10-18 add
           dispatch({ type: 'list/appendDirty', unitId });
+          dispatch({ type: 'list/processListData' });
           router.replace('/workbench');
         }, 300);
       }

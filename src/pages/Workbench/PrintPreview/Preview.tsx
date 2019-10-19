@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useCallback, memo } from 'react';
 import { connect } from 'dva';
 import { Document, Page } from 'react-pdf';
-import { Pagination, Button, Spin, Empty } from 'antd';
+import { Pagination, Button, Spin, Empty, Input } from 'antd';
 import { ipcRenderer } from 'electron';
 import config from '@/utils/config';
 import { Context } from './index'
@@ -10,8 +10,7 @@ import request from "@lianmed/request";
 // import pdf from './pdfBase64';
 import moment from 'moment'
 import 'react-pdf/dist/Page/AnnotationLayer.css';
-import store from "@/utils/SettingStore";
-const settingData = store.cache
+import usePrintConfig from "./usePrintConfig";
 const styles = require('./Preview.less')
 
 
@@ -19,6 +18,19 @@ const COEFFICIENT = 240
 
 
 const Preview = props => {
+  const [value, setValue] = useState<{ suit: any }>({ suit: null })
+
+  const {
+    startingTime,
+    endingTime,
+    locking,
+    customizable,
+    remoteSetStartingTime,
+    remoteSetEndingTime,
+    toggleLocking,
+    toggleCustomiz
+  } = usePrintConfig(value)
+
   const { dataSource } = props;
   const { pregnancy, data, ctgexam } = dataSource
   let docid = '';
@@ -34,50 +46,16 @@ const Preview = props => {
   // const [pdfBase64, setPdfBase64] = useState(`data:application/pdf;base64,${pdf}`)
   const [numPages, setNumPages] = useState(0)
   const [pageNumber, setPageNumber] = useState(1)
-  const [startingTime, setStartingTime] = useState<number>(0)
-  const [endingTime, setEndingTime] = useState<number>(0)
   const [pdfflow, setPdfflow] = useState('')
-  const [value, setValue] = useState<{ suit: any }>({ suit: null })
-  const [locking, setLocking] = useState(false)
-  const [customizable, setCustomizable] = useState(false)
 
 
-  useEffect(() => {
-    const cb = startingTime => {
-      const interval = settingData.print_interval
-      setStartingTime(
-        startingTime
-      )
-      //TODO: 计算结束时间
-      setEndingTime(
-        startingTime + Number(interval) * COEFFICIENT
-      )
-    }
-    const cbe = endingTime => {
-      setEndingTime(
-        endingTime
-      )
-    }
-    value.suit && value.suit.on('suit:startTime', cb).on('suit:endTime', cbe)
-    return () => {
-      value.suit && value.suit.off('suit:startTime', cb).on('suit:endTime', cb)
-    };
-  }, [value])
+
 
   const onDocumentLoad = useCallback(({ numPages }) => { setNumPages(numPages) }, [])
   const onChangePage = useCallback(page => { setPageNumber(page) }, [])
   const handlePrint = useCallback((e) => { ipcRenderer.send('printWindow', filePath) }, [filePath])
 
-  const toggleLocking = () => {
-    const nextV = !locking
-    setLocking(nextV)
-    value.suit.emit('locking', nextV)
-  }
-  const toggleCustomiz = () => {
-    const nextV = !customizable
-    setCustomizable(nextV)
-    value.suit.emit('customizing', nextV)
-  }
+
   const handlePreview = () => {
     const params = {
       docid: docid,
@@ -145,7 +123,9 @@ const Preview = props => {
               <PreivewContent />
               <div style={{ width: 300, padding: 24, background: '#fff', display: 'flex', flexDirection: 'column', justifyContent: 'space-around' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span>开始时间：{(startingTime / COEFFICIENT).toFixed(1)}分</span>
+                  <span>开始时间：<Input size="small" style={{ width: 80 }} value={startingTime} onChange={e => {
+                    remoteSetStartingTime(parseFloat(e.target.value))
+                  }} />分</span>
                   <Button type={locking ? 'danger' : 'primary'} onClick={toggleLocking} size="small">
                     {
                       locking ? '重置' : '确定'
@@ -155,7 +135,10 @@ const Preview = props => {
 
                 {/* TODO: 计算显示时间 */}
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span>结束时间：{(endingTime / COEFFICIENT).toFixed(1)}分</span>
+                  <span>结束时间：<Input size="small" style={{ width: 80 }} value={endingTime} onChange={e => {
+                    remoteSetEndingTime(parseFloat(e.target.value))
+                  }} />分</span>
+
                   {
                     locking && (
                       <Button type={customizable ? 'danger' : 'primary'} onClick={toggleCustomiz} size="small">
@@ -167,7 +150,7 @@ const Preview = props => {
                   }
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span>时长：{((endingTime-startingTime) / COEFFICIENT).toFixed(1) || 0}分</span>
+                  <span>时长：{((endingTime - startingTime) / COEFFICIENT).toFixed(1) || 0}分</span>
                 </div>
                 <div style={{ display: 'flex' }}>
                   <Button block disabled={!locking} type="primary" onClick={handlePreview} style={{ marginRight: 10 }}>
