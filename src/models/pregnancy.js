@@ -6,8 +6,11 @@ export default {
     pregnancies: [], // 孕册列表
   },
   effects: {
-    *fetchPregnancies({ payload }, { call, put }) {
+    *fetchPregnancies({ payload, callback }, { call, put }) {
       const res = yield call(getPregnancies, payload);
+      if (callback && typeof callback === 'function') {
+        callback(res); // 返回结果
+      }
       yield put({
         type: 'updateState',
         payload: {

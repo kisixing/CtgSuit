@@ -129,7 +129,7 @@ export default {
     },
 
     *removeDirty({ unitId }, { call, put, select }) {
-      console.log('removeDirty')
+      // console.log('removeDirty')
       const state = yield select();
       let {
         list: { dirty },

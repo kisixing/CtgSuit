@@ -293,19 +293,24 @@ class BasicLayout extends Component {
         </Header>
         <Content className={styles.main}>{children}</Content>
         <Footer className={styles.footer}>
-          <span className={styles.question} onClick={() => ipcRenderer.send('newWindow', '操作说明')}>
-            <Icon type="question-circle" />
-          </span>
+          <span />
           <span>
             Copyright <Icon type="copyright" /> {config.copyright}
           </span>
-          <AntdThemeManipulator
-            primaryColor={primaryColor}
-            placement="topLeft"
-            onChange={color => {
-              settingStore.set('theme', color);
-            }}
-          />
+          <span>
+            <Icon
+              type="question-circle"
+              className={styles.question}
+              onClick={() => ipcRenderer.send('newWindow', '操作说明')}
+            />
+            <AntdThemeManipulator
+              primaryColor={primaryColor}
+              placement="topLeft"
+              onChange={color => {
+                settingStore.set('theme', color);
+              }}
+            />
+          </span>
         </Footer>
       </Layout>
     );

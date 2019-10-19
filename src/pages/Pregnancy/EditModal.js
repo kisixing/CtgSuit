@@ -2,7 +2,6 @@
  * 建档
  */
 import React from 'react';
-import moment from 'moment';
 import {
   Button,
   Modal,
@@ -13,7 +12,6 @@ import {
   Select,
   DatePicker,
   InputNumber,
-  message,
 } from 'antd';
 import styles from './index.less';
 
@@ -26,19 +24,36 @@ const EditModal = Form.create({
   class extends React.Component {
     constructor(props) {
       super(props);
-      this.state = {};
+      this.state = {
+        required: false
+      };
     }
 
     componentDidMount() {
       const { form, dataSource } = this.props;
-      const { inpatientNO, name, age, telephone, gravidity, parity } = dataSource;
-      form.setFieldsValue({
-        inpatientNO,
-        name,
-        age,
-        telephone,
-        gravidity,
-        parity,
+      if (dataSource) {
+        const { inpatientNO, name, age, telephone, gravidity, parity, recordstate, bedNO } = dataSource;
+        form.setFieldsValue({ inpatientNO, name, age, telephone, gravidity, parity, bedNO, recordstate });
+        this.setState({ required: true });
+      }
+    }
+
+    handleSearch = () => {
+      const { form, dispatch } = this.props;
+      form.validateFields((err, values) => {
+        if (!err) {
+          const { inpatientNO, name } = values;
+          dispatch({
+            type: 'pregnancy/fetchPregnancies',
+            payload: {
+              'inpatientNO.equals': inpatientNO,
+              'name.equals': name,
+            },
+            callback: (res) => {
+
+            }
+          });
+        }
       });
     }
 
@@ -49,13 +64,14 @@ const EditModal = Form.create({
       form.validateFields((err, values) => {
         if (!err) {
           onOk({ id, ...values });
+          onCancel();
         }
       });
-      onCancel();
     };
 
     render() {
-      const { visible, onCancel, form } = this.props;
+      const { required } = this.state;
+      const { visible, onCancel, form, dataSource } = this.props;
       const { getFieldDecorator } = form;
 
       const formItemLayout = {
@@ -76,7 +92,7 @@ const EditModal = Form.create({
           destroyOnClose
           width={800}
           visible={visible}
-          title="修改孕册"
+          title={dataSource ? '修改孕册' : 'ADT(建档/修改)'}
           footer={null}
           okText="创建"
           cancelText="取消"
@@ -88,15 +104,22 @@ const EditModal = Form.create({
               <Col span={12}>
                 <Form.Item label="住院号">
                   {getFieldDecorator('inpatientNO', {
-                    rules: [{ required: true, message: '请填写孕妇住院号!' }],
-                  })(<Input disabled placeholder="输入住院号" style={{ width }} />)}
+                    rules: [{ required: required, message: '请填写孕妇住院号!' }],
+                  })(<Input placeholder="输入住院号" style={{ width }} />)}
                 </Form.Item>
               </Col>
               <Col span={12}>
                 <Form.Item label="孕妇姓名">
                   {getFieldDecorator('name', {
-                    rules: [{ required: true, message: '请填写孕妇姓名!' }],
+                    rules: [{ required: required, message: '请填写孕妇姓名!' }],
                   })(<Input placeholder="输入孕妇姓名" style={{ width }} />)}
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item label="床号">
+                  {getFieldDecorator('bedNO', {
+                    rules: [{ required: required, message: '请填写孕妇床号!' }],
+                  })(<Input placeholder="请输入床号..." style={{ width }} />)}
                 </Form.Item>
               </Col>
               <Col span={12}>
@@ -121,10 +144,15 @@ const EditModal = Form.create({
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item label="联系电话">
-                  {getFieldDecorator('telephone', {
-                    rules: [{ required: false, message: '请填写孕妇联系电话!' }],
-                  })(<Input placeholder="请输入联系电话..." style={{ width }} />)}
+                <Form.Item label="住院状态">
+                  {getFieldDecorator('recordstate', {
+                    rules: [{ required: false, message: '请选择住院状态!' }],
+                  })(
+                    <Select allowClear style={{ width }}>
+                      <Select.Option value="10">住院中</Select.Option>
+                      <Select.Option value="11">已出院</Select.Option>
+                    </Select>,
+                  )}
                 </Form.Item>
               </Col>
               <Col span={12}>
@@ -146,6 +174,13 @@ const EditModal = Form.create({
                 </Form.Item>
               </Col>
               <Col span={12}>
+                <Form.Item label="联系电话">
+                  {getFieldDecorator('telephone', {
+                    rules: [{ required: false, message: '请填写孕妇联系电话!' }],
+                  })(<Input placeholder="请输入联系电话..." style={{ width }} />)}
+                </Form.Item>
+              </Col>
+              <Col span={12}>
                 <Form.Item label="居住地址">
                   {getFieldDecorator('address', {
                     rules: [{ required: false, message: '请填写现居住详细地址!' }],
@@ -154,11 +189,13 @@ const EditModal = Form.create({
               </Col>
               <Col span={24} className={styles.buttons}>
                 <Button onClick={onCancel}>取消</Button>
+                {dataSource ? null : <Button>搜索</Button>}
                 <Button type="primary" onClick={this.handleUpdate}>
                   确定
                 </Button>
               </Col>
             </Row>
+            {dataSource ? null : <div className={styles.tips}>只支持“住院号”、“姓名”搜索</div>}
           </Form>
         </Modal>
       );

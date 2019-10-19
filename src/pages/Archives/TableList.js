@@ -101,14 +101,14 @@ class TableList extends Component {
               <span className="primary-link" onClick={() => this.showAnalysis(record)}>
                 分析
               </span>
-              <Divider type="vertical" />
+              {/* <Divider type="vertical" /> */}
               {/* <span className="delete-link" onClick={() => this.switchFullscreen(record)}>
                 详情
               </span>
               <Divider type="vertical" /> */}
-              <Popconfirm title="确认删除该条信息？" okText="确定" cancelText="取消">
+              {/* <Popconfirm title="确认删除该条信息？" okText="确定" cancelText="取消">
                 <span className="delete-link">删除</span>
-              </Popconfirm>
+              </Popconfirm> */}
             </span>
           );
         },

@@ -22,16 +22,16 @@ export default function ModalConfirm({
   }
   const content = isMonitor ? (
     isCreated ? (
-      `确认床号: ${bedname} 停止监护 ?`
+      `确认子机: ${bedname} 停止监护 ?`
     ) : (
       <span>
-        床号: {bedname} 即将停止监护，但还
+        子机: {bedname} 即将停止监护，但还
         <span style={{ color: '#f00' }}>未建立档案</span>
-        ，建档请选择“建档”按钮，放弃请选择“确定”按钮 ?
+        ，建档请选择“建档”按钮，放弃请选择“放弃”按钮 ?
       </span>
     )
   ) : (
-    `确认床号: ${bedname} 开始监护 ?`
+    `确认子机: ${bedname} 开始监护 ?`
   );
 
   return (

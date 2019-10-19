@@ -43,7 +43,7 @@ const WorkbenchItem = (props: IProps) => {
           )
         }
         <Button
-          title="全屏展示"
+          title="关闭监护窗口"
           icon="close"
           size="small"
           type="link"

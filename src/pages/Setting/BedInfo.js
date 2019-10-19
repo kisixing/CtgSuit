@@ -79,12 +79,6 @@ class EditableTable extends React.Component {
     this.columns = [
       ...[
         {
-          title: '编号',
-          dataIndex: 'bedno',
-          key: 'bedno',
-
-        },
-        {
           title: '名称',
           dataIndex: 'bedname',
           key: 'bedname',
@@ -95,17 +89,27 @@ class EditableTable extends React.Component {
           key: 'deviceno',
         },
         {
+          title: '子机号',
+          dataIndex: 'subdevice',
+          key: 'subdevice',
+        },
+        {
+          title: '床号',
+          dataIndex: 'bedno',
+          key: 'bedno',
+        },
+        {
           title: '状态',
           dataIndex: 'status',
           key: 'status',
           render: (text, record) => {
             let status = '其它';
             if (text === '0') {
-              status = '离线'
+              status = '离线';
             } else if (text === '1') {
-              status = '在线'
+              status = '在线';
             } else if (text === '2') {
-              status = '工作中'
+              status = '工作中';
             }
             return status;
           },
@@ -138,14 +142,21 @@ class EditableTable extends React.Component {
                 )}
               </EditableContext.Consumer>
               <Popconfirm title="确认取消?" onConfirm={() => this.cancel(record.id)}>
-                <Button size="small" type="link">取消</Button>
+                <Button size="small" type="link">
+                  取消
+                </Button>
               </Popconfirm>
             </span>
           ) : (
-              <Button size="small" type="link" disabled={editingKey !== ''} onClick={() => this.edit(record.id)}>
-                编辑
+            <Button
+              size="small"
+              type="link"
+              disabled={editingKey !== ''}
+              onClick={() => this.edit(record.id)}
+            >
+              编辑
             </Button>
-            );
+          );
         },
       },
     ];

@@ -53,7 +53,7 @@ class TableList extends Component {
         sorter: (a, b) => a.parity - b.parity,
       },
       {
-        title: '孕产期',
+        title: '预产期',
         dataIndex: 'edd',
         key: 'edd',
         render: text => text ? moment(text).format('YYYY-MM-DD') : null
