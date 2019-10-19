@@ -18,18 +18,21 @@ FileStorage.prototype = {
     box(obj) {
         if (!obj) return '';
         this.setCache(obj)
-        return Object.entries(obj).map(_ => _.join('=')).join('\n')
+        return Object.entries(obj).map(_ => _.join('=')).join('\r\n')
     },
     deBox(str) {
         if (!str) {
             return []
         }
-        const obj = str.split('\n').map(_ => _.split('=')).reduce((prev, curr) => {
-            prev[curr[0]] = curr[1].trim()
-            return prev
-        }, {})
+        const obj = str
+            .split('\r\n')
+            .filter(_ => !!_)
+            .map(_ => _.split('='))
+            .reduce((prev, curr) => {
+                prev[curr[0]] = curr[1].trim()
+                return prev
+            }, {})
         this.setCache(obj)
-
         return obj
     },
     _check(path) {

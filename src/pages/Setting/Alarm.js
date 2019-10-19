@@ -6,21 +6,73 @@
 
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Form, InputNumber, Button, message, Radio } from 'antd';
+import { Form, InputNumber, Button, message, Radio, Input } from 'antd';
 import store from '@/utils/SettingStore';
 
 import { formItemLayout, tailFormItemLayout } from './utils';
 import styles from './style.less';
 
+
+const colors = {
+  normalarea: 'normalarea',
+  selectarea: 'selectarea',
+  rule: 'rule',
+  scale: 'scale',
+  primarygrid: 'primarygrid',
+  secondarygrid: 'secondarygrid',
+  fhrcolor1: 'fhrcolor1',
+  fhrcolor2: 'fhrcolor2',
+  fhrcolor3: 'fhrcolor3',
+  tococolor: 'tococolor',
+  alarmcolor: 'alarmcolor',
+}
 @Form.create()
 class Network extends Component {
   componentDidMount() {
     this.fetchData()
   }
   fetchData = () => {
+
+
     const { form } = this.props;
-    store.getObj().then(({ alarm_high, alarm_low, alarm_on_window, alarm_on_sound }) => {
-      form.setFieldsValue({ alarm_high, alarm_low, alarm_on_window, alarm_on_sound });
+    store.getObj().then(({
+      normalarea,
+      selectarea,
+      rule,
+      scale,
+      primarygrid,
+      secondarygrid,
+      fhrcolor1,
+      fhrcolor2,
+      fhrcolor3,
+      tococolor,
+      alarmcolor,
+
+      alarm_enable,
+      alarm_high,
+      alarm_low,
+      alarm_on_window,
+      alarm_on_sound
+    }) => {
+      form.setFieldsValue({
+        normalarea,
+        selectarea,
+        rule,
+        scale,
+        primarygrid,
+        secondarygrid,
+        fhrcolor1,
+        fhrcolor2,
+        fhrcolor3,
+        tococolor,
+        alarmcolor,
+
+        alarm_enable,
+        alarm_high,
+        alarm_low,
+        alarm_on_window,
+        alarm_on_sound
+      });
     })
   }
   handleSubmit = () => {
@@ -35,7 +87,14 @@ class Network extends Component {
     });
   };
   reset() {
-    store.reset(['alarm_high', 'alarm_low', 'alarm_on_window', 'alarm_on_sound']).then(status => {
+    store.reset([
+      'alarm_high',
+      'alarm_low',
+      'alarm_on_window',
+      'alarm_on_sound',
+      'alarm_enable',
+      ...Object.keys(colors)
+    ]).then(status => {
       if (status) {
         message.success('恢复成功', 2)
         this.fetchData()
@@ -85,6 +144,30 @@ class Network extends Component {
             <Radio value={"0"}>关闭</Radio>
           </Radio.Group>)}
         </Form.Item>
+
+        <Form.Item label="开启报警">
+          {getFieldDecorator('alarm_enable', {
+            rules: [{ required: false, message: '请选择!' }],
+          })(<Radio.Group>
+            <Radio value={"1"}>打开</Radio>
+            <Radio value={"0"}>关闭</Radio>
+          </Radio.Group>)}
+        </Form.Item>
+
+
+        {
+          Object.keys(colors).map(_ => {
+            return (
+              <Form.Item label={_} key={_}>
+                {getFieldDecorator(_, {
+                  rules: [{ required: false, message: '选择颜色!' }],
+                })(
+                  <Input type="color" />
+                )}
+              </Form.Item>
+            )
+          })
+        }
 
         <Form.Item {...tailFormItemLayout}>
           <Button type="primary" onClick={this.handleSubmit}>

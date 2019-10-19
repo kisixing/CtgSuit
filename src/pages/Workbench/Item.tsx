@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import ReactDOM from 'react-dom';
 import { Card, Col, Button, Tag, Tooltip } from 'antd';
 import moment from 'moment';
@@ -10,6 +10,7 @@ let styles = require('./Item.less')
 import { BedStatus } from "@lianmed/lmg/lib/services/WsService";
 import { IDevice } from "@/models/list";
 import { IRemain } from './useTodo';
+import { Suit } from '@lianmed/lmg/lib/Ctg/Suit';
 interface IProps {
   dataSource: IDevice | IRemain;
   [x: string]: any
@@ -20,7 +21,7 @@ const WorkbenchItem = (props: IProps) => {
   const { data, id } = dataSource;
   const [showSettingBar, setShowSettingBar] = useState(true);
   const ref = useRef(null)
-  const suitObject = { suit: null };
+  const suitObject: { suit: Suit } = { suit: null };
 
   const fullScreen = () => {
     const el = ReactDOM.findDOMNode(ref.current);
@@ -33,13 +34,21 @@ const WorkbenchItem = (props: IProps) => {
   const unitId = (dataSource as IDevice).unitId
   const { isTodo, note } = (dataSource as IRemain)
 
+  const testAlarm = useMemo(() => {
+    let f = true
+    return () => {
+      suitObject.suit[f ? 'alarmOn' : 'alarmOff']('zzz')
+      f = !f
+    }
+  }, [suitObject.suit])
+
   // item右上角icon
   const renderExtra = (status: React.ReactText) => {
     return (
       <div className={styles.extra}>
         {
           status !== void 0 && (
-            <Tag color={mapStatusToColor[status]}>{mapStatusToText[status]}</Tag>
+            <Tag onClick={testAlarm} color={mapStatusToColor[status]}>{mapStatusToText[status]}</Tag>
           )
         }
         <Button
