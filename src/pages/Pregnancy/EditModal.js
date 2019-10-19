@@ -25,7 +25,8 @@ const EditModal = Form.create({
     constructor(props) {
       super(props);
       this.state = {
-        required: false
+        required: false,
+        searchValues: {}
       };
     }
 
@@ -50,9 +51,35 @@ const EditModal = Form.create({
               'name.equals': name,
             },
             callback: (res) => {
-
+              const data = res[0];
+              if (data && data.id) {
+                form.setFieldsValue({ ...data });
+                this.setState({ searchValues: data });
+              }
             }
           });
+        }
+      });
+    }
+
+    handleOk = () => {
+      const { searchValues } = this.state;
+      const { form, onCreate, onCancel, onUpdate, dataSource } = this.props;
+      form.validateFields((err, values) => {
+        if (!err) {
+          if (dataSource) {
+            onUpdate({ id: dataSource.id, ...values });
+          } else {
+            // ADT
+            if (searchValues.id) {
+              // 修改
+              onUpdate({ id: searchValues.id, ...values });
+            } else {
+              // 新建
+              onCreate(values);
+            }
+          }
+          onCancel();
         }
       });
     }
@@ -189,8 +216,8 @@ const EditModal = Form.create({
               </Col>
               <Col span={24} className={styles.buttons}>
                 <Button onClick={onCancel}>取消</Button>
-                {dataSource ? null : <Button>搜索</Button>}
-                <Button type="primary" onClick={this.handleUpdate}>
+                {dataSource ? null : <Button onClick={this.handleSearch}>搜索</Button>}
+                <Button type="primary" onClick={this.handleOk}>
                   确定
                 </Button>
               </Col>

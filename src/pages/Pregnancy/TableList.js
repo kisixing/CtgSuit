@@ -235,7 +235,7 @@ class TableList extends Component {
             visible={visible}
             dataSource={current}
             onCancel={this.hideEdit}
-            onOk={this.handleUpdate}
+            onUpdate={this.handleUpdate}
           />
         ) : null}
       </div>

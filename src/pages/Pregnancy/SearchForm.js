@@ -22,7 +22,7 @@ class SearchForm extends Component {
 
   show = () => {
     this.setState({ visible: true });
-  }
+  };
 
   // 检索
   handleSubmit = e => {
@@ -49,9 +49,22 @@ class SearchForm extends Component {
     this.props.form.resetFields();
   };
 
-  // ADT创建孕册
-  handCreate = () => {
+  // 修改
+  handleUpdate = values => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'pregnancy/update',
+      payload: values,
+    });
+  };
 
+  // ADT创建孕册
+  handCreate = values => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'pregnancy/create',
+      payload: values,
+    });
   };
 
   render() {
@@ -110,7 +123,13 @@ class SearchForm extends Component {
           </Row>
         </Form>
         {visible ? (
-          <EditModal {...rest} visible={visible} onCancel={this.hide} onOk={this.handCreate} />
+          <EditModal
+            {...rest}
+            visible={visible}
+            onCancel={this.hide}
+            onUpdate={this.handleUpdate}
+            onCreate={this.handCreate}
+          />
         ) : null}
       </>
     );
