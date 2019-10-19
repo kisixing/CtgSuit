@@ -48,13 +48,32 @@ export default function useTodo(showTodo: boolean): [IRemain[], boolean] {
             request.get('/ctg-exams-remain').then((res: IRemain[]) => {
                 return Promise.all(res.map(_ => request.get(`/ctg-exams-data/${_.note}`))).then(all => {
                     setTodoLoading(false);
-                    setTodo(res.map((_, index) => ({ ..._, isTodo: true, id: _.note, data: { ...all[index], docid: _.note } })))
+                    setTodo(res.map((_, index) => {
+                        const _index = _.note.lastIndexOf('_')
+                        const bedname = _.note.slice(0, _index).split('_')[0]
+                        const dateString = _.note.slice(_index + 1)
+                        const t = ["-", "-", " ", ":", ":", ""]
+                        let starttime = '20' + dateString.split('').reduce((a, b, index) => {
+                            return a.concat(b) + (index % 2 === 1 ? t[~~(index / 2)] : '')
+                        }, '')
+
+                        return {
+                            ..._,
+                            isTodo: true,
+                            bedname,
+                            id: _.note,
+
+                            data: { ...all[index], docid: _.note, starttime }
+                        }
+                    }
+                    ))
                 })
             })
 
         },
         []
     )
+    console.log('todo', todo)
     return [
         todo, todoLoading
     ]

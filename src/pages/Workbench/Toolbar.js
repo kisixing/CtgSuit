@@ -97,7 +97,7 @@ class Toolbar extends Component {
         ctgexam: {
           startTime: moment(starttime),
           endTime: null,
-          result: null,
+          result: item.isTodo ? '1' : null,
           note: docid, // docid
           diagnosis: null,
           report: null,
