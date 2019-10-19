@@ -1,8 +1,7 @@
 import { useCallback, useState, useEffect } from "react";
 import request from "@lianmed/request";
 import { event } from "@lianmed/utils";
-
-
+import { Modal } from "antd";
 export default function useTodo(showTodo: boolean): [IRemain[], boolean] {
     const [todo, setTodo] = useState<IRemain[]>([])
     const [todoLoading, setTodoLoading] = useState(false)
@@ -20,13 +19,19 @@ export default function useTodo(showTodo: boolean): [IRemain[], boolean] {
             const index = todo.findIndex(_ => _.note === note)
             const target = todo[index]
             if (!target) return
-            request.get(`/ctg-exams-nosaving/${target.note}`).then((res) => {
-                const next = [...todo]
-                console.log(index)
+            Modal.confirm({
+                onOk() {
+                    request.get(`/ctg-exams-nosaving/${target.note}`).then((res) => {
+                        const next = [...todo]
+                        console.log(index)
 
-                next.splice(index, 1)
-                setTodo(next)
+                        next.splice(index, 1)
+                        setTodo(next)
+                    })
+                },
+                content:'确认丢弃吗'
             })
+
         },
         [todo],
     )
