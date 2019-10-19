@@ -14,17 +14,17 @@ import styles from './style.less';
 
 
 const colors = {
-  normalarea: 'normalarea',
-  selectarea: 'selectarea',
-  rule: 'rule',
-  scale: 'scale',
-  primarygrid: 'primarygrid',
-  secondarygrid: 'secondarygrid',
-  fhrcolor1: 'fhrcolor1',
-  fhrcolor2: 'fhrcolor2',
-  fhrcolor3: 'fhrcolor3',
-  tococolor: 'tococolor',
-  alarmcolor: 'alarmcolor',
+  normalarea: '正常区域',
+  selectarea: '打印区域',
+  rule: '刻度',
+  scale: '时间轴',
+  primarygrid: '主网格',
+  secondarygrid: '次网格',
+  fhrcolor1: 'FHR1',
+  fhrcolor2: 'FHR2',
+  fhrcolor3: 'FHR3',
+  tococolor: 'TOCO',
+  alarmcolor: '报警',
 }
 @Form.create()
 class Network extends Component {
@@ -116,7 +116,7 @@ class Network extends Component {
     return (
       <Form layout="horizontal" {...formItemLayout} className={styles.form}>
         <Form.Item>
-          <div className={styles.subTitle}>报警设置</div>
+          <div className={styles.subTitle}>CTG设置</div>
         </Form.Item>
         <Form.Item label="胎心率上限">
           {getFieldDecorator('alarm_high', {
@@ -158,7 +158,7 @@ class Network extends Component {
         {
           Object.keys(colors).map(_ => {
             return (
-              <Form.Item label={_} key={_}>
+              <Form.Item label={colors[_]} key={_}>
                 {getFieldDecorator(_, {
                   rules: [{ required: false, message: '选择颜色!' }],
                 })(
