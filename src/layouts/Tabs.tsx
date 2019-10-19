@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Button } from 'antd';
 import { router } from 'umi';
 import { connect } from 'dva';
@@ -41,7 +41,7 @@ function Tabs({ pageData, page, dispatch, showTodo }) {
   );
 }
 
-export default connect(({ list }) => {
+export default connect(({ list }: any) => {
   return {
     showTodo: list.showTodo
   }

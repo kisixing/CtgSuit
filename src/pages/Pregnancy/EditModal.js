@@ -12,6 +12,7 @@ import {
   Select,
   DatePicker,
   InputNumber,
+  message,
 } from 'antd';
 import styles from './index.less';
 
@@ -25,7 +26,8 @@ const EditModal = Form.create({
     constructor(props) {
       super(props);
       this.state = {
-        required: false
+        required: false,
+        searchValues: {}
       };
     }
 
@@ -50,9 +52,46 @@ const EditModal = Form.create({
               'name.equals': name,
             },
             callback: (res) => {
-
+              const data = res[0];
+              if (data && data.id) {
+                form.setFieldsValue({ ...data });
+                this.setState({ searchValues: data });
+              }
             }
           });
+        }
+      });
+    }
+
+    handleOk = () => {
+      const { searchValues } = this.state;
+      const { form, onCreate, onCancel, onUpdate, dataSource } = this.props;
+      form.validateFields((err, values) => {
+        if (!err) {
+          if (dataSource) {
+            onUpdate({ id: dataSource.id, ...values });
+            onCancel();
+          } else {
+            // ADT
+            if (searchValues.id) {
+              // 修改
+              onUpdate({ id: searchValues.id, ...values });
+            } else {
+              // 新建
+              const { inpatientNO, name, bedNO } = values;
+              if (!inpatientNO) {
+                return message.error('请输入住院号！')
+              }
+              if (!name) {
+                return message.error('请输入姓名！');
+              }
+              if (!bedNO) {
+                return message.error('请输入床号！');
+              }
+              onCreate(values);
+              onCancel();
+            }
+          }
         }
       });
     }
@@ -102,21 +141,29 @@ const EditModal = Form.create({
           <Form className={styles.modalForm} layout="horizontal" {...formItemLayout}>
             <Row gutter={24}>
               <Col span={12}>
-                <Form.Item label="住院号">
+                <Form.Item
+                  label={required ? <span>住院号</span> : <span className="required">住院号</span>}
+                >
                   {getFieldDecorator('inpatientNO', {
                     rules: [{ required: required, message: '请填写孕妇住院号!' }],
                   })(<Input placeholder="输入住院号" style={{ width }} />)}
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item label="孕妇姓名">
+                <Form.Item
+                  label={
+                    required ? <span>孕妇姓名</span> : <span className="required">孕妇姓名</span>
+                  }
+                >
                   {getFieldDecorator('name', {
                     rules: [{ required: required, message: '请填写孕妇姓名!' }],
                   })(<Input placeholder="输入孕妇姓名" style={{ width }} />)}
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item label="床号">
+                <Form.Item
+                  label={required ? <span>床号</span> : <span className="required">床号</span>}
+                >
                   {getFieldDecorator('bedNO', {
                     rules: [{ required: required, message: '请填写孕妇床号!' }],
                   })(<Input placeholder="请输入床号..." style={{ width }} />)}
@@ -189,8 +236,8 @@ const EditModal = Form.create({
               </Col>
               <Col span={24} className={styles.buttons}>
                 <Button onClick={onCancel}>取消</Button>
-                {dataSource ? null : <Button>搜索</Button>}
-                <Button type="primary" onClick={this.handleUpdate}>
+                {dataSource ? null : <Button onClick={this.handleSearch}>搜索</Button>}
+                <Button type="primary" onClick={this.handleOk}>
                   确定
                 </Button>
               </Col>

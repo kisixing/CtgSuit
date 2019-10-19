@@ -10,6 +10,7 @@ function Beds({ dispatch, listData, wsData }) {
   const handleClicks = ({ pageIndex, unitId }) => {
     return () => {
       const data = { type: 'list/setPage', page: pageIndex };
+
       if (clickTimeout !== null) {
         clearTimeout(clickTimeout);
         clickTimeout = null;
@@ -18,6 +19,8 @@ function Beds({ dispatch, listData, wsData }) {
         dispatch({ type: 'list/appendDirty', unitId });
         dispatch({ type: 'list/processListData' });
         dispatch({ type: 'list/setState', payload: { fullScreenId: unitId } });
+        dispatch({ type: 'list/setState', payload: { showTodo: false } })
+
         router.replace('/workbench');
       } else {
         clickTimeout = setTimeout(() => {
@@ -27,6 +30,8 @@ function Beds({ dispatch, listData, wsData }) {
           //kisi 2019-10-18 add
           dispatch({ type: 'list/appendDirty', unitId });
           dispatch({ type: 'list/processListData' });
+          dispatch({ type: 'list/setState', payload: { showTodo: false } })
+
           router.replace('/workbench');
         }, 300);
       }

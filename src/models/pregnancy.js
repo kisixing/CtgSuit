@@ -1,4 +1,5 @@
-import { getPregnancies, updatePregnancy } from '@/services/api';
+import { getPregnancies, updatePregnancy, newPregnancies } from '@/services/api';
+import { message } from 'antd';
 
 export default {
   namespace: 'pregnancy',
@@ -14,15 +15,27 @@ export default {
       yield put({
         type: 'updateState',
         payload: {
-          pregnancies: res,
+          pregnancies: res.reverse(),
         },
       });
     },
     *update({ payload }, { call, put }) {
       const res = yield call(updatePregnancy, payload);
-      console.log("TCL: *update -> res", res)
-
+      if (res && res.id) {
+        message.success('修改成功！')
+      } else {
+        message.error('修改失败，请稍后...')
+      }
     },
+    *create({ payload, callback }, { call, put }) {
+      const res = yield call(newPregnancies, payload);
+      if (res && res.id) {
+        message.success('孕册创建成功！');
+        if (callback && typeof callback === 'function') {
+          callback(res); // 返回结果
+        }
+      }
+    }
   },
   reducers: {
     updateState(state, { payload }) {

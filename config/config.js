@@ -46,13 +46,13 @@ export default {
       },
     ],
   ],
-  copy: [
-    {
-      // build时才会copy
-      from: path.join(__dirname, '../docs/_book/'),
-      to: path.join(__dirname, '../public/handbook/'),
-    },
-  ],
+  // copy: [
+  //   {
+  //     // build时才会copy
+  //     from: path.join(__dirname, '../docs/_book/'),
+  //     to: path.join(__dirname, '../public/handbook/'),
+  //   },
+  // ],
   proxy: {
     // '/api': {
     //   target: 'http://127.0.0.1:1702/',
