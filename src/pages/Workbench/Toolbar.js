@@ -16,6 +16,7 @@ import Partogram from './Partogram';
 import ModalConfirm from './ModalConfirm';
 import styles from './Item.less';
 import { WsService } from '@lianmed/lmg';
+import { BedStatus } from '@lianmed/lmg/lib/services/WsService';
 const socket = WsService._this;
 
 class Toolbar extends Component {
@@ -177,10 +178,20 @@ class Toolbar extends Component {
 
     const pregnancy = typeof havePregnancy === 'object' ? havePregnancy : havePregnancy && JSON.parse(data.pregnancy.replace(/'/g, '"'));
     const isCreated = pregnancy && pregnancy.id && data && data.pregnancy;
-    dispatch({
-      type: 'list/appendDirty',
-      unitId,
-    });
+
+    data.status === BedStatus.Working ?
+      (
+        dispatch({
+          type: 'list/appendDirty',
+          unitId,
+        })
+      ) : (
+        dispatch({
+          type: 'list/appendOffline',
+          unitId
+        })
+      )
+
     socket.endwork(deviceno, bedno);
     // socket.datacache.delete(unitId);
     if (isCreated) {
@@ -277,15 +288,15 @@ class Toolbar extends Component {
               停止监护
             </Button>
           ) : (
-            <Button
-              disabled={data.index === undefined}
-              icon="play-circle"
-              type="link"
-              onClick={() => this.start(dataSource)}
-            >
-              开始监护
+              <Button
+                disabled={data.index === undefined}
+                icon="play-circle"
+                type="link"
+                onClick={() => this.start(dataSource)}
+              >
+                开始监护
             </Button>
-          )}
+            )}
           {/* 停止状态下不可以建档，监护、离线都是可以建档的 */}
           <Button
             icon="user-add"

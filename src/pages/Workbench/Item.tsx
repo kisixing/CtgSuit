@@ -61,7 +61,6 @@ const WorkbenchItem = (props: IProps) => {
           style={{ color: "#fff" }}
           onClick={(
             () => {
-              const s = [BedStatus.Working, BedStatus.Offline].includes(status)
               return () => {
                 if (isTodo) {
                   event.emit('todo:discard', note)
@@ -71,7 +70,9 @@ const WorkbenchItem = (props: IProps) => {
                       type: 'list/removeDirty', unitId
                     })
                   }
-                  s ? event.emit(`bedClose:${unitId}`, cb) : cb()
+                  status === BedStatus.Stopped ? cb() : (
+                    event.emit(`bedClose:${unitId}`, cb)
+                  )
                 }
               }
             }

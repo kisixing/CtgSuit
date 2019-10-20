@@ -11,9 +11,10 @@ function checkVisible(_: IDevice, dirty: Set<string>): boolean {
 export default {
   namespace: 'list',
   state: {
-    rawData:[],
+    rawData: [],
     listData: [], // 所有bed数据
     dirty: new Set(), // 受保护的床位
+    offline: new Set(),
     pageData: [], // [[1,4],[5,8]]
     page: 0, //当前页码
     pageCount: 0, // 页码长度
@@ -28,21 +29,21 @@ export default {
       let rawData: IDevice[] = yield call(getList);
       yield put({
         type: 'setState',
-        payload: { listData: rawData || [],rawData }
+        payload: { listData: rawData || [], rawData }
       });
       yield put({ type: 'processListData' });
     },
 
-    *processListData(payload, { put, select }) {
+    *processListData({ }, { put, select }) {
       const state = yield select();
       let {
         setting: { listLayout },
         list,
         ws: { data: datacache }
       } = state;
-      let { rawData:listData, dirty } = list as any
+      let { rawData: listData, dirty } = list as any
       const pageItemsCount: number = listLayout[0] * listLayout[1];
-      console.log('update',datacache,listData)
+      console.log('update', datacache, listData)
       listData = listData
         .map(_ => {
           const unitId = `${_.deviceno}-${_.subdevice}`;
@@ -108,19 +109,21 @@ export default {
         payload: { page }
       });
       yield put({
-        type: 'setPageItems',
+        type: 'setPageItems'
       });
     },
-    *setPageItems(payload, { put, select }) {
+    *setPageItems({ }, { put, select }) {
       const state = yield select();
       let {
         setting: { listLayout },
         list,
       } = state;
-      let { listData, dirty, page } = list as IListState
-      listData = listData.filter(_ => {
-        return checkVisible(_, dirty)
-      })
+      let { listData, dirty, page, offline } = list as IListState
+      listData = listData
+        .filter(_ => {
+          return checkVisible(_, dirty)
+        })
+        .filter(_ => !offline.has(_.unitId))
       const pageItemsCount: number = listLayout[0] * listLayout[1];
       const pageItems = listData.slice(page * pageItemsCount, (page + 1) * pageItemsCount);
       yield put({
@@ -157,6 +160,22 @@ export default {
         type: 'setState', payload: {
           dirty
         }
+      })
+    },
+    *appendOffline({ unitId }, { call, put, select }) {
+      const state: IState = yield select();
+      let {
+        list: { offline },
+      } = state;
+      offline = new Set(offline)
+      offline.add(unitId)
+      yield put({
+        type: 'setState', payload: {
+          offline
+        }
+      })
+      yield put({
+        type: 'processListData'
       })
     },
 
@@ -218,7 +237,7 @@ export default {
   },
   reducers: {
     setState(state, { payload }) {
-  console.log('list setState')
+      console.log('list setState')
 
       return {
         ...state,
@@ -233,7 +252,13 @@ export default {
   }
 } as { state: IListState };
 
+
+interface IState {
+  list: IListState
+}
 interface IListState {
+  offline: Set<string>,
+
   listData: IDevice[],
   dirty: Set<string>,
   pageData: any[],
