@@ -151,11 +151,13 @@ class Toolbar extends Component {
           const { isStopMonitorWhenCreated } = this.state;
           if (isStopMonitorWhenCreated) {
             this.end(item);
-            this.setState({
-              isStopMonitorWhenCreated: false,
-              visible: false
+            this.setState({ isStopMonitorWhenCreated: false });
+            dispatch({
+              type: 'list/removeDirty',
+              unitId: this.unitId,
             });
           }
+          this.setState({ visible: false });
         } else {
           // message.error('建档失败！', res)
         }
@@ -223,6 +225,10 @@ class Toolbar extends Component {
         payload: data.docid,
       });
     }
+    dispatch({
+      type: 'list/removeDirty',
+      unitId: this.unitId,
+    });
     if (this.endCb) {
       this.endCb();
       this.endCb = null;
@@ -257,8 +263,7 @@ class Toolbar extends Component {
     // 已建档状态
     const havePregnancy = data && data.pregnancy;
     const pregnancy = typeof havePregnancy === 'object' ? havePregnancy : havePregnancy && JSON.parse(data.pregnancy.replace(/'/g, '"'));
-    const isCreated =
-      pregnancy && pregnancy.id && data && data.pregnancy;
+    const isCreated = havePregnancy && pregnancy.id;
     return (
       <>
         <div className={cx(styles.toolbar, { [styles.show]: showSetting })}>
@@ -280,22 +285,23 @@ class Toolbar extends Component {
               开始监护
             </Button>
           )}
+          {/* 停止状态下不可以建档，监护、离线都是可以建档的 */}
           <Button
             icon="user-add"
             type="link"
-            disabled={isCreated || (!isMonitor && data.index !== undefined)}
+            disabled={isCreated}
             onClick={() => this.showModal('visible')}
           >
             {isCreated ? '已建档' : '建档'}
           </Button>
-          <Button
+          {/* <Button
             disabled={!isCreated}
             icon="pie-chart"
             type="link"
             onClick={() => this.showModal('analysisVisible')}
           >
             电脑分析
-          </Button>
+          </Button> */}
           <Button
             disabled={!isCreated}
             icon="printer"
@@ -304,14 +310,14 @@ class Toolbar extends Component {
           >
             打印
           </Button>
-          <Button
+          {/* <Button
             disabled={!isCreated}
             icon="line-chart"
             type="link"
             onClick={() => this.showModal('partogramVisible')}
           >
             产程图
-          </Button>
+          </Button> */}
           {/* <Link to="">
             <Button icon="reconciliation" type="link">
               事件记录
