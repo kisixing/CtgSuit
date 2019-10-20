@@ -41,6 +41,10 @@ export async function getAccount() {
 export async function newPregnancies(params) {
   return request.post(`/pregnancies`, {
     data: params,
+  }).catch(error => {
+    error.data.then(e => {
+      message.error(e.title);
+    });
   });
 }
 
