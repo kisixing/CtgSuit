@@ -1,5 +1,5 @@
 const { Menu } = require('electron');
-const hasMenus = true;
+const hasMenus = false;
 
 const menu = [
   {
