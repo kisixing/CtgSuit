@@ -11,6 +11,7 @@ function checkVisible(_: IDevice, dirty: Set<string>): boolean {
 export default {
   namespace: 'list',
   state: {
+    rawData:[],
     listData: [], // 所有bed数据
     dirty: new Set(), // 受保护的床位
     pageData: [], // [[1,4],[5,8]]
