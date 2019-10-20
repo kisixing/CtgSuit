@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { event } from "@lianmed/utils";
-console.log('11111', event)
 export default () => {
 
     useEffect(() => {
@@ -14,10 +13,13 @@ export default () => {
                 audio.pause()
             }, 50000);
         }
-        const announcerCb = text => {
-            // audio.play()
-            var speechSU = new SpeechSynthesisUtterance();
+        const announcerCb = (text, pitch = 4, rate = .6) => {
+            const voices = speechSynthesis.getVoices().find(_ => _.lang === 'zh-TW')
+            const speechSU = new SpeechSynthesisUtterance();
             speechSU.text = text;
+            speechSU.pitch = pitch;
+            speechSU.voice = voices;
+            speechSU.rate = rate;
             speechSynthesis.speak(speechSU);
         }
 

@@ -35,10 +35,11 @@ const WorkbenchItem = (props: IProps) => {
   const { isTodo, note } = (dataSource as IRemain)
 
   const testAlarm = useMemo(() => {
-    let f = true
     return () => {
-      suitObject.suit[f ? 'alarmOn' : 'alarmOff']('zzz')
-      f = !f
+      const arr = unitId.split('-')
+      let text = unitId
+      arr[0] && arr[1] && arr[0] === arr[1] && (text = arr[0])
+      event.emit('bed:announcer', `${text} 号子机监护时间到`)
     }
   }, [suitObject.suit])
 
@@ -60,7 +61,7 @@ const WorkbenchItem = (props: IProps) => {
           style={{ color: "#fff" }}
           onClick={(
             () => {
-              const s = [BedStatus.Working,BedStatus.Offline].includes(status)
+              const s = [BedStatus.Working, BedStatus.Offline].includes(status)
               return () => {
                 if (isTodo) {
                   event.emit('todo:discard', note)
