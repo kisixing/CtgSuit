@@ -80,6 +80,7 @@ export default {
     },
     *create({ payload, callback }, { call, put, select }) {
       const res = yield call(newCTGrecord, payload);
+      console.log("TCL: *create -> res", res)
       if (res && res.id) {
         message.success('绑定成功！');
         // 创建成功后更新bed information

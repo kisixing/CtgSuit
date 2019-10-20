@@ -87,6 +87,9 @@ class Toolbar extends Component {
       const {
         data: { starttime, docid },
       } = item;
+      if (!docid) {
+        return message.warn('走纸异常，无法建档！');
+      }
       const d = {
         visitType: values.visitTime,
         visitTime: moment(values.values).format(),
@@ -120,14 +123,13 @@ class Toolbar extends Component {
               this.newArchive(data, item);
             } else {
               // 孕册存在，取到孕册信息
-              message.info('改患者信息已存在！');
+              message.info('该患者信息已存在！');
             }
           },
         });
       }
-
-      form.resetFields();
-      this.setState({ visible: false });
+      // form.resetFields();
+      // this.setState({ visible: false });
     });
   };
 
@@ -149,10 +151,13 @@ class Toolbar extends Component {
           const { isStopMonitorWhenCreated } = this.state;
           if (isStopMonitorWhenCreated) {
             this.end(item);
-            this.setState({ isStopMonitorWhenCreated: false });
+            this.setState({
+              isStopMonitorWhenCreated: false,
+              visible: false
+            });
           }
         } else {
-          message.error('建档失败！')
+          // message.error('建档失败！', res)
         }
       },
     });
@@ -247,6 +252,8 @@ class Toolbar extends Component {
 
     // 处于监护状态
     const isMonitor = data && data.status === 1;
+    // 离线状态
+    const isOffline = data && data.status === 3;
     // 已建档状态
     const havePregnancy = data && data.pregnancy;
     const pregnancy = typeof havePregnancy === 'object' ? havePregnancy : havePregnancy && JSON.parse(data.pregnancy.replace(/'/g, '"'));
@@ -255,7 +262,7 @@ class Toolbar extends Component {
     return (
       <>
         <div className={cx(styles.toolbar, { [styles.show]: showSetting })}>
-          {isMonitor ? (
+          {isMonitor || isOffline ? (
             <Button
               icon="pause-circle"
               type="link"
@@ -264,22 +271,37 @@ class Toolbar extends Component {
               停止监护
             </Button>
           ) : (
-              <Button disabled={(data.index === undefined)} icon="play-circle" type="link" onClick={() => this.start(dataSource)}>
-                开始监护
+            <Button
+              disabled={data.index === undefined}
+              icon="play-circle"
+              type="link"
+              onClick={() => this.start(dataSource)}
+            >
+              开始监护
             </Button>
-            )}
+          )}
           <Button
             icon="user-add"
             type="link"
-            disabled={isCreated || (!isMonitor && (data.index !== undefined))}
+            disabled={isCreated || (!isMonitor && data.index !== undefined)}
             onClick={() => this.showModal('visible')}
           >
             {isCreated ? '已建档' : '建档'}
           </Button>
-          <Button disabled={!isCreated} icon="pie-chart" type="link" onClick={() => this.showModal('analysisVisible')}>
+          <Button
+            disabled={!isCreated}
+            icon="pie-chart"
+            type="link"
+            onClick={() => this.showModal('analysisVisible')}
+          >
             电脑分析
           </Button>
-          <Button disabled={!isCreated} icon="printer" type="link" onClick={() => this.showModal('printVisible')}>
+          <Button
+            disabled={!isCreated}
+            icon="printer"
+            type="link"
+            onClick={() => this.showModal('printVisible')}
+          >
             打印
           </Button>
           <Button

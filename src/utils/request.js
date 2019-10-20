@@ -9,8 +9,8 @@ import r from '@lianmed/request';
 import config from "@/utils/config";
 
 const request = r.config({
-  prefix:config.apiPrefix,
-  hideErr:true,
+  prefix: config.apiPrefix,
+  hideErr: true,
   errHandler({ status, errortext, url }) {
     if (status === 401) {
       // @HACK
@@ -58,7 +58,7 @@ request._request.interceptors.response.use(
     return response;
   },
   error => {
-    console.log('response error', error);
+    // console.log('response error', error);
     return Promise.reject(error);
   },
 );
