@@ -268,7 +268,6 @@ class Toolbar extends Component {
         <div className={cx(styles.toolbar, { [styles.show]: showSetting })}>
           {isMonitor || isOffline ? (
             <Button
-              disabled={isOffline}
               icon="pause-circle"
               type="link"
               onClick={() => this.showModal('confirmVisible')}
@@ -277,7 +276,7 @@ class Toolbar extends Component {
             </Button>
           ) : (
             <Button
-              disabled={data.index === undefined || isOffline}
+              disabled={data.index === undefined}
               icon="play-circle"
               type="link"
               onClick={() => this.start(dataSource)}
