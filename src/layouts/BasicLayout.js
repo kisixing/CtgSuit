@@ -251,7 +251,7 @@ class BasicLayout extends Component {
       >
         <Header className={styles.header}>
           <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <Link to="/" className={styles.logo}>
+            <Link to="/workbench" className={styles.logo}>
               {/* <img alt="logo" src={logo} /> */}
               <h1>胎监工作站</h1>
             </Link>
