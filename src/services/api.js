@@ -1,5 +1,6 @@
 import request from '@/utils/request';
 import { stringify } from 'qs';
+import { message } from 'antd';
 
 /**
  * 验证账户登录
@@ -67,6 +68,10 @@ export async function getCTGrecords(params) {
 export async function newCTGrecord(params) {
   return request.post(`/prenatal-visits`, {
     data: params,
+  }).catch((error) => {
+    error.data.then(e => {
+      message.error(e.title);
+    })
   });
 }
 
@@ -122,8 +127,8 @@ export async function getPDF(note) {
  * @export
  * @returns
  */
-export async function getBedIfo() {
-  return request.get('/bedinfos');
+export async function getBedIfo(params) {
+  return request.get(`/bedinfos?${stringify(params)}`);
 }
 
 /**

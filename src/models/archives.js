@@ -80,41 +80,42 @@ export default {
     },
     *create({ payload, callback }, { call, put, select }) {
       const res = yield call(newCTGrecord, payload);
+      console.log("TCL: *create -> res", res)
       if (res && res.id) {
         message.success('绑定成功！');
         // 创建成功后更新bed information
-        // const bedinfo = yield select(state => state.list.pageItems);
-        // const { ctgexam, pregnancy, visitTime, id } = res;
-        // const note = ctgexam.note.split('_');
-        // const [bedno, deviceno, ...rest] = note;
-        // // const selected = bedinfo.filter(item => item.bedno === bedno && item.deviceno === deviceno);
-        // const newBedinfo = bedinfo.map(item => {
-        //   if (item.bedno === bedno && item.deviceno === deviceno) {
-        //     return {
-        //       ...item,
-        //       pregnancy,
-        //       documentno: ctgexam.note, // 确保信息更新 要求docid documentno一致
-        //       prenatalVisit: {
-        //         doctor: null,
-        //         gestationalWeek: null,
-        //         id: id,
-        //         visitTime: moment(visitTime),
-        //         visitType: null,
-        //         ctgexam: {
-        //           ...ctgexam,
-        //           startTime: moment(ctgexam.startTime),
-        //         },
-        //       },
-        //     };
-        //   }
-        //   return item;
-        // });
-        // yield put({
-        //   type: 'list/setState',
-        //   payload: {
-        //     pageItems: newBedinfo,
-        //   },
-        // });
+        const bedinfo = yield select(state => state.list.pageItems);
+        const { ctgexam, pregnancy, visitTime, id } = res;
+        const note = ctgexam.note.split('_');
+        const [bedno, deviceno, ...rest] = note;
+        // const selected = bedinfo.filter(item => item.bedno === bedno && item.deviceno === deviceno);
+        const newBedinfo = bedinfo.map(item => {
+          if (item.bedno === bedno && item.deviceno === deviceno) {
+            return {
+              ...item,
+              pregnancy,
+              documentno: ctgexam.note, // 确保信息更新 要求docid documentno一致
+              prenatalVisit: {
+                doctor: null,
+                gestationalWeek: null,
+                id: id,
+                visitTime: moment(visitTime),
+                visitType: null,
+                ctgexam: {
+                  ...ctgexam,
+                  startTime: moment(ctgexam.startTime),
+                },
+              },
+            };
+          }
+          return item;
+        });
+        yield put({
+          type: 'list/setState',
+          payload: {
+            pageItems: newBedinfo,
+          },
+        });
       }
       if (callback && typeof callback === 'function') {
         callback(res); // 返回结果

@@ -15,6 +15,7 @@ const CollectionCreateForm = Form.create({
     constructor(props) {
       super(props);
       this.state = {
+        disabled: false,
         required: true,
         errorText: '',
       };
@@ -30,7 +31,10 @@ const CollectionCreateForm = Form.create({
     // modal里面的搜索按钮事件、调入
     handleSearch = () => {
       const { dispatch, form } = this.props;
-      this.setState({ required: false }, () => {
+      this.setState({
+        required: false,
+        errorText: ''
+      }, () => {
         form.validateFields((err, values) => {
           if (err) {
             return;
@@ -47,6 +51,7 @@ const CollectionCreateForm = Form.create({
               if (!res.length) {
                 this.setState({ errorText: '没有这个孕册，请新建孕册。' });
               }
+              // this.setState({ disabled: true });
               form.setFieldsValue(res[0]);
             },
           }).then(() => {
@@ -118,7 +123,7 @@ const CollectionCreateForm = Form.create({
     render() {
       const { visible, onCancel, form, dataSource, loading } = this.props;
       const { getFieldDecorator } = form;
-      const { required, errorText } = this.state;
+      const { disabled, required, errorText } = this.state;
 
       const formItemLayout = {
         labelCol: {
@@ -162,14 +167,21 @@ const CollectionCreateForm = Form.create({
                       { max: 10, message: '床号的最大长度为10' },
                       { validator: this.validateNoChinese },
                     ],
-                  })(<Input placeholder="输入床号..." style={{ width }} />)}
+                  })(
+                    <Input
+                      autoFocus
+                      disabled={disabled}
+                      placeholder="输入床号..."
+                      style={{ width }}
+                    />,
+                  )}
                 </Form.Item>
               </Col>
               <Col span={12}>
                 <Form.Item label={<span className="required">姓名</span>}>
                   {getFieldDecorator('name', {
                     rules: [{ required: false, message: '请填写孕妇姓名!' }],
-                  })(<Input placeholder="输入孕妇姓名..." style={{ width }} />)}
+                  })(<Input disabled={disabled} placeholder="输入孕妇姓名..." style={{ width }} />)}
                 </Form.Item>
               </Col>
               <Col span={12}>
@@ -179,7 +191,7 @@ const CollectionCreateForm = Form.create({
                       { required: false, message: '请填写孕妇住院号!' },
                       { validator: this.validateNoChinese },
                     ],
-                  })(<Input placeholder="输入住院号..." style={{ width }} />)}
+                  })(<Input disabled={disabled} placeholder="输入住院号..." style={{ width }} />)}
                 </Form.Item>
               </Col>
               <Col span={12}>
@@ -190,6 +202,7 @@ const CollectionCreateForm = Form.create({
                     <InputNumber
                       min={1}
                       max={99}
+                      disabled={disabled}
                       placeholder="输入孕妇年龄..."
                       style={{ width }}
                     />,
@@ -204,7 +217,13 @@ const CollectionCreateForm = Form.create({
                       { validator: this.validateMaxMin },
                     ],
                   })(
-                    <InputNumber min={1} max={99} placeholder="请输入孕次..." style={{ width }} />,
+                    <InputNumber
+                      min={1}
+                      max={99}
+                      disabled={disabled}
+                      placeholder="请输入孕次..."
+                      style={{ width }}
+                    />,
                   )}
                 </Form.Item>
               </Col>
@@ -216,7 +235,13 @@ const CollectionCreateForm = Form.create({
                       { validator: this.validateMaxMin },
                     ],
                   })(
-                    <InputNumber min={0} max={99} placeholder="请输入产次..." style={{ width }} />,
+                    <InputNumber
+                      min={0}
+                      max={99}
+                      disabled={disabled}
+                      placeholder="请输入产次..."
+                      style={{ width }}
+                    />,
                   )}
                 </Form.Item>
               </Col>

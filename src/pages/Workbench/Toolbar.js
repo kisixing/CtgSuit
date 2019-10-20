@@ -36,7 +36,7 @@ class Toolbar extends Component {
     this.showModal('confirmVisible');
   };
   componentDidMount() {
-
+    console.log('item datasource', this.props.dataSource);
     this.unitId = this.props.dataSource.unitId;
     event.on(`bedClose:${this.unitId}`, this.onclose);
   }
@@ -87,6 +87,9 @@ class Toolbar extends Component {
       const {
         data: { starttime, docid },
       } = item;
+      if (!docid) {
+        return message.warn('走纸异常，无法建档！');
+      }
       const d = {
         visitType: values.visitTime,
         visitTime: moment(values.values).format(),
@@ -120,14 +123,13 @@ class Toolbar extends Component {
               this.newArchive(data, item);
             } else {
               // 孕册存在，取到孕册信息
-              message.info('改患者信息已存在！');
+              message.info('该患者信息已存在！');
             }
           },
         });
       }
-
-      form.resetFields();
-      this.setState({ visible: false });
+      // form.resetFields();
+      // this.setState({ visible: false });
     });
   };
 
@@ -137,7 +139,6 @@ class Toolbar extends Component {
    * @param {object} item item原始数据
    */
   newArchive = (params, item) => {
-
     const { dispatch } = this.props;
     dispatch({
       type: 'archives/create',
@@ -145,16 +146,18 @@ class Toolbar extends Component {
       callback: res => {
         if (res && res.id) {
           // this.setState({ isCreated: true });
-
           event.emit('newArchive', res)
           // 完成绑定后判断是否停止监护工作
           const { isStopMonitorWhenCreated } = this.state;
           if (isStopMonitorWhenCreated) {
             this.end(item);
-            this.setState({ isStopMonitorWhenCreated: false });
+            this.setState({
+              isStopMonitorWhenCreated: false,
+              visible: false
+            });
           }
         } else {
-          message.error('建档失败！')
+          // message.error('建档失败！', res)
         }
       },
     });
@@ -169,7 +172,7 @@ class Toolbar extends Component {
   end = item => {
     // TODO 逻辑混乱
     const { dispatch } = this.props;
-    const { deviceno, bedno, data, prenatalVisit = {}, unitId } = item;
+    const { deviceno, bedno, data, unitId } = item;
     const havePregnancy = data && data.pregnancy;
 
     const pregnancy = typeof havePregnancy === 'object' ? havePregnancy : havePregnancy && JSON.parse(data.pregnancy.replace(/'/g, '"'));
@@ -183,24 +186,35 @@ class Toolbar extends Component {
     if (isCreated) {
       // 已经建档 ,修改结束时间
       const pregnancyId = pregnancy.id;
+      // 获取ctg曲线档案id，重新调用获取bedinfo
       dispatch({
-        type: 'archives/update',
+        type: 'list/fetchBed',
         payload: {
-          id: prenatalVisit.id,
-          pregnancy: {
-            id: pregnancyId,
-          },
-          ctgexam: {
-            ...prenatalVisit.ctgexam,
-            endTime: moment(),
-            note: data.docid,
-          },
+          'pregnancyId.equals': pregnancyId,
         },
-        callback: res => {
-          if (res && res.id) {
-            // 将监护状态改为未监护状态
+        callback: (res) => {
+          const d = res[0];
+          if (d && d.id) {
+            const prenatalVisit = d['prenatalVisit'];
+            dispatch({
+              type: 'archives/update',
+              payload: {
+                id: prenatalVisit.id,
+                pregnancy: {
+                  id: pregnancyId,
+                },
+                ctgexam: {
+                  ...prenatalVisit.ctgexam,
+                  startTime: moment(prenatalVisit.ctgexam.startTime),
+                  endTime: moment(),
+                  note: d.documentno,
+                },
+              },
+            });
+          } else {
+
           }
-        },
+        }
       });
     } else {
       // 未建档提示简单保存或者放弃保存
@@ -238,6 +252,8 @@ class Toolbar extends Component {
 
     // 处于监护状态
     const isMonitor = data && data.status === 1;
+    // 离线状态
+    const isOffline = data && data.status === 3;
     // 已建档状态
     const havePregnancy = data && data.pregnancy;
     const pregnancy = typeof havePregnancy === 'object' ? havePregnancy : havePregnancy && JSON.parse(data.pregnancy.replace(/'/g, '"'));
@@ -246,7 +262,7 @@ class Toolbar extends Component {
     return (
       <>
         <div className={cx(styles.toolbar, { [styles.show]: showSetting })}>
-          {isMonitor ? (
+          {isMonitor || isOffline ? (
             <Button
               icon="pause-circle"
               type="link"
@@ -255,22 +271,37 @@ class Toolbar extends Component {
               停止监护
             </Button>
           ) : (
-              <Button disabled={(data.index === undefined)} icon="play-circle" type="link" onClick={() => this.start(dataSource)}>
-                开始监护
+            <Button
+              disabled={data.index === undefined}
+              icon="play-circle"
+              type="link"
+              onClick={() => this.start(dataSource)}
+            >
+              开始监护
             </Button>
-            )}
+          )}
           <Button
             icon="user-add"
             type="link"
-            disabled={isCreated || (!isMonitor && (data.index !== undefined))}
+            disabled={isCreated || (!isMonitor && data.index !== undefined)}
             onClick={() => this.showModal('visible')}
           >
             {isCreated ? '已建档' : '建档'}
           </Button>
-          <Button disabled={!isCreated} icon="pie-chart" type="link" onClick={() => this.showModal('analysisVisible')}>
+          <Button
+            disabled={!isCreated}
+            icon="pie-chart"
+            type="link"
+            onClick={() => this.showModal('analysisVisible')}
+          >
             电脑分析
           </Button>
-          <Button disabled={!isCreated} icon="printer" type="link" onClick={() => this.showModal('printVisible')}>
+          <Button
+            disabled={!isCreated}
+            icon="printer"
+            type="link"
+            onClick={() => this.showModal('printVisible')}
+          >
             打印
           </Button>
           <Button

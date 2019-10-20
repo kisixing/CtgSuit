@@ -63,6 +63,7 @@ class TableList extends Component {
         dataIndex: 'visitTime',
         key: 'visitTime',
         width: 150,
+        sorter: (a, b) => moment(a.visitTime) - moment(b.visitTime),
         render: text => text && moment(text).format('YYYY-MM-DD HH:mm:ss'),
       },
       {

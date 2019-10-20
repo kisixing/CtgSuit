@@ -19,18 +19,20 @@ export default function useTodo(showTodo: boolean): [IRemain[], boolean] {
             const index = todo.findIndex(_ => _.note === note)
             const target = todo[index]
             if (!target) return
-            Modal.confirm({
-                onOk() {
-                    request.get(`/ctg-exams-nosaving/${target.note}`).then((res) => {
-                        const next = [...todo]
-                        console.log(index)
-
-                        next.splice(index, 1)
-                        setTodo(next)
-                    })
-                },
-                content:'确认丢弃吗'
+            const fn = () => request.get(`/ctg-exams-nosaving/${target.note}`).then((res) => {
+                const next = [...todo]
+                next.splice(index, 1)
+                setTodo(next)
             })
+            if (target.data && target.data.pregnancy) {
+                fn()
+            } else {
+                Modal.confirm({
+                    onOk: fn,
+                    content: '未建档，确认关闭吗'
+                })
+            }
+
 
         },
         [todo],

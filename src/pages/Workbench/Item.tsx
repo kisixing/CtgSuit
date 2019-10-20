@@ -99,7 +99,7 @@ const WorkbenchItem = (props: IProps) => {
         姓名: <span>{pregnancy.name}</span>
         年龄：<span>{pregnancy.age}</span>
         G/P：<span>{pregnancy.GP}</span>
-        开始时间: <span>{moment(data.starttime).format('HH:mm')}</span>
+        开始时间: <span>{data.starttime && moment(data.starttime).format('HH:mm')}</span>
         <span style={{ float: 'right', marginRight: '5px' }}>{bedname}号</span>
       </span>
     )

@@ -43,8 +43,11 @@ export default {
       yield put({ type: 'setState', payload })
       yield put({ type: 'list/processListData' })
     },
-    *fetchBed({ payload }, { call, put }) {
-      const res = yield call(getBedIfo);
+    *fetchBed({ payload, callback }, { call, put }) {
+      const res = yield call(getBedIfo, payload);
+      if (callback && typeof callback === 'function') {
+        callback(res); // 返回结果
+      }
       yield put({
         type: 'setState',
         payload: {
