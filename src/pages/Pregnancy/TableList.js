@@ -56,7 +56,7 @@ class TableList extends Component {
         title: '预产期',
         dataIndex: 'edd',
         key: 'edd',
-        render: text => text ? moment(text).format('YYYY-MM-DD') : null
+        render: text => (text ? moment(text).format('YYYY-MM-DD') : null),
         // sorter: (a, b) => a.edd - b.edd,
       },
       {
@@ -87,10 +87,10 @@ class TableList extends Component {
               <span className="primary-link" onClick={() => this.handleSearchArchives(record.id)}>
                 档案
               </span>
-              <Divider type="vertical" />
+              {/* <Divider type="vertical" />
               <Popconfirm title="确认删除此条孕册信息？" okText="确定" cancelText="取消">
                 <span className="delete-link">删除</span>
-              </Popconfirm>
+              </Popconfirm> */}
             </>
           );
         },
@@ -111,7 +111,7 @@ class TableList extends Component {
         'recordstate.equals': '10',
       },
     });
-  }
+  };
 
   hideEdit = () => {
     this.setState({ visible: false });
@@ -130,7 +130,7 @@ class TableList extends Component {
 
   handleSearchArchives = id => {
     router.push(`/archives?pregnancyId=${id}`);
-  }
+  };
 
   handleUpdate = values => {
     const { dispatch } = this.props;
@@ -185,9 +185,9 @@ class TableList extends Component {
     onFilter: (value, record) => {
       if (record[dataIndex]) {
         return record[dataIndex]
-        .toString()
-        .toLowerCase()
-        .includes(value.toLowerCase())
+          .toString()
+          .toLowerCase()
+          .includes(value.toLowerCase());
       }
     },
 
@@ -197,12 +197,15 @@ class TableList extends Component {
       }
     },
     render: text => (
-      <Highlighter
-        highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
-        searchWords={[this.state.searchText]}
-        autoEscape
-        textToHighlight={text && text.toString()}
-      />
+      <div style={{ width: '84px' }} className={styles.textOver}>
+        <Highlighter
+          className={styles.textOver}
+          highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+          searchWords={[this.state.searchText]}
+          autoEscape
+          textToHighlight={text && text.toString()}
+        />
+      </div>
     ),
   });
 
