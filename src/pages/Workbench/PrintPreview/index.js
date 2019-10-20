@@ -16,7 +16,7 @@ const PrintPreview = (props) => {
   const renderTitle = (data) => {
     return (
       <div className={styles.modalTitle}>
-        <span>【${data.bedname}】 打印</span>
+        <span>【{data.bedname}】 打印</span>
         <span>住院号：{data.pregnancy && data.pregnancy.inpatientNO}</span>
         <span>姓名：{data.pregnancy && data.pregnancy.name}</span>
         <span>年龄：{data.pregnancy && data.pregnancy.age}</span>
