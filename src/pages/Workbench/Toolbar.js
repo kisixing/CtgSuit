@@ -64,6 +64,8 @@ class Toolbar extends Component {
     this.setState({ [name]: false });
   };
 
+  // 检验数据库是否已经建册了
+
   // 建档（绑定孕册信息）
   handleCreate = item => {
     const { dispatch } = this.props;
