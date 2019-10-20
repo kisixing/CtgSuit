@@ -152,10 +152,6 @@ class Toolbar extends Component {
           if (isStopMonitorWhenCreated) {
             this.end(item);
             this.setState({ isStopMonitorWhenCreated: false });
-            dispatch({
-              type: 'list/removeDirty',
-              unitId: this.unitId,
-            });
           }
           this.setState({ visible: false });
         } else {
@@ -225,14 +221,17 @@ class Toolbar extends Component {
         payload: data.docid,
       });
     }
-    dispatch({
-      type: 'list/removeDirty',
-      unitId: this.unitId,
-    });
     if (this.endCb) {
       this.endCb();
       this.endCb = null;
     }
+    // if (data.status === '3') {
+    //   // 离线状态时，建档完成后关闭
+    //   dispatch({
+    //     type: 'list/removeDirty',
+    //     unitId: this.unitId,
+    //   });
+    // }
   };
 
   // 重定向打开建档窗口
@@ -269,6 +268,7 @@ class Toolbar extends Component {
         <div className={cx(styles.toolbar, { [styles.show]: showSetting })}>
           {isMonitor || isOffline ? (
             <Button
+              disabled={isOffline}
               icon="pause-circle"
               type="link"
               onClick={() => this.showModal('confirmVisible')}
@@ -277,7 +277,7 @@ class Toolbar extends Component {
             </Button>
           ) : (
             <Button
-              disabled={data.index === undefined}
+              disabled={data.index === undefined || isOffline}
               icon="play-circle"
               type="link"
               onClick={() => this.start(dataSource)}
