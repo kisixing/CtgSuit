@@ -123,7 +123,7 @@ const Preview = props => {
               <PreivewContent />
               <div style={{ width: 300, padding: 24, background: '#fff', display: 'flex', flexDirection: 'column', justifyContent: 'space-around' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span>开始时间：<Input size="small" style={{ width: 80 }} value={startingTime} onChange={e => {
+                  <span>开始时间：<Input size="small" style={{ width: 80 }} value={(startingTime/ COEFFICIENT).toFixed(1)} onChange={e => {
                     remoteSetStartingTime(parseFloat(e.target.value))
                   }} />分</span>
                   <Button type={locking ? 'danger' : 'primary'} onClick={toggleLocking} size="small">
@@ -135,7 +135,7 @@ const Preview = props => {
 
                 {/* TODO: 计算显示时间 */}
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span>结束时间：<Input size="small" style={{ width: 80 }} value={endingTime} onChange={e => {
+                  <span>结束时间：<Input size="small" style={{ width: 80 }} value={(endingTime/ COEFFICIENT).toFixed(1) } onChange={e => {
                     remoteSetEndingTime(parseFloat(e.target.value))
                   }} />分</span>
 
