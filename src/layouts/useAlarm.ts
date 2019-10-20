@@ -4,17 +4,18 @@ export default () => {
 
     useEffect(() => {
         const audio: HTMLAudioElement = document.querySelector('#alarm')
+        let timeout
         const onCb = alarmType => {
             audio.play()
+            clearTimeout(timeout)
+            timeout = setTimeout(() => {
+                audio.pause()
+            }, 50000);
         }
-        const offCb = alarmType => {
-            audio.pause()
-        }
+
         event.on('suit:alarmOn', onCb)
-        event.on('suit:alarmOff', offCb)
         return () => {
             event.off('suit:alarmOn', onCb)
-            event.off('suit:alarmOff', offCb)
         };
     }, [])
 
