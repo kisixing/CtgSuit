@@ -90,7 +90,7 @@ class Toolbar extends Component {
         data: { starttime, docid },
       } = item;
       if (!docid) {
-        return message.warn('走纸异常，无法建档！');
+        return message.warn('离线状态，无法建档！');
       }
       const d = {
         visitType: values.visitTime,
