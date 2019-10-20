@@ -9,17 +9,23 @@ import { Modal } from 'antd';
 import Setting from './Setting';
 import Preview from './Preview';
 import styles from './index.less';
+import moment from 'moment';
 
 export const Context = React.createContext({})
 
 const PrintPreview = (props) => {
   const renderTitle = (data) => {
+    console.log("TCL: renderTitle -> data", data)
     return (
       <div className={styles.modalTitle}>
-        <span>【{data.bedname}】 打印</span>
+        <span>档案号：{data.ctgexam.note}</span>
         <span>住院号：{data.pregnancy && data.pregnancy.inpatientNO}</span>
         <span>姓名：{data.pregnancy && data.pregnancy.name}</span>
         <span>年龄：{data.pregnancy && data.pregnancy.age}</span>
+        <span>孕周： {data.gestationalWeek}</span>
+        <span>
+          监护日期：{data.ctgexam && data.ctgexam.startTime && moment(data.ctgexam.startTime).format('YYYY-MM-DD HH:mm:ss')}
+        </span>
       </div>
     );
   }
