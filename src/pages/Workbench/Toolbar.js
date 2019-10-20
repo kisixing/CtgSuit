@@ -36,7 +36,7 @@ class Toolbar extends Component {
     this.showModal('confirmVisible');
   };
   componentDidMount() {
-
+    console.log('item datasource', this.props.dataSource);
     this.unitId = this.props.dataSource.unitId;
     event.on(`bedClose:${this.unitId}`, this.onclose);
   }
@@ -137,7 +137,6 @@ class Toolbar extends Component {
    * @param {object} item item原始数据
    */
   newArchive = (params, item) => {
-
     const { dispatch } = this.props;
     dispatch({
       type: 'archives/create',
@@ -145,7 +144,6 @@ class Toolbar extends Component {
       callback: res => {
         if (res && res.id) {
           // this.setState({ isCreated: true });
-
           event.emit('newArchive', res)
           // 完成绑定后判断是否停止监护工作
           const { isStopMonitorWhenCreated } = this.state;
@@ -169,7 +167,7 @@ class Toolbar extends Component {
   end = item => {
     // TODO 逻辑混乱
     const { dispatch } = this.props;
-    const { deviceno, bedno, data, prenatalVisit = {}, unitId } = item;
+    const { deviceno, bedno, data, unitId } = item;
     const havePregnancy = data && data.pregnancy;
 
     const pregnancy = typeof havePregnancy === 'object' ? havePregnancy : havePregnancy && JSON.parse(data.pregnancy.replace(/'/g, '"'));
@@ -183,24 +181,35 @@ class Toolbar extends Component {
     if (isCreated) {
       // 已经建档 ,修改结束时间
       const pregnancyId = pregnancy.id;
+      // 获取ctg曲线档案id，重新调用获取bedinfo
       dispatch({
-        type: 'archives/update',
+        type: 'list/fetchBed',
         payload: {
-          id: prenatalVisit.id,
-          pregnancy: {
-            id: pregnancyId,
-          },
-          ctgexam: {
-            ...prenatalVisit.ctgexam,
-            endTime: moment(),
-            note: data.docid,
-          },
+          'pregnancyId.equals': pregnancyId,
         },
-        callback: res => {
-          if (res && res.id) {
-            // 将监护状态改为未监护状态
+        callback: (res) => {
+          const d = res[0];
+          if (d && d.id) {
+            const prenatalVisit = d['prenatalVisit'];
+            dispatch({
+              type: 'archives/update',
+              payload: {
+                id: prenatalVisit.id,
+                pregnancy: {
+                  id: pregnancyId,
+                },
+                ctgexam: {
+                  ...prenatalVisit.ctgexam,
+                  startTime: moment(prenatalVisit.ctgexam.startTime),
+                  endTime: moment(),
+                  note: d.documentno,
+                },
+              },
+            });
+          } else {
+
           }
-        },
+        }
       });
     } else {
       // 未建档提示简单保存或者放弃保存

@@ -1,5 +1,5 @@
 import { message } from 'antd';
-import { newPregnancies, getPregnancy } from '@/services/api';
+import { newPregnancies, getPregnancy, getBedIfo } from '@/services/api';
 import { getList } from '@/services/list';
 import { BedStatus } from "@lianmed/lmg/lib/services/WsService";
 const downStatus = [BedStatus.Working, BedStatus.Offline];
@@ -205,6 +205,13 @@ export default {
         if (callback && typeof callback === 'function') {
           callback(res); // 返回结果
         }
+      }
+    },
+    // 主要获取prenatalVisit信息
+    *fetchBed({ payload, callback }, { call, put }) {
+      const res = yield call(getBedIfo, payload);
+      if (callback && typeof callback === 'function') {
+        callback(res); // 返回结果
       }
     },
   },

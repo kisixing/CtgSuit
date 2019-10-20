@@ -122,8 +122,8 @@ export async function getPDF(note) {
  * @export
  * @returns
  */
-export async function getBedIfo() {
-  return request.get('/bedinfos');
+export async function getBedIfo(params) {
+  return request.get(`/bedinfos?${stringify(params)}`);
 }
 
 /**
