@@ -35,7 +35,9 @@ export default function ModalConfirm({
     );
   }
   if (isOffine ) {
-    content = (
+    content = isCreated ? (
+      `确认子机: ${bedname} 停止监护 ?`
+    ) : (
       <span>
         子机: {bedname} 即将停止监护，但还
         <span style={{ color: '#f00' }}>未建立档案</span>

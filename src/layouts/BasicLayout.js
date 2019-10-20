@@ -295,7 +295,7 @@ class BasicLayout extends Component {
         <Footer className={styles.footer}>
           <span />
           <span>
-            Copyright <Icon type="copyright" /> {config.copyright}
+            Copyright <Icon type="copyright" style={{ margin: '0 4px' }} /> {config.copyright}
           </span>
           <span>
             <Icon

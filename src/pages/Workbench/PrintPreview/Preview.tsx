@@ -31,7 +31,8 @@ const Preview = props => {
     toggleCustomiz
   } = usePrintConfig(value)
 
-  const { dataSource } = props;
+  const { dataSource, from } = props;
+  // console.log('TCL111111111111111111', dataSource);
   const { pregnancy, data, ctgexam } = dataSource
   let docid = '';
   let starttime = '';
@@ -47,27 +48,42 @@ const Preview = props => {
   const [numPages, setNumPages] = useState(0)
   const [pageNumber, setPageNumber] = useState(1)
   const [pdfflow, setPdfflow] = useState('')
-
-
-
-
   const onDocumentLoad = useCallback(({ numPages }) => { setNumPages(numPages) }, [])
   const onChangePage = useCallback(page => { setPageNumber(page) }, [])
   const handlePrint = useCallback((e) => { ipcRenderer.send('printWindow', filePath) }, [filePath])
 
-
   const handlePreview = () => {
-    const params = {
-      docid: docid,
-      name: pregnancy.name,
-      age: pregnancy.age,
-      gestationalWeek: pregnancy.gestationalWeek,
-      inpatientNO: pregnancy.inpatientNO,
-      startdate: moment(starttime).format('YYYY-MM-DD HH:mm:ss'),
-      fetalcount: 2,
-      start: startingTime,
-      end: endingTime,
+    let params = {};
+    if (from !== "archives") {
+      // 提取孕产信息
+      const havePregnancy = data && data.pregnancy;
+      const p = typeof havePregnancy === 'object' ? havePregnancy : havePregnancy && JSON.parse(data.pregnancy.replace(/'/g, '"'));
+
+      params = {
+        docid: data && data.docid,
+        name: p.name,
+        age: p.age,
+        gestationalWeek: p.gestationalWeek,
+        inpatientNO: p.inpatientNO,
+        startdate: moment(data.starttime).format('YYYY-MM-DD HH:mm:ss'),
+        fetalcount: 2,
+        start: startingTime,
+        end: endingTime,
+      }
+    } else {
+      params = {
+        docid: docid,
+        name: pregnancy.name,
+        age: pregnancy.age,
+        gestationalWeek: pregnancy.gestationalWeek,
+        inpatientNO: pregnancy.inpatientNO,
+        startdate: moment(starttime).format('YYYY-MM-DD HH:mm:ss'),
+        fetalcount: 2,
+        start: startingTime,
+        end: endingTime,
+      }
     }
+
     request.post(`/ctg-exams-pdf`, {
       data: params,
     }).then(res => {
@@ -124,13 +140,13 @@ const Preview = props => {
               <div style={{ width: 300, padding: 24, background: '#fff', display: 'flex', flexDirection: 'column', justifyContent: 'space-around' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <span>开始时间：
-                    
+
                     {/* <Input size="small" style={{ width: 80 }} value={(startingTime/ COEFFICIENT).toFixed(1)} onChange={e => {
                     remoteSetStartingTime(parseFloat(e.target.value))
                   }} /> */}
                   {(startingTime/ COEFFICIENT).toFixed(1)}
                   分
-                  
+
                   </span>
                   <Button type={locking ? 'danger' : 'primary'} onClick={toggleLocking} size="small">
                     {
@@ -149,8 +165,8 @@ const Preview = props => {
                   }} /> */}
                   {(endingTime/ COEFFICIENT).toFixed(1) }
                   分
-                  
-                  
+
+
                   </span>
 
                   {
