@@ -16,21 +16,20 @@ export const Context = React.createContext({})
 const PrintPreview = (props) => {
   const renderTitle = (from, data) => {
     if (from !== 'archives') {
-      const d = data.data;
+      // const d = data.data;
       // console.log('TCL -----------', d);
-      const havePregnancy = d && d.pregnancy;
-      const p =
-        typeof havePregnancy === 'object'
-          ? havePregnancy
-          : havePregnancy && JSON.parse(d.pregnancy.replace(/'/g, '"'));
-      // console.log('TCL -----------', d, p);
+      // const havePregnancy = d && d.pregnancy;
+      // const p =
+      //   typeof havePregnancy === 'object'
+      //     ? havePregnancy
+      //     : havePregnancy && JSON.parse(d.pregnancy.replace(/'/g, '"'));
       return (
         <div className={styles.modalTitle}>
           <span>档案号：{data.documentno}</span>
-          <span>住院号：{p.inpatientNO}</span>
+          {/* <span>住院号：{p.inpatientNO}</span>
           <span>姓名：{p.name}</span>
           <span>年龄：{p.age}</span>
-          <span>孕周： {data.gestationalWeek}</span>
+          <span>孕周： {data.gestationalWeek}</span> */}
           {/* <span>
             监护日期：
             {d && d.startTime && moment(d.startTime).format('YYYY-MM-DD HH:mm:ss')}
