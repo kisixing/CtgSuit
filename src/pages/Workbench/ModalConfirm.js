@@ -13,6 +13,8 @@ export default function ModalConfirm({
   onCreate = () => {}
 }) {
   const { bedname, data } = dataSource;
+  // 离线状态
+  const isOffine = data && data.status === 3;
   const havePregnancy = data && data.pregnancy;
   const pregnancy = typeof havePregnancy === 'object' ? havePregnancy : havePregnancy && JSON.parse(data.pregnancy.replace(/'/g, '"'));
   const isCreate = pregnancy && pregnancy.id && data && data.pregnancy;
@@ -20,8 +22,9 @@ export default function ModalConfirm({
     onOk(dataSource);
     onCancel('confirmVisible');
   }
-  const content = isMonitor ? (
-    isCreated ? (
+  let content = '';
+  if (isMonitor) {
+    content = isCreated ? (
       `确认子机: ${bedname} 停止监护 ?`
     ) : (
       <span>
@@ -29,10 +32,30 @@ export default function ModalConfirm({
         <span style={{ color: '#f00' }}>未建立档案</span>
         ，建档请选择“建档”按钮，放弃请选择“放弃”按钮 ?
       </span>
-    )
-  ) : (
-    `确认子机: ${bedname} 开始监护 ?`
-  );
+    );
+  }
+  if (isOffine ) {
+    content = (
+      <span>
+        子机: {bedname} 即将停止监护，但还
+        <span style={{ color: '#f00' }}>未建立档案</span>
+        ，建档请选择“建档”按钮，放弃请选择“放弃”按钮 ?
+      </span>
+    );
+  }
+  // const content = isMonitor ? (
+  //   isCreated ? (
+  //     `确认子机: ${bedname} 停止监护 ?`
+  //   ) : (
+  //     <span>
+  //       子机: {bedname} 即将停止监护，但还
+  //       <span style={{ color: '#f00' }}>未建立档案</span>
+  //       ，建档请选择“建档”按钮，放弃请选择“放弃”按钮 ?
+  //     </span>
+  //   )
+  // ) : (
+  //   `确认子机: ${bedname} 开始监护 ?`
+  // );
 
   return (
     <Modal
