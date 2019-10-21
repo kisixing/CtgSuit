@@ -46,10 +46,12 @@ class Setting extends Component {
           <Spin
             wrapperClassName={styles.chart}
             spinning={
-              !data
+              !data || (data && data.index < 60)
             }
           >
-            <L suitType={2} data={data} mutableSuitObject={value}></L>
+
+            <L suitType={2} data={(data && data.index >= 60) ? data : null} mutableSuitObject={value}></L>
+
           </Spin>
         )}
       </Context.Consumer>
