@@ -22,7 +22,7 @@ const WorkbenchItem = (props: IProps) => {
   const [showSettingBar, setShowSettingBar] = useState(true);
   const ref = useRef(null)
   const suitObject: { suit: Suit } = { suit: null };
-
+  const [alarmStatus, setAlarmStatus] = useState(null)
   const fullScreen = () => {
     const el = ReactDOM.findDOMNode(ref.current);
     if (document.fullscreenElement) {
@@ -49,9 +49,9 @@ const WorkbenchItem = (props: IProps) => {
       <div className={styles.extra}>
         <span style={{ marginRight: '8px', color: '#fff' }}>{bedname}号</span>
         {
-          status !== void 0 && (
-            <Tag onClick={testAlarm} color={mapStatusToColor[status]}>{mapStatusToText[status]}</Tag>
-          )
+
+          <Tag onClick={testAlarm} color={alarmStatus ? 'red' : mapStatusToColor[status]}>{alarmStatus ? alarmStatus : mapStatusToText[status]}</Tag>
+
         }
         <Button
           title="关闭监护窗口"
@@ -111,7 +111,21 @@ const WorkbenchItem = (props: IProps) => {
       fullScreen();
       dispatch({ type: 'list/setState', payload: { fullScreenId: null } });
     }
+
+    const onCb = alarmType => {
+      setAlarmStatus(alarmType)
+    }
+    const offCb = alarmType => {
+      setAlarmStatus(null)
+    }
+    event
+      .on('suit:alarmOn', onCb)
+      .on('suit:alarmOff', offCb)
+
     return () => {
+      event
+        .off('suit:alarmOn', onCb)
+        .off('suit:alarmOff', offCb)
     };
   }, [fullScreenId])
   // console.log('zzzzzzz', data)

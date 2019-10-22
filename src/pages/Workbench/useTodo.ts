@@ -86,6 +86,7 @@ export default function useTodo(showTodo: boolean): [IRemain[], boolean] {
     ]
 }
 export interface IRemain {
+    bedname: string;
     isTodo: true;
     diagnosis: any;
     endTime: any;

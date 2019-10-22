@@ -49,6 +49,7 @@ class Network extends Component {
       alarmcolor,
 
       alarm_enable,
+      alarm_finished,
       alarm_high,
       alarm_low,
       alarm_on_window,
@@ -67,6 +68,7 @@ class Network extends Component {
         tococolor,
         alarmcolor,
 
+        alarm_finished,
         alarm_enable,
         alarm_high,
         alarm_low,
@@ -93,6 +95,7 @@ class Network extends Component {
       'alarm_on_window',
       'alarm_on_sound',
       'alarm_enable',
+      'alarm_finished',
       ...Object.keys(colors)
     ]).then(status => {
       if (status) {
@@ -147,6 +150,15 @@ class Network extends Component {
 
         <Form.Item label="开启报警">
           {getFieldDecorator('alarm_enable', {
+            rules: [{ required: false, message: '请选择!' }],
+          })(<Radio.Group>
+            <Radio value={"1"}>打开</Radio>
+            <Radio value={"0"}>关闭</Radio>
+          </Radio.Group>)}
+        </Form.Item>
+
+        <Form.Item label="监护结束提示">
+          {getFieldDecorator('alarm_finished', {
             rules: [{ required: false, message: '请选择!' }],
           })(<Radio.Group>
             <Radio value={"1"}>打开</Radio>
