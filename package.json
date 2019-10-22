@@ -12,8 +12,10 @@
     "lint": "eslint --ext .js src mock tests",
     "rebuild": "electron-rebuild -m ./app",
     "pack": "npm run build:render && npm run rebuild && electron-builder --dir =./app",
+    "pack-ia32": "npm run build:render && npm run rebuild && electron-builder  --ia32 --dir =./app",
     "pack-linux": "npm run build:render && npm run rebuild && electron-builder build --linux",
     "dist": "electron-builder",
+    "dist:ia32": "electron-builder --ia32",
     "precommit": "lint-staged",
     "update:lianmed": "yarn upgrade @lianmed/lmg @lianmed/components @lianmed/utils @lianmed/request",
     "link:lianmed": "npm link @lianmed/lmg @lianmed/components @lianmed/utils @lianmed/request"

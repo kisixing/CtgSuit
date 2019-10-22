@@ -1,9 +1,9 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Row } from 'antd';
+import { Row, Empty } from 'antd';
 import { connect } from 'react-redux';
 import './index.less';
 import Item from './Item';
-import { Spin } from 'antd';
+// import { Spin } from 'antd';
 import { IDevice } from '@/models/list';
 import useTodo, { IRemain } from "./useTodo";
 
@@ -15,11 +15,11 @@ interface IProps {
 
 const Home = (props: IProps) => {
   const { listLayout = [], pageItems, fullScreenId, dispatch, showTodo } = props;
-  const [todo, todoLoading] = useTodo(showTodo)
+  const [todo] = useTodo(showTodo)
 
   const wrap = useRef(null);
   // const [wrapRec, setWrapRec] = useState({ height: 0, width: 0 });
-
+  const empty = useRef(null)
 
   const itemSpan = 24 / listLayout[0];
   const outPadding = 6;
@@ -28,27 +28,44 @@ const Home = (props: IProps) => {
     (contentHeight - outPadding * 2) / listLayout[1];
   const items: any[] = (showTodo ? todo : pageItems);
 
+
+  // useLayoutEffect(() => {
+  //   if (empty.current) {
+  //     const e = (empty.current) as HTMLDivElement
+  //     const h1 = document.querySelector('h1')
+  //     const clone = h1.cloneNode(true) as HTMLDivElement
+  //     Object.assign(clone.style, getComputedStyle(h1), { margin: 'auto' })
+  //     e.replaceChild(clone, e.firstElementChild)
+  //   }
+
+  // })
   return (
     <div style={{ height: '100%' }} ref={wrap}>
-      <Spin spinning={pageItems.length === 0 || todoLoading} size="large" >
-        <Row style={{ padding: outPadding, height: contentHeight }}>
-          {items.map((item: IDevice | IRemain) => {
-            // console.log('item', item)
-            return (
-              <Item
-                key={item.id}
-                dataSource={item}
-                itemHeight={itemHeight}
-                itemSpan={itemSpan}
-                outPadding={outPadding}
-                fullScreenId={fullScreenId}
-                dispatch={dispatch}
-              />
-            );
-          })}
-        </Row>
-      </Spin>
-
+      {
+        (
+          <Row style={{ padding: outPadding, height: contentHeight }} >
+            {items.length ? items.map((item: IDevice | IRemain) => {
+              // console.log('item', item)
+              return (
+                <Item
+                  key={item.id}
+                  dataSource={item}
+                  itemHeight={itemHeight}
+                  itemSpan={itemSpan}
+                  outPadding={outPadding}
+                  fullScreenId={fullScreenId}
+                  dispatch={dispatch}
+                />
+              );
+            }) : (
+                <div ref={empty} style={{ marginTop: 200, display:'flex',justifyContent:'center' }}>
+                  <Empty description="胎监工作站" />
+                </div>
+              )
+            }
+          </Row>
+        )
+      }
     </div>
 
   );
