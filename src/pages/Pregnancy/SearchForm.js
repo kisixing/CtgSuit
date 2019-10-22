@@ -98,12 +98,15 @@ class SearchForm extends Component {
               <Form.Item label="住院号">
                 {getFieldDecorator('inpatientNO', {
                   rules: [{ required: false, message: '请输入住院号!' }],
+                  getValueFromEvent: event => event.target.value.replace(/\s+/g, ''),
                 })(<Input allowClear type="text" />)}
               </Form.Item>
             </Col>
             <Col span={4}>
               <Form.Item label="姓名">
-                {getFieldDecorator('name')(<Input allowClear type="text" />)}
+                {getFieldDecorator('name', {
+                  getValueFromEvent: event => event.target.value.trim(),
+                })(<Input allowClear type="text" />)}
               </Form.Item>
             </Col>
             <Col span={4}>

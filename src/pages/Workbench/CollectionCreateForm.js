@@ -31,34 +31,37 @@ const CollectionCreateForm = Form.create({
     // modal里面的搜索按钮事件、调入
     handleSearch = () => {
       const { dispatch, form } = this.props;
-      this.setState({
-        required: false,
-        errorText: ''
-      }, () => {
-        form.validateFields((err, values) => {
-          if (err) {
-            return;
-          }
-          // 获取孕册信息,只做床号检索
-          dispatch({
-            type: 'list/fetchPregnancy',
-            payload: {
-              'recordstate.equals': '10', // 住院中
-              'areaNO.equals': '01', // 默认病区
-              'bedNO.equals': values.bedNO, // 床号
-            },
-            callback: res => {
-              if (!res.length) {
-                this.setState({ errorText: '没有这个孕册，请新建孕册。' });
-              }
-              // this.setState({ disabled: true });
-              form.setFieldsValue(res[0]);
-            },
-          }).then(() => {
-            this.setState({ required: true });
+      this.setState(
+        {
+          required: false,
+          errorText: '',
+        },
+        () => {
+          form.validateFields((err, values) => {
+            if (err) {
+              return;
+            }
+            // 获取孕册信息,只做床号检索
+            dispatch({
+              type: 'list/fetchPregnancy',
+              payload: {
+                'recordstate.equals': '10', // 住院中
+                'areaNO.equals': '01', // 默认病区
+                'bedNO.equals': values.bedNO, // 床号
+              },
+              callback: res => {
+                if (!res.length) {
+                  this.setState({ errorText: '没有这个孕册，请新建孕册。' });
+                }
+                // this.setState({ disabled: true });
+                form.setFieldsValue(res[0]);
+              },
+            }).then(() => {
+              this.setState({ required: true });
+            });
           });
-        });
-      });
+        },
+      );
     };
 
     handleCreate = dataSource => {
@@ -101,7 +104,7 @@ const CollectionCreateForm = Form.create({
       const { field } = rule;
       const { form } = this.props;
       if (value && !reg.test(value)) {
-        callback('请输入不小于0的整数')
+        callback('请输入不小于0的整数');
       }
       if (field === 'gravidity') {
         // 孕次
@@ -119,6 +122,12 @@ const CollectionCreateForm = Form.create({
       }
       callback();
     };
+
+    // 前后空格消除
+    trim = event => event.target.value.trim();
+
+    // 所有空格消除
+    replace = event => event.target.value.replace(/\s+/g, '');
 
     render() {
       const { visible, onCancel, form, dataSource, loading } = this.props;
@@ -164,9 +173,10 @@ const CollectionCreateForm = Form.create({
                   {getFieldDecorator('bedNO', {
                     rules: [
                       { required: true, message: '请填写孕妇床号!' },
-                      { max: 10, message: '床号的最大长度为10' },
+                      { max: 6, message: '床号的最大长度为6' },
                       { validator: this.validateNoChinese },
                     ],
+                    getValueFromEvent: event => event.target.value.replace(/\s+/g, ''),
                   })(
                     <Input
                       autoFocus
@@ -180,7 +190,11 @@ const CollectionCreateForm = Form.create({
               <Col span={12}>
                 <Form.Item label={<span className="required">姓名</span>}>
                   {getFieldDecorator('name', {
-                    rules: [{ required: false, message: '请填写孕妇姓名!' }],
+                    rules: [
+                      { required: false, message: '请填写孕妇姓名!' },
+                      { max: 12, message: '姓名的最大长度为12' },
+                    ],
+                    getValueFromEvent: event => event.target.value.trim(),
                   })(<Input disabled={disabled} placeholder="输入孕妇姓名..." style={{ width }} />)}
                 </Form.Item>
               </Col>
@@ -189,8 +203,10 @@ const CollectionCreateForm = Form.create({
                   {getFieldDecorator('inpatientNO', {
                     rules: [
                       { required: false, message: '请填写孕妇住院号!' },
+                      { max: 10, message: '住院号的最大长度为12' },
                       { validator: this.validateNoChinese },
                     ],
+                    getValueFromEvent: event => event.target.value.replace(/\s+/g, ''),
                   })(<Input disabled={disabled} placeholder="输入住院号..." style={{ width }} />)}
                 </Form.Item>
               </Col>

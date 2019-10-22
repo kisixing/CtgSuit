@@ -22,6 +22,10 @@ class Login extends PureComponent {
     this.state = {};
   }
 
+  // componentDidMount() {
+  //   this.props.form.setFieldsValue({ password: '' });
+  // }
+
   handleSubmit = e => {
     e.preventDefault();
     const { dispatch, form } = this.props;
@@ -30,7 +34,10 @@ class Login extends PureComponent {
       if (errors) {
         return;
       }
-      dispatch({ type: 'login/login', payload: values });
+      dispatch({ type: 'login/login', payload: values })
+        .then(() => {
+          form.resetFields();
+        });
     });
   };
 
@@ -53,7 +60,6 @@ class Login extends PureComponent {
                     message: '请输入用户名！',
                   },
                 ],
-                initialValue: 'admin',
               })(
                 <Input
                   autoFocus
@@ -65,17 +71,18 @@ class Login extends PureComponent {
             </FormItem>
             <FormItem hasFeedback>
               {getFieldDecorator('password', {
+                initialValue: '',
                 rules: [
                   {
                     required: true,
                     message: '请输入用户密码！',
                   },
                 ],
-                initialValue: 'admin',
               })(
                 <Input
                   type="password"
                   placeholder="密码"
+                  autoComplete="new-password"
                   prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
                   onPressEnter={this.handleSubmit}
                 />,
@@ -85,7 +92,6 @@ class Login extends PureComponent {
               <Button type="primary" htmlType="submit" loading={loading.effects['login/login']}>
                 登陆
               </Button>
-        
             </Row>
             {error && error.status === '401' ? (
               <Alert message={error.message} type="error" closable />
