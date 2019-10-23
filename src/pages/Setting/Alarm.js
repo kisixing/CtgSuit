@@ -194,8 +194,8 @@ class Network extends Component {
         <Row>
           {Object.keys(colors).map(_ => {
             return (
-              <Col span={8}>
-                <Form.Item label={colors[_]} key={_}>
+              <Col span={8} key={_}>
+                <Form.Item label={colors[_]} >
                   {getFieldDecorator(_, {
                     rules: [{ required: false, message: '选择颜色!' }],
                   })(<Input type="color" />)}
