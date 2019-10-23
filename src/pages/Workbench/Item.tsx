@@ -1,48 +1,33 @@
-import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
-import ReactDOM from 'react-dom';
+import React, { useMemo } from 'react';
 import { Card, Col, Button, Tag, Tooltip } from 'antd';
 import moment from 'moment';
 import { Ctg as L } from '@lianmed/lmg';
 import { mapStatusToColor, mapStatusToText } from '@/constant';
 import Toolbar from './Toolbar';
 import { event } from "@lianmed/utils";
-let styles = require('./Item.less')
 import { BedStatus } from "@lianmed/lmg/lib/services/WsService";
 import { IDevice } from "@/models/list";
 import { IRemain } from './useTodo';
 import { Suit } from '@lianmed/lmg/lib/Ctg/Suit';
-import { throttle } from "lodash";
+import useItemAlarm from "./useItemAlarm";
+import useFullScreen from "./useFullScreen";
+let styles = require('./Item.less')
+
 interface IProps {
   dataSource: IDevice | IRemain;
   [x: string]: any
 }
 const WorkbenchItem = (props: IProps) => {
-  // console.log('item render')
   const { dispatch, fullScreenId, itemHeight, itemSpan, dataSource, outPadding } = props;
   const { data, bedname, id } = dataSource;
-  const [showSettingBar, setShowSettingBar] = useState(true);
-  const ref = useRef(null)
-  const suitObject: { suit: Suit } = { suit: null };
-  const [alarmStatus, setAlarmStatus] = useState(null)
-  const fullScreen = () => {
-    const el = ReactDOM.findDOMNode(ref.current);
-    if (document.fullscreenElement) {
-      document.exitFullscreen();
-    } else {
-      el.requestFullscreen();
-    }
-  }
-  const unitId = (dataSource as IDevice).unitId
+  const { unitId } = (dataSource as IDevice)
   const { isTodo, note } = (dataSource as IRemain)
+  const suitObject = useMemo<{ suit: Suit }>(() => {
+    return { suit: null }
+  }, [])
 
-  const testAlarm = useMemo(() => {
-    return () => {
-      const arr = unitId.split('-')
-      let text = unitId
-      arr[0] && arr[1] && arr[0] === arr[1] && (text = arr[0])
-      event.emit('bed:announcer', `${text} 号子机监护时间到`)
-    }
-  }, [suitObject.suit])
+  const [ref, fullScreen] = useFullScreen(fullScreenId, unitId, dispatch)
+  const [alarmStatus] = useItemAlarm(suitObject.suit)
 
   // item右上角icon
   const renderExtra = (bedname: string, status: number) => {
@@ -50,9 +35,7 @@ const WorkbenchItem = (props: IProps) => {
       <div className={styles.extra}>
         <span style={{ marginRight: '8px', color: '#fff' }}>{bedname}号</span>
         {
-
-          <Tag onClick={testAlarm} color={alarmStatus ? '#f5222d' : mapStatusToColor[status]}>{alarmStatus ? alarmStatus : mapStatusToText[status]}</Tag>
-
+          <Tag color={alarmStatus ? '#f5222d' : mapStatusToColor[status]}>{alarmStatus ? alarmStatus : mapStatusToText[status]}</Tag>
         }
         <Button
           title="关闭监护窗口"
@@ -107,49 +90,15 @@ const WorkbenchItem = (props: IProps) => {
     );
   };
 
-  useEffect(() => {
-    if (fullScreenId === unitId) {
-      fullScreen();
-      dispatch({ type: 'list/setState', payload: { fullScreenId: null } });
-    }
-    const _setAlarmStatus = throttle((alarmType) => {
-      setAlarmStatus(alarmType)
-    }, 5000)
-    const onCb = alarmType => {
-      _setAlarmStatus(alarmType)
-    }
-    const offCb = alarmType => {
-      _setAlarmStatus(null)
-    }
-    event
-      .on('suit:alarmOn', onCb)
-      .on('suit:alarmOff', offCb)
-
-    return () => {
-      event
-        .off('suit:alarmOn', onCb)
-        .off('suit:alarmOff', offCb)
-    };
-  }, [fullScreenId])
-  // console.log('zzzzzzz', data)
   return (
     <Col
       span={itemSpan}
       className={styles.col}
       ref={ref}
-      style={{ padding: outPadding, height: itemHeight }}
-      onMouseOver={e => {
-        if (e.target === ref.current) {
-          showSettingBar || setShowSettingBar(true)
-        }
-      }}
-      onMouseOut={e => {
-        if (e.target === ref.current) {
-          showSettingBar && setShowSettingBar(false)
-        }
-      }}
-    >
-      <Toolbar {...props} showSettingBar={showSettingBar} />
+      style={{ padding: outPadding, height: itemHeight }} >
+
+      <Toolbar {...props} showSettingBar={true} />
+
       <Card
         title={renderTilte(dataSource)}
         size="small"
@@ -160,8 +109,8 @@ const WorkbenchItem = (props: IProps) => {
       >
         <L data={data} showEcg={false} mutableSuitObject={suitObject} itemHeight={itemHeight} onDoubleClick={fullScreen}></L>
       </Card>
+
     </Col>
   );
 }
-
 export default WorkbenchItem;
