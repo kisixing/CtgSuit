@@ -320,7 +320,7 @@ class Toolbar extends Component {
             type="link"
             onClick={() => this.showModal('printVisible')}
           >
-            打印
+            报告
           </Button>
           {/* <Button
             disabled={!isCreated}

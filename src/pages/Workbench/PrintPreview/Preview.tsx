@@ -1,13 +1,13 @@
 // import printElement from './printElement';
-import React, { useState, useEffect, useCallback, memo } from 'react';
+import React, { useState, useCallback } from 'react';
 import { connect } from 'dva';
 import { Document, Page } from 'react-pdf';
-import { Pagination, Button, Spin, Empty, Input } from 'antd';
+import { Pagination, Button, Spin, Empty } from 'antd';
 import { ipcRenderer } from 'electron';
 import config from '@/utils/config';
 import { Context } from './index'
 import request from "@lianmed/request";
-// import pdf from './pdfBase64';
+import classnames from 'classnames';
 import moment from 'moment'
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import usePrintConfig from "./usePrintConfig";
@@ -19,6 +19,8 @@ const COEFFICIENT = 240
 
 const Preview = props => {
   const [value, setValue] = useState<{ suit: any }>({ suit: null })
+  const [isFullpage, setFullpage] = useState(false);
+  const [height, setHeight] = useState(130);
 
   const {
     startingTime,
@@ -31,8 +33,7 @@ const Preview = props => {
     toggleCustomiz
   } = usePrintConfig(value)
 
-  const { dataSource, from } = props;
-  // console.log('TCL111111111111111111', dataSource);
+  const { dataSource, from, getHeight } = props;
   const { pregnancy, data, ctgexam } = dataSource
   let docid = '';
   let starttime = '';
@@ -92,9 +93,14 @@ const Preview = props => {
     })
   }
 
+  const togglePage = () => {
+    const height = getHeight;
+    setHeight(height)
+  }
+
   const PreivewContent = () => {
     const content = pdfflow ? (
-      <>
+      <div className={classnames({ [styles.fullPage]: isFullpage})}>
         <Document
           className={styles.preview}
           loading={<Spin style={{ margin: '120px 0' }} />}
@@ -106,7 +112,7 @@ const Preview = props => {
             cMapPacked: true,
           }}
         >
-          <Page className={styles.page} pageNumber={pageNumber} scale={1.5} height={130} />
+          <Page className={styles.page} pageNumber={pageNumber} scale={1.5} height={height} />
         </Document>
         <Pagination
           className={styles.pagination}
@@ -117,7 +123,8 @@ const Preview = props => {
           size="small"
           onChange={onChangePage}
         />
-      </>
+        {/* <Button onClick={togglePage}>放大</Button> */}
+      </div>
     ) : (
         <Empty style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', margin: 0 }} />
       );
@@ -140,7 +147,6 @@ const Preview = props => {
               <div style={{ width: 300, padding: 24, background: '#fff', display: 'flex', flexDirection: 'column', justifyContent: 'space-around' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <span>开始时间：
-
                     {/* <Input size="small" style={{ width: 80 }} value={(startingTime/ COEFFICIENT).toFixed(1)} onChange={e => {
                     remoteSetStartingTime(parseFloat(e.target.value))
                   }} /> */}
@@ -158,17 +164,12 @@ const Preview = props => {
                 {/* TODO: 计算显示时间 */}
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <span>结束时间：
-
-
                     {/* <Input  size="small" style={{ width: 80 }} value={(endingTime/ COEFFICIENT).toFixed(1) } onChange={e => {
                     remoteSetEndingTime(parseFloat(e.target.value))
                   }} /> */}
                   {(endingTime/ COEFFICIENT).toFixed(1) }
                   分
-
-
                   </span>
-
                   {
                     locking && (
                       <Button type={customizable ? 'danger' : 'primary'} onClick={toggleCustomiz} size="small">
@@ -184,22 +185,18 @@ const Preview = props => {
                 </div>
                 <div style={{ display: 'flex' }}>
                   <Button block disabled={!locking} type="primary" onClick={handlePreview} style={{ marginRight: 10 }}>
-                    预览
+                    生成
                   </Button>
-
                   <Button block disabled={!pdfflow} type="primary" onClick={handlePrint}>
                     打印
                   </Button>
-
                 </div>
               </div>
             </div>
-
           )
         }
       }
     </Context.Consumer>
-
   );
 }
 
