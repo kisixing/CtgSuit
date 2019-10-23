@@ -11,6 +11,7 @@ import { BedStatus } from "@lianmed/lmg/lib/services/WsService";
 import { IDevice } from "@/models/list";
 import { IRemain } from './useTodo';
 import { Suit } from '@lianmed/lmg/lib/Ctg/Suit';
+import { throttle } from "lodash";
 interface IProps {
   dataSource: IDevice | IRemain;
   [x: string]: any
@@ -50,7 +51,7 @@ const WorkbenchItem = (props: IProps) => {
         <span style={{ marginRight: '8px', color: '#fff' }}>{bedname}号</span>
         {
 
-          <Tag onClick={testAlarm} color={alarmStatus ? 'red' : mapStatusToColor[status]}>{alarmStatus ? alarmStatus : mapStatusToText[status]}</Tag>
+          <Tag onClick={testAlarm} color={alarmStatus ? '#f5222d' : mapStatusToColor[status]}>{alarmStatus ? alarmStatus : mapStatusToText[status]}</Tag>
 
         }
         <Button
@@ -111,12 +112,14 @@ const WorkbenchItem = (props: IProps) => {
       fullScreen();
       dispatch({ type: 'list/setState', payload: { fullScreenId: null } });
     }
-
-    const onCb = alarmType => {
+    const _setAlarmStatus = throttle((alarmType) => {
       setAlarmStatus(alarmType)
+    }, 5000)
+    const onCb = alarmType => {
+      _setAlarmStatus(alarmType)
     }
     const offCb = alarmType => {
-      setAlarmStatus(null)
+      _setAlarmStatus(null)
     }
     event
       .on('suit:alarmOn', onCb)
