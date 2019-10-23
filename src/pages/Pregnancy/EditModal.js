@@ -27,15 +27,33 @@ const EditModal = Form.create({
       super(props);
       this.state = {
         required: false,
-        searchValues: {}
+        searchValues: {},
       };
     }
 
     componentDidMount() {
       const { form, dataSource } = this.props;
       if (dataSource) {
-        const { inpatientNO, name, age, telephone, gravidity, parity, recordstate, bedNO } = dataSource;
-        form.setFieldsValue({ inpatientNO, name, age, telephone, gravidity, parity, bedNO, recordstate });
+        const {
+          inpatientNO,
+          name,
+          age,
+          telephone,
+          gravidity,
+          parity,
+          recordstate,
+          bedNO,
+        } = dataSource;
+        form.setFieldsValue({
+          inpatientNO,
+          name,
+          age,
+          telephone,
+          gravidity,
+          parity,
+          bedNO,
+          recordstate,
+        });
         this.setState({ required: true });
       }
     }
@@ -51,17 +69,17 @@ const EditModal = Form.create({
               'inpatientNO.equals': inpatientNO,
               'name.equals': name,
             },
-            callback: (res) => {
+            callback: res => {
               const data = res[0];
               if (data && data.id) {
                 form.setFieldsValue({ ...data });
                 this.setState({ searchValues: data });
               }
-            }
+            },
           });
         }
       });
-    }
+    };
 
     handleOk = () => {
       const { searchValues } = this.state;
@@ -80,7 +98,7 @@ const EditModal = Form.create({
               // 新建
               const { inpatientNO, name, bedNO } = values;
               if (!inpatientNO) {
-                return message.error('请输入住院号！')
+                return message.error('请输入住院号！');
               }
               if (!name) {
                 return message.error('请输入姓名！');
@@ -94,7 +112,7 @@ const EditModal = Form.create({
           }
         }
       });
-    }
+    };
 
     handleUpdate = () => {
       // 编辑修改
@@ -106,6 +124,18 @@ const EditModal = Form.create({
           onCancel();
         }
       });
+    };
+
+    // 手机号码验证
+    validateTel = (rule, value, callback) => {
+      const reg = /^1[3456789]\d{9}$/;
+      if (value && value.length !== 11) {
+        callback('手机号码位数不正确');
+      } else if (value && !reg.test(value)) {
+        callback('手机号码不合法');
+      } else {
+        callback();
+      }
     };
 
     render() {
@@ -145,7 +175,11 @@ const EditModal = Form.create({
                   label={required ? <span>住院号</span> : <span className="required">住院号</span>}
                 >
                   {getFieldDecorator('inpatientNO', {
-                    rules: [{ required: required, message: '请填写孕妇住院号!' }],
+                    rules: [
+                      { required: required, message: '请填写孕妇住院号!' },
+                      { max: 10, message: '住院号的最大长度为10' },
+                    ],
+                    getValueFromEvent: event => event.target.value.trim(),
                   })(<Input placeholder="输入住院号" style={{ width }} />)}
                 </Form.Item>
               </Col>
@@ -156,7 +190,11 @@ const EditModal = Form.create({
                   }
                 >
                   {getFieldDecorator('name', {
-                    rules: [{ required: required, message: '请填写孕妇姓名!' }],
+                    rules: [
+                      { required: required, message: '请填写孕妇姓名!' },
+                      { max: 12, message: '姓名的最大长度为12' },
+                    ],
+                    getValueFromEvent: event => event.target.value.trim(),
                   })(<Input placeholder="输入孕妇姓名" style={{ width }} />)}
                 </Form.Item>
               </Col>
@@ -165,7 +203,11 @@ const EditModal = Form.create({
                   label={required ? <span>床号</span> : <span className="required">床号</span>}
                 >
                   {getFieldDecorator('bedNO', {
-                    rules: [{ required: required, message: '请填写孕妇床号!' }],
+                    rules: [
+                      { required: required, message: '请填写孕妇床号!' },
+                      { max: 6, message: '姓名的最大长度为6' },
+                    ],
+                    getValueFromEvent: event => event.target.value.trim(),
                   })(<Input placeholder="请输入床号..." style={{ width }} />)}
                 </Form.Item>
               </Col>
@@ -223,7 +265,11 @@ const EditModal = Form.create({
               <Col span={12}>
                 <Form.Item label="联系电话">
                   {getFieldDecorator('telephone', {
-                    rules: [{ required: false, message: '请填写孕妇联系电话!' }],
+                    rules: [
+                      { required: false, message: '请填写孕妇联系电话!' },
+                      { validator: this.validateTel },
+                    ],
+                    getValueFromEvent: event => event.target.value.replace(/\s+/g, ''),
                   })(<Input placeholder="请输入联系电话..." style={{ width }} />)}
                 </Form.Item>
               </Col>
@@ -231,6 +277,7 @@ const EditModal = Form.create({
                 <Form.Item label="居住地址">
                   {getFieldDecorator('address', {
                     rules: [{ required: false, message: '请填写现居住详细地址!' }],
+                    getValueFromEvent: event => event.target.value.trim(),
                   })(<Input placeholder="输入现居住详细地址" style={{ width }} />)}
                 </Form.Item>
               </Col>

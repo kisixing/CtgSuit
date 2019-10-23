@@ -22,7 +22,19 @@ const tailFormItemLayout = {
   },
 };
 
+const threeFormItemLayout = {
+  labelCol: {
+    xs: { span: 8 },
+    sm: { span: 8 },
+  },
+  wrapperCol: {
+    xs: { span: 8 },
+    sm: { span: 8 },
+  },
+};
+
 module.exports = {
   formItemLayout,
   tailFormItemLayout,
+  threeFormItemLayout,
 };

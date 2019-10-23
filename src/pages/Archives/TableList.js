@@ -251,7 +251,7 @@ class TableList extends Component {
           value={selectedKeys[0]}
           onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
           onPressEnter={() => this.handleSearch(selectedKeys, confirm)}
-          style={{  marginBottom: 8, display: 'block' }}
+          style={{ marginBottom: 8, display: 'block' }}
         />
         <Button
           type="primary"
@@ -288,15 +288,17 @@ class TableList extends Component {
       }
     },
     render: (text, record) => (
-      <Highlighter
-        className={styles.textOver}
-        highlightStyle={{ backgroundColor: '#ffc069', padding: 0, width: '134px' }}
-        searchWords={[this.state.searchText]}
-        autoEscape
-        textToHighlight={
-          record.pregnancy && record.pregnancy.name && record.pregnancy.name.toString()
-        }
-      />
+      <div style={{ width: '134px' }} className={styles.textOver}>
+        <Highlighter
+          className={styles.textOver}
+          highlightStyle={{ backgroundColor: '#ffc069', padding: 0, width: '134px' }}
+          searchWords={[this.state.searchText]}
+          autoEscape
+          textToHighlight={
+            record.pregnancy && record.pregnancy.name && record.pregnancy.name.toString()
+          }
+        />
+      </div>
     ),
   });
 

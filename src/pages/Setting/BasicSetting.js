@@ -22,23 +22,13 @@ class BasicSetting extends Component {
     return (
       <Form {...formItemLayout} layout="horizontal" className={styles.form}>
         <Form.Item>
-          <div className={styles.subTitle}>基本设置</div>
+          <div className={styles.subTitle}>维护设置</div>
         </Form.Item>
-        <Form.Item label="Open Developer Tool">
+        <Form.Item label="开发者工具">
           <Button onClick={() => ipcRenderer.send('openDevTools')}>开发者工具</Button>
         </Form.Item>
-        <Form.Item label="Title">
-          {getFieldDecorator('title', {
-            rules: [{ required: true, message: 'Please input the title of collection!' }],
-          })(<Input />)}
-        </Form.Item>
-        <Form.Item label="Description">
-          {getFieldDecorator('description')(<Input type="textarea" />)}
-        </Form.Item>
-        <Form.Item {...tailFormItemLayout}>
-          <Button type="primary" onClick={this.handleSubmit}>
-            保存
-          </Button>
+        <Form.Item label="检查更新">
+          <Button>检查更新</Button>
         </Form.Item>
       </Form>
     );
