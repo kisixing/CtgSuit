@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, message } from 'antd';
 import { ipcRenderer } from 'electron';
 
 import { formItemLayout, tailFormItemLayout } from './utils';
@@ -8,6 +8,13 @@ import styles from './style.less';
 
 @Form.create()
 class BasicSetting extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: false,
+    };
+  }
+
   handleSubmit = () => {
     this.props.form.validateFields((err, values) => {
       if (!err) {
@@ -15,7 +22,18 @@ class BasicSetting extends Component {
       }
     });
   };
+
+  checkUpdate = () => {
+    this.setState({ loading: true });
+    setTimeout(() => {
+      this.setState({ loading: false });
+      message.info('暂无更新...')
+    }, 2000);
+
+  }
+
   render() {
+    const { loading } = this.state;
     const {
       form: { getFieldDecorator },
     } = this.props;
@@ -28,7 +46,9 @@ class BasicSetting extends Component {
           <Button onClick={() => ipcRenderer.send('openDevTools')}>开发者工具</Button>
         </Form.Item>
         <Form.Item label="检查更新">
-          <Button>检查更新</Button>
+          <Button loading={loading} onClick={this.checkUpdate}>
+            检查更新
+          </Button>
         </Form.Item>
       </Form>
     );

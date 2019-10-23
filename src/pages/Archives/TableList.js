@@ -96,7 +96,7 @@ class TableList extends Component {
           return (
             <span>
               <span className="primary-link" onClick={() => this.showPrint(record)}>
-                打印
+                报告
               </span>
               <Divider type="vertical" />
               <span className="primary-link" onClick={() => this.showAnalysis(record)}>

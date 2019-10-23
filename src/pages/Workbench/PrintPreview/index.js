@@ -4,7 +4,7 @@
  * @Date: 2019-10-02 20:10:21
  */
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { Modal } from 'antd';
 import Setting from './Setting';
 import Preview from './Preview';
@@ -14,10 +14,18 @@ import moment from 'moment';
 export const Context = React.createContext({})
 
 const PrintPreview = (props) => {
+  const inputEl = useRef(null);
+  const getHeight = () => {
+    // `current` points to the mounted text input element
+    const { clientHeight, clientWidth } = inputEl.current;
+    // console.log('1111111111111', inputEl.current, clientHeight);
+    // return inputEl.current.height;
+  };
+
   const renderTitle = (from, data) => {
     if (from !== 'archives') {
       // const d = data.data;
-      // console.log('TCL -----------', d);
+      // // console.log('TCL -----------', d);
       // const havePregnancy = d && d.pregnancy;
       // const p =
       //   typeof havePregnancy === 'object'
@@ -75,9 +83,10 @@ const PrintPreview = (props) => {
         onCancel={() => onCancel('printVisible')}
         onOk={onCreate}
         maskClosable={false}
+        ref={inputEl}
       >
         <div className={styles.top}>
-          <Preview dataSource={dataSource} from={from} />
+          <Preview dataSource={dataSource} from={from} getHeight={getHeight} />
         </div>
         <div className={styles.bottom}>
           <Setting from={from} dataSource={dataSource} />
