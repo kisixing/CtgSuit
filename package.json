@@ -1,7 +1,7 @@
 {
   "name": "ctg-suit",
-  "version": "0.2.5",
-  "license": "CC0-1.0",
+  "version": "1.0.1",
+  "license": "lianmed-1.0.0",
   "private": true,
   "scripts": {
     "start:dev": "concurrently  'yarn start' 'yarn run dev:main'",

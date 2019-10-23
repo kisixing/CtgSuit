@@ -2,7 +2,7 @@
 import React, { useState, useCallback } from 'react';
 import { connect } from 'dva';
 import { Document, Page } from 'react-pdf';
-import { Pagination, Button, Spin, Empty } from 'antd';
+import { Pagination, Button, Spin, Empty, Icon } from 'antd';
 import { ipcRenderer } from 'electron';
 import config from '@/utils/config';
 import { Context } from './index'
@@ -20,7 +20,8 @@ const COEFFICIENT = 240
 const Preview = props => {
   const [value, setValue] = useState<{ suit: any }>({ suit: null })
   const [isFullpage, setFullpage] = useState(false);
-  const [height, setHeight] = useState(130);
+  const [height, setHeight] = useState(200); //
+  const [width, setWidth] = useState('100%')
 
   const {
     startingTime,
@@ -93,14 +94,22 @@ const Preview = props => {
     })
   }
 
-  const togglePage = () => {
-    const height = getHeight;
-    setHeight(height)
+  const largen = () => {
+    const{ height, width } = getHeight();
+    setFullpage(true)
+    setHeight(height - 24);
+    setWidth(width)
+  }
+
+  const shrink = () => {
+    setFullpage(false)
+    setHeight(200);
+    setWidth('100%')
   }
 
   const PreivewContent = () => {
     const content = pdfflow ? (
-      <div className={classnames({ [styles.fullPage]: isFullpage})}>
+      <div className={classnames({ [styles.fullPage]: isFullpage })} style={{ width: width }}>
         <Document
           className={styles.preview}
           loading={<Spin style={{ margin: '120px 0' }} />}
@@ -112,7 +121,7 @@ const Preview = props => {
             cMapPacked: true,
           }}
         >
-          <Page className={styles.page} pageNumber={pageNumber} scale={1.5} height={height} />
+          <Page className={styles.page} pageNumber={pageNumber} scale={1} height={height} />
         </Document>
         <Pagination
           className={styles.pagination}
@@ -123,7 +132,9 @@ const Preview = props => {
           size="small"
           onChange={onChangePage}
         />
-        {/* <Button onClick={togglePage}>放大</Button> */}
+        <span className={styles.icon}>
+          {isFullpage ? <Icon title="缩小" onClick={shrink} type="fullscreen-exit" /> : <Icon title="全屏" onClick={largen} type="fullscreen" />}
+        </span>
       </div>
     ) : (
         <Empty style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', margin: 0 }} />

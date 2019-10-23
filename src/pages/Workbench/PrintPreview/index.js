@@ -18,8 +18,10 @@ const PrintPreview = (props) => {
   const getHeight = () => {
     // `current` points to the mounted text input element
     const { clientHeight, clientWidth } = inputEl.current;
-    // console.log('1111111111111', inputEl.current, clientHeight);
-    // return inputEl.current.height;
+    return {
+      height: clientHeight,
+      width: clientWidth
+    };
   };
 
   const renderTitle = (from, data) => {
@@ -78,18 +80,18 @@ const PrintPreview = (props) => {
         okText="创建"
         cancelText="取消"
         footer={null}
-        bodyStyle={{ display: 'flex', flexDirection: 'column' }}
         wrapClassName={styles.modal}
         onCancel={() => onCancel('printVisible')}
         onOk={onCreate}
         maskClosable={false}
-        ref={inputEl}
       >
-        <div className={styles.top}>
-          <Preview dataSource={dataSource} from={from} getHeight={getHeight} />
-        </div>
-        <div className={styles.bottom}>
-          <Setting from={from} dataSource={dataSource} />
+        <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }} ref={inputEl}>
+          <div className={styles.top}>
+            <Preview dataSource={dataSource} from={from} getHeight={getHeight} />
+          </div>
+          <div className={styles.bottom}>
+            <Setting from={from} dataSource={dataSource} />
+          </div>
         </div>
       </Modal>
     </Context.Provider>
