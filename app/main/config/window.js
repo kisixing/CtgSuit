@@ -1,11 +1,28 @@
-const path = require('path')
-const is = require('electron-is')
-function getPath(){
-    let filePath = `file://${path.join(__dirname,'..', '..','render/index.html')}`;
-    if(is.dev()){
-        filePath = 'http://127.0.0.1:8000/'
-    }
-    return filePath;
+const path = require('path');
+const is = require('electron-is');
+
+function getMainPath() {
+  let filePath = `file://${path.join(__dirname, '..', '..', 'render/index.html')}`;
+  if (is.dev()) {
+    filePath = 'http://127.0.0.1:1702/';
+  }
+  return filePath;
 }
 
-module.exports = { getPath }
+function getNewPath(params) {
+  let filePath = `file://${path.join(__dirname, '..', '..', 'render/handbook/index.html')}`;
+  if (is.dev()) {
+    filePath = 'http://127.0.0.1:1702/handbook/index.html';
+  }
+  return filePath;
+}
+
+function getPDFviewPath (params){
+  let filePath = `file://${path.join(__dirname, '..', '..', 'render/pdfjs/web/viewer.html')}`;
+  if (is.dev()) {
+    filePath = 'http://127.0.0.1:1702/pdfjs/web/viewer.html';
+  }
+  return filePath;
+}
+
+module.exports = { getMainPath, getNewPath, getPDFviewPath };

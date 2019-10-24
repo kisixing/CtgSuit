@@ -1,0 +1,50 @@
+@import '~antd/lib/style/themes/default.less';
+
+.modal {
+  .chart {
+    flex: 1;
+    padding: 24px;
+    margin-bottom: 24px;
+    background-color: #fff;
+
+    .spinWrapper {
+      height: 100%;
+
+      :global {
+        .ant-spin-container {
+          height: 100%;
+        }
+      }
+    }
+  }
+
+  .content {
+    flex: 1;
+  }
+
+  :global {
+    .ant-modal {
+      padding-bottom: 0;
+    }
+
+    .ant-modal-content {
+      height: 100%;
+    }
+
+    .ant-modal-header {
+      padding: 8px 12px;
+    }
+
+    .ant-modal-body {
+      height: calc(100% - 55px);
+      background: #f0f2f5;
+      overflow: auto;
+    }
+
+    .ant-modal-close-x {
+      height: 40px;
+      width: 40px;
+      line-height: 40px;
+    }
+  }
+}

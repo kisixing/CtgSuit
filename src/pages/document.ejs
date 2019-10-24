@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>Your App</title>
+  <style>
+    ::-webkit-scrollbar {
+      background-color: transparent;
+      width: 8px;
+      height: 8px;
+      background-clip: padding-box;
+
+    }
+
+    /*滚动条两端方向按钮*/
+    /* ::-webkit-scrollbar-button {
+      background-color: pink;
+    } */
+
+    /*滚动条中间滑动部分*/
+    ::-webkit-scrollbar-thumb {
+      background-color: var(--theme-dark-color);
+      border-radius: 5px;
+      cursor: grabbing;
+    }
+
+    /*滚动条右下角区域*/
+    /* ::-webkit-scrollbar-corner {
+      background-color: red;
+    } */
+  </style>
+</head>
+
+<body>
+  <div id="root"></div>
+  <audio src="high0.wav" loop="loop" id="alarm"></audio>
+</body>
+
+</html>

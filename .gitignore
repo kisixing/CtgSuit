@@ -18,3 +18,9 @@
 # umi
 .umi
 .umi-production
+/release
+/public/pdfjs
+
+.tmp/
+.setting
+/docs/_book
