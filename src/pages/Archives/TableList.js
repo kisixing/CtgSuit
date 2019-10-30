@@ -370,7 +370,8 @@ class TableList extends Component {
             visible={analysisVisible}
             onCancel={this.handleCancel}
             onCreate={this.handleCreate}
-            dataSource={dataSource}
+            dataSource={selected}
+            docid={selected.ctgexam && selected.ctgexam.note}
           />
         ) : null}
       </div>
