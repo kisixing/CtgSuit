@@ -1,6 +1,7 @@
 import request from '@/utils/request';
 import { stringify } from 'qs';
 import { message } from 'antd';
+import { async } from 'q';
 
 /**
  * 验证账户登录
@@ -49,23 +50,50 @@ export async function newPregnancies(params) {
 }
 
 /**
- * 获取孕册信息
- * @param {*} params 条件参数
+ * 获取孕册列表信息
+ * @param {object} params 条件参数{size,page,sort}
  */
 export async function getPregnancy(params) {
-  return request.get(`/pregnancies?${stringify(params)}`);
+  return request.get(`/pregnanciespage?${stringify(params)}`);
 }
 
 /**
- * 胎监历史档案记录接口
+ * 获取孕册总数
+ *
  * @export
+ * @param {object} params {}
  * @returns
+ */
+export async function getPregnancyCount(params) {
+  return request.get(`/pregnancies/count?${stringify(params)}`);
+}
+
+/**
+ * 历史档案记录
+ * @param {object} params {size: , page: , sort: }
  */
 export async function getCTGrecords(params) {
   // CTGExamId有ctg数据，pregnancyId有孕妇信息即已经绑定
   const string = stringify(params);
   return request.get(
-    `/prenatal-visits?CTGExamId.specified=true&pregnancyId.specified=true${string ? '&' : ''}${string}`,
+    `/prenatal-visitspage?CTGExamId.specified=true&pregnancyId.specified=true${
+      string ? '&' : ''
+    }${string}`,
+  );
+}
+
+/**
+ * 获取历史档案记录总数
+ *
+ * @export
+ * @returns
+ */
+export async function getCount(params) {
+  const string = stringify(params);
+  return request.get(
+    `/prenatal-visits/count?CTGExamId.specified=true&pregnancyId.specified=true${
+      string ? '&' : ''
+    }${string}`,
   );
 }
 
@@ -139,7 +167,7 @@ export async function getBedIfo(params) {
  * 获取孕册数据
  */
 export async function getPregnancies(params) {
-  return request.get(`/pregnancies?${stringify(params)}`);
+  return request.get(`/pregnanciespage?${stringify(params)}`);
 }
 
 /**

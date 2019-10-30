@@ -100,15 +100,29 @@ class TableList extends Component {
 
   componentDidMount() {
     // 默认检索住院状态的
+    this.fetchCount();
     this.fetchData();
   }
 
-  fetchData = () => {
+  fetchData = params => {
     const { dispatch } = this.props;
     dispatch({
       type: 'pregnancy/fetchPregnancies',
       payload: {
+        // 住院状态
         'recordstate.equals': '10',
+        ...params
+      },
+    });
+  };
+
+  fetchCount = params => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'pregnancy/fetchCount',
+      payload: {
+        'recordstate.equals': '10',
+        ...params
       },
     });
   };
@@ -139,16 +153,50 @@ class TableList extends Component {
       payload: values,
     }).then(() => {
       this.fetchData();
+      this.fetchCount();
     });
   };
 
-  onChange = (pagination, filters, sorter) => {
-    console.log('onChange --> params', pagination, filters, sorter);
+  // 分页器onchange
+  onChange = (page, pageSize) => {
+    const values = this.getValues();
+    // 以是否有pageSize区分触发区域
+    if (pageSize) {
+      // console.log('onChange --> params', page, pageSize);
+      const params = {
+        size: pageSize,
+        page: page - 1,
+        ...values
+      };
+      this.fetchData(params);
+      this.fetchCount(params);
+    }
   };
 
   onShowSizeChange = (current, size) => {
-    console.log('TCL: TableList -> onShowSizeChange -> current, size', current, size);
+    // console.log('TCL: TableList -> onShowSizeChange -> current, size', current, size);
+    const values = this.getValues();
+    const params = {
+      size,
+      page: current - 1,
+      ...values
+    };
+    this.fetchData(params);
+    this.fetchCount(params);
   };
+
+  getValues = () => {
+    const { getFields } = this.props;
+    const values = getFields();
+    const { inpatientNO, name, recordstate, edd } = values;
+    const params = {
+      'inpatientNO.contains': inpatientNO,
+      'name.contains': name,
+      'recordstate.equals': recordstate,
+      'edd.equals': edd ? moment(edd).format('YYYY-MM-DD') : edd,
+    };
+    return params;
+  }
 
   getColumnSearchProps = dataIndex => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
@@ -221,7 +269,7 @@ class TableList extends Component {
 
   render() {
     const { visible, current } = this.state;
-    const { loading, pregnancies } = this.props;
+    const { loading, count, pregnancies } = this.props;
 
     return (
       <div className={styles.tableList}>
@@ -232,15 +280,15 @@ class TableList extends Component {
           loading={loading.effects['pregnancy/fetchPregnancies']}
           dataSource={pregnancies}
           columns={this.columns}
-          onChange={this.onChange}
+          // onChange={this.onChange}
           pagination={{
-            hideOnSinglePage: true,
-            pageSize: 10,
+            hideOnSinglePage: false,
+            total: count,
             showQuickJumper: true,
             showSizeChanger: true,
             showTotal: (total, range) => `共 ${total} 条`,
-            // onChange: this.onChange,
-            // onShowSizeChange: this.onShowSizeChange,
+            onChange: this.onChange,
+            onShowSizeChange: this.onShowSizeChange,
           }}
         />
         {visible ? (
@@ -257,6 +305,7 @@ class TableList extends Component {
 }
 
 export default connect(({ loading, pregnancy }) => ({
+  count: pregnancy.count,
   pregnancies: pregnancy.pregnancies,
   loading: loading,
 }))(TableList);

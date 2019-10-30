@@ -118,31 +118,47 @@ class TableList extends Component {
   }
 
   componentDidMount() {
-    const { dispatch, router } = this.props;
+    const { router } = this.props;
     const query = router.location.query;
     if (query.pregnancyId) {
       // 从孕产妇列表进入时，取得该孕产妇的孕产id，获得ctg档案信息
-      dispatch({
-        type: 'archives/fetchRecords',
-        payload: {
-          'pregnancyId.equals': query.pregnancyId,
-        },
-      });
+      this.fetchRecords({ 'pregnancyId.equals': query.pregnancyId });
     } else {
       // 默认请求近一周的数据
       const sTime = moment()
         .subtract(7, 'd')
         .format('YYYY-MM-DD');
       const eTime = moment().format('YYYY-MM-DD');
-      dispatch({
-        type: 'archives/fetchRecords',
-        payload: {
-          'visitDate.greaterOrEqualThan': sTime,
-          'visitDate.lessOrEqualThan': eTime,
-        },
-      });
+      const params = {
+        'visitDate.greaterOrEqualThan': sTime,
+        'visitDate.lessOrEqualThan': eTime,
+      };
+      // 获取列表count
+      this.fetchCount(params);
+      // 获取列表
+      this.fetchRecords(params);
     }
   }
+
+  fetchRecords = params => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'archives/fetchRecords',
+      payload: {
+        ...params,
+      },
+    });
+  };
+
+  fetchCount = params => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'archives/fetchCount',
+      payload: {
+        ...params,
+      },
+    });
+  };
 
   showModal = () => {
     this.setState({
@@ -295,7 +311,7 @@ class TableList extends Component {
           searchWords={[this.state.searchText]}
           autoEscape
           textToHighlight={
-            record.pregnancy && record.pregnancy.name && record.pregnancy.name.toString()
+            record.pregnancy && record.pregnancy.name ? record.pregnancy.name.toString() : ''
           }
         />
       </div>
@@ -314,8 +330,67 @@ class TableList extends Component {
     this.setState({ searchText: '' });
   };
 
+  // 分页器onchange
+  onChange = (page, pageSize) => {
+    const values = this.getValues();
+    // 以是否有pageSize区分触发区域
+    if (pageSize) {
+      // console.log('onChange --> params', page, pageSize);
+      const params = {
+        size: pageSize,
+        page: page - 1,
+        ...values,
+      };
+      this.fetchRecords(params);
+      this.fetchCount(params);
+      this.savePagination({ size: pageSize, page: page - 1 });
+    }
+  };
+
+  // 分页器SizeChange
+  onShowSizeChange = (current, size) => {
+    // console.log('TCL: TableList -> onShowSizeChange -> current, size', current, size);
+    const values = this.getValues();
+    const params = {
+      size,
+      page: current - 1,
+      ...values,
+    };
+    this.fetchRecords(params);
+    this.fetchCount(params);
+    this.savePagination({ size, page: current - 1 });
+  };
+
+  // 获取form表单值
+  getValues = () => {
+    const { getFields } = this.props;
+    const values = getFields();
+    let { startTime, endTime } = values;
+    if (startTime) {
+      startTime = moment(startTime).format('YYYY-MM-DD');
+    }
+    if (endTime) {
+      endTime = moment(endTime).format('YYYY-MM-DD');
+    }
+    const params = {
+      'visitDate.greaterOrEqualThan': startTime,
+      'visitDate.lessOrEqualThan': endTime,
+    };
+    return params;
+  };
+
+  // 缓存分页器数据
+  savePagination = params => {
+    this.props.dispatch({
+      type: 'archives/updateState',
+      payload: {
+        pagination: params,
+      },
+    });
+  };
+
   render() {
-    const { selected, dataSource, loading } = this.props;
+    const { selected, dataSource, count, loading, pagination: { size, page } } = this.props;
     const { visible, printVisible, analysisVisible, type, current } = this.state;
 
     return (
@@ -323,8 +398,7 @@ class TableList extends Component {
         <Table
           bordered
           size="small"
-          pagination={false}
-          scroll={{ x: 1250, y: 258 }}
+          scroll={{ x: 1250, y: 196 }}
           columns={this.columns}
           dataSource={dataSource}
           // onRow={record => {
@@ -343,6 +417,18 @@ class TableList extends Component {
             type: 'radio',
             selectedRowKeys: [selected.id],
             onSelect: (record, selected, selectedRows) => this.handleRow(record),
+          }}
+          pagination={{
+            showSizeChanger: true,
+            showQuickJumper: true,
+            total: count,
+            current: page + 1,
+            defaultPageSize: 5,
+            pageSize: size,
+            pageSizeOptions: ['5', '10', '20', '30', '40'],
+            showTotal: (total, range) => `共 ${total} 条`,
+            onChange: this.onChange,
+            onShowSizeChange: this.onShowSizeChange,
           }}
         />
         {visible ? (
@@ -379,6 +465,8 @@ class TableList extends Component {
 }
 
 export default connect(({ archives, loading, router }) => ({
+  pagination: archives.pagination,
+  count: archives.count,
   selected: archives.current,
   dataSource: archives.dataSource,
   isFullscreen: archives.isFullscreen,

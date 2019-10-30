@@ -1,28 +1,49 @@
 import { message } from 'antd';
 import {
   getCTGrecords,
+  getCount,
   getCTGrecordData,
   newCTGrecord,
   updateCTGrecord,
   nosaveCTG,
 } from '@/services/api';
-import moment from 'moment';
 
 export default {
   namespace: 'archives',
   state: {
+    count: 0,
     dataSource: [],
     current: {},
     CTGData: null, // ctg曲线数据
     isFullscreen: false,
+    // 记录分页器数据
+    pagination: {
+      size: 5,
+      page: 0,
+    },
   },
   effects: {
     *fetchRecords({ payload }, { call, put }) {
-      const res = yield call(getCTGrecords, payload);
+      const params = {
+        size: 5,
+        page: 0,
+        sort: 'visitDate,asc',
+        ...payload,
+      };
+      const res = yield call(getCTGrecords, params);
       yield put({
         type: 'updateState',
         payload: {
-          dataSource: res.reverse(),
+          dataSource: res,
+        },
+      });
+    },
+    *fetchCount({ payload }, { call, put }) {
+      const res = yield call(getCount, payload);
+      yield put({
+        type: 'updateState',
+        payload: {
+          count: res,
         },
       });
     },
@@ -128,8 +149,8 @@ export default {
       }
     },
     *noSaveCTG({ payload }, { call }) {
-      const res = yield call(nosaveCTG, payload)
-    }
+      const res = yield call(nosaveCTG, payload);
+    },
   },
   reducers: {
     updateState(state, { payload }) {

@@ -20,7 +20,6 @@ class SearchForm extends Component {
     this.props.form.setFieldsValue({ recordstate: '10' });
   }
 
-
   hide = () => {
     this.setState({ visible: false });
   };
@@ -34,18 +33,31 @@ class SearchForm extends Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
+        // console.log('Received values of form: ', values);
         const { inpatientNO, name, recordstate, edd } = values;
+        const params = {
+          'inpatientNO.contains': inpatientNO,
+          'name.contains': name,
+          'recordstate.equals': recordstate,
+          'edd.equals': edd ? moment(edd).format('YYYY-MM-DD') : edd,
+        };
         this.props.dispatch({
           type: 'pregnancy/fetchPregnancies',
-          payload: {
-            'inpatientNO.contains': inpatientNO,
-            'name.contains': name,
-            'recordstate.equals': recordstate,
-            'edd.equals': edd ? moment(edd).format('YYYY-MM-DD') : edd,
-          },
+          payload: params,
         });
+        this.fetchCount(params);
       }
+    });
+  };
+
+  fetchCount = params => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'pregnancy/fetchCount',
+      payload: {
+        'recordstate.equals': '10',
+        ...params,
+      },
     });
   };
 
@@ -82,7 +94,7 @@ class SearchForm extends Component {
         'recordstate.equals': '10',
       },
     });
-  }
+  };
 
   render() {
     const { visible } = this.state;

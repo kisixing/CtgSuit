@@ -18,21 +18,23 @@ class FieldForm extends Component {
 
   componentDidMount() {
     const { form } = this.props;
-    console.log('init time', STARTTIME, ENDTIME);
     form.setFieldsValue({
       startTime: STARTTIME,
       endTime: ENDTIME,
     });
   }
 
-
   // 检索
   handleSubmit = e => {
     e.preventDefault();
-    this.props.form.validateFields((err, values) => {
+    const { dispatch, form, pagination } = this.props;
+    const { size, page } = pagination;
+    form.validateFields((err, values) => {
       if (!err) {
-        let sTime = STARTTIME.format('YYYY-MM-DD');
-        let eTime = ENDTIME.format('YYYY-MM-DD');
+        // let sTime = STARTTIME.format('YYYY-MM-DD');
+        // let eTime = ENDTIME.format('YYYY-MM-DD');
+        let sTime = undefined;
+        let eTime = undefined;
         let { startTime, endTime } = values;
         if (startTime) {
           sTime = moment(startTime).format('YYYY-MM-DD');
@@ -40,14 +42,33 @@ class FieldForm extends Component {
         if (endTime) {
           eTime = moment(endTime).format('YYYY-MM-DD');
         }
-        console.log('888888888888', sTime, eTime);
-        //TODO
-        this.props.dispatch({
+        // TODO
+        dispatch({
           type: 'archives/fetchRecords',
           payload: {
             // 'pregnancyId.equals': pregnancyId,
             'visitDate.greaterOrEqualThan': sTime,
             'visitDate.lessOrEqualThan': eTime,
+            size,
+            page: 0,
+          },
+        });
+        dispatch({
+          type: 'archives/fetchCount',
+          payload: {
+            // 'pregnancyId.equals': pregnancyId,
+            'visitDate.greaterOrEqualThan': sTime,
+            'visitDate.lessOrEqualThan': eTime,
+          },
+        });
+        // 检索与分页器相关关
+        dispatch({
+          type: 'archives/updateState',
+          payload: {
+            pagination: {
+              size,
+              page: 0
+            },
           },
         });
       }
@@ -99,6 +120,7 @@ class FieldForm extends Component {
   }
 }
 
-export default connect(({ loading }) => ({
+export default connect(({ loading, archives }) => ({
   loading: loading,
+  pagination: archives.pagination,
 }))(FieldForm);

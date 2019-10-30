@@ -235,6 +235,7 @@ const EditModal = Form.create({
               <Col span={12}>
                 <Form.Item label="住院状态">
                   {getFieldDecorator('recordstate', {
+                    initialValue: '10',
                     rules: [{ required: false, message: '请选择住院状态!' }],
                   })(
                     <Select allowClear style={{ width }}>

@@ -35,7 +35,6 @@ class Setting extends Component {
         ctgData: null
       },
     });
-
   }
   render() {
     const { ctgData, CTGData, from, loading } = this.props;
