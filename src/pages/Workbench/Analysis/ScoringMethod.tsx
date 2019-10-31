@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Tabs, Radio, Form, Button, InputNumber } from 'antd';
 import request from "@lianmed/request";
@@ -8,26 +7,15 @@ import useAnalyse, { IResult } from './useAnalyse'
 const styles = require('./ScoringMethod.less');
 const { TabPane } = Tabs;
 
-interface IProps {
-  docid: string,
-  form: WrappedFormUtils<IResult>,
-  v: { suit: Suit }
-  [x: string]: any
-}
-
 const ScoringMethod = (props: IProps) => {
   const { form, docid, v, dataSource } = props;
-  
-  const [disabled, setDisabled] = useState(true)
 
+  const [disabled, setDisabled] = useState(true)
   const { responseData, activeItem, setMark, mark, MARKS, analyse } = useAnalyse(v, docid, (_result) => {
     form.setFieldsValue(_result)
   })
 
-  const callback = (key) => {
-    console.log(key);
-  }
-
+  const callback = (key) => { console.log(key); }
   const onChange = e => {
     const mark = e.target.value
     setDisabled(true)
@@ -104,5 +92,10 @@ const ScoringMethod = (props: IProps) => {
     </div>
   );
 }
-
+interface IProps {
+  docid: string,
+  form: WrappedFormUtils<IResult>,
+  v: { suit: Suit }
+  [x: string]: any
+}
 export default Form.create<IProps>()(ScoringMethod);
