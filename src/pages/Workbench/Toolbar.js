@@ -306,14 +306,14 @@ class Toolbar extends Component {
           >
             {isCreated ? '已建档' : '建档'}
           </Button>
-          {/* <Button
+          <Button
             disabled={!isCreated}
             icon="pie-chart"
             type="link"
             onClick={() => this.showModal('analysisVisible')}
           >
             电脑分析
-          </Button> */}
+          </Button>
           <Button
             disabled={!isCreated}
             icon="printer"
