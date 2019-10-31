@@ -2,6 +2,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import request from "@lianmed/request";
 import { Suit } from '@lianmed/lmg/lib/Ctg/Suit';
+import { event } from "@lianmed/utils";
 
 export default (v: { suit: Suit }, docid, cb: (result: IResult) => void) => {
     const [mark, setMark] = useState(null)
@@ -17,6 +18,8 @@ export default (v: { suit: Suit }, docid, cb: (result: IResult) => void) => {
         }).then((r: IResponseData) => {
 
             Object.assign(responseData, r)
+            event.emit('analysis:setCtgData', { analyse: responseData })
+
             let _result: IResult = null
             try {
                 _result = JSON.parse(r.result)

@@ -61,9 +61,8 @@ export default function useTodo(showTodo: boolean): [IRemain[], boolean] {
                         const dateString = _.note.slice(_index + 1)
                         const t = ["-", "-", " ", ":", ":", ""]
                         let starttime = '20' + dateString.split('').reduce((a, b, index) => {
-                            return a.concat(b) + (index % 2 === 1 ? t[~~(index / 2)] : '')
+                            return a.concat(b) + ((index & 1) ? t[~~(index / 2)] : '')
                         }, '')
-
                         return {
                             ..._,
                             isTodo: true,
