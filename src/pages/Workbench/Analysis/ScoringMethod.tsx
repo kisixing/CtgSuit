@@ -1,119 +1,13 @@
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState } from 'react';
 import { Tabs, Radio, Form, Button, InputNumber } from 'antd';
 import request from "@lianmed/request";
 import { Suit } from '@lianmed/lmg/lib/Ctg/Suit';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
+import useAnalyse, { IResult } from './useAnalyse'
 const styles = require('./ScoringMethod.less');
-
 const { TabPane } = Tabs;
-const MARKS = [
-  'Kerbs',
-  'Fisher',
-  'Nst',
-]
-interface IItem {
-  key: string;
-  label: string;
-  message: string;
-  required: boolean;
-}
-const mapItemsToMarks = {
-  Nst: [
-    'fhrbaseline_score',
-    'zhenfu_lv_score',
-    'fhr_uptime_score',
-    'fm_fhrv_score',
-    'fm_score',
-  ],
-  Fisher: [
-    'fhrbaseline_score',
-    'zhenfu_lv_score',
-    'zhouqi_lv_score',
-    'acc_score',
-    'dec_score',
-  ],
-  Kerbs: [
-    'fhrbaseline_score',
-    'zhenfu_lv_score',
-    'zhouqi_lv_score',
-    'acc_score',
-    'dec_score',
-    'movement_score',
-  ]
-}
-const allItems: IItem[] = [
-  {
-    key: 'fhrbaseline_score',
-    label: '基线'
-  },
-  {
-    key: 'zhenfu_lv_score',
 
-    label: '振幅'
-  },
-  {
-    key: 'fhr_uptime_score',
-
-    label: '胎动FHR上升时间'
-  },
-  {
-    key: 'fm_fhrv_score',
-
-    label: '胎动FHR变化'
-  },
-  {
-    key: 'fm_score',
-
-    label: '胎动次数'
-  },
-  {
-    key: 'Fischer',
-
-    label: '分析法'
-  },
-  {
-    key: 'zhouqi_lv_score',
-
-    label: '周期变异'
-  },
-  {
-    key: 'acc_score',
-
-    label: '加速'
-  },
-  {
-    key: 'dec_score',
-
-    label: '减速'
-  },
-  {
-    key: 'Krebs',
-
-    label: '分析法'
-  },
-  {
-    key: 'movement_score',
-
-    label: '胎动'
-  },
-].map(_ => ({ ..._, required: true, message: '请输入分数' }))
-interface IResponseData {
-  "acc": string,
-  "dec": string,
-  "baseline": any,
-  "meanbaseline": string,
-  "mark": string,
-  "result": string,
-  "diagnosis": any
-}
-interface IResult {
-  fhr_uptime_score: number;
-  fhrbaseline_score: number;
-  fm_fhrv_score: number;
-  fm_score: number;
-  zhenfu_lv_score: number;
-}
 interface IProps {
   docid: string,
   form: WrappedFormUtils<IResult>,
@@ -123,59 +17,28 @@ interface IProps {
 
 const ScoringMethod = (props: IProps) => {
   const { form, docid, v, dataSource } = props;
-  const { getFieldDecorator } = form;
+  
+  const [disabled, setDisabled] = useState(true)
+
+  const { responseData, activeItem, setMark, mark, MARKS, analyse } = useAnalyse(v, docid, (_result) => {
+    form.setFieldsValue(_result)
+  })
+
+  const callback = (key) => {
+    console.log(key);
+  }
+
+  const onChange = e => {
+    const mark = e.target.value
+    setDisabled(true)
+    form.resetFields()
+    setMark(mark)
+  };
+
   const formItemLayout = {
     labelCol: { span: 8 },
     wrapperCol: { span: 16 },
   };
-  const [mark, setMark] = useState(null)
-  const [activeItem, setActiveItem] = useState<IItem[]>([])
-  const [disabled, setDisabled] = useState(true)
-  const result = useMemo(() => { return {} }, [])
-  useEffect(() => {
-    setMarkAndItems(MARKS[0])
-  }, [])
-  useEffect(() => {
-    analyse()
-  }, [mark])
-  const callback = (key) => {
-    console.log(key);
-  }
-  const analyse = () => {
-
-    v.suit && v.suit.data && request.post(`/ctg-exams-analyse`, {
-      data: {
-        docid,
-        mark,
-        "start": 0,
-        "end": v.suit.data.index
-      }
-    }).then((r: IResponseData) => {
-      Object.assign(result, r)
-      let _result = null
-      try {
-        _result = JSON.parse(r.result)
-      } catch (error) {
-        console.log('parse analysis data error')
-      }
-      console.log(_result)
-      if (_result) {
-        form.setFieldsValue(_result)
-      }
-    })
-  }
-  const onChange = e => {
-    const mark = e.target.value
-    setDisabled(true)
-    setMarkAndItems(mark)
-  };
-  const setMarkAndItems = (mark: string) => {
-    form.resetFields()
-    setMark(mark)
-    const keys: string[] = mapItemsToMarks[mark]
-    setActiveItem(allItems.filter(_ => keys.includes(_.key)))
-  }
-
   return (
     <div className={styles.wrapper}>
       <div className={styles.tabs}>
@@ -195,7 +58,7 @@ const ScoringMethod = (props: IProps) => {
                 {
                   activeItem.map(({ label, key, required, message }) => (
                     <Form.Item label={label} key={key}>
-                      {getFieldDecorator(key, {
+                      {form.getFieldDecorator(key, {
                         rules: [{ required, message }],
                       })(<InputNumber disabled={disabled} style={{ width: '150px' }} />)}
                     </Form.Item>
@@ -212,7 +75,7 @@ const ScoringMethod = (props: IProps) => {
                       data: {
                         id: dataSource.ctgexam.id,
                         result: JSON.stringify({
-                          ...result, result: JSON.stringify(form.getFieldsValue())
+                          ...responseData, result: JSON.stringify(form.getFieldsValue())
                         })
                       }
                     })
