@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Tabs, Radio, Form, Button, InputNumber } from 'antd';
 import request from "@lianmed/request";
 import { Suit } from '@lianmed/lmg/lib/Ctg/Suit';
@@ -22,6 +22,16 @@ const ScoringMethod = (props: IProps) => {
     form.resetFields()
     setMark(mark)
   };
+  const modifyAnalyseData = () => {
+    request.put('/ctg-exams', {
+      data: {
+        id: dataSource.ctgexam.id,
+        result: JSON.stringify({
+          ...responseData, result: JSON.stringify(form.getFieldsValue())
+        })
+      }
+    })
+  }
 
   const formItemLayout = {
     labelCol: { span: 8 },
@@ -57,17 +67,11 @@ const ScoringMethod = (props: IProps) => {
               <div className={styles.buttonView}>
                 <Button type="primary" onClick={analyse}>分析</Button>
                 <Button onClick={() => {
-                  setDisabled(!disabled)
-                  if (!disabled) {
-                    request.put('/ctg-exams', {
-                      data: {
-                        id: dataSource.ctgexam.id,
-                        result: JSON.stringify({
-                          ...responseData, result: JSON.stringify(form.getFieldsValue())
-                        })
-                      }
-                    })
+                  const opposite = !disabled
+                  if (opposite) {
+                    modifyAnalyseData()
                   }
+                  setDisabled(opposite)
                 }}>{disabled ? '修改' : '确认'}</Button>
                 <Button>打印</Button>
                 <Button>退出</Button>

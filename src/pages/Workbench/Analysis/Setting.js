@@ -19,15 +19,7 @@ class Setting extends Component {
  
         <div className={styles.form}>
           <div>
-            <Radio.Group onChange={this.onChange}>
-              <Radio value={1}>原来结果</Radio>
-              <Radio value={2}>新的分析</Radio>
-            </Radio.Group>
-            <Divider type="vertical" />
-            <Radio.Group onChange={this.onChange}>
-              <Radio value={3}>更新结果</Radio>
-              <Radio value={4}>不更新结果</Radio>
-            </Radio.Group>
+              &nbsp;
           </div>
           <Form>
             <Form.Item label="NST">

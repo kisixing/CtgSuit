@@ -35,7 +35,7 @@ function Analysis({
         destroyOnClose
         centered
         width="92%"
-        style={{ height: "96%" }}
+        style={{ height: "88%" }}
         footer={null}
         visible={visible}
         title={
@@ -60,7 +60,7 @@ function Analysis({
         onOk={onCreate}
         wrapClassName={styles.modal}
       >
-        <Layout style={{ height: '100%' }}>
+        <div style={{ height: '100%',display:'flex',flexDirection:'column' }}>
           <div className={styles.chart}>
             <CTGChart from={from} dataSource={dataSource} docid={docid} />
           </div>
@@ -75,7 +75,7 @@ function Analysis({
               </Col>
             </Row>
           </div>
-        </Layout>
+        </div>
       </Modal>
     </Context.Provider>
   );
