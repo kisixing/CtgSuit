@@ -10,13 +10,22 @@ import { formItemLayout, tailFormItemLayout } from './utils';
 import store from '@/utils/SettingStore';
 import styles from './style.less';
 
+var config = require("../../../package.json");
+
 @Form.create()
 class Hospital extends PureComponent {
   componentDidMount() {
     const { form } = this.props;
     store.getObj().then(({ hospital_name, version_number, build_date }) => {
-      form.setFieldsValue({ hospital_name, version_number, build_date });
+      form.setFieldsValue({
+        hospital_name,
+      });
     });
+    // 设置版本信息
+    form.setFieldsValue({
+      version_number: config.version,
+      build_date: config.author.date
+    })
   }
 
   handleSubmit = () => {
