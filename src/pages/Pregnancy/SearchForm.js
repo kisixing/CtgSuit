@@ -31,6 +31,7 @@ class SearchForm extends Component {
   // 检索
   handleSubmit = e => {
     e.preventDefault();
+    const { size, page } = this.props;
     this.props.form.validateFields((err, values) => {
       if (!err) {
         // console.log('Received values of form: ', values);
@@ -45,6 +46,15 @@ class SearchForm extends Component {
           type: 'pregnancy/fetchPregnancies',
           payload: params,
         });
+        this.props.dispatch({
+          type: 'pregnancy/updateState',
+          payload: {
+            pagination: {
+              size,
+              page: 0,
+            },
+          }
+        })
         this.fetchCount(params);
       }
     });

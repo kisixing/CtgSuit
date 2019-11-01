@@ -33,6 +33,10 @@ export default {
         type: 'updateState',
         payload: {
           pregnancies: res,
+          pagination: {
+            size: params.size,
+            page: params.page,
+          }
         },
       });
     },

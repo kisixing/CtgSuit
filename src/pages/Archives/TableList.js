@@ -120,19 +120,27 @@ class TableList extends Component {
   componentDidMount() {
     const { router } = this.props;
     const query = router.location.query;
+    // 默认请求近一周的数据
+    const sTime = moment()
+      .subtract(7, 'd')
+      .format('YYYY-MM-DD');
+    const eTime = moment().format('YYYY-MM-DD');
+    const params = {
+      'visitDate.greaterOrEqualThan': sTime,
+      'visitDate.lessOrEqualThan': eTime,
+    };
     if (query.pregnancyId) {
       // 从孕产妇列表进入时，取得该孕产妇的孕产id，获得ctg档案信息
-      this.fetchRecords({ 'pregnancyId.equals': query.pregnancyId });
+      this.fetchRecords({
+        ...params,
+        'pregnancyId.equals': query.pregnancyId
+      });
+      // 获取列表count
+      this.fetchCount({
+        ...params,
+        'pregnancyId.equals': query.pregnancyId
+      });
     } else {
-      // 默认请求近一周的数据
-      const sTime = moment()
-        .subtract(7, 'd')
-        .format('YYYY-MM-DD');
-      const eTime = moment().format('YYYY-MM-DD');
-      const params = {
-        'visitDate.greaterOrEqualThan': sTime,
-        'visitDate.lessOrEqualThan': eTime,
-      };
       // 获取列表count
       this.fetchCount(params);
       // 获取列表
