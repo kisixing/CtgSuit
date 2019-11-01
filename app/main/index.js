@@ -68,6 +68,7 @@ function createWindow() {
       nodeIntegration: true, // 是否集成 Nodejs
       webSecurity: false,
     },
+    icon: require.resolve('../asserts/icons/64x64.ico')
     // webPreferences: {
     //   preload: path.join(__dirname, 'preload.js')
     // }
