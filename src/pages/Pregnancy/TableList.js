@@ -269,7 +269,7 @@ class TableList extends Component {
 
   render() {
     const { visible, current } = this.state;
-    const { loading, count, pregnancies } = this.props;
+    const { loading, count, pregnancies, pagination: { size, page } } = this.props;
 
     return (
       <div className={styles.tableList}>
@@ -284,6 +284,7 @@ class TableList extends Component {
           pagination={{
             hideOnSinglePage: false,
             total: count,
+            current: page + 1,
             showQuickJumper: true,
             showSizeChanger: true,
             showTotal: (total, range) => `共 ${total} 条`,
@@ -305,6 +306,7 @@ class TableList extends Component {
 }
 
 export default connect(({ loading, pregnancy }) => ({
+  pagination: pregnancy.pagination,
   count: pregnancy.count,
   pregnancies: pregnancy.pregnancies,
   loading: loading,
