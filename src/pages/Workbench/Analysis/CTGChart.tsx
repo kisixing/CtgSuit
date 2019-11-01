@@ -1,12 +1,12 @@
-import React, { useEffect, useState,useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Context } from './index';
 import { Spin } from 'antd';
 import { Ctg as L } from '@lianmed/lmg';
 import { event } from '@lianmed/utils'
 import request from "@lianmed/request";
 const styles = require('./index.less')
-const CTGChart = props => {
-  const { docid, } = props;
+const CTGChart = (props: { docid: string }) => {
+  const { docid } = props;
 
   const [ctgData, setCtgData] = useState(null)
   useEffect(() => {

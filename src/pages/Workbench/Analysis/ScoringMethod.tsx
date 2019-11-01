@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Tabs, Radio, Form, Button, InputNumber } from 'antd';
-import request from "@lianmed/request";
+import { Tabs, Radio, Form, Button, InputNumber, Tag } from 'antd';
 import { Suit } from '@lianmed/lmg/lib/Ctg/Suit';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import useAnalyse, { IResult } from './useAnalyse'
+import { event } from '@lianmed/utils';
 const styles = require('./ScoringMethod.less');
 const { TabPane } = Tabs;
 
 const ScoringMethod = (props: IProps) => {
-  const { form, docid, v, dataSource } = props;
+  const { form, docid, v } = props;
 
   const [disabled, setDisabled] = useState(true)
   const { responseData, activeItem, setMark, mark, MARKS, analyse } = useAnalyse(v, docid, (_result) => {
@@ -22,21 +22,22 @@ const ScoringMethod = (props: IProps) => {
     form.resetFields()
     setMark(mark)
   };
-  const modifyAnalyseData = () => {
-    request.put('/ctg-exams', {
-      data: {
-        id: dataSource.ctgexam.id,
-        result: JSON.stringify({
-          ...responseData, result: JSON.stringify(form.getFieldsValue())
-        })
-      }
-    })
-  }
 
   const formItemLayout = {
     labelCol: { span: 8 },
     wrapperCol: { span: 16 },
   };
+  useEffect(() => {
+    const cb = fn => fn({
+      result: JSON.stringify({
+        ...responseData, result: JSON.stringify(form.getFieldsValue())
+      })
+    })
+    event.on('analysis:result', cb)
+    return () => {
+      event.off('analysis:result', cb)
+    };
+  }, [responseData])
   return (
     <div className={styles.wrapper}>
       <div className={styles.tabs}>
@@ -68,9 +69,6 @@ const ScoringMethod = (props: IProps) => {
                 <Button type="primary" onClick={analyse}>分析</Button>
                 <Button onClick={() => {
                   const opposite = !disabled
-                  if (opposite) {
-                    modifyAnalyseData()
-                  }
                   setDisabled(opposite)
                 }}>{disabled ? '修改' : '确认'}</Button>
                 <Button>打印</Button>
@@ -83,7 +81,7 @@ const ScoringMethod = (props: IProps) => {
             <span>CTG = {Object.values(form.getFieldsValue()).reduce((a, b) => ~~a + ~~b, 0)}</span>
               </div>
               <div className={styles.tip}>
-                <Button disabled>注意：电脑自动分析数据和结果仅供参考</Button>
+                <Tag >注意：电脑自动分析数据和结果仅供参考</Tag>
               </div>
             </div>
           </TabPane>
