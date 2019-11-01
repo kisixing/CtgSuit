@@ -14,45 +14,12 @@ class Setting extends Component {
     const { getFieldDecorator } = form;
     return (
       <div className={styles.wrapper}>
-        <div className={styles.buttons}>
-          <Button.Group>
-            <Button>刷新CTG图</Button>
-            <Button>取消定制</Button>
-          </Button.Group>
-          <input type="button" value={`心悸：${168};  压力：${18}`} />
-        </div>
+  
 
-        <Row className={styles.lists}>
-          <Col span={12}>
-            黄色面积：<span></span>
-          </Col>
-          <Col span={12}>
-            减速时间：<span></span>
-          </Col>
-          <Col span={12}>
-            红色面积：<span></span>
-          </Col>
-          <Col span={12}>
-            减速幅度：<span></span>
-          </Col>
-          <Col span={12}>
-            绿色面积：<span></span>
-          </Col>
-          <Col span={12}>
-            面积比值（黄:红）<span></span>
-          </Col>
-        </Row>
+ 
         <div className={styles.form}>
           <div>
-            <Radio.Group onChange={this.onChange}>
-              <Radio value={1}>原来结果</Radio>
-              <Radio value={2}>新的分析</Radio>
-            </Radio.Group>
-            <Divider type="vertical" />
-            <Radio.Group onChange={this.onChange}>
-              <Radio value={3}>更新结果</Radio>
-              <Radio value={4}>不更新结果</Radio>
-            </Radio.Group>
+              &nbsp;
           </div>
           <Form>
             <Form.Item label="NST">
