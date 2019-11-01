@@ -1,4 +1,5 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef } from 'react';
+import Empty from '@/components/Empty'
 import { Row, Empty } from 'antd';
 import { connect } from 'react-redux';
 import './index.less';
@@ -59,7 +60,7 @@ const Home = (props: IProps) => {
               );
             }) : (
                 <div ref={empty} style={{ marginTop: 200, display:'flex',justifyContent:'center' }}>
-                  <Empty description="胎监工作站" />
+                  <Empty description="胎监工作站"/>
                 </div>
               )
             }

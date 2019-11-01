@@ -25,12 +25,12 @@ function Analysis({
   }, []);
 
   const submit = () => {
-    const data = { id: dataSource.ctgexam.id }
+    const data = { note: docid }
     event.emit('analysis:result', result => {
       Object.assign(data, result)
     })
     console.log(data)
-    // request.put('/ctg-exams', { data })
+    request.put(`/ctg-exams-note`, { data })
   }
   return (
     <Context.Provider value={v}>
