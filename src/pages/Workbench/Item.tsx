@@ -107,7 +107,7 @@ const WorkbenchItem = (props: IProps) => {
         headStyle={{ background: 'var(--theme-color)', color: '#fff' }}
         bodyStyle={{ padding: 0, height: 'calc(100% - 38px)' }}
       >
-        <L data={data} showEcg={false} mutableSuitObject={suitObject} itemHeight={itemHeight} onDoubleClick={fullScreen}></L>
+        <L data={data} showEcg={true} mutableSuitObject={suitObject} itemHeight={itemHeight} onDoubleClick={fullScreen}></L>
       </Card>
 
     </Col>

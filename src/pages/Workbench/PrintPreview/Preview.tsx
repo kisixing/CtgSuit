@@ -2,7 +2,9 @@
 import React, { useState, useCallback } from 'react';
 import { connect } from 'dva';
 import { Document, Page } from 'react-pdf';
-import { Pagination, Button, Spin, Empty, Icon } from 'antd';
+import { Pagination, Button, Spin, Icon } from 'antd';
+import Empty from '@/components/Empty'
+
 import { ipcRenderer } from 'electron';
 import config from '@/utils/config';
 import { Context } from './index'
@@ -137,7 +139,7 @@ const Preview = props => {
         </span>
       </div>
     ) : (
-        <Empty style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', margin: 0 }} />
+        <Empty  style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', margin: 0 }} />
       );
     return (
       <div className={styles.wrapper} >

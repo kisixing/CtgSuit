@@ -8,7 +8,6 @@ import moment from 'moment';
 import { event } from '@lianmed/utils';
 import request from "@lianmed/request";
 
-const styles = require('./index.less');
 
 export const Context = React.createContext({});
 const docid = '1_1112_160415144057'
@@ -25,12 +24,12 @@ function Analysis({
   }, []);
 
   const submit = () => {
-    const data = { id: dataSource.ctgexam.id }
+    const data = { note: docid }
     event.emit('analysis:result', result => {
       Object.assign(data, result)
     })
     console.log(data)
-    // request.put('/ctg-exams', { data })
+    request.put(`/ctg-exams-note`, { data })
   }
   return (
     <Context.Provider value={v}>
@@ -44,7 +43,7 @@ function Analysis({
         footer={null}
         visible={visible}
         title={
-          <div className={styles.modalTitle}>
+          <div >
             <span>档案号：{(dataSource.ctgexam && dataSource.ctgexam.note) || dataSource.documentno}</span>
             <span>住院号：{(dataSource.pregnancy && dataSource.pregnancy.inpatientNO)}</span>
             <span>姓名：{dataSource.pregnancy && dataSource.pregnancy.name}</span>
@@ -63,13 +62,14 @@ function Analysis({
         cancelText="取消"
         onCancel={() => onCancel('analysisVisible')}
         onOk={onCreate}
-        wrapClassName={styles.modal}
+        bodyStyle={{background:'#f1f1f1'}}
+      // wrapClassName={styles.modal}
       >
         <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-          <div className={styles.chart}>
+          <div style={{ height: 300, padding: 24, marginBottom: 24, background: '#fff' }}>
             <CTGChart docid={docid} />
           </div>
-          <div className={styles.content}>
+          <div style={{flex:1}}>
             <Row gutter={24} style={{ height: '100%' }}>
               <Col span={12} style={{ height: '100%' }}>
                 <ScoringMethod docid={docid} v={v} dataSource={dataSource} />

@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Context } from './index';
-import { Spin } from 'antd';
 import { Ctg as L } from '@lianmed/lmg';
 import { event } from '@lianmed/utils'
 import request from "@lianmed/request";
-const styles = require('./index.less')
 const CTGChart = (props: { docid: string }) => {
   const { docid } = props;
 
@@ -30,15 +28,8 @@ const CTGChart = (props: { docid: string }) => {
     <Context.Consumer>
       {(value: any) => {
         return (
-          <Spin
-            wrapperClassName={styles.spinWrapper}
-            // spinning={
-            //   loading.effects['item/fetchCTGData'] || loading.effects['archives/fetchCTGrecordData']
-            // }
-            spinning={!ctgData}
-          >
-            <L suitType={2} data={ctgData} mutableSuitObject={value}></L>
-          </Spin>
+
+          <L suitType={2} data={ctgData} mutableSuitObject={value} />
         )
       }}
     </Context.Consumer>
