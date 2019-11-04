@@ -6,7 +6,7 @@
 
 import React, { Component } from 'react';
 import { Modal } from 'antd';
-import modalStyles from './Analysis/index.less';
+import modalStyles from './Partogram.less';
 import { Partogram } from '@lianmed/lmg';
 import { PartogramTable } from '@lianmed/components';
 class C extends Component {

@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { Form, Button, Row, Col, Radio, Divider } from 'antd';
-import styles from './Setting.less';
+import { Form, Radio } from 'antd';
+const styles = require('./Setting.less')
 
-@Form.create()
-class Setting extends Component {
+class Setting extends Component<{ form: any }> {
   constructor(props) {
     super(props);
     this.state = {};
@@ -14,12 +13,12 @@ class Setting extends Component {
     const { getFieldDecorator } = form;
     return (
       <div className={styles.wrapper}>
-  
 
- 
+
+
         <div className={styles.form}>
           <div>
-              &nbsp;
+            &nbsp;
           </div>
           <Form>
             <Form.Item label="NST">
@@ -66,4 +65,4 @@ class Setting extends Component {
   }
 }
 
-export default Setting;
+export default Form.create()(Setting);
