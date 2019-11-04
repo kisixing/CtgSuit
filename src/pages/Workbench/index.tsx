@@ -67,7 +67,6 @@ const Home = (props: IProps) => {
         )
       }
     </div>
-
   );
 };
 
