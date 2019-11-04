@@ -74,7 +74,9 @@ export default {
         if (!oridata) {
           return;
         }
-        CTGDATA.index = oridata.length / 2;
+        if (key === 'fhr1') {
+          CTGDATA.index = oridata.length / 2;
+        }
         for (let i = 0; i < CTGDATA.index; i++) {
           let hexBits = oridata.substring(0, 2);
           let data_to_push = parseInt(hexBits, 16);
