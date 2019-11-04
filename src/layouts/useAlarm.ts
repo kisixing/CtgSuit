@@ -4,7 +4,7 @@ export default () => {
 
     useEffect(() => {
         const audio: HTMLAudioElement = document.querySelector('#alarm')
-        let timeout
+        let timeout:NodeJS.Timeout
 
         const onCb = alarmType => {
             // audio.play()

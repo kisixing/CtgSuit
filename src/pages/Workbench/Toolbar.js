@@ -341,7 +341,7 @@ class Toolbar extends Component {
           style={{ opacity: showSetting || showSettingBar ? 1 : 0 }}
         >
           <Button
-            icon={showSetting ? 'right' : 'left'}
+            icon={showSetting ? 'left' : 'right'}
             shape={showSetting ? 'circle' : null}
             style={{ boxShadow: '#aaa 3px 3px 5px 1px' }}
             type="primary"
