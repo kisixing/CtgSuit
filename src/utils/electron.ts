@@ -5,17 +5,22 @@ class E extends EventEmitter {
         super()
     }
     send(name: string, ...args) {
-        console.log('electron send', name)
-
         this.emit(name, args)
     }
     on(name: string, fn: any) {
-        console.log('electron on', name)
-        this.on(name, fn)
+        super.on(name, fn)
         return this
     }
 }
 const ipcRenderer = new E()
+    .on('printWindow', (url) => {
+        window.open(url)
+    })
+    .on('newWindow',()=>{
+        window.open('/handbook/index.html')
+    })
+
+
 const remote = {
     getGlobal(name: string) {
         const a = {

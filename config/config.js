@@ -5,7 +5,7 @@ import { join } from 'path';
 import slash from 'slash';
 import path from 'path';
 import pageRoutes from './routes';
-const isRuntime = process.env.TARGET === '0'
+const isRuntime = process.env.BROWSER !== 'none'
 export default {
   theme: {
     'primary-color': '#004c8c',
@@ -92,7 +92,6 @@ export default {
       const requireAbsolute = isDev ? orininalPath : request;
       isExternal = getNodeExternal(requireAbsolute)
     }
-    isExternal && console.log(request, isExternal)
     callback(null, isExternal);
   },
 };
