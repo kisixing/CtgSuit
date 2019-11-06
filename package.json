@@ -26,6 +26,7 @@
     "@lianmed/lmg": "NenX/lianmed_lmg.git",
     "@lianmed/request": "NenX/request",
     "@lianmed/utils": "NenX/lianmed_utils.git",
+    "@lianmed/pages": "NenX/lianmed_pages.git",
     "antd": "^3.19.5",
     "dva": "^2.6.0-beta.6",
     "electron-store": "^5.0.0",
