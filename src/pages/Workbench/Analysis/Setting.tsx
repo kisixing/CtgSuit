@@ -13,9 +13,6 @@ class Setting extends Component<{ form: any }> {
     const { getFieldDecorator } = form;
     return (
       <div className={styles.wrapper}>
-
-
-
         <div className={styles.form}>
           <div>
             &nbsp;

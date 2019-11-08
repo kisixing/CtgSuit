@@ -123,6 +123,18 @@ const CollectionCreateForm = Form.create({
       callback();
     };
 
+    // 年龄校验
+    validateAge = (rule, value, callback) => {
+      // 大于0 小于100
+      const reg = /^99$|^(\d|[1-9]\d)$/;
+      if (value > 60) {
+        callback('该孕妇年龄高于60！');
+      }
+      if (value < 13) {
+        callback('该孕妇年龄低于13！');
+      }
+    };
+
     // 前后空格消除
     trim = event => event.target.value.trim();
 
@@ -213,7 +225,11 @@ const CollectionCreateForm = Form.create({
               <Col span={12}>
                 <Form.Item label="孕妇年龄">
                   {getFieldDecorator('age', {
-                    rules: [{ required: false, message: '请填写孕妇住年龄!' }],
+                    validateFirst: true,
+                    rules: [
+                      { required: false, message: '请填写孕妇住年龄!' },
+                      { validator: this.validateAge },
+                    ],
                   })(
                     <InputNumber
                       min={1}

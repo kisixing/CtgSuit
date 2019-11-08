@@ -28,7 +28,6 @@ const CTGChart = (props: { docid: string }) => {
     <Context.Consumer>
       {(value: any) => {
         return (
-
           <L suitType={2} data={ctgData} mutableSuitObject={value} />
         )
       }}
