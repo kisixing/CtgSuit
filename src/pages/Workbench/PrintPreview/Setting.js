@@ -20,36 +20,30 @@ class Setting extends Component {
       }
     } = this.props;
     if (from !== "archives") {
+      // 从检测页（主页）调用时，重新请求静态ctg数据
       dispatch({
-        type: 'item/fetchCTGData',
+        type: 'item/fetchCTGData', // archives/fetchCTGrecordData
         payload: {
           ctgexamid: data.docid,
         },
       });
     }
   }
-  componentWillMount() {
-    this.props.dispatch({
-      type: 'item/updateState',
-      payload: {
-        ctgData: null
-      },
-    });
-  }
+
   render() {
     const { ctgData, CTGData, from, loading } = this.props;
     const data = from === 'archives' ? CTGData : ctgData;
+    console.log('55555555557777', data)
     return (
       <Context.Consumer>
         {value => (
           <Spin
             wrapperClassName={styles.chart}
             spinning={
-              !data
+              loading.effects['item/fetchCTGData'] || loading.effects['archives/fetchCTGrecordData']
             }
           >
             <L suitType={2} data={data} mutableSuitObject={value}></L>
-
           </Spin>
         )}
       </Context.Consumer>
@@ -59,6 +53,6 @@ class Setting extends Component {
 
 export default connect(({ item, archives, loading }) => ({
   loading: loading,
-  ctgData: item.ctgData,
-  CTGData: archives.CTGData,
+  ctgData: item.ctgData, // 检测页ctg数据
+  CTGData: archives.CTGData, // 档案管理也ctg数据
 }))(Setting);

@@ -28,6 +28,13 @@ export default {
       });
     },
     *fetchCTGData({ payload }, { call, put }) {
+      // 先清空缓存数据
+      yield put({
+        type: 'updateState',
+        payload: {
+          ctgData: null,
+        }
+      });
       const res = yield call(getCTGrecordData, payload) || {};
       // 处理值，以便符合ctg曲线数据要求
       let pureidarr = payload.ctgexamid.split('_');

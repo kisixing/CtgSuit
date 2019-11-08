@@ -15,9 +15,7 @@ import 'react-pdf/dist/Page/AnnotationLayer.css';
 import usePrintConfig from "./usePrintConfig";
 const styles = require('./Preview.less')
 
-
 const COEFFICIENT = 240
-
 
 const Preview = props => {
   const [value, setValue] = useState<{ suit: any }>({ suit: null })

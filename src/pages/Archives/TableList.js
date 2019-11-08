@@ -242,6 +242,7 @@ class TableList extends Component {
       type: 'archives/updateState',
       payload: {
         current: record,
+        CTGData: null,
       },
     });
     // 获取监护图曲线信息
