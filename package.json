@@ -1,6 +1,7 @@
 {
   "name": "ctg-suit",
   "version": "1.0.2",
+  "description": "description",
   "license": "lianmed-1.0.0",
   "private": true,
   "scripts": {
@@ -19,15 +20,10 @@
     "dist:ia32": "electron-builder --ia32",
     "precommit": "lint-staged",
     "update:lianmed": "yarn upgrade @lianmed/lmg @lianmed/components @lianmed/utils @lianmed/request",
-    "link:lianmed": "npm link @lianmed/lmg @lianmed/components @lianmed/utils @lianmed/request"
+    "link:lianmed": "npm link @lianmed/lmg @lianmed/components @lianmed/utils @lianmed/request @lianmed/pages"
   },
   "main": "./app/main/index.js",
   "dependencies": {
-    "@lianmed/components": "NenX/components",
-    "@lianmed/lmg": "NenX/lianmed_lmg.git",
-    "@lianmed/request": "NenX/request",
-    "@lianmed/utils": "NenX/lianmed_utils.git",
-    "@lianmed/pages": "NenX/lianmed_pages.git",
     "antd": "^3.19.5",
     "dva": "^2.6.0-beta.6",
     "electron-store": "^5.0.0",
@@ -37,10 +33,16 @@
     "react-pdf": "^4.1.0",
     "run-electron": "^1.0.0",
     "store": "^2.0.12",
-    "umi-request": "^1.2.2"
+    "umi-request": "^1.2.2",
+    "@lianmed/components": "NenX/components",
+    "@lianmed/lmg": "NenX/lianmed_lmg.git",
+    "@lianmed/request": "NenX/request",
+    "@lianmed/utils": "NenX/lianmed_utils.git",
+    "@lianmed/pages": "NenX/lianmed_pages.git"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.144",
+    "@types/request": "^2.48.3",
     "babel-eslint": "^9.0.0",
     "concurrently": "^4.1.2",
     "cross-env": "^6.0.0",
@@ -53,16 +55,19 @@
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jsx-a11y": "^5.1.1",
     "eslint-plugin-react": "^7.11.1",
+    "glob": "^7.1.6",
     "husky": "^0.14.3",
     "lint-staged": "^7.2.2",
     "mockjs": "^1.0.1-beta3",
+    "progress": "^2.0.3",
     "react-test-renderer": "^16.7.0",
     "roadhog-api-doc": "^1.1.2",
     "shx": "^0.3.2",
     "slash": "^3.0.0",
     "umi": "^2.7.7",
     "umi-plugin-react": "^1.8.4",
-    "webpack-chain": "^6.0.0"
+    "webpack-chain": "^6.0.0",
+    "yargs-parser": "^16.1.0"
   },
   "build": {
     "productName": "ctg-suit",
