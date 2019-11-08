@@ -10,6 +10,7 @@ import Print from './Print';
 import BedInfo from './BedInfo';
 import Account from './Account';
 import Hospital from './Hospital';
+import VersionManager from './VersionManager';
 
 import styles from './index.less';
 
@@ -19,7 +20,7 @@ class Setting extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      current: { label: '网络设置', value: '5' },
+      current: { label: '网络设置', value: '0' },
       results: {},
     };
   }
@@ -53,6 +54,7 @@ class Setting extends Component {
         {/* <Menu.Item key="2">评分设置</Menu.Item>
         <Menu.Item key="4">事件设置</Menu.Item> */}
         <Menu.Item key="1">维护设置</Menu.Item>
+        <Menu.Item key="0">版本管理</Menu.Item>
       </Menu>
     );
   };
@@ -88,6 +90,8 @@ class Setting extends Component {
         return <Account />
       case '9':
         return <Alarm />;
+      case '0':
+        return <VersionManager />;
       default:
         break;
     }
