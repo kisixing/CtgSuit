@@ -5,7 +5,8 @@
   "private": true,
   "scripts": {
     "start:dev": "concurrently  'yarn start' 'yarn run dev:main'",
-    "start": "cross-env PORT=1702 umi dev",
+    "start": "cross-env  PORT=1702 BROWSER=none umi dev",
+    "start:runtime": "cross-env PORT=1702 TARGET=0 umi dev",
     "dev:main": "run-electron .",
     "build:render": "umi build",
     "test": "umi test",
@@ -26,6 +27,7 @@
     "@lianmed/lmg": "NenX/lianmed_lmg.git",
     "@lianmed/request": "NenX/request",
     "@lianmed/utils": "NenX/lianmed_utils.git",
+    "@lianmed/pages": "NenX/lianmed_pages.git",
     "antd": "^3.19.5",
     "dva": "^2.6.0-beta.6",
     "electron-store": "^5.0.0",

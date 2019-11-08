@@ -5,7 +5,7 @@ import { join } from 'path';
 import slash from 'slash';
 import path from 'path';
 import pageRoutes from './routes';
-
+const isRuntime = process.env.BROWSER !== 'none'
 export default {
   theme: {
     'primary-color': '#004c8c',
@@ -66,18 +66,31 @@ export default {
     // },
   },
   outputPath: './app/render', // 更改输出目录
+  define: {
+    TARGET: process.env.TARGET
+  },
+
+  alias: {
+    electron: isRuntime ? '@/utils/electron' : 'electron',
+    fs: isRuntime ? '@/utils/fs' : 'fs'
+  },
   externals(context, request, callback) {
+    if (isRuntime) {
+      return callback()
+    }
+    // const getNodeExternal = target => `commonjs${target}`
+    const getNodeExternal = target => `require("${target}")`
     const isDev = process.env.NODE_ENV === 'development';
     let isExternal = false;
     const load = ['electron', 'fs', 'path', 'os', 'url', 'child_process'];
     if (load.includes(request)) {
-      isExternal = `require("${request}")`;
+      isExternal = getNodeExternal(request);
     }
     const appDeps = Object.keys(require('../app/package').dependencies);
     if (appDeps.includes(request)) {
       const orininalPath = slash(join(__dirname, '../app/node_modules', request));
-      const requireAbsolute = `require('${orininalPath}')`;
-      isExternal = isDev ? requireAbsolute : `require('${request}')`;
+      const requireAbsolute = isDev ? orininalPath : request;
+      isExternal = getNodeExternal(requireAbsolute)
     }
     callback(null, isExternal);
   },

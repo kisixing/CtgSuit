@@ -123,8 +123,11 @@ function createWindow() {
   });
   fs.stat(constant.SETTING_PATH, err => {
     if (err) {
-      const writeStream = fs.createWriteStream(constant.SETTING_PATH)
-      fs.createReadStream(constant.DEFAULT_SETTING_PATH).pipe(writeStream)
+      const metaData = fs.readFileSync(constant.DEFAULT_SETTING_PATH,'utf-8')
+      fs.writeFile(constant.SETTING_PATH, metaData, () => { })
+      fs.writeFile(constant.DEFAULT_SETTING_PATH__RUNTIME, `export default ${JSON.stringify(metaData)}`, () => { })
+
+      // fs.createReadStream(constant.DEFAULT_SETTING_PATH).pipe(writeStream).pipe(writeStreamRuntime)
     }
   })
 
