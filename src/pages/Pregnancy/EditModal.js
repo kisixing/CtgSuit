@@ -90,7 +90,7 @@ const EditModal = Form.create({
             onUpdate({ id: dataSource.id, ...values });
             onCancel();
           } else {
-            // ADT
+            // ADT操作
             if (searchValues.id) {
               // 修改
               onUpdate({ id: searchValues.id, ...values });
@@ -106,7 +106,7 @@ const EditModal = Form.create({
               if (!bedNO) {
                 return message.error('请输入床号！');
               }
-              onCreate(values);
+              onCreate({ areaNO: '01', ...values });
               onCancel();
             }
           }

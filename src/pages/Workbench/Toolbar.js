@@ -44,17 +44,17 @@ class Toolbar extends Component {
   componentWillUnmount() {
     event.on(`bedClose:${this.unitId}`, this.onclose);
   }
-  timeout = null
+  timeout = null;
   autoHide = () => {
-    clearTimeout(this.timeout)
+    clearTimeout(this.timeout);
     this.timeout = setTimeout(() => {
       this.setState({ showSetting: false });
     }, 15000);
-  }
+  };
   toggleTool = () => {
     const { showSetting } = this.state;
     this.setState({ showSetting: !showSetting });
-    this.autoHide()
+    this.autoHide();
   };
 
   showModal = name => {
@@ -67,20 +67,16 @@ class Toolbar extends Component {
 
   // 检验数据库是否已经建册了
 
-  // 建档（绑定孕册信息）
+  /**
+   * 建档（绑定孕册信息）
+   *
+   * @param {object} item 改设备数据
+   * @param {object} values 创建表单form数据
+   */
   handleCreate = (item, values) => {
     const { dispatch } = this.props;
-    if (!values.bedNO) {
-      return message.error('请输入患者床号！');
-    }
-    if (!values.name) {
-      return message.error('请输入患者姓名！');
-    }
-    if (!values.inpatientNO) {
-      return message.error('请输入患者住院号！');
-    }
-    // 新建孕册 后台检验孕册是否已经存在
-    // ture -> 提示孕册已经存在，是否
+    // 新建孕册 后台会自动检验孕册是否已经存在
+    // ture -> 提示孕册已经存在
     const pregnancyId = values.id;
     const {
       data: { starttime, docid },
@@ -112,6 +108,7 @@ class Toolbar extends Component {
       // 无孕册pregnancyId 新建孕册获取pregnancyId
       dispatch({
         type: 'list/createPregnancy',
+        // TODO 默认01病区
         payload: { ...values, areaNO: '01', recordstate: '10' },
         callback: res => {
           if (res && res.id) {
@@ -141,7 +138,7 @@ class Toolbar extends Component {
       callback: res => {
         if (res && res.id) {
           // this.setState({ isCreated: true });
-          event.emit('newArchive', res)
+          event.emit('newArchive', res);
           // 完成绑定后判断是否停止监护工作
           const { isStopMonitorWhenCreated } = this.state;
           if (isStopMonitorWhenCreated) {
@@ -168,21 +165,21 @@ class Toolbar extends Component {
     const { deviceno, bedno, data, unitId } = item;
     const havePregnancy = data && data.pregnancy;
 
-    const pregnancy = typeof havePregnancy === 'object' ? havePregnancy : havePregnancy && JSON.parse(data.pregnancy.replace(/'/g, '"'));
+    const pregnancy =
+      typeof havePregnancy === 'object'
+        ? havePregnancy
+        : havePregnancy && JSON.parse(data.pregnancy.replace(/'/g, '"'));
     const isCreated = pregnancy && pregnancy.id && data && data.pregnancy;
 
-    data.status === BedStatus.Working ?
-      (
-        dispatch({
+    data.status === BedStatus.Working
+      ? dispatch({
           type: 'list/appendDirty',
           unitId,
         })
-      ) : (
-        dispatch({
+      : dispatch({
           type: 'list/appendOffline',
-          unitId
-        })
-      )
+          unitId,
+        });
 
     socket.endwork(deviceno, bedno);
     // socket.datacache.delete(unitId);
@@ -195,7 +192,7 @@ class Toolbar extends Component {
         payload: {
           'pregnancyId.equals': pregnancyId,
         },
-        callback: (res) => {
+        callback: res => {
           const d = res[0];
           if (d && d.id) {
             const prenatalVisit = d['prenatalVisit'];
@@ -215,9 +212,8 @@ class Toolbar extends Component {
               },
             });
           } else {
-
           }
-        }
+        },
       });
     } else {
       // 未建档提示简单保存或者放弃保存
@@ -239,7 +235,7 @@ class Toolbar extends Component {
     // }
   };
 
-  // 重定向打开建档窗口
+  // 重定向打开建档窗口，用于未建档设备停止监护时，选择建档
   redirectCreate = () => {
     this.setState({
       confirmVisible: false,
@@ -266,7 +262,10 @@ class Toolbar extends Component {
     const isOffline = data && data.status === 3;
     // 已建档状态
     const havePregnancy = data && data.pregnancy;
-    const pregnancy = typeof havePregnancy === 'object' ? havePregnancy : havePregnancy && JSON.parse(data.pregnancy.replace(/'/g, '"'));
+    const pregnancy =
+      typeof havePregnancy === 'object'
+        ? havePregnancy
+        : havePregnancy && JSON.parse(data.pregnancy.replace(/'/g, '"'));
     const isCreated = havePregnancy && pregnancy.id;
     return (
       <>
@@ -280,15 +279,15 @@ class Toolbar extends Component {
               停止监护
             </Button>
           ) : (
-              <Button
-                disabled={data.index === undefined}
-                icon="play-circle"
-                type="link"
-                onClick={() => this.start(dataSource)}
-              >
-                开始监护
+            <Button
+              disabled={data.index === undefined}
+              icon="play-circle"
+              type="link"
+              onClick={() => this.start(dataSource)}
+            >
+              开始监护
             </Button>
-            )}
+          )}
           {/* 停止状态下不可以建档，监护、离线都是可以建档的 */}
           <Button
             icon="user-add"

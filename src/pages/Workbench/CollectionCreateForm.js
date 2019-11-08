@@ -2,7 +2,7 @@
  * 建档/绑定弹窗
  */
 import React from 'react';
-import { Button, Modal, Form, Input, Row, Col, InputNumber } from 'antd';
+import { Button, Modal, Form, Input, Row, Col, InputNumber, message } from 'antd';
 import styles from './index.less';
 
 const width = '200px';
@@ -57,8 +57,18 @@ class CollectionCreateForm extends React.Component {
     form.validateFields((err, values) => {
       if (err) {
         return;
+      } else {
+        if (!values.bedNO) {
+          return message.error('请输入患者床号！');
+        }
+        if (!values.name) {
+          return message.error('请输入患者姓名！');
+        }
+        if (!values.inpatientNO) {
+          return message.error('请输入患者住院号！');
+        }
+        onCreate(dataSource, values);
       }
-      onCreate(dataSource, values);
     })
   };
 
