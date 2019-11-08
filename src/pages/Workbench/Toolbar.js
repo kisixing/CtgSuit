@@ -68,72 +68,64 @@ class Toolbar extends Component {
   // 检验数据库是否已经建册了
 
   // 建档（绑定孕册信息）
-  handleCreate = item => {
+  handleCreate = (item, values) => {
     const { dispatch } = this.props;
-    const { form } = this.formRef.props;
-    form.validateFields((err, values) => {
-      if (err) {
-        return;
-      }
-      if (!values.bedNO) {
-        return message.error('请输入患者床号！');
-      }
-      if (!values.name) {
-        return message.error('请输入患者姓名！');
-      }
-      if (!values.inpatientNO) {
-        return message.error('请输入患者住院号！');
-      }
-      // 新建孕册 后台检验孕册是否已经存在
-      // ture -> 提示孕册已经存在，是否
-      const pregnancyId = values.id;
-      const {
-        data: { starttime, docid },
-      } = item;
-      if (!docid) {
-        return message.warn('离线状态，无法建档！');
-      }
-      const d = {
-        visitType: values.visitTime,
-        visitTime: moment(values.values).format(),
-        gestationalWeek: values.gestationalWeek,
-        pregnancy: {
-          id: '',
+    if (!values.bedNO) {
+      return message.error('请输入患者床号！');
+    }
+    if (!values.name) {
+      return message.error('请输入患者姓名！');
+    }
+    if (!values.inpatientNO) {
+      return message.error('请输入患者住院号！');
+    }
+    // 新建孕册 后台检验孕册是否已经存在
+    // ture -> 提示孕册已经存在，是否
+    const pregnancyId = values.id;
+    const {
+      data: { starttime, docid },
+    } = item;
+    if (!docid) {
+      return message.warn('离线状态，无法建档！');
+    }
+    const d = {
+      visitType: values.visitTime,
+      visitTime: moment(values.values).format(),
+      gestationalWeek: values.gestationalWeek,
+      pregnancy: {
+        id: '',
+      },
+      ctgexam: {
+        startTime: moment(starttime),
+        endTime: null,
+        result: item.isTodo ? '1' : null,
+        note: docid, // docid
+        diagnosis: null,
+        report: null,
+      },
+    };
+    if (pregnancyId) {
+      // 调入孕册信息后获取的 有孕册pregnancyId
+      const data = { ...d, pregnancy: { id: pregnancyId } };
+      this.newArchive(data, item);
+    } else {
+      // 无孕册pregnancyId 新建孕册获取pregnancyId
+      dispatch({
+        type: 'list/createPregnancy',
+        payload: { ...values, areaNO: '01', recordstate: '10' },
+        callback: res => {
+          if (res && res.id) {
+            // 新建孕册成功
+            const data = { ...d, pregnancy: { id: res.id } };
+            // 新建档案
+            this.newArchive(data, item);
+          } else {
+            // 孕册存在，取到孕册信息
+            message.info('该患者信息已存在！');
+          }
         },
-        ctgexam: {
-          startTime: moment(starttime),
-          endTime: null,
-          result: item.isTodo ? '1' : null,
-          note: docid, // docid
-          diagnosis: null,
-          report: null,
-        },
-      };
-      if (pregnancyId) {
-        // 调入孕册信息后获取的 有孕册pregnancyId
-        const data = { ...d, pregnancy: { id: pregnancyId } };
-        this.newArchive(data, item);
-      } else {
-        // 无孕册pregnancyId 新建孕册获取pregnancyId
-        dispatch({
-          type: 'list/createPregnancy',
-          payload: { ...values, areaNO: '01', recordstate: '10' },
-          callback: res => {
-            if (res && res.id) {
-              // 新建孕册成功
-              const data = { ...d, pregnancy: { id: res.id } };
-              // 新建档案
-              this.newArchive(data, item);
-            } else {
-              // 孕册存在，取到孕册信息
-              message.info('该患者信息已存在！');
-            }
-          },
-        });
-      }
-      // form.resetFields();
-      // this.setState({ visible: false });
-    });
+      });
+    }
   };
 
   /**
@@ -351,7 +343,6 @@ class Toolbar extends Component {
         {visible ? (
           <CollectionCreateForm
             {...rest}
-            wrappedComponentRef={form => (this.formRef = form)}
             visible={visible}
             onCancel={this.handleCancel}
             onCreate={this.handleCreate}
