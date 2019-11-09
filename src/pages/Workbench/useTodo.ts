@@ -68,7 +68,7 @@ export default function useTodo(showTodo: boolean): [IRemain[], boolean] {
                             isTodo: true,
                             bedname,
                             id: _.note,
-
+                            type:'',
                             data: { ...all[index], docid: _.note, starttime }
                         }
                     }
@@ -94,6 +94,7 @@ export interface IRemain {
     report: any;
     result: any;
     startTime: any;
+    type:string;
     data: {
         fhr1: string;
         fhr2: string;
