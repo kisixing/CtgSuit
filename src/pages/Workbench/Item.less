@@ -12,6 +12,7 @@
   }
   // margin-bottom: 24px;
   background: var(--theme-light-color);
+
   .toolbar {
     position: absolute;
     left: 5 * @float-padding;
@@ -53,11 +54,8 @@
   }
 
   .card {
-    // display: flex;
-    // flex-direction: column;
-    height: 100%;
+    height: calc(100%);
     overflow: hidden;
-    // border: 1px solid #ddd;
     user-select: none;
     .extra {
       button {
@@ -70,6 +68,20 @@
       // color: #fff;
       span {
         margin-right: 12px;
+      }
+    }
+  }
+
+  :global {
+    .ant-spin-nested-loading {
+      height: 100%;
+
+      .ant-spin-spinning {
+        max-height: none;
+      }
+
+      .ant-spin-container {
+        height: 100%;
       }
     }
   }
