@@ -104,24 +104,22 @@ const WorkbenchItem = (props: IProps) => {
       ref={ref}
       style={{ padding: outPadding, height: itemHeight }}
     >
-      <Spin spinning={spinning} tip="Loading...">
-        <Card
-          size="small"
-          title={renderTilte(dataSource)}
-          className={styles.card}
-          extra={renderExtra(bedname, data.status)}
-          headStyle={{ background: 'var(--theme-color)', color: '#fff' }}
-          bodyStyle={{ padding: 0, height: '100%' }}
-        >
-          <L
-            data={data}
-            showEcg={true}
-            mutableSuitObject={suitObject}
-            itemHeight={itemHeight}
-            onDoubleClick={fullScreen}
-          ></L>
-        </Card>
-      </Spin>
+      <Card
+        size="small"
+        title={renderTilte(dataSource)}
+        className={styles.card}
+        extra={renderExtra(bedname, data.status)}
+        headStyle={{ background: 'var(--theme-color)', color: '#fff' }}
+        bodyStyle={{ padding: 0, height: '100%' }}
+      >
+        <L
+          data={data}
+          showEcg={true}
+          mutableSuitObject={suitObject}
+          itemHeight={itemHeight}
+          onDoubleClick={fullScreen}
+        ></L>
+      </Card>
       <Toolbar {...props} showSettingBar={true} showLoading={setSpinning} />
     </Col>
   );
