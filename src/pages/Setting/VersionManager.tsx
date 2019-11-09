@@ -57,8 +57,10 @@ const AliyunOSSUpload = (props: { [x: string]: any }) => {
         data: getExtraData,
     };
     return (
-        <Upload style={{ maxWidth: 240 }} {...p} beforeUpload={e => { console.log(22, e); return false }} >
-            <Button>                    <Icon type="upload" /> Click to Upload        </Button>
+        <Upload  {...p} beforeUpload={e => { console.log(22, e); return false }} >
+            <Button>
+                <Icon type="upload" /> <span>Click to Upload </span>
+            </Button>
 
         </Upload>
     );
@@ -98,15 +100,15 @@ const FormPage = (props: any) => {
             },
             wrapperCol: {
                 xs: { span: 24 },
-                sm: { span: 16 },
+                sm: { span: 8 },
             },
         }
         }>
             <Form.Item label="file">{getFieldDecorator('file')(<AliyunOSSUpload />)}</Form.Item>
-            <Form.Item label="name">{getFieldDecorator('name')(<Input style={{ maxWidth: 240 }} />)}</Form.Item>
-            <Form.Item label="type">{getFieldDecorator('type')(<Input style={{ maxWidth: 240 }} />)}</Form.Item>
-            <Form.Item label="uri">{getFieldDecorator('uri')(<Input style={{ maxWidth: 240 }} />)}</Form.Item>
-            <Form.Item label="description">{getFieldDecorator('description')(<Input.TextArea style={{ maxWidth: 240 }} />)}</Form.Item>
+            <Form.Item label="name">{getFieldDecorator('name')(<Input />)}</Form.Item>
+            <Form.Item label="type">{getFieldDecorator('type')(<Input />)}</Form.Item>
+            <Form.Item label="uri">{getFieldDecorator('uri')(<Input />)}</Form.Item>
+            <Form.Item label="description">{getFieldDecorator('description')(<Input.TextArea />)}</Form.Item>
             <Form.Item label=" " colon={false}><Button onClick={submit} loading={loading}>上传</Button></Form.Item>
         </Form >
     );
