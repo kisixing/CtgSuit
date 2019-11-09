@@ -106,11 +106,12 @@ const WorkbenchItem = (props: IProps) => {
     >
       <Card
         size="small"
+        loading={spinning}
         title={renderTilte(dataSource)}
         className={styles.card}
         extra={renderExtra(bedname, data.status)}
         headStyle={{ background: 'var(--theme-color)', color: '#fff' }}
-        bodyStyle={{ padding: 0, height: '100%' }}
+        bodyStyle={{ padding: 0, height: 'calc(100% - 38px)' }}
       >
         <L
           data={data}
@@ -118,6 +119,7 @@ const WorkbenchItem = (props: IProps) => {
           mutableSuitObject={suitObject}
           itemHeight={itemHeight}
           onDoubleClick={fullScreen}
+          loading={spinning}
         ></L>
       </Card>
       <Toolbar {...props} showSettingBar={true} showLoading={setSpinning} />
