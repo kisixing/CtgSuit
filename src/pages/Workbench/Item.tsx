@@ -115,11 +115,11 @@ const WorkbenchItem = (props: IProps) => {
       >
         <L
           data={data}
-          showEcg={true}
           mutableSuitObject={suitObject}
           itemHeight={itemHeight}
           onDoubleClick={fullScreen}
           loading={spinning}
+          showEcg={dataSource.type === 'k9'}
         ></L>
       </Card>
       <Toolbar {...props} showSettingBar={true} showLoading={setSpinning} />
