@@ -1,5 +1,5 @@
-import React, { useMemo } from 'react';
-import { Card, Col, Button, Tag, Tooltip } from 'antd';
+import React, { useMemo, useState } from 'react';
+import { Card, Col, Button, Tag, Tooltip, Spin } from 'antd';
 import moment from 'moment';
 import { Ctg as L } from '@lianmed/lmg';
 import { mapStatusToColor, mapStatusToText } from '@/constant';
@@ -19,7 +19,7 @@ interface IProps {
 }
 const WorkbenchItem = (props: IProps) => {
   const { dispatch, fullScreenId, itemHeight, itemSpan, dataSource, outPadding } = props;
-  const { data, bedname, id } = dataSource;
+  const { data, bedname } = dataSource;
   const { unitId } = (dataSource as IDevice)
   const { isTodo, note } = (dataSource as IRemain)
   const suitObject = useMemo<{ suit: Suit }>(() => {
@@ -29,13 +29,18 @@ const WorkbenchItem = (props: IProps) => {
   const [ref, fullScreen] = useFullScreen(fullScreenId, unitId, dispatch)
   const [alarmStatus] = useItemAlarm(suitObject.suit)
 
+  // set loading
+  const [spinning, setSpinning] = useState(false);
+
   // item右上角icon
   const renderExtra = (bedname: string, status: number) => {
     return (
       <div className={styles.extra}>
         <span style={{ marginRight: '8px', color: '#fff' }}>{bedname}号</span>
         {
-          <Tag color={alarmStatus ? '#f5222d' : mapStatusToColor[status]}>{alarmStatus ? alarmStatus : mapStatusToText[status]}</Tag>
+          <Tag color={alarmStatus ? '#f5222d' : mapStatusToColor[status]}>
+            {alarmStatus ? alarmStatus : mapStatusToText[status]}
+          </Tag>
         }
         <Button
           title="关闭监护窗口"
@@ -68,9 +73,12 @@ const WorkbenchItem = (props: IProps) => {
 
   // 床位信息
   const renderTilte = (item) => {
-    const { bedname, data = {} } = item;
-    const havePregnancy = data && data.pregnancy
-    const pregnancy = (typeof havePregnancy === 'object') ? havePregnancy : havePregnancy && JSON.parse(havePregnancy.replace(/'/g, '"')) || {};
+    const { data = {} } = item;
+    const havePregnancy = data && data.pregnancy;
+    const pregnancy = (typeof havePregnancy === 'object')
+      ? havePregnancy
+      : havePregnancy && JSON.parse(havePregnancy.replace(/'/g, '"'))
+      || {};
     const text = (
       <span className={styles.title}>
         床号: <span>{pregnancy.bedNO}</span>
@@ -79,7 +87,6 @@ const WorkbenchItem = (props: IProps) => {
         年龄：<span>{pregnancy.age}</span>
         GP：<span>{pregnancy.GP}</span>
         开始时间: <span>{data.starttime && moment(data.starttime).format('HH:mm')}</span>
-        {/* <span style={{ float: 'right', marginRight: '5px' }}>{bedname}号</span> */}
       </span>
     )
     // 是否已经建档绑定孕册
@@ -95,21 +102,27 @@ const WorkbenchItem = (props: IProps) => {
       span={itemSpan}
       className={styles.col}
       ref={ref}
-      style={{ padding: outPadding, height: itemHeight }} >
-
-      <Toolbar {...props} showSettingBar={true} />
-
-      <Card
-        title={renderTilte(dataSource)}
-        size="small"
-        className={styles.card}
-        extra={renderExtra(bedname, data.status)}
-        headStyle={{ background: 'var(--theme-color)', color: '#fff' }}
-        bodyStyle={{ padding: 0, height: 'calc(100% - 38px)' }}
-      >
-        <L data={data} showEcg={true} mutableSuitObject={suitObject} itemHeight={itemHeight} onDoubleClick={fullScreen}></L>
-      </Card>
-
+      style={{ padding: outPadding, height: itemHeight }}
+    >
+      <Spin spinning={spinning} tip="Loading...">
+        <Card
+          size="small"
+          title={renderTilte(dataSource)}
+          className={styles.card}
+          extra={renderExtra(bedname, data.status)}
+          headStyle={{ background: 'var(--theme-color)', color: '#fff' }}
+          bodyStyle={{ padding: 0, height: '100%' }}
+        >
+          <L
+            data={data}
+            showEcg={true}
+            mutableSuitObject={suitObject}
+            itemHeight={itemHeight}
+            onDoubleClick={fullScreen}
+          ></L>
+        </Card>
+      </Spin>
+      <Toolbar {...props} showSettingBar={true} showLoading={setSpinning} />
     </Col>
   );
 }

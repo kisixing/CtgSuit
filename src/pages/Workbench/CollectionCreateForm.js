@@ -1,5 +1,5 @@
 /**
- * 建档/绑定弹窗
+ * 胎监主页PDA建档/绑定弹窗
  */
 import React from 'react';
 import { Button, Modal, Form, Input, Row, Col, InputNumber, message } from 'antd';
@@ -17,8 +17,9 @@ class CollectionCreateForm extends React.Component {
   }
 
   reset = () => {
-    const { form } = this.props;
-    form.resetFields();
+    // 清空form表单数据、输入框状态变为可输入状态
+    this.props.form.resetFields();
+    this.setState({ disabled: false })
   };
 
   // modal里面的搜索按钮事件、调入
@@ -34,19 +35,23 @@ class CollectionCreateForm extends React.Component {
       dispatch({
         type: 'list/fetchPregnancy',
         payload: {
+          // TODO
+          // 默认病区 、默认住院状态
           'recordstate.equals': '10', // 住院中
           'areaNO.equals': '01', // 默认病区
           'bedNO.equals': values.bedNO, // 床号
         },
         callback: res => {
+          // 成功调入孕妇信息后，禁止修改。
+          // 重新选择调入、新建孕妇信息 --> '取消'后再重复操作
           if (!res.length) {
             _this.setState({ errorText: '没有这个孕册，请新建孕册。' });
+          } else {
+            _this.setState({ disabled: true });
+            form.setFieldsValue(res[0]);
           }
-          form.setFieldsValue(res[0]);
         },
-      }).then(() => {
-        _this.setState({ required: true });
-      });
+      })
     });
   };
 
@@ -145,6 +150,7 @@ class CollectionCreateForm extends React.Component {
     const { visible, onCancel, form, dataSource, loading } = this.props;
     const { getFieldDecorator } = form;
     const { disabled, errorText } = this.state;
+    console.log('5555555888888', disabled);
 
     const formItemLayout = {
       labelCol: {
@@ -289,8 +295,8 @@ class CollectionCreateForm extends React.Component {
           </Row>
           <Row>
             <Col span={24} className={styles.buttons}>
-              {/* <Button onClick={this.reset}>重置</Button> */}
-              <Button onClick={() => onCancel('visible')}>取消</Button>
+              {/* 清空form数据 */}
+              <Button onClick={this.reset}>取消</Button>
               {/* 建档后，不支持再次修改信息 */}
               <Button
                 type="primary"

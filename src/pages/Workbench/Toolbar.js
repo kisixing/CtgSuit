@@ -58,6 +58,12 @@ class Toolbar extends Component {
   };
 
   showModal = name => {
+    this.props.dispatch({
+      type: 'item/updateState',
+      payload: {
+        ctgData: null,
+      },
+    });
     this.setState({ [name]: true });
   };
 
@@ -105,7 +111,7 @@ class Toolbar extends Component {
       const data = { ...d, pregnancy: { id: pregnancyId } };
       this.newArchive(data, item);
     } else {
-      // 无孕册pregnancyId 新建孕册获取pregnancyId
+      // 无孕册pregnancyId 新建孕册获并获取到pregnancyId
       dispatch({
         type: 'list/createPregnancy',
         // TODO 默认01病区
@@ -114,7 +120,7 @@ class Toolbar extends Component {
           if (res && res.id) {
             // 新建孕册成功
             const data = { ...d, pregnancy: { id: res.id } };
-            // 新建档案
+            // 新建（绑定）档案
             this.newArchive(data, item);
           } else {
             // 孕册存在，取到孕册信息
@@ -126,7 +132,7 @@ class Toolbar extends Component {
   };
 
   /**
-   * 绑定孕册信息
+   * 绑定（新建）档案信息
    * @param {object} params 条件参数
    * @param {object} item item原始数据
    */
@@ -147,15 +153,23 @@ class Toolbar extends Component {
           }
           this.setState({ visible: false });
         } else {
-          // message.error('建档失败！', res)
+          console.info('archives/create', JSON.stringify(res));
+          message.error('建档异常，请稍后再试！', 3)
         }
       },
     });
   };
 
+  // 开始设备监控
+  // 增加2s的loading
   start = item => {
+    const { showLoading } = this.props;
     const { deviceno, bedno } = item;
+    showLoading(true);
     socket.startwork(deviceno, bedno);
+    setTimeout(() => {
+      showLoading(false);
+    }, 2000);
   };
 
   // 停止监护

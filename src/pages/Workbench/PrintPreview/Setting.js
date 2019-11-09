@@ -21,26 +21,29 @@ class Setting extends Component {
     } = this.props;
     if (from !== "archives") {
       // 从检测页（主页）调用时，重新请求静态ctg数据
-      dispatch({
-        type: 'item/fetchCTGData', // archives/fetchCTGrecordData
-        payload: {
-          ctgexamid: data.docid,
-        },
-      });
+      setTimeout(() => {
+        dispatch({
+          type: 'item/fetchCTGData', // archives/fetchCTGrecordData
+          payload: {
+            ctgexamid: data.docid,
+          },
+        });
+      }, 1000);
+
     }
   }
 
   render() {
     const { ctgData, CTGData, from, loading } = this.props;
     const data = from === 'archives' ? CTGData : ctgData;
-    console.log('55555555557777', data)
     return (
       <Context.Consumer>
         {value => (
           <Spin
             wrapperClassName={styles.chart}
             spinning={
-              loading.effects['item/fetchCTGData'] || loading.effects['archives/fetchCTGrecordData']
+              !data
+              // loading.effects['item/fetchCTGData'] || loading.effects['archives/fetchCTGrecordData']
             }
           >
             <L suitType={2} data={data} mutableSuitObject={value}></L>
