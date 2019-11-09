@@ -4,6 +4,12 @@
 
 .col {
   position: relative;
+  &:hover{
+    
+    .actionButton {
+      opacity: 1;
+    }
+  }
   // margin-bottom: 24px;
   background: var(--theme-light-color);
   .toolbar {
@@ -37,6 +43,8 @@
   }
 
   .actionButton {
+    opacity: 0;
+
     position: absolute;
     bottom: 2 * @float-padding;
     left: 2 * @float-padding;

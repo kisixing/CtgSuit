@@ -329,7 +329,7 @@ class Toolbar extends Component {
         </div>
         <div
           className={styles.actionButton}
-          style={{ opacity: showSetting || showSettingBar ? 1 : 0 }}
+          // style={{ opacity: showSetting || showSettingBar ? 1 : 0 }}
         >
           <Button
             icon={showSetting ? 'left' : 'right'}
