@@ -10,7 +10,7 @@ export default (suit: Suit) => {
 
         const _setAlarmStatus = throttle((alarmType) => {
             setAlarmStatus(alarmType)
-        }, 100)
+        }, 0)
         const onCb = (alarmType: string) => {
             event.emit(`Suit:alarmOn`, alarmType)
             _setAlarmStatus(alarmType)
