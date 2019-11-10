@@ -37,7 +37,7 @@ class Toolbar extends Component {
     this.showModal('confirmVisible');
   };
   componentDidMount() {
-    console.log('item datasource', this.props.dataSource);
+    // console.log('item datasource', this.props.dataSource);
     this.unitId = this.props.dataSource.unitId;
     event.on(`bedClose:${this.unitId}`, this.onclose);
   }
@@ -169,7 +169,7 @@ class Toolbar extends Component {
     socket.startwork(deviceno, bedno);
     setTimeout(() => {
       showLoading(false);
-    }, 2000);
+    }, 3500);
   };
 
   // 停止监护

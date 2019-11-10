@@ -106,6 +106,7 @@ const WorkbenchItem = (props: IProps) => {
     >
       <Card
         size="small"
+        // loading={spinning}
         title={renderTilte(dataSource)}
         className={styles.card}
         extra={renderExtra(bedname, data.status)}

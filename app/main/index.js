@@ -79,7 +79,7 @@ function createWindow() {
   Menu.setApplicationMenu(menus);
 
   // and load the index.html of the app.
-  mainWindow.loadURL('https://www.baidu.com');
+  mainWindow.loadURL(getMainPath());
 
   // Open the DevTools.打开开发者工具
   // mainWindow.webContents.openDevTools();
