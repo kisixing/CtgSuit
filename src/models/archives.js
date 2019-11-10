@@ -144,12 +144,14 @@ export default {
         callback(res); // 返回结果
       }
     },
+
     *update({ payload, callback }, { call, put }) {
       const res = yield call(updateCTGrecord, payload);
       if (callback && typeof callback === 'function') {
         callback(res); // 返回结果
       }
     },
+    
     *noSaveCTG({ payload }, { call }) {
       const res = yield call(nosaveCTG, payload);
     },

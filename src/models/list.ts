@@ -65,6 +65,7 @@ export default {
       yield put({ type: 'setState', payload: { listData } });
       yield put({ type: 'computeLayout' });
     },
+
     *computeLayout({ }, { put, select }) {
       const state = yield select();
       let {
@@ -73,6 +74,7 @@ export default {
       yield put({ type: 'setPageData' });
       yield put({ type: 'setPage', page });
     },
+
     *setPageData(payload, { put, select }) {
       const state = yield select();
       let {
@@ -97,6 +99,7 @@ export default {
 
       yield put({ type: 'setState', payload: { pageData, pageCount } });
     },
+
     *setPage({ page }, { put, select }) {
       const state = yield select();
       let {
@@ -112,6 +115,7 @@ export default {
         type: 'setPageItems'
       });
     },
+
     *setPageItems({ }, { put, select }) {
       const state = yield select();
       let {
@@ -149,6 +153,7 @@ export default {
         type: 'processListData'
       })
     },
+
     *appendDirty({ unitId }, { call, put, select }) {
       const state = yield select();
       let {
@@ -162,6 +167,7 @@ export default {
         }
       })
     },
+
     *appendOffline({ unitId }, { call, put, select }) {
       const state: IState = yield select();
       let {
@@ -202,6 +208,7 @@ export default {
         })
       }
     },
+
     // 新建档案modal页面的搜索功能，检索个人孕册信息
     *fetchPregnancy({ payload, callback }, { call, put }) {
       const res = yield call(getPregnancy, payload);
@@ -217,6 +224,7 @@ export default {
         });
       }
     },
+
     // 新建孕册
     *createPregnancy({ payload, callback }, { call, put, select }) {
       const res = yield call(newPregnancies, payload);
@@ -227,6 +235,7 @@ export default {
         }
       }
     },
+    
     // 主要获取prenatalVisit信息
     *fetchBed({ payload, callback }, { call, put }) {
       const res = yield call(getBedIfo, payload);

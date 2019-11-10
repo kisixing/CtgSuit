@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import Empty from '@/components/Empty'
-import { Row, Empty } from 'antd';
+import { Row } from 'antd';
 import { connect } from 'react-redux';
 import './index.less';
 import Item from './Item';
@@ -12,7 +12,6 @@ interface IProps {
   pageItems: IDevice[],
   [x: string]: any
 }
-
 
 const Home = (props: IProps) => {
   const { listLayout = [], pageItems, fullScreenId, dispatch, showTodo } = props;
@@ -28,7 +27,6 @@ const Home = (props: IProps) => {
   const itemHeight =
     (contentHeight - outPadding * 2) / listLayout[1];
   const items: any[] = (showTodo ? todo : pageItems);
-
 
   // useLayoutEffect(() => {
   //   if (empty.current) {

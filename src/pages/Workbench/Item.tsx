@@ -78,7 +78,6 @@ const WorkbenchItem = (props: IProps) => {
     const pregnancy = (typeof havePregnancy === 'object')
       ? havePregnancy
       : havePregnancy && JSON.parse(havePregnancy.replace(/'/g, '"'))
-      || {};
     const text = (
       <span className={styles.title}>
         床号: <span>{pregnancy.bedNO}</span>
