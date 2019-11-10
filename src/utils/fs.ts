@@ -3,7 +3,7 @@ import store from "store";
 const fs = {
     stat(path: string, cb) {
         const value = store.get(path)
-        cb(!value)
+        cb(!value,value)
     },
     readFile(path: string, encoding: string, cb: (err: any, value: string) => void) {
         const value = store.get(path)
@@ -21,8 +21,8 @@ const fs = {
         store.set(path, value)
     }
 }
-fs.stat('.setting', (err) => {
-    if (err) {
+fs.stat('.setting', (err,data:string) => {
+    if (err || !data.includes('ws')) {
         fs.writeFile('.setting', require('../setting').default, '', () => { })
     }
 })

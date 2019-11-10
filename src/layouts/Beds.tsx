@@ -60,6 +60,7 @@ function Beds({ dispatch, listData, wsData }) {
         listData.filter(({ unitId }) => {
           const status = wsData.get(unitId) && wsData.get(unitId).status
           return [BedStatus.Working, BedStatus.Stopped].includes(status)
+          // return true
         })
           .map(({ bedname, id, pageIndex, unitId }) => {
             const status = wsData.get(unitId) && wsData.get(unitId).status

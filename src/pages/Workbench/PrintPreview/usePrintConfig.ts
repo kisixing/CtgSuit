@@ -47,9 +47,9 @@ export default (value): {
                 endingTime
             )
         }
-        value.suit && value.suit.on('suit:startTime', cb).on('suit:endTime', cbe)
+        value.suit && value.suit.on('startTime', cb).on('endTime', cbe)
         return () => {
-            value.suit && value.suit.off('suit:startTime', cb).off('suit:endTime', cb)
+            value.suit && value.suit.off('startTime', cb).off('endTime', cb)
         };
     }, [value])
 
