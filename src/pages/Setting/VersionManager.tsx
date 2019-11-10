@@ -26,7 +26,6 @@ const AliyunOSSUpload = (props: { [x: string]: any }) => {
     };
 
     const transformFile = file => {
-        debugger
         const suffix = file.name.slice(file.name.lastIndexOf('.'));
         const filename = Date.now() + suffix;
         file.url = OSSData.dir + filename;
