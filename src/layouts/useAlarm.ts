@@ -14,7 +14,7 @@ export default () => {
             }, 5000);
         }
         const announcerCb = (text, pitch = 4, rate = .6) => {
-            const voices = speechSynthesis.getVoices().find(_ => _.lang === 'zh-TW')
+            const voices = speechSynthesis.getVoices().find(_ => _.lang === 'zh-CN')
             const speechSU = new SpeechSynthesisUtterance();
             speechSU.text = text;
             speechSU.pitch = pitch;
