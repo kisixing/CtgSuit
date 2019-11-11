@@ -9,19 +9,23 @@ export default function ModalConfirm({
   isCreated,
   isMonitor,
   onCancel = () => {},
-  onOk = () => {},
+  onOk = () => {}, // end事件，停止监护
   onCreate = () => {}
 }) {
   const { bedname, data } = dataSource;
   // 离线状态
   const isOffine = data && data.status === 3;
   const havePregnancy = data && data.pregnancy;
-  const pregnancy = typeof havePregnancy === 'object' ? havePregnancy : havePregnancy && JSON.parse(data.pregnancy.replace(/'/g, '"'));
+  const pregnancy = typeof havePregnancy === 'object'
+    ? havePregnancy : havePregnancy && JSON.parse(data.pregnancy.replace(/'/g, '"'));
   const isCreate = pregnancy && pregnancy.id && data && data.pregnancy;
+
+  // 放弃建档
   const handleOk = () => {
     onOk(dataSource);
     onCancel('confirmVisible');
   }
+
   let content = '';
   if (isMonitor) {
     content = isCreated ? (
@@ -78,7 +82,10 @@ export default function ModalConfirm({
       <div className={styles.content}>{content}</div>
       <div className={styles.buttons}>
         <Button onClick={() => onCancel('confirmVisible')}>取消</Button>
-        {isCreate ? <Button type="primary" onClick={handleOk}>确定</Button> : <Button onClick={handleOk}>放弃</Button>}
+        {isCreate
+          ? <Button type="primary" onClick={handleOk}>确定</Button>
+          : <Button onClick={handleOk}>放弃</Button>
+        }
         {isCreate ? null : (
           <Button type="primary" onClick={onCreate}>
             建档

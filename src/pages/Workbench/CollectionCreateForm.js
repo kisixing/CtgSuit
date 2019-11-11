@@ -150,7 +150,6 @@ class CollectionCreateForm extends React.Component {
     const { visible, onCancel, form, dataSource, loading } = this.props;
     const { getFieldDecorator } = form;
     const { disabled, errorText } = this.state;
-    console.log('5555555888888', disabled);
 
     const formItemLayout = {
       labelCol: {

@@ -145,7 +145,7 @@ class Toolbar extends Component {
         if (res && res.id) {
           // this.setState({ isCreated: true });
           event.emit('newArchive', res);
-          // 完成绑定后判断是否停止监护工作
+          // 完成绑定后判断是否停止监护工作（未建档停止监护时补充建档内容）
           const { isStopMonitorWhenCreated } = this.state;
           if (isStopMonitorWhenCreated) {
             this.end(item);
@@ -225,7 +225,6 @@ class Toolbar extends Component {
                 },
               },
             });
-          } else {
           }
         },
       });
@@ -249,7 +248,7 @@ class Toolbar extends Component {
     // }
   };
 
-  // 重定向打开建档窗口，用于未建档设备停止监护时，选择建档
+  // 未建档停止监，选择建档时，重定向打开建档窗口
   redirectCreate = () => {
     this.setState({
       confirmVisible: false,
