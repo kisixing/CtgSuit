@@ -2,7 +2,7 @@ import { routerRedux } from 'dva/router';
 import { parse } from 'qs';
 import store from 'store';
 import { TOKEN } from '@/utils/constant';
-import { login, authenticate } from '@/services/api';
+import { authenticate } from '@/services/api';
 
 export default {
   namespace: 'login',
@@ -17,7 +17,6 @@ export default {
     *login({ payload }, { put, call }) {
       let data = {};
       data = yield call(authenticate, payload);
-      console.log('error------', data);
       const auth = data && data.id_token ? true : false;
       if (auth) {
         // 登录验证成功
@@ -34,6 +33,8 @@ export default {
           },
         });
         store.set(TOKEN, `Bearer ${data.id_token}`);
+        // TODO 暂时存储登录账户密码
+        store.set('ACCOUNT', payload);
         const urlParams = new URL(window.location.href);
         const params = parse(window.location.href.split('?')[1]);
         let { redirect } = params;
@@ -59,6 +60,14 @@ export default {
           },
         });
         throw data;
+      }
+    },
+    *verification({ payload }, {call, put}) {
+      // 验证用户登录
+      const data = yield call(authenticate, payload);
+      const auth = data && data.id_token ? true : false;
+      if (auth) {
+        store.set(TOKEN, `Bearer ${data.id_token}`);
       }
     },
     *logout(_, { put }) {

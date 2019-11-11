@@ -32,6 +32,17 @@ const WorkbenchItem = (props: IProps) => {
   // set loading
   const [spinning, setSpinning] = useState(false);
 
+  // 保存建档孕册信息 1/运行  2/停止
+  console.log('99999999999999911111', dataSource);
+  const { status, pregnancy } = data;
+  const b = sessionStorage.getItem('bed');
+  let bed = b ? JSON.parse(b) : {};
+  if (status === 1) {
+    bed[bedname] = pregnancy;
+    const bedString = JSON.stringify(bed); // JSON.parse(str)
+    sessionStorage.setItem('bed', bedString);
+  }
+
   // item右上角icon
   const renderExtra = (bedname: string, status: number) => {
     return (
@@ -73,18 +84,27 @@ const WorkbenchItem = (props: IProps) => {
 
   // 床位信息
   const renderTilte = (item) => {
-    const { data = {} } = item;
+    const { data = {}, bedname } = item;
     const havePregnancy = data && data.pregnancy;
     const pregnancy = (typeof havePregnancy === 'object')
       ? havePregnancy
-      : havePregnancy && JSON.parse(havePregnancy.replace(/'/g, '"'))
+      : havePregnancy && JSON.parse(havePregnancy.replace(/'/g, '"'));
+    // 根据是否建档判断是否显示
+    // const isCreated = havePregnancy && pregnancy.id;
+    const { status } = data;
+    let dd = pregnancy;
+    if (status !== 1) {
+      const bed = JSON.parse(sessionStorage.getItem('bed'));
+      dd = JSON.parse(bed[bedname]);
+      console.log('000000000', item, bed, dd);
+    }
     const text = (
       <span className={styles.title}>
-        床号: <span>{pregnancy.bedNO}</span>
-        {/* 住院号: <span>{ pregnancy && pregnancy.inpatientNO}</span> */}
-        姓名: <span>{pregnancy.name}</span>
-        年龄：<span>{pregnancy.age}</span>
-        GP：<span>{pregnancy.GP}</span>
+        床号: <span>{dd.bedNO}</span>
+        {/* 住院号: <span>{dd.inpatientNO}</span> */}
+        姓名: <span>{dd.name}</span>
+        年龄：<span>{dd.age}</span>
+        GP：<span>{dd.GP}</span>
         开始时间: <span>{data.starttime && moment(data.starttime).format('HH:mm')}</span>
       </span>
     )

@@ -1,6 +1,6 @@
 {
   "name": "ctg-suit",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "license": "lianmed-1.0.0",
   "private": true,
   "scripts": {
@@ -96,6 +96,6 @@
     "name": "Lian-Med",
     "email": "lian-med@163.com",
     "hospital": "xxx 医院",
-    "date": "2019-11-09"
+    "date": "2019-11-10"
   }
 }

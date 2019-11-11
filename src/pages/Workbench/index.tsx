@@ -70,8 +70,7 @@ const Home = (props: IProps) => {
 };
 
 export default connect(({ setting, list, ws }: any) => {
-  console.log('index connect')
-
+  // console.log('index connect')
   const { data: datacache } = ws
   return {
     listLayout: setting.listLayout,

@@ -47,7 +47,6 @@ class BasicLayout extends Component {
   }
 
   componentDidMount() {
-
     const { dispatch } = this.props;
     dispatch({
       type: 'global/fetchAccount',
@@ -64,8 +63,14 @@ class BasicLayout extends Component {
       age: '18',
       clearAll: () => store.clearAll(),
     });
-    // 每1min请求一次床位信息列表
-    // this.interval = setInterval(() => this.updateBeds(), 10000);
+    // 每2h获取新的token
+    this.interval = setInterval(() => {
+      const account = store.get('ACCOUNT');
+      dispatch({
+        type: 'login/verification',
+        payload: account
+      });
+    }, 1000*60*60*2);
   }
 
   componentWillUnmount() {

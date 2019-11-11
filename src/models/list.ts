@@ -34,7 +34,7 @@ export default {
       yield put({ type: 'processListData' });
     },
 
-    *processListData({ }, { put, select }) {
+    *processListData(_, { put, select }) {
       const state = yield select();
       let {
         setting: { listLayout },
@@ -66,7 +66,7 @@ export default {
       yield put({ type: 'computeLayout' });
     },
 
-    *computeLayout({ }, { put, select }) {
+    *computeLayout(_, { put, select }) {
       const state = yield select();
       let {
         list: { page },
@@ -235,7 +235,7 @@ export default {
         }
       }
     },
-    
+
     // 主要获取prenatalVisit信息
     *fetchBed({ payload, callback }, { call, put }) {
       const res = yield call(getBedIfo, payload);
