@@ -2,7 +2,7 @@
 import React, { useState, useCallback } from 'react';
 import { connect } from 'dva';
 import { Document, Page } from 'react-pdf';
-import { Pagination, Button, Spin, Icon } from 'antd';
+import { Pagination, Button, Spin, Icon, Input, Modal } from 'antd';
 import Empty from '@/components/Empty'
 
 import { ipcRenderer } from 'electron';
@@ -13,6 +13,7 @@ import classnames from 'classnames';
 import moment from 'moment'
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import usePrintConfig from "./usePrintConfig";
+import useSign from "./useSign";
 const styles = require('./Preview.less')
 
 const COEFFICIENT = 240
@@ -28,11 +29,12 @@ const Preview = props => {
     endingTime,
     locking,
     customizable,
-    remoteSetStartingTime,
-    remoteSetEndingTime,
+    // remoteSetStartingTime,
+    // remoteSetEndingTime,
     toggleLocking,
     toggleCustomiz
   } = usePrintConfig(value)
+
 
   const { dataSource, from, getHeight } = props;
   const { pregnancy, data, ctgexam } = dataSource
@@ -45,15 +47,17 @@ const Preview = props => {
     docid = ctgexam.note;
     starttime = ctgexam.startTime
   }
+  const { signHandler, qrCodeBase64, modalVisible } = useSign(docid)
+
   const filePath = `${config.apiPrefix}/ctg-exams-pdfurl/${docid}` || 'http://www.orimi.com/pdf-test.pdf'
   // const [pdfBase64, setPdfBase64] = useState(`data:application/pdf;base64,${pdf}`)
   const [numPages, setNumPages] = useState(0)
   const [pageNumber, setPageNumber] = useState(1)
-  const [pdfflow, setPdfflow] = useState('')
+  const [pdfBase64, setPdfBase64] = useState('')
   const onDocumentLoad = useCallback(({ numPages }) => { setNumPages(numPages) }, [])
   const onChangePage = useCallback(page => { setPageNumber(page) }, [])
   const handlePrint = useCallback((e) => { ipcRenderer.send('printWindow', filePath) }, [filePath])
-
+  const [diagnosis, setDiagnosis] = useState('观察      分钟，胎心基线     bpm，胎动    次，胎动时胎心    bpm,持续时间     s，胎心振幅范围            bpm  NST   反应。 ')
   const handlePreview = () => {
     let params = {};
     if (from !== "archives") {
@@ -87,15 +91,15 @@ const Preview = props => {
     }
 
     request.post(`/ctg-exams-pdf`, {
-      data: params,
+      data: { ...params, diagnosis },
     }).then(res => {
       const pdfData = res.pdfdata && `data:application/pdf;base64,${res.pdfdata}`;
-      setPdfflow(pdfData)
+      setPdfBase64(pdfData)
     })
   }
 
   const largen = () => {
-    const{ height, width } = getHeight();
+    const { height, width } = getHeight();
     setFullpage(true)
     setHeight(height - 24);
     setWidth(width)
@@ -108,13 +112,13 @@ const Preview = props => {
   }
 
   const PreivewContent = () => {
-    const content = pdfflow ? (
-      <div className={classnames({ [styles.fullPage]: isFullpage })} style={{ width: width }}>
+    const content = pdfBase64 ? (
+      <div className={classnames({ [styles.fullPage]: isFullpage })} style={{ width }}>
         <Document
           className={styles.preview}
           loading={<Spin style={{ margin: '120px 0' }} />}
           onLoadSuccess={onDocumentLoad}
-          file={pdfflow}
+          file={pdfBase64}
           renderMode="canvas"
           options={{
             cMapUrl: 'cmaps/',
@@ -137,7 +141,7 @@ const Preview = props => {
         </span>
       </div>
     ) : (
-        <Empty  style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', margin: 0 }} />
+        <Empty style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', margin: 0 }} />
       );
     return (
       <div className={styles.wrapper} >
@@ -155,14 +159,20 @@ const Preview = props => {
           return (
             <div style={{ display: 'flex', height: '100%' }}>
               <PreivewContent />
+              <div style={{ background: '#fff', width: 400, marginRight: 10 }}>
+                <Input.TextArea value={diagnosis} style={{ height: '100%', border: 0 }} onChange={e => setDiagnosis(e.target.value)}>
+
+                </Input.TextArea>
+              </div>
+
               <div style={{ width: 300, padding: 24, background: '#fff', display: 'flex', flexDirection: 'column', justifyContent: 'space-around' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <span>开始时间：
                     {/* <Input size="small" style={{ width: 80 }} value={(startingTime/ COEFFICIENT).toFixed(1)} onChange={e => {
                     remoteSetStartingTime(parseFloat(e.target.value))
                   }} /> */}
-                  {(startingTime/ COEFFICIENT).toFixed(1)}
-                  分
+                    {(startingTime / COEFFICIENT).toFixed(1)}
+                    分
 
                   </span>
                   <Button type={locking ? 'danger' : 'primary'} onClick={toggleLocking} size="small">
@@ -178,8 +188,8 @@ const Preview = props => {
                     {/* <Input  size="small" style={{ width: 80 }} value={(endingTime/ COEFFICIENT).toFixed(1) } onChange={e => {
                     remoteSetEndingTime(parseFloat(e.target.value))
                   }} /> */}
-                  {(endingTime/ COEFFICIENT).toFixed(1) }
-                  分
+                    {(endingTime / COEFFICIENT).toFixed(1)}
+                    分
                   </span>
                   {
                     locking && (
@@ -198,16 +208,23 @@ const Preview = props => {
                   <Button block disabled={!locking} type="primary" onClick={handlePreview} style={{ marginRight: 10 }}>
                     生成
                   </Button>
-                  <Button block disabled={!pdfflow} type="primary" onClick={handlePrint}>
+                  <Button block disabled={!pdfBase64} type="primary" onClick={signHandler} style={{ marginRight: 10 }}>
+                    签名
+                  </Button>
+                  <Button block disabled={!pdfBase64} type="primary" onClick={handlePrint}>
                     打印
                   </Button>
                 </div>
               </div>
+
+              <Modal visible={modalVisible} footer={null} centered bodyStyle={{ textAlign: 'center' }}>
+                <img src={qrCodeBase64} />
+              </Modal>
             </div>
           )
         }
       }
-    </Context.Consumer>
+    </Context.Consumer >
   );
 }
 
