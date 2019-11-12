@@ -159,7 +159,8 @@ const Preview = props => {
           return (
             <div style={{ display: 'flex', height: '100%' }}>
               <PreivewContent />
-              <div style={{ background: '#fff', width: 400, marginRight: 10 }}>
+              <div style={{ background: '#fff', width: 400, marginRight: 10,display:'flex',flexDirection:'column' }}>
+                <label>NST报告结果</label>
                 <Input.TextArea value={diagnosis} style={{ height: '100%', border: 0 }} onChange={e => setDiagnosis(e.target.value)}>
 
                 </Input.TextArea>
