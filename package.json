@@ -5,10 +5,10 @@
   "private": true,
   "scripts": {
     "start:dev": "concurrently  'yarn start' 'yarn run dev:main'",
-    "start": "cross-env  PORT=1702 BROWSER=none umi dev",
+    "start": "cross-env PORT=1702 BROWSER=none umi dev",
     "start:runtime": "cross-env PORT=1702 TARGET=0 umi dev",
     "dev:main": "run-electron .",
-    "build:render": "umi build",
+    "build:render": "cross-env BROWSER=none umi build",
     "test": "umi test",
     "lint": "eslint --ext .js src mock tests",
     "rebuild": "electron-rebuild -m ./app",
