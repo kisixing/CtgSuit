@@ -32,8 +32,9 @@ const WorkbenchItem = (props: IProps) => {
   // set loading
   const [spinning, setSpinning] = useState(false);
 
+  // TODO 监护窗口header 暂时处理方案
   // 保存建档孕册信息 1/运行  2/停止
-  console.log('99999999999999911111', dataSource);
+  // console.log('99999999999999911111', dataSource);
   const { status, pregnancy } = data;
   const b = sessionStorage.getItem('bed');
   let bed = b ? JSON.parse(b) : {};
@@ -89,17 +90,17 @@ const WorkbenchItem = (props: IProps) => {
     const pregnancy = (typeof havePregnancy === 'object')
       ? havePregnancy
       : havePregnancy && JSON.parse(havePregnancy.replace(/'/g, '"'));
-    // 根据是否建档判断是否显示
+    // TODO 根据是否建档判断是否显示
     // const isCreated = havePregnancy && pregnancy.id;
     const { status } = data;
     let dd = pregnancy;
     if (status !== 1) {
       const bed = JSON.parse(sessionStorage.getItem('bed'));
-      dd = JSON.parse(bed[bedname]);
-      console.log('000000000', item, bed, dd);
+      dd = bed[bedname] ? JSON.parse(bed[bedname]) : {};
+      // console.log('000000000', item, bed, dd);
     }
     const text = (
-      <span className={styles.title}>
+      <span className={styles.tooltipTitle}>
         床号: <span>{dd.bedNO}</span>
         {/* 住院号: <span>{dd.inpatientNO}</span> */}
         姓名: <span>{dd.name}</span>

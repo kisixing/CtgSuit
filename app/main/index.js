@@ -82,8 +82,8 @@ function createWindow() {
   mainWindow.loadURL(getMainPath());
 
   // react 插件
-  BrowserWindow.addDevToolsExtension('c:/Users/ADMIN/AppData/Local/Google/Chrome/User\ Data/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/4.2.0_0')
-  BrowserWindow.addDevToolsExtension('c:/Users/ADMIN/AppData/Local/Google/Chrome/User\ Data/Default/Extensions/lmhkpmbekcpmknklioeibfkpmmfibljd/2.17.0_0')
+  // BrowserWindow.addDevToolsExtension('c:/Users/ADMIN/AppData/Local/Google/Chrome/User\ Data/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/4.2.0_0')
+  // BrowserWindow.addDevToolsExtension('c:/Users/ADMIN/AppData/Local/Google/Chrome/User\ Data/Default/Extensions/lmhkpmbekcpmknklioeibfkpmmfibljd/2.17.0_0')
   // Open the DevTools.打开开发者工具
   // mainWindow.webContents.openDevTools();
 
