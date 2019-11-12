@@ -187,3 +187,13 @@ export async function updatePregnancy(params) {
 export async function nosaveCTG(params) {
   return request.get(`/ctg-exams-nosaving/${params}`);
 }
+
+/**
+ * 胎监标记，同时更新ctg组件
+ *
+ */
+export async function updateCTGNote(params) {
+  return request.put(`/ctg-exams-note`, {
+    data: params
+  });
+}

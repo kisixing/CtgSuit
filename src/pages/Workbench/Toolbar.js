@@ -14,6 +14,7 @@ import Analysis from './Analysis';
 import PrintPreview from './PrintPreview';
 import Partogram from './Partogram';
 import ModalConfirm from './ModalConfirm';
+import SignModal from './SignModal';
 import styles from './Item.less';
 import { WsService } from '@lianmed/lmg';
 import { BedStatus } from '@lianmed/lmg/lib/services/WsService';
@@ -29,6 +30,7 @@ class Toolbar extends Component {
       printVisible: false,
       partogramVisible: false,
       confirmVisible: false,
+      signVisible: false, // 胎位标记
       isStopMonitorWhenCreated: false, // 建档后是否停止监护
     };
   }
@@ -154,7 +156,7 @@ class Toolbar extends Component {
           this.setState({ visible: false });
         } else {
           console.info('archives/create', JSON.stringify(res));
-          message.error('建档异常，请稍后再试！', 3)
+          message.error('建档异常，请稍后再试！', 3);
         }
       },
     });
@@ -257,6 +259,12 @@ class Toolbar extends Component {
     });
   };
 
+  // 胎位标记
+  sign = values => {
+    const { form, dispatch } = this.props;
+    console.log('Received values of form: ', values);
+  };
+
   render() {
     const { dataSource, showSettingBar, ...rest } = this.props;
     const {
@@ -266,6 +274,7 @@ class Toolbar extends Component {
       printVisible,
       partogramVisible,
       confirmVisible,
+      signVisible,
     } = this.state;
     const { data } = dataSource;
 
@@ -309,6 +318,14 @@ class Toolbar extends Component {
             onClick={() => this.showModal('visible')}
           >
             {isCreated ? '已建档' : '建档'}
+          </Button>
+          <Button
+            disabled={!isCreated}
+            icon="pushpin"
+            type="link"
+            onClick={() => this.showModal('signVisible')}
+          >
+            胎位标记
           </Button>
           <Button
             disabled={!isCreated}
@@ -393,6 +410,15 @@ class Toolbar extends Component {
           onCancel={this.handleCancel}
           onOk={this.end}
           onCreate={this.redirectCreate}
+        />
+        <SignModal
+          {...rest}
+          visible={signVisible}
+          dataSource={dataSource}
+          isCreated={isCreated}
+          isMonitor={isMonitor}
+          onCancel={this.handleCancel}
+          onCreate={this.sign}
         />
       </>
     );

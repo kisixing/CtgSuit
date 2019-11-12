@@ -1,4 +1,5 @@
-import { getPregnancy, getPDFflow, getCTGrecordData } from '@/services/api';
+import { getPregnancy, getPDFflow, getCTGrecordData, updateCTGNote } from '@/services/api';
+import { message } from 'antd';
 
 export default {
   namespace: 'item',
@@ -79,6 +80,12 @@ export default {
           ctgData: CTGDATA,
         },
       });
+    },
+    *updateCTGnote({ payload }, { call, put }) {
+      const res = yield call(updateCTGNote, payload);
+      if (res) {
+        message.info('胎位标记成功!')
+      }
     },
     // *create({ payload }, { call, put }) {
     //   const res = yield call(newCTGrecord, payload);

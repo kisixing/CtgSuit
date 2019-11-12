@@ -2,9 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Form, Input, Button, message } from 'antd';
 import { ipcRenderer } from 'electron';
+import { request } from '@lianmed/utils';
 
 import { formItemLayout, tailFormItemLayout } from './utils';
 import styles from './style.less';
+
+const config = require('../../../package.json');
 
 @Form.create()
 class BasicSetting extends Component {
@@ -12,6 +15,8 @@ class BasicSetting extends Component {
     super(props);
     this.state = {
       loading: false,
+      isNew: false,
+      version: config.version,
     };
   }
 
@@ -26,14 +31,18 @@ class BasicSetting extends Component {
   checkUpdate = () => {
     this.setState({ loading: true });
     setTimeout(() => {
+      request.get('/');
       this.setState({ loading: false });
       message.info('暂无更新...')
     }, 2000);
+  }
+
+  download = () => {
 
   }
 
   render() {
-    const { loading } = this.state;
+    const { loading, isNew } = this.state;
     const {
       form: { getFieldDecorator },
     } = this.props;
@@ -46,9 +55,14 @@ class BasicSetting extends Component {
           <Button onClick={() => ipcRenderer.send('openDevTools')}>开发者工具</Button>
         </Form.Item>
         <Form.Item label="检查更新">
-          <Button loading={loading} onClick={this.checkUpdate}>
-            检查更新
+          <Button disabled={isNew} loading={loading} onClick={this.checkUpdate}>
+              {isNew ? '有版本更新' : '检查更新'}
           </Button>
+          {isNew ? (
+            <Button onClick={this.download}>
+              下载更新
+            </Button>
+          ) : null}
         </Form.Item>
       </Form>
     );
