@@ -41,7 +41,13 @@ class BasicLayout extends Component {
       current: '',
     };
     const ws = new WsService(settingData);
-    ws.connect();
+    try {
+      ws.connect().catch(err => {
+        router.push('/setting')
+      })
+    } catch (e) {
+      router.push('/setting')
+    }
     this.colorIndex = ~~(Math.random() * colors.length) >> 5;
     this.interval = null;
   }
