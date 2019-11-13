@@ -1,9 +1,11 @@
 import React from "react";
-import { Table, Input, InputNumber, Popconfirm, Form, Button, Select } from 'antd';
+import { Table, Input, Popconfirm, Form, Button, Select } from 'antd';
 import { connect } from "dva";
 import { mapStatusToText } from '@/constant'
 import request from "@lianmed/request";
-
+import { IBed } from '@/types'
+import WsServiceSubscribe from "./WsServiceSubscribe";
+import { WrappedFormUtils } from "antd/lib/form/Form";
 const data = [];
 for (let i = 0; i < 100; i++) {
   data.push({
@@ -13,9 +15,9 @@ for (let i = 0; i < 100; i++) {
     address: `London Park no. ${i}`,
   });
 }
-const EditableContext = React.createContext();
+const EditableContext = React.createContext<WrappedFormUtils>(null);
 
-class EditableCell extends React.Component {
+class EditableCell extends React.Component<any, any> {
   getInput = () => {
     if (this.props.inputType === 'number') {
       return (
@@ -72,7 +74,8 @@ class EditableCell extends React.Component {
   }
 }
 
-class EditableTable extends React.Component {
+class EditableTable extends React.Component<{ data: IBed[], dispatch: any, form: any }, any> {
+  columns: any[]
   constructor(props) {
     super(props);
     this.state = { data, editingKey: '' };
@@ -141,27 +144,26 @@ class EditableTable extends React.Component {
                   </Button>
                 )}
               </EditableContext.Consumer>
-              <Popconfirm title="确认取消?" onConfirm={() => this.cancel(record.id)}>
+              <Popconfirm title="确认取消?" onConfirm={() => this.cancel()}>
                 <Button size="small" type="link">
                   取消
                 </Button>
               </Popconfirm>
             </span>
           ) : (
-            <Button
-              size="small"
-              type="link"
-              disabled={editingKey !== ''}
-              onClick={() => this.edit(record.id)}
-            >
-              编辑
+              <Button
+                size="small"
+                type="link"
+                disabled={editingKey !== ''}
+                onClick={() => this.edit(record.id)}
+              >
+                编辑
             </Button>
-          );
+            );
         },
       },
     ];
   }
-
   isEditing = record => {
     const status = record.id === this.state.editingKey;
     return status
@@ -233,7 +235,7 @@ class EditableTable extends React.Component {
     });
     return (
       <EditableContext.Provider value={this.props.form}>
-        <p style={{ fontWeight: 600, lineHeight: '40px', marginBottom: '24px' }}>账户管理</p>
+        <p style={{ fontWeight: 600, lineHeight: '40px', marginBottom: '24px' }}>床位设置</p>
         <Table
           size="small"
           components={components}
@@ -241,11 +243,12 @@ class EditableTable extends React.Component {
           rowKey="id"
           dataSource={this.props.data}
           columns={columns}
-          rowClassName="editable-row"
+          // rowClassName="editable-row"
           pagination={{
             onChange: this.cancel,
           }}
         />
+        <WsServiceSubscribe data={this.props.data}  />
       </EditableContext.Provider>
     );
   }
@@ -253,7 +256,7 @@ class EditableTable extends React.Component {
 
 const EditableFormTable = Form.create()(EditableTable);
 
-export default connect(({ loading, setting }) => ({
+export default connect(({ loading, setting }: any) => ({
   data: setting.bedinfo,
   loading: loading,
 }))(EditableFormTable);
