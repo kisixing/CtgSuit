@@ -76,7 +76,7 @@ class BasicLayout extends Component {
         type: 'login/verification',
         payload: account
       });
-    }, 1000*60*60*2);
+    }, 1000*60*60);
   }
 
   componentWillUnmount() {
@@ -98,13 +98,13 @@ class BasicLayout extends Component {
       ipcRenderer.send('newWindow', '操作说明');
     }
     if (key === '档案管理') {
-      router.push('/a');
+      router.push('/archives');
     }
     if (key === '系统设置') {
-      router.push('/s');
+      router.push('/setting');
     }
     if (key === '孕产妇管理') {
-      router.push('/p');
+      router.push('/pregnancy');
     }
   };
 

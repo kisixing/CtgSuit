@@ -32,13 +32,13 @@ const WorkbenchItem = (props: IProps) => {
   // set loading
   const [spinning, setSpinning] = useState(false);
 
-  // TODO 监护窗口header 暂时处理方案
-  // 保存建档孕册信息 1/运行  2/停止
-  // console.log('99999999999999911111', dataSource);
+  // TODO 停止状态下没有孕册信息返回，监护窗口header 暂时处理方案
+  // 保存建档孕册信息 1/运行  2/停止 3/离线
   const { status, pregnancy } = data;
   const b = sessionStorage.getItem('bed');
   let bed = b ? JSON.parse(b) : {};
-  if (status === 1) {
+  if (status !== 2) {
+    // 停止监护
     bed[bedname] = pregnancy;
     const bedString = JSON.stringify(bed); // JSON.parse(str)
     sessionStorage.setItem('bed', bedString);
@@ -84,7 +84,7 @@ const WorkbenchItem = (props: IProps) => {
   };
 
   // 床位信息
-  const renderTilte = (item) => {
+  const renderTilte = item => {
     const { data = {}, bedname } = item;
     const havePregnancy = data && data.pregnancy;
     const pregnancy = (typeof havePregnancy === 'object')
@@ -93,11 +93,11 @@ const WorkbenchItem = (props: IProps) => {
     // TODO 根据是否建档判断是否显示
     // const isCreated = havePregnancy && pregnancy.id;
     const { status } = data;
-    let dd = pregnancy;
-    if (status !== 1) {
+    let dd = pregnancy || {};
+    if (status === 2) {
       const bed = JSON.parse(sessionStorage.getItem('bed'));
       dd = bed[bedname] ? JSON.parse(bed[bedname]) : {};
-      // console.log('000000000', item, bed, dd);
+      // console.log('66666666666666', dd)
     }
     const text = (
       <span className={styles.tooltipTitle}>

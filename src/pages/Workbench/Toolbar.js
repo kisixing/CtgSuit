@@ -259,10 +259,24 @@ class Toolbar extends Component {
     });
   };
 
+  // TODO 未实现CTG组件更新
   // 胎位标记
   sign = values => {
-    const { form, dispatch } = this.props;
+    const { dispatch } = this.props;
     console.log('Received values of form: ', values);
+    dispatch({
+      type: 'item/updateCTGnote',
+      payload: {
+        ...values,
+        endTime: '',
+      },
+    }).then(() => {
+      this.setState({ signVisible: false });
+    });
+
+    setTimeout(() => {
+      this.setState({ signVisible: false });
+    }, 1500);
   };
 
   render() {
@@ -320,7 +334,7 @@ class Toolbar extends Component {
             {isCreated ? '已建档' : '建档'}
           </Button>
           <Button
-            disabled={!isCreated}
+            disabled={!isMonitor}
             icon="pushpin"
             type="link"
             onClick={() => this.showModal('signVisible')}
