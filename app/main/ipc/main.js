@@ -23,7 +23,7 @@ function appDownload(e, url = '') {
             e.sender.send('\u0061\u0070\u0070\u0044\u006f\u0077\u006e\u006c\u006f\u0061\u0064\u0065\u0064')
             dialog.showMessageBox({
                 message: '\u4e0b\u8f7d\u5b8c\u6210\uff0c\u662f\u5426\u8fdb\u884c\u5b89\u88c5\uff1f',
-                buttons: ['cancel', 'ok'],
+                buttons: ['取消', '确定'],
             }, resNum => exec(resNum ? filePath : `explorer ${insDir}`))
         })
     })

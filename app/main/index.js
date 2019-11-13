@@ -106,7 +106,7 @@ function createWindow() {
         type: 'info',
         title: '提示信息',
         message: '确定关闭应用？',
-        buttons: ['cancel', 'ok'],
+        buttons: ['取消', '确定'],
       },
       function (index) {
         if (index === 0) {

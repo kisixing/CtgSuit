@@ -137,7 +137,10 @@ const Preview = props => {
           onChange={onChangePage}
         />
         <span className={styles.icon}>
-          {isFullpage ? <Icon title="缩小" onClick={shrink} type="fullscreen-exit" /> : <Icon title="全屏" onClick={largen} type="fullscreen" />}
+          {isFullpage
+            ? <span onClick={shrink}>缩小<Icon title="缩小" type="fullscreen-exit" /></span>
+            : <span onClick={largen}>放大预览<Icon title="放大" type="fullscreen" /></span>
+          }
         </span>
       </div>
     ) : (
@@ -159,9 +162,16 @@ const Preview = props => {
           return (
             <div style={{ display: 'flex', height: '100%' }}>
               <PreivewContent />
-              <div style={{ background: '#fff', width: 400, marginRight: 10,display:'flex',flexDirection:'column' }}>
+              <div style={{
+                background: '#fff',
+                width: 400,
+                marginRight: 10,
+                padding: '24px',
+                display:'flex',
+                flexDirection:'column'
+              }}>
                 <label>NST报告结果</label>
-                <Input.TextArea value={diagnosis} style={{ height: '100%', border: 0 }} onChange={e => setDiagnosis(e.target.value)}>
+                <Input.TextArea value={diagnosis} style={{ height: '100%', marginTop: '', border: 0 }} onChange={e => setDiagnosis(e.target.value)}>
 
                 </Input.TextArea>
               </div>
@@ -219,7 +229,7 @@ const Preview = props => {
               </div>
 
               <Modal visible={modalVisible} footer={null} centered bodyStyle={{ textAlign: 'center' }}>
-                <img src={qrCodeBase64} />
+                <img alt="qrCode" src={qrCodeBase64} />
               </Modal>
             </div>
           )
