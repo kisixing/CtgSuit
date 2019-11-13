@@ -2,6 +2,7 @@ import { message } from 'antd';
 import { newPregnancies, getPregnancy, getBedIfo } from '@/services/api';
 import { getList } from '@/services/list';
 import { BedStatus } from "@lianmed/lmg/lib/services/WsService";
+// import store from "@/utils/SettingStore";
 const downStatus = [BedStatus.Working, BedStatus.Offline];
 
 function checkVisible(_: IDevice, dirty: Set<string>): boolean {
