@@ -48,9 +48,9 @@ export default [
     routes: [
       // reload
       { path: '/', redirect: '/workbench' },
-      { path: '/a', redirect: '/archives' },
-      { path: '/s', redirect: '/setting' },
-      { path: '/p', redirect: '/pregnancy' },
+      // { path: '/a', redirect: '/archives' },
+      // { path: '/s', redirect: '/setting' },
+      // { path: '/p', redirect: '/pregnancy' },
       {
         path: '/workbench', // Archives
         name: 'workbench',

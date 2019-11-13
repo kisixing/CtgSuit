@@ -3,16 +3,20 @@
  *
  */
 import React, { Component } from 'react';
-import { Button, Modal, Form, Input, Row, Col, InputNumber, message } from 'antd';
-import styles from './index.less';
+import { Button, Modal, Form, Input } from 'antd';
 
 export class SignModal extends Component {
   handleCreate = () => {
-    const { form, onCreate } = this.props;
+    const { form, onCreate, dataSource } = this.props;
+    const { data: { docid, starttime }, unitId } = dataSource;
+    const other = {
+      unitId: unitId,
+      startTime: starttime,
+      note: docid,
+    };
     form.validateFields((err, values) => {
-      if (!err) {
-        onCreate(values);
-      }
+      const fetalposition = JSON.stringify(values);
+      onCreate({ fetalposition, ...other });
     });
   }
   render() {
@@ -44,17 +48,17 @@ export class SignModal extends Component {
         <Form {...formItemLayout} layout="horizontal">
           <Form.Item label="FHR1">
             {getFieldDecorator('fhr1', {
-              rules: [{ required: true, message: '请输入fhr1' }],
+              rules: [{ max: 2, message: '最大长度为2' }],
             })(<Input />)}
           </Form.Item>
           <Form.Item label="FHR2">
             {getFieldDecorator('fhr2', {
-              rules: [{ required: true, message: '请输入fhr2' }],
+              rules: [{ max: 2, message: '最大长度为2' }],
             })(<Input />)}
           </Form.Item>
           <Form.Item label="FHR3">
             {getFieldDecorator('fhr3', {
-              rules: [{ required: true, message: '请输入fhr3' }],
+              rules: [{ max: 2, message: '最大长度为2' }],
             })(<Input />)}
           </Form.Item>
           <div style={{ textAlign: 'center' }}>
