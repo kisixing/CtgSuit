@@ -1,5 +1,5 @@
-// import printElement from './printElement';
-import { useState, useEffect, useCallback, memo } from 'react';
+
+import { useState, useEffect } from 'react';
 import request from "@lianmed/request";
 
 

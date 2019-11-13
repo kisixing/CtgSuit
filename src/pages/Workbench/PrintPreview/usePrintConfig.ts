@@ -1,5 +1,5 @@
-// import printElement from './printElement';
-import { useState, useEffect, useCallback, memo } from 'react';
+
+import { useState, useEffect, useCallback } from 'react';
 import store from "@/utils/SettingStore";
 const settingData = store.cache
 
