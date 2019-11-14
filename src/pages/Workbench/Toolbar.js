@@ -171,7 +171,7 @@ class Toolbar extends Component {
     socket.startwork(deviceno, bedno);
     setTimeout(() => {
       showLoading(false);
-    }, 3500);
+    }, 1500);
   };
 
   // 停止监护
@@ -260,10 +260,13 @@ class Toolbar extends Component {
   };
 
   // TODO 未实现CTG组件更新
-  // 胎位标记
+  // 11.14 胎位标记 fhr position
   sign = values => {
-    const { dispatch } = this.props;
-    console.log('Received values of form: ', values);
+    const { dispatch, suitObject } = this.props;
+
+    const position = JSON.parse(values.fetalposition);
+    console.log('Received values of form: ', suitObject, position);
+    suitObject.suit.setfetalposition(position.fhr1, position.fhr2, position.fhr3);
     dispatch({
       type: 'item/updateCTGnote',
       payload: {
@@ -334,7 +337,7 @@ class Toolbar extends Component {
             {isCreated ? '已建档' : '建档'}
           </Button>
           <Button
-            disabled={!isMonitor}
+            // disabled={!isMonitor}
             icon="pushpin"
             type="link"
             onClick={() => this.showModal('signVisible')}
