@@ -1,9 +1,10 @@
 
 import React, { useState, useCallback } from 'react';
 import { Document, Page } from 'react-pdf';
-import { Pagination, Spin, Icon } from 'antd';
+import { Pagination, Spin, Icon, Button } from 'antd';
 import Empty from '@/components/Empty'
 import 'react-pdf/dist/Page/AnnotationLayer.css';
+import './react-pdf.css';
 
 
 const PreviewContent = props => {
@@ -17,10 +18,10 @@ const PreviewContent = props => {
     const onChangePage = useCallback(page => { setPageNumber(page) }, [])
 
     const largen = () => {
-        const { height, width } = props.wh;
+        const { h, w } = props.wh;
         setFullpage(true)
-        setHeight(height - 24);
-        setWidth(width)
+        setHeight(h - 24);
+        setWidth(w)
     }
     const shrink = () => {
         setFullpage(false)
@@ -29,11 +30,11 @@ const PreviewContent = props => {
     }
     const content = pdfBase64 ? (
         <div style={{
-            width, ...(isFullpage ? {
+            width: width,
+             ...(isFullpage ? {
                 position: 'absolute',
                 top: 0,
                 left: 0,
-                width: '100%',
                 background: '#fff'
             } : {})
         }
@@ -48,10 +49,9 @@ const PreviewContent = props => {
                     cMapPacked: true,
                 }}
             >
-                <Page style={{ display: 'inline-block' }} pageNumber={pageNumber} scale={1} height={height} />
+                <Page pageNumber={pageNumber} scale={1} height={height} />
             </Document>
             <Pagination
-
                 total={numPages}
                 showTotal={total => `共 ${total} 页`}
                 current={pageNumber}
@@ -59,9 +59,22 @@ const PreviewContent = props => {
                 size="small"
                 onChange={onChangePage}
             />
-            <span style={{ position: 'absolute', top: 24, right: 24, }}>
-                {isFullpage ? <Icon title="缩小" onClick={shrink} type="fullscreen-exit" /> : <Icon title="全屏" onClick={largen} type="fullscreen" />}
-            </span>
+            {isFullpage ? (
+                <span style={{ position: 'absolute', top: 24, right: 24, cursor: 'pointer' }} onClick={shrink}>
+                    返回<Icon title="缩小" type="fullscreen-exit" />
+                </span>
+            ) : (
+                <span style={{ position: 'absolute', bottom: 36, right: 12, }}>
+                    <Button
+                        title="全屏"
+                        type="primary"
+                        // icon="fullscreen"
+                        onClick={largen}
+                    >
+                        放大预览
+                    </Button>
+                </span>
+            )}
         </div >
     ) : (
             <Empty style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', margin: 0 }} />
@@ -74,7 +87,6 @@ const PreviewContent = props => {
             marginRight: 12,
             zIndex: 99,
             border: '1px solid #eee',
-
         }
         } >
             {content}
