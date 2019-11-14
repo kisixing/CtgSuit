@@ -28,6 +28,8 @@ export default function useTodo(showTodo: boolean): [IRemain[], boolean] {
                 fn()
             } else {
                 Modal.confirm({
+                    okText: '确认',
+                    cancelText: '取消',
                     onOk: fn,
                     content: '未建档，确认关闭吗'
                 })

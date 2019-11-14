@@ -142,7 +142,7 @@ const WorkbenchItem = (props: IProps) => {
           showEcg={dataSource.type === 'k9'}
         ></L>
       </Card>
-      <Toolbar {...props} showSettingBar={true} showLoading={setSpinning} />
+      <Toolbar {...props} suitObject={suitObject} showSettingBar={true} showLoading={setSpinning} />
     </Col>
   );
 }
