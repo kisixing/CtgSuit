@@ -13,6 +13,7 @@ const Preview = props => {
   const [value, setValue] = useState<{ suit: any }>({ suit: null })
   const [diagnosis, setDiagnosis] = useState('观察      分钟，胎心基线     bpm，胎动    次，胎动时胎心    bpm,持续时间     s，胎心振幅范围            bpm  NST   反应。 ')
   const [pdfBase64, setPdfBase64] = useState('')
+  const [pdfBase64Loading, setPdfBase64Loading] = useState(false)
   const {
     startingTime,
     endingTime,
@@ -23,8 +24,9 @@ const Preview = props => {
     toggleLocking,
     toggleCustomiz
   } = usePrintConfig(value)
-  const { signHandler, qrCodeBase64, modalVisible } = useSign(docid)
+  const { signHandler, qrCodeBase64, modalVisible, qrCodeBase64Loading } = useSign(docid,setPdfBase64)
   const handlePreview = () => {
+    setPdfBase64Loading(true)
     request.post(`/ctg-exams-pdf`, {
       data: {
         name, age, gestationalWeek, inpatientNO, startdate, fetalcount,
@@ -34,6 +36,7 @@ const Preview = props => {
         end: endingTime,
       },
     }).then(res => {
+      setPdfBase64Loading(false)
       const pdfData = res.pdfdata && `data:application/pdf;base64,${res.pdfdata}`;
       setPdfBase64(pdfData)
     })
@@ -95,10 +98,10 @@ const Preview = props => {
                   <span>时长：{((endingTime - startingTime) / COEFFICIENT).toFixed(1) || 0}分</span>
                 </div>
                 <div style={{ display: 'flex' }}>
-                  <Button block disabled={!locking} type="primary" onClick={handlePreview} style={{ marginRight: 10 }}>
+                  <Button block disabled={!locking} type="primary" loading={pdfBase64Loading} onClick={handlePreview} style={{ marginRight: 10 }}>
                     生成
                   </Button>
-                  <Button block disabled={!pdfBase64} type="primary" onClick={signHandler} style={{ marginRight: 10 }}>
+                  <Button block disabled={!pdfBase64} type="primary" loading={qrCodeBase64Loading} onClick={signHandler} style={{ marginRight: 10 }}>
                     签名
                   </Button>
                   <Button block disabled={!pdfBase64} type="primary" onClick={onDownload}>
