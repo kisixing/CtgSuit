@@ -337,7 +337,7 @@ class Toolbar extends Component {
             {isCreated ? '已建档' : '建档'}
           </Button>
           <Button
-            disabled={!isMonitor}
+            // disabled={!isMonitor}
             icon="pushpin"
             type="link"
             onClick={() => this.showModal('signVisible')}
