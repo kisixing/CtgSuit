@@ -4,10 +4,9 @@
  * @Date: 2019-10-02 20:10:21
  */
 
-import React, { useMemo, useRef, useLayoutEffect, useState } from 'react';
+import React, { useMemo } from 'react';
+import { Ctg_Report as Report } from "@lianmed/pages";
 import { Modal } from 'antd';
-import Setting from './Setting';
-import Preview from './Preview';
 import styles from './index.less';
 import moment from 'moment';
 
@@ -19,13 +18,8 @@ export const Context = React.createContext({})
 
 const PrintPreview = (props) => {
   const { visible, onCancel, onCreate, dataSource, from } = props;
-  const [wh, setWh] = useState({})
-  useLayoutEffect(() => {
-    const { clientHeight, clientWidth } = inputEl.current;
-    setWh({ h: clientHeight, w: clientWidth })
-  }, [])
 
-  const inputEl = useRef(null);
+
 
   const onDownload = () => {
     const docid = (dataSource.ctgexam && dataSource.ctgexam.note) || dataSource.documentno
@@ -115,20 +109,7 @@ const PrintPreview = (props) => {
         onOk={onCreate}
         maskClosable={false}
       >
-        <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }} ref={inputEl}>
-          <div style={{ height: 240, textAlign: 'center' }}>
-            <Preview docid={docid} onDownload={onDownload} dataSource={dataSource} from={from} wh={wh} {...getPreviewData()} />
-          </div>
-          <div style={{
-            flex: 1,
-            padding: 24,
-            marginTop: 12,
-            border: '1px solid #eee'
-
-          }}>
-            <Setting docid={docid} from={from} dataSource={dataSource} />
-          </div>
-        </div>
+        <Report docid={docid} onDownload={onDownload} {...getPreviewData()} print_interval={20} />
       </Modal>
     </Context.Provider>
   );
