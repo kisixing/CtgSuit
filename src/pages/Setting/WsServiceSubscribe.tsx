@@ -60,9 +60,10 @@ const C = (props: IProps) => {
             </div>
             <Checkbox.Group disabled={!editable} onChange={(e: string[]) => setSelected(e)} value={selected}>
                 {
-                    props.data.map(_ => {
-                        return <Checkbox value={_.bedname} key={_.id}>{_.bedname}</Checkbox>
-                    })
+                    [...new Set(props.data.map(_ => _.bedname.slice(0, _.bedname.indexOf('-'))))]
+                        .map(_ => {
+                            return <Checkbox value={_} key={_}>{_}</Checkbox>
+                        })
                 }
             </Checkbox.Group>
         </div>
