@@ -8,6 +8,7 @@ import React, { PureComponent } from 'react';
 import { Form, Button, Input, message } from 'antd';
 import { formItemLayout, tailFormItemLayout } from './utils';
 import store from '@/utils/SettingStore';
+import { getDisplaySize } from '@/utils/utils';
 import styles from './style.less';
 
 var config = require("../../../package.json");
@@ -16,6 +17,8 @@ var config = require("../../../package.json");
 class Hospital extends PureComponent {
   componentDidMount() {
     const { form } = this.props;
+    // 获取显示器尺寸
+    const { w, h } = getDisplaySize();
     store.getObj().then(({ hospital_name, version_number, build_date }) => {
       form.setFieldsValue({
         hospital_name,
@@ -24,7 +27,8 @@ class Hospital extends PureComponent {
     // 设置版本信息
     form.setFieldsValue({
       version_number: config.version,
-      build_date: config.author.date
+      build_date: config.author.date,
+      display_size: `${w.toFixed(2)} * ${h.toFixed(2)} cm`
     })
   }
 
@@ -62,6 +66,9 @@ class Hospital extends PureComponent {
           {getFieldDecorator('build_date', {
             rules: [{ required: false, message: '请输入版本时间!' }],
           })(<Input disabled placeholder="请输入请输入版本时间!" />)}
+        </Form.Item>
+        <Form.Item label="设备尺寸">
+          {getFieldDecorator('display_size')(<Input disabled />)}
         </Form.Item>
         <Form.Item {...tailFormItemLayout}>
           <Button type="primary" onClick={this.handleSubmit}>
