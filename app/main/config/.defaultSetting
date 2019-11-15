@@ -1,5 +1,5 @@
-ws_url=192.168.31.223:8084
-xhr_url=192.168.31.223:9987
+ws_url=192.168.124.10:8084
+xhr_url=192.168.124.10:9987
 print_interval=20
 theme=#006064
 hospital_name=xxx医院
