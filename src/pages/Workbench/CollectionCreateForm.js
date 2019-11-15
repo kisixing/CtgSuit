@@ -295,7 +295,7 @@ class CollectionCreateForm extends React.Component {
           <Row>
             <Col span={24} className={styles.buttons}>
               {/* 清空form数据 */}
-              <Button onClick={this.reset}>取消</Button>
+              <Button onClick={this.reset}>重置</Button>
               {/* 建档后，不支持再次修改信息 */}
               <Button
                 type="primary"
@@ -314,7 +314,7 @@ class CollectionCreateForm extends React.Component {
             </Col>
             <Col span={24} className={styles.tips}>
               <span className={styles.error}>{errorText}</span>
-              提示：调入孕产妇信息时，输入床号即可。
+              提示：调入孕产妇信息时，输入床号即可。调入档案后，如需要更改，请先点击'重置'按钮，再进行操作。
             </Col>
           </Row>
         </Form>
