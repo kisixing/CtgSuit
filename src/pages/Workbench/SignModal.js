@@ -3,9 +3,18 @@
  *
  */
 import React, { Component } from 'react';
-import { Button, Modal, Form, Input } from 'antd';
+import { Button, Modal, Form, Radio } from 'antd';
 
 export class SignModal extends Component {
+  componentDidMount() {
+    // const { form } = this.props;
+    // form.setFieldsValue({
+    //   fhr1: '左上',
+    //   fhr2: '左下',
+    //   fhr3: '右上',
+    // });
+  }
+
   handleCreate = () => {
     const { form, onCreate, dataSource } = this.props;
     const { data: { docid, starttime }, unitId } = dataSource;
@@ -16,6 +25,7 @@ export class SignModal extends Component {
     };
     form.validateFields((err, values) => {
       const fetalposition = JSON.stringify(values);
+      // console.log('8888888888888', values);
       onCreate({ fetalposition, ...other });
     });
   }
@@ -25,11 +35,11 @@ export class SignModal extends Component {
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 5 },
+        sm: { span: 8 },
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 16 },
+        sm: { span: 12 },
       },
     };
     return (
@@ -49,18 +59,23 @@ export class SignModal extends Component {
           <Form.Item label="FHR1">
             {getFieldDecorator('fhr1', {
               rules: [{ max: 2, message: '最大长度为2' }],
-            })(<Input />)}
+            })(<RadioGroup />)}
           </Form.Item>
           <Form.Item label="FHR2">
             {getFieldDecorator('fhr2', {
               rules: [{ max: 2, message: '最大长度为2' }],
-            })(<Input />)}
+            })(<RadioGroup />)}
           </Form.Item>
           <Form.Item label="FHR3">
             {getFieldDecorator('fhr3', {
               rules: [{ max: 2, message: '最大长度为2' }],
-            })(<Input />)}
+            })(<RadioGroup />)}
           </Form.Item>
+          {/* <div>
+            <Button block type="dashed" icon="plus">
+              增加
+            </Button>
+          </div> */}
           <div style={{ textAlign: 'center' }}>
             <Button
               type="primary"
@@ -79,4 +94,40 @@ export class SignModal extends Component {
   }
 }
 
-export default Form.create()(SignModal)
+export default Form.create()(SignModal);
+
+const RadioGroup = ({ value, onChange }) => {
+  const itemStyle = {
+    width: '76px',
+    height: '40px',
+    paddingLeft: '12px'
+  };
+  const borderStyle = '1px solid #ddd';
+  return (
+    <Radio.Group
+      name="radiogroup"
+      style={{
+        display: 'flex',
+        flexWrap: 'wrap',
+        width: '160px',
+        height: '80px',
+        marginLeft: '24px',
+      }}
+      value={value}
+      onChange={onChange}
+    >
+      <div style={{ ...itemStyle, borderBottom: borderStyle, borderRight: borderStyle }}>
+        <Radio value={'左上'}>左上</Radio>
+      </div>
+      <div style={{ ...itemStyle, borderBottom: borderStyle }}>
+        <Radio value={'左下'}>左下</Radio>
+      </div>
+      <div style={{ ...itemStyle, borderRight: borderStyle }}>
+        <Radio value={'右上'}>右上</Radio>
+      </div>
+      <div style={{ ...itemStyle }}>
+        <Radio value={'右下'}>右下</Radio>
+      </div>
+    </Radio.Group>
+  );
+}
