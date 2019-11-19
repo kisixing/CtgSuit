@@ -9,7 +9,7 @@ function Beds({ dispatch, listData, wsData }) {
   useAlarm()
   const handleClicks = ({ pageIndex, unitId }) => {
     return () => {
-      const data = { type: 'list/setPage', page: pageIndex };
+      const data = { type: 'list/setPageByUnitId', unitId };
 
       // if (clickTimeout !== null) {
       //   clearTimeout(clickTimeout);
@@ -36,10 +36,11 @@ function Beds({ dispatch, listData, wsData }) {
       //   }, 300);
       // }
 
-      dispatch(data);
       dispatch({ type: 'list/appendDirty', unitId });
       dispatch({ type: 'list/processListData' });
       dispatch({ type: 'list/setState', payload: { showTodo: false } })
+      dispatch(data);
+
 
       router.replace('/workbench');
     };

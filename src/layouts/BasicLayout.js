@@ -328,14 +328,16 @@ class BasicLayout extends Component {
   }
 }
 
-export default connect(({ global, list, loading, setting, ws, ...rest }) => ({
+export default connect(({ global, list, loading, setting, ws, subscribe,...rest }) => ({
   loading: loading,
   account: global.account || {},
   pageData: list.pageData,
   page: list.page,
-  listData: list.listData,
+  listData: list.headData,
   listLayout: setting.listLayout,
   listLayoutOptions: setting.listLayoutOptions,
   wsStatus: ws.status,
   wsData: ws.data,
+  subscribeData:subscribe.data
+
 }))(withRouter(BasicLayout));

@@ -5,8 +5,8 @@ import { BedStatus } from "@lianmed/lmg/lib/services/WsService";
 // import store from "@/utils/SettingStore";
 const downStatus = [BedStatus.Working, BedStatus.Offline];
 
-function checkVisible(_: IDevice, dirty: Set<string>): boolean {
-  return downStatus.includes(_.status) || dirty.has(_.unitId)
+function checkVisible(_: IDevice, dirty: Set<string>, offline: Set<string>): boolean {
+  return (downStatus.includes(_.status) || dirty.has(_.unitId)) && (!offline.has(_.unitId))
 };
 
 export default {
@@ -22,46 +22,48 @@ export default {
     pageItems: [], // [listItem,...] 床位信息
     fullScreenId: null,
     pregnancy: {}, // 初始化，暂无使用
-    showTodo: false
+    showTodo: false,
+    headData: []
   },
   effects: {
     *getlist(_, { put, call, select }) {
-      // get bed information
-      let rawData: IDevice[] = yield call(getList);
+
+      let data: IDevice[] = yield call(getList);
       yield put({
         type: 'setState',
-        payload: { listData: rawData || [], rawData }
+        payload: { listData: data || [], rawData: data }
       });
       yield put({ type: 'processListData' });
     },
 
     *processListData(_, { put, select }) {
       const state = yield select();
-      let {
-        setting: { listLayout },
-        list,
-        ws: { data: datacache }
-      } = state;
-      let { rawData: listData, dirty } = list as any
-      const pageItemsCount: number = listLayout[0] * listLayout[1];
+      let { list, ws: { data: datacache } } = state;
+      let { rawData: listData } = list as any
+
       console.log('update', datacache, listData)
       listData = listData
         .map(_ => {
-          const unitId = `${_.deviceno}-${_.subdevice}`;
-          const data = (datacache as Map<any, any>).get(unitId)
-          return { ..._, unitId, data, status: data && data.status };
+          const data = (datacache as Map<any, any>).get(_.unitId)
+          return { ..._, data, status: data && data.status };
         })
         .filter(_ => !!_.data)
-      // .map((_, index) => {
-      //   return { ..._, index, pageIndex: Math.floor(index / pageItemsCount) };
-      // });
+
+
+      yield put({ type: 'setState', payload: { headData: listData } });
+      yield put({ type: 'setListData', listData });
+    },
+    *setListData({ listData }, { put, select }) {
+      const state = yield select();
+      let { list, setting: { listLayout }, } = state;
+      let { dirty, offline } = list as IListState
+      const pageItemsCount: number = listLayout[0] * listLayout[1];
+
+
+      listData = (listData as IDevice[]).filter(_ => checkVisible(_, dirty, offline))
       listData.reduce((pre, cur) => {
-        if (checkVisible(cur, dirty)) {
-          cur.pageIndex = Math.floor(pre / pageItemsCount)
-          return pre + 1
-        }
-        cur.pageIndex = null
-        return pre
+        cur.pageIndex = Math.floor(pre / pageItemsCount)
+        return pre + 1
       }, 0)
       yield put({ type: 'setState', payload: { listData } });
       yield put({ type: 'computeLayout' });
@@ -101,7 +103,18 @@ export default {
       yield put({ type: 'setState', payload: { pageData, pageCount } });
     },
 
+    *setPageByUnitId({ unitId }, { put, select }) {
+      const list: IListState = yield select(state => state.list);
+
+      let { listData } = list
+      const page = listData.find(_ => _.unitId === unitId).pageIndex
+      yield put({
+        type: 'setPage',
+        page
+      });
+    },
     *setPage({ page }, { put, select }) {
+
       const state = yield select();
       let {
         list,
@@ -124,11 +137,6 @@ export default {
         list,
       } = state;
       let { listData, dirty, page, offline } = list as IListState
-      listData = listData
-        .filter(_ => {
-          return checkVisible(_, dirty)
-        })
-        .filter(_ => !offline.has(_.unitId))
       const pageItemsCount: number = listLayout[0] * listLayout[1];
       const pageItems = listData.slice(page * pageItemsCount, (page + 1) * pageItemsCount);
       yield put({
@@ -237,13 +245,13 @@ export default {
       }
     },
 
-    // 主要获取prenatalVisit信息
-    *fetchBed({ payload, callback }, { call, put }) {
-      const res = yield call(getBedIfo, payload);
-      if (callback && typeof callback === 'function') {
-        callback(res); // 返回结果
-      }
-    },
+    // // 主要获取prenatalVisit信息
+    // *fetchBed({ payload, callback }, { call, put }) {
+    //   const res = yield call(getBedIfo, payload);
+    //   if (callback && typeof callback === 'function') {
+    //     callback(res); // 返回结果
+    //   }
+    // },
   },
   reducers: {
     setState(state, { payload }) {
@@ -268,8 +276,9 @@ interface IState {
 }
 interface IListState {
   offline: Set<string>,
-
+  headData: IDevice[],
   listData: IDevice[],
+  rawData: IDevice[],
   dirty: Set<string>,
   pageData: any[],
   pageCount: number,
