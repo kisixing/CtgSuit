@@ -6,6 +6,7 @@ import request from "@lianmed/request";
 import { IBed } from '@/types'
 import WsServiceSubscribe from "./WsServiceSubscribe";
 import { WrappedFormUtils } from "antd/lib/form/Form";
+import AddBed from "./AddBed";
 const data = [];
 for (let i = 0; i < 100; i++) {
   data.push({
@@ -248,7 +249,12 @@ class EditableTable extends React.Component<{ data: IBed[], dispatch: any, form:
             onChange: this.cancel,
           }}
         />
-        <WsServiceSubscribe data={this.props.data}  />
+        <AddBed onOk={() => {
+          this.props.dispatch({
+            type: 'setting/fetchBed',
+          });
+        }} />
+        <WsServiceSubscribe data={this.props.data} />
       </EditableContext.Provider>
     );
   }

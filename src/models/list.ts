@@ -15,7 +15,7 @@ export default {
     rawData: [],
     listData: [], // 所有bed数据
     dirty: new Set(), // 受保护的床位
-    offline: new Set(),
+    offline: new Set(), // 初始化离线数据，隐藏
     pageData: [], // [[1,4],[5,8]]
     page: 0, //当前页码
     pageCount: 0, // 页码长度
