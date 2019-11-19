@@ -100,9 +100,7 @@ const PrintPreview = (props) => {
         okText="创建"
         cancelText="取消"
         width="92%"
-        footer={
-          null
-        }
+        footer={null}
         bodyStyle={{ height: "80vh" }}
         wrapClassName={styles.modal}
         onCancel={() => onCancel('printVisible')}
