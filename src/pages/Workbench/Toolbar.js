@@ -44,7 +44,7 @@ class Toolbar extends Component {
     event.on(`bedClose:${this.unitId}`, this.onclose);
   }
   componentWillUnmount() {
-    event.on(`bedClose:${this.unitId}`, this.onclose);
+    event.off(`bedClose:${this.unitId}`, this.onclose);
   }
   timeout = null;
   autoHide = () => {

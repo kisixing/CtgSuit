@@ -139,7 +139,7 @@ const WorkbenchItem = (props: IProps) => {
           itemHeight={itemHeight}
           onDoubleClick={fullScreen}
           loading={spinning}
-          showEcg={dataSource.type === 'k9'}
+          showEcg={dataSource.data.ismulti}
         ></L>
       </Card>
       <Toolbar {...props} suitObject={suitObject} showSettingBar={true} showLoading={setSpinning} />
