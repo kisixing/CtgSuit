@@ -22,12 +22,11 @@ const WorkbenchItem = (props: IProps) => {
   const { data, bedname } = dataSource;
   const { unitId } = (dataSource as IDevice)
   const { isTodo, note } = (dataSource as IRemain)
-  const suitObject = useMemo<{ suit: Suit }>(() => {
-    return { suit: null }
-  }, [])
 
+  const [so, setSo] = useState({ suit: null })
+  console.log('alarm gg', so)
   const [ref, fullScreen] = useFullScreen(fullScreenId, unitId, dispatch)
-  const [alarmStatus] = useItemAlarm(suitObject.suit)
+  const [alarmStatus] = useItemAlarm(so.suit)
 
   // set loading
   const [spinning, setSpinning] = useState(false);
@@ -135,14 +134,14 @@ const WorkbenchItem = (props: IProps) => {
       >
         <L
           data={data}
-          mutableSuitObject={suitObject}
+          onReady={suit => setSo({ suit })}
           itemHeight={itemHeight}
           onDoubleClick={fullScreen}
           loading={spinning}
           showEcg={dataSource.data.ismulti}
         ></L>
       </Card>
-      <Toolbar {...props} suitObject={suitObject} showSettingBar={true} showLoading={setSpinning} />
+      <Toolbar {...props} suitObject={so} showSettingBar={true} showLoading={setSpinning} />
     </Col>
   );
 }
