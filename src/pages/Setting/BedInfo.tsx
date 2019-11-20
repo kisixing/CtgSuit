@@ -4,7 +4,7 @@ import { connect } from "dva";
 import { mapStatusToText } from '@/constant'
 import request from "@lianmed/request";
 import { IBed } from '@/types'
-import WsServiceSubscribe from "./WsServiceSubscribe";
+import Subscribe from "./Subscribe";
 import { WrappedFormUtils } from "antd/lib/form/Form";
 import AddBed from "./AddBed";
 const data = [];
@@ -249,12 +249,12 @@ class EditableTable extends React.Component<{ data: IBed[], dispatch: any, form:
             onChange: this.cancel,
           }}
         />
-        <AddBed onOk={() => {
+        {/* <AddBed onOk={() => {
           this.props.dispatch({
             type: 'setting/fetchBed',
           });
-        }} />
-        <WsServiceSubscribe data={this.props.data} />
+        }} /> */}
+        <Subscribe />
       </EditableContext.Provider>
     );
   }

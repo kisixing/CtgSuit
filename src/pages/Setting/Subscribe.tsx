@@ -1,47 +1,35 @@
 import React, { useState, useEffect } from 'react';
-import { IBed } from "@/types";
 import { Checkbox, Button } from "antd";
-import store from "@/utils/SettingStore";
-import { WsService } from "@lianmed/lmg";
-interface IProps {
-    data: IBed[];
-    [x: string]: any
+
+import { connect, DispatchProp } from 'dva';
+interface IProps extends DispatchProp {
+    subscribeData?: string[]
+    data: string[];
+    [x: string]: any;
 }
 
 const C = (props: IProps) => {
 
-
+    const { subscribeData, dispatch, data } = props
     const [editable, setEditable] = useState(false)
     const [selected, setSelected] = useState<string[]>([])
-    const refresh = () => {
-        store.get('area_devices').then((res: string) => {
-            console.log('zzz', res)
-            res && setSelected(res.split(','))
-        })
-    }
-    const commit = () => {
-        const str = selected.join(',')
-        store.set('area_devices', str).then(status => {
-            status && WsService._this.send(JSON.stringify(
-                {
-                    name: "area_devices",
-                    data: str
-                }
-            ))
-        })
-    }
-    const cancel = () => {
-        setEditable(false)
-        refresh()
-    }
-    const comfirm = () => {
-        setEditable(false)
-        commit()
-    }
 
     useEffect(() => {
-        refresh()
-    }, [])
+        setSelected(subscribeData)
+    }, [subscribeData])
+
+
+    const cancel = () => {
+        setEditable(false)
+        setSelected(subscribeData)
+    }
+
+    const comfirm = () => {
+        setEditable(false)
+        dispatch({ type: 'subscribe/setData', data: selected })
+    }
+
+
     return (
         <div style={{}} >
             <div style={{ fontWeight: 600, lineHeight: '40px', marginBottom: '24px' }}>
@@ -59,15 +47,13 @@ const C = (props: IProps) => {
                 }
             </div>
             <Checkbox.Group disabled={!editable} onChange={(e: string[]) => setSelected(e)} value={selected}>
-                {
-                    [...new Set(props.data.map(_ => _.bedname.slice(0, _.bedname.indexOf('-'))))]
-                        .map(_ => {
-                            return <Checkbox value={_} key={_}>{_}</Checkbox>
-                        })
+                {data.map(_ => {
+                    return <Checkbox value={_} key={_}>{_}</Checkbox>
+                })
                 }
             </Checkbox.Group>
         </div>
     );
 };
 
-export default C
+export default connect((state: any) => ({ subscribeData: state.subscribe.data, data: [...new Set(state.list.rawData.map(_ => _.deviceno))] }))(C)

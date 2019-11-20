@@ -27,8 +27,14 @@ export default {
   },
   effects: {
     *getlist(_, { put, call, select }) {
+      const state = yield select();
+      let { subscribe } = state;
 
       let data: IDevice[] = yield call(getList);
+
+      if (!subscribe.data.length) {
+        yield put({ type: 'subscribe/setData', data: [...new Set(data.map(_ => _.deviceno))] })
+      }
       yield put({
         type: 'setState',
         payload: { listData: data || [], rawData: data }
@@ -38,11 +44,11 @@ export default {
 
     *processListData(_, { put, select }) {
       const state = yield select();
-      let { list, ws: { data: datacache } } = state;
-      let { rawData: listData } = list as any
-
-      console.log('update', datacache, listData)
+      let { list, ws: { data: datacache }, subscribe } = state;
+      let { rawData: listData } = list as IListState
+      const subscribeData: string[] = subscribe.data
       listData = listData
+        .filter(_ => subscribeData.includes(_.deviceno))
         .map(_ => {
           const data = (datacache as Map<any, any>).get(_.unitId)
           return { ..._, data, status: data && data.status };
@@ -146,7 +152,6 @@ export default {
     },
 
     *removeDirty({ unitId }, { call, put, select }) {
-      // console.log('removeDirty')
       const state = yield select();
       let {
         list: { dirty },
@@ -255,8 +260,6 @@ export default {
   },
   reducers: {
     setState(state, { payload }) {
-      console.log('list setState')
-
       return {
         ...state,
         ...payload,
