@@ -22,10 +22,7 @@ import Beds from './Beds';
 import Tabs from './Tabs';
 import settingStore from "@/utils/SettingStore";
 import { WsService } from "@lianmed/lmg";
-
-window.gg = (str) => {
-  ipcRenderer.send('printWindow', 'http://www.orimi.com/pdf-test.pdf')
-}
+import CheckNetwork from "./CheckNetwork";
 
 
 const EWsStatus = WsService.wsStatus
@@ -76,7 +73,7 @@ class BasicLayout extends Component {
         type: 'login/verification',
         payload: account
       });
-    }, 1000*60*60);
+    }, 1000 * 60 * 60);
   }
 
   componentWillUnmount() {
@@ -260,6 +257,8 @@ class BasicLayout extends Component {
           }
         }}
       >
+        <CheckNetwork visible={wsStatus !== EWsStatus.Success} />
+
         <Header className={styles.header}>
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             <Link to="/workbench" className={styles.logo}>
@@ -328,7 +327,7 @@ class BasicLayout extends Component {
   }
 }
 
-export default connect(({ global, list, loading, setting, ws, subscribe,...rest }) => ({
+export default connect(({ global, list, loading, setting, ws, subscribe, ...rest }) => ({
   loading: loading,
   account: global.account || {},
   pageData: list.pageData,
@@ -338,6 +337,6 @@ export default connect(({ global, list, loading, setting, ws, subscribe,...rest 
   listLayoutOptions: setting.listLayoutOptions,
   wsStatus: ws.status,
   wsData: ws.data,
-  subscribeData:subscribe.data
+  subscribeData: subscribe.data
 
 }))(withRouter(BasicLayout));

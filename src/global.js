@@ -7,6 +7,9 @@ message.config({
     top: 150,
     duration: 2,
 });
+
+
+
 // window.console.log = () => { }
 // var os = require('os')
 // var p = require('process')

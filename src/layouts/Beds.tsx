@@ -52,9 +52,10 @@ function Beds({ dispatch, listData, wsData }) {
         flex: 1,
         display: 'flex',
         backgroundColor: '#fff',
-        borderRadius: 4,
+        // borderRadius: 4,
         alignContent: ' flex-start',
         flexWrap: 'wrap',
+        overflow:'scroll'
       }}
     >
       {
