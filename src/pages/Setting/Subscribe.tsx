@@ -28,6 +28,13 @@ const C = (props: IProps) => {
         setEditable(false)
         dispatch({ type: 'subscribe/setData', data: selected })
     }
+    const all = () => {
+        setSelected(data.map(_ => _.slice(_.lastIndexOf('-') + 1)))
+
+    }
+    const empty = () => {
+        setSelected([])
+    }
 
 
     return (
@@ -38,6 +45,8 @@ const C = (props: IProps) => {
                 {
                     editable ? (
                         <>
+                            <Button style={{ marginLeft: 10 }} onClick={empty}>全空</Button>
+                            <Button style={{ marginLeft: 10 }} onClick={all}>全选</Button>
                             <Button style={{ marginLeft: 10 }} type="primary" onClick={comfirm}>确认</Button>
                             <Button style={{ marginLeft: 10 }} onClick={cancel}>取消</Button>
                         </>
@@ -48,7 +57,10 @@ const C = (props: IProps) => {
             </div>
             <Checkbox.Group disabled={!editable} onChange={(e: string[]) => setSelected(e)} value={selected}>
                 {data.map(_ => {
-                    return <Checkbox value={_} key={_}>{_}</Checkbox>
+                    const lastIndex = _.lastIndexOf('-')
+                    const name = _.slice(0, lastIndex)
+                    const deviceno = _.slice(lastIndex + 1)
+                    return <Checkbox value={deviceno} key={deviceno}>{name}</Checkbox>
                 })
                 }
             </Checkbox.Group>
@@ -56,4 +68,4 @@ const C = (props: IProps) => {
     );
 };
 
-export default connect((state: any) => ({ subscribeData: state.subscribe.data, data: [...new Set(state.list.rawData.map(_ => _.deviceno))] }))(C)
+export default connect((state: any) => ({ subscribeData: state.subscribe.data, data: [...new Set(state.list.rawData.map(_ => `${_.areaname}-${_.bedname}-${_.deviceno}`))] }))(C)

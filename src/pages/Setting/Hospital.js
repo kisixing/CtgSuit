@@ -10,6 +10,7 @@ import { formItemLayout, tailFormItemLayout } from './utils';
 import store from '@/utils/SettingStore';
 import { getDisplaySize } from '@/utils/utils';
 import styles from './style.less';
+import { connect } from 'dva';
 
 var config = require("../../../package.json");
 
@@ -19,9 +20,10 @@ class Hospital extends PureComponent {
     const { form } = this.props;
     // 获取显示器尺寸
     const { w, h } = getDisplaySize();
-    store.getObj().then(({ hospital_name, version_number, build_date }) => {
+    store.getObj().then(({ hospital_name, areano, version_number, build_date }) => {
       form.setFieldsValue({
         hospital_name,
+        areano
       });
     });
     // 设置版本信息
@@ -38,6 +40,7 @@ class Hospital extends PureComponent {
         store.set(Object.keys(values), Object.values(values)).then(status => {
           if (status) {
             message.success('设置成功', 2);
+            this.props.dispatch({ type: 'list/getlist' })
           }
         });
       }
@@ -56,6 +59,11 @@ class Hospital extends PureComponent {
           {getFieldDecorator('hospital_name', {
             rules: [{ required: false, message: '请输入医院名称!' }],
           })(<Input placeholder="请输入医院名称!" />)}
+        </Form.Item>
+        <Form.Item label="病区号">
+          {getFieldDecorator('areano', {
+            rules: [{ required: false, message: '请输入区号!' }],
+          })(<Input placeholder="请输入区号!" />)}
         </Form.Item>
         <Form.Item label="系统信息">
           {getFieldDecorator('version_number', {
@@ -80,4 +88,4 @@ class Hospital extends PureComponent {
   }
 }
 
-export default Hospital;
+export default connect()(Hospital);
