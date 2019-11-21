@@ -45,8 +45,16 @@ const Home = (props: IProps) => {
           <Row style={{ padding: outPadding, height: contentHeight }} >
             {items.length ? items.map((item: IDevice | IRemain) => {
               // console.log('item', item)
+              const { data, bedname } = item;
+              const { unitId } = (item as IDevice)
+              const { isTodo, note } = (item as IRemain)
               return (
                 <Item
+                  data={data}
+                  bedname={bedname}
+                  unitId={unitId}
+                  isTodo={isTodo}
+                  note={note}
                   key={item.id}
                   dataSource={item}
                   itemHeight={itemHeight}
@@ -57,8 +65,8 @@ const Home = (props: IProps) => {
                 />
               );
             }) : (
-                <div ref={empty} style={{ marginTop: 200, display:'flex',justifyContent:'center' }}>
-                  <Empty description="胎监工作站"/>
+                <div ref={empty} style={{ marginTop: 200, display: 'flex', justifyContent: 'center' }}>
+                  <Empty description="胎监工作站" />
                 </div>
               )
             }

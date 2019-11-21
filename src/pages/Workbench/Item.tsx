@@ -8,20 +8,22 @@ import { event } from "@lianmed/utils";
 import { BedStatus } from "@lianmed/lmg/lib/services/WsService";
 import { IDevice } from "@/models/list";
 import { IRemain } from './useTodo';
-import { Suit } from '@lianmed/lmg/lib/Ctg/Suit';
 import useItemAlarm from "./useItemAlarm";
 import useFullScreen from "./useFullScreen";
 let styles = require('./Item.less')
 
 interface IProps {
-  dataSource: IDevice | IRemain;
+  dataSource: IDevice | IRemain
   [x: string]: any
+  data: any
+  bedname: string
+  unitId: string
+  isTodo: boolean
+  note: string
 }
 const WorkbenchItem = (props: IProps) => {
-  const { dispatch, fullScreenId, itemHeight, itemSpan, dataSource, outPadding } = props;
-  const { data, bedname } = dataSource;
-  const { unitId } = (dataSource as IDevice)
-  const { isTodo, note } = (dataSource as IRemain)
+  const { dispatch, fullScreenId, itemHeight, itemSpan, dataSource, outPadding, data, bedname, unitId, isTodo, note } = props;
+
 
   const [so, setSo] = useState({ suit: null })
   console.log('alarm gg', so)
@@ -67,7 +69,7 @@ const WorkbenchItem = (props: IProps) => {
                 } else {
                   const cb = () => {
                     dispatch({
-                      type: 'list/removeDirty', unitId
+                      type: 'list/appendDirty', unitId
                     })
                   }
                   status === BedStatus.Stopped ? cb() : (
@@ -85,17 +87,15 @@ const WorkbenchItem = (props: IProps) => {
   // 床位信息
   const renderTilte = item => {
     const { data = {}, bedname } = item;
-    const havePregnancy = data && data.pregnancy;
-    const pregnancy = (typeof havePregnancy === 'object')
-      ? havePregnancy
-      : havePregnancy && JSON.parse(havePregnancy.replace(/'/g, '"'));
+    const pregnancy = data && data.pregnancy;
+    console.log('pregnancy', pregnancy)
     // TODO 根据是否建档判断是否显示
     // const isCreated = havePregnancy && pregnancy.id;
     const { status } = data;
     let dd = pregnancy || {};
     if (status === 2) {
       const bed = JSON.parse(sessionStorage.getItem('bed'));
-      dd = bed[bedname] ? JSON.parse(bed[bedname]) : {};
+      dd = bed[bedname] ? bed[bedname] : {};
       // console.log('66666666666666', dd)
     }
     const text = (

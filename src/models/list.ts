@@ -3,10 +3,10 @@ import { newPregnancies, getPregnancy, getBedIfo } from '@/services/api';
 import { getList } from '@/services/list';
 import { BedStatus } from "@lianmed/lmg/lib/services/WsService";
 // import store from "@/utils/SettingStore";
-const downStatus = [BedStatus.Working, BedStatus.Offline];
+// const downStatus = [BedStatus.Working, BedStatus.Offline];
 
 function checkVisible(_: IDevice, dirty: Set<string>, offline: Set<string>): boolean {
-  return (downStatus.includes(_.status) || dirty.has(_.unitId)) && (!offline.has(_.unitId))
+  return (!offline.has(_.unitId)) && (!dirty.has(_.unitId))
 };
 
 export default {

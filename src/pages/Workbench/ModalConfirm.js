@@ -15,9 +15,7 @@ export default function ModalConfirm({
   const { bedname, data } = dataSource;
   // 离线状态
   const isOffine = data && data.status === 3;
-  const havePregnancy = data && data.pregnancy;
-  const pregnancy = typeof havePregnancy === 'object'
-    ? havePregnancy : havePregnancy && JSON.parse(data.pregnancy.replace(/'/g, '"'));
+  const pregnancy = data && data.pregnancy;
   const isCreate = pregnancy && pregnancy.id && data && data.pregnancy;
 
   // 放弃建档

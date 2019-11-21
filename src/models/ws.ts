@@ -29,18 +29,23 @@ export default {
     *updateData({ payload }, { put, select }) {
       const { data } = payload
 
-      const { offline } = yield select(state => state.list);
+      const { offline, dirty } = yield select(state => state.list);
       const newOffline: Set<string> = new Set(offline);
+      const newDirty: Set<string> = new Set(dirty);
 
-      [...data.entries()].filter(([k, v]) => v.status !== BedStatus.Offline).forEach(([k, v]) => {
-        if (newOffline.has(k)) {
+      [...data.entries()].forEach(([k, v]) => {
+        if (v.status !== BedStatus.Offline && newOffline.has(k)) {
           newOffline.delete(k)
+        }
+        if (v.status !== BedStatus.Stopped && newDirty.has(k)) {
+          newDirty.delete(k)
         }
       })
       yield put({ type: 'setState', payload });
       yield put({
         type: 'list/setState', payload: {
-          offline: newOffline
+          offline: newOffline,
+          dirty: newDirty,
         }
       });
       yield put({ type: 'list/processListData' });

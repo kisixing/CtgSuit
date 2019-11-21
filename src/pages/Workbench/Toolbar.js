@@ -179,23 +179,21 @@ class Toolbar extends Component {
     // TODO 逻辑混乱
     const { dispatch } = this.props;
     const { deviceno, bedno, data, unitId } = item;
-    const havePregnancy = data && data.pregnancy;
 
-    const pregnancy =
-      typeof havePregnancy === 'object'
-        ? havePregnancy
-        : havePregnancy && JSON.parse(data.pregnancy.replace(/'/g, '"'));
+    const pregnancy = data.pregnancy
+
     const isCreated = pregnancy && pregnancy.id && data && data.pregnancy;
 
-    data.status === BedStatus.Working
-      ? dispatch({
-          type: 'list/appendDirty',
-          unitId,
-        })
+    data.status === BedStatus.Working ?
+      // dispatch({
+      //   type: 'list/appendDirty',
+      //   unitId,
+      // })
+      console.log('working end')
       : dispatch({
-          type: 'list/appendOffline',
-          unitId,
-        });
+        type: 'list/appendOffline',
+        unitId,
+      });
 
     socket.endwork(deviceno, bedno);
     // socket.datacache.delete(unitId);
@@ -300,12 +298,9 @@ class Toolbar extends Component {
     // 离线状态
     const isOffline = data && data.status === 3;
     // 已建档状态
-    const havePregnancy = data && data.pregnancy;
-    const pregnancy =
-      typeof havePregnancy === 'object'
-        ? havePregnancy
-        : havePregnancy && JSON.parse(data.pregnancy.replace(/'/g, '"'));
-    const isCreated = havePregnancy && pregnancy.id;
+    const pregnancy = data && data.pregnancy;
+
+    const isCreated = pregnancy && pregnancy.id;
     return (
       <>
         <div className={cx(styles.toolbar, { [styles.show]: showSetting })}>
@@ -318,15 +313,15 @@ class Toolbar extends Component {
               停止监护
             </Button>
           ) : (
-            <Button
-              disabled={data.index === undefined}
-              icon="play-circle"
-              type="link"
-              onClick={() => this.start(dataSource)}
-            >
-              开始监护
+              <Button
+                disabled={data.index === undefined}
+                icon="play-circle"
+                type="link"
+                onClick={() => this.start(dataSource)}
+              >
+                开始监护
             </Button>
-          )}
+            )}
           {/* 停止状态下不可以建档，监护、离线都是可以建档的 */}
           <Button
             icon="user-add"
@@ -376,7 +371,7 @@ class Toolbar extends Component {
         </div>
         <div
           className={styles.actionButton}
-          // style={{ opacity: showSetting || showSettingBar ? 1 : 0 }}
+        // style={{ opacity: showSetting || showSettingBar ? 1 : 0 }}
         >
           <Button
             icon={showSetting ? 'left' : 'right'}

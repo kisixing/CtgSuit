@@ -33,7 +33,7 @@ const PrintPreview = (props) => {
     let p
     if (data) {
       starttime = data.starttime
-      p = JSON.parse(data.pregnancy)
+      p = data.pregnancy
     } else {
       starttime = ctgexam.startTime
       p = pregnancy
