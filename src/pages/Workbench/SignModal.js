@@ -4,6 +4,7 @@
  */
 import React, { Component } from 'react';
 import { Button, Modal, Form, Radio } from 'antd';
+import moment from 'moment';
 
 export class SignModal extends Component {
   componentDidMount() {
@@ -20,7 +21,7 @@ export class SignModal extends Component {
     const { data: { docid, starttime }, unitId } = dataSource;
     const other = {
       unitId: unitId,
-      startTime: starttime,
+      startTime: moment(starttime),
       note: docid,
     };
     form.validateFields((err, values) => {
@@ -29,6 +30,7 @@ export class SignModal extends Component {
       onCreate({ fetalposition, ...other });
     });
   }
+
   render() {
     const { visible, onCancel, form, dataSource, loading } = this.props;
     const { getFieldDecorator } = form;

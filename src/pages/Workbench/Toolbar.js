@@ -18,6 +18,7 @@ import SignModal from './SignModal';
 import styles from './Item.less';
 import { WsService } from '@lianmed/lmg';
 import { BedStatus } from '@lianmed/lmg/lib/services/WsService';
+
 const socket = WsService._this;
 
 class Toolbar extends Component {
@@ -178,11 +179,11 @@ class Toolbar extends Component {
   end = item => {
     // TODO 逻辑混乱
     const { dispatch } = this.props;
-    const { deviceno, bedno, data, unitId } = item;
+    const { deviceno, bedno, data, prenatalVisit, unitId, documentno } = item;
 
     const pregnancy = data.pregnancy
 
-    const isCreated = pregnancy && pregnancy.id && data && data.pregnancy;
+    const isCreated = pregnancy && pregnancy.id;
 
     data.status === BedStatus.Working ?
       // dispatch({
@@ -194,38 +195,23 @@ class Toolbar extends Component {
         type: 'list/appendOffline',
         unitId,
       });
-
-    socket.endwork(deviceno, bedno);
-    // socket.datacache.delete(unitId);
     if (isCreated) {
       // 已经建档 ,修改结束时间
       const pregnancyId = pregnancy.id;
       // 获取ctg曲线档案id，重新调用获取bedinfo
       dispatch({
-        type: 'list/fetchBed',
+        type: 'archives/update',
         payload: {
-          'pregnancyId.equals': pregnancyId,
-        },
-        callback: res => {
-          const d = res[0];
-          if (d && d.id) {
-            const prenatalVisit = d['prenatalVisit'];
-            dispatch({
-              type: 'archives/update',
-              payload: {
-                id: prenatalVisit.id,
-                pregnancy: {
-                  id: pregnancyId,
-                },
-                ctgexam: {
-                  ...prenatalVisit.ctgexam,
-                  startTime: moment(prenatalVisit.ctgexam.startTime),
-                  endTime: moment(),
-                  note: d.documentno,
-                },
-              },
-            });
-          }
+          id: prenatalVisit.id,
+          pregnancy: {
+            id: pregnancyId,
+          },
+          ctgexam: {
+            ...prenatalVisit.ctgexam,
+            startTime: moment(prenatalVisit.ctgexam.startTime),
+            endTime: moment(),
+            note: documentno,
+          },
         },
       });
     } else {
@@ -235,6 +221,7 @@ class Toolbar extends Component {
         payload: data.docid,
       });
     }
+    socket.endwork(deviceno, bedno);
     if (this.endCb) {
       this.endCb();
       this.endCb = null;
@@ -261,7 +248,6 @@ class Toolbar extends Component {
   // 11.14 胎位标记 fhr position
   sign = values => {
     const { dispatch, suitObject } = this.props;
-
     const position = JSON.parse(values.fetalposition);
     console.log('Received values of form: ', suitObject, position);
     suitObject.suit.setfetalposition(position.fhr1, position.fhr2, position.fhr3);
@@ -332,7 +318,7 @@ class Toolbar extends Component {
             {isCreated ? '已建档' : '建档'}
           </Button>
           <Button
-            // disabled={!isMonitor}
+            disabled={!isCreated}
             icon="pushpin"
             type="link"
             onClick={() => this.showModal('signVisible')}
@@ -379,7 +365,7 @@ class Toolbar extends Component {
             style={{ boxShadow: '#aaa 3px 3px 5px 1px' }}
             type="primary"
             onClick={this.toggleTool}
-          ></Button>
+          />
         </div>
         {visible ? (
           <CollectionCreateForm
