@@ -1,11 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Button } from 'antd';
+import { WsService } from "@lianmed/lmg";
+import { EWsEvents } from '@lianmed/lmg/lib/services/types';
 
-function CheckNetwork({ visible }) {
+function CheckNetwork(props) {
     const [v, setV] = useState(false)
+    const cb = useCallback((status: any) => {
+        setV(!status)
+    }, [])
     useEffect(() => {
-        setV(visible)
-    }, [visible])
+        WsService._this.on(EWsEvents.pong, cb)
+        return () => {
+            WsService._this.off(EWsEvents.pong, cb)
+        }
+    }, [])
     useEffect(() => {
         window.addEventListener('online', function () {
             alert("onLine");
