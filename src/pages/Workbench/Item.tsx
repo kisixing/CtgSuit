@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { Card, Col, Button, Tag, Tooltip, Spin } from 'antd';
 import moment from 'moment';
 import { Ctg as L } from '@lianmed/lmg';
@@ -10,25 +10,23 @@ import { IDevice } from "@/models/list";
 import { IRemain } from './useTodo';
 import useItemAlarm from "./useItemAlarm";
 import useFullScreen from "./useFullScreen";
-let styles = require('./Item.less')
+
+let styles = require('./Item.less');
 
 interface IProps {
-  dataSource: IDevice | IRemain
+  dataSource: IDevice | IRemain;
   [x: string]: any
-  data: any
-  bedname: string
-  unitId: string
-  isTodo: boolean
-  note: string
 }
 const WorkbenchItem = (props: IProps) => {
-  const { dispatch, fullScreenId, itemHeight, itemSpan, dataSource, outPadding, data, bedname, unitId, isTodo, note } = props;
+  const { dispatch, fullScreenId, itemHeight, itemSpan, dataSource, outPadding } = props;
+  const { data, bedname } = dataSource;
+  const { unitId } = (dataSource as IDevice);
+  const { isTodo, note } = (dataSource as IRemain);
 
-
-  const [so, setSo] = useState({ suit: null })
-  console.log('alarm gg', so)
-  const [ref, fullScreen] = useFullScreen(fullScreenId, unitId, dispatch)
-  const [alarmStatus] = useItemAlarm(so.suit)
+  const [so, setSo] = useState({ suit: null });
+  console.log('alarm gg', so, dataSource);
+  const [ref, fullScreen] = useFullScreen(fullScreenId, unitId, dispatch);
+  const [alarmStatus] = useItemAlarm(so.suit);
 
   // set loading
   const [spinning, setSpinning] = useState(false);
@@ -69,9 +67,9 @@ const WorkbenchItem = (props: IProps) => {
                 } else {
                   const cb = () => {
                     dispatch({
-                      type: 'list/appendDirty', unitId
+                      type: 'list/removeDirty', unitId
                     })
-                  }
+                  };
                   status === BedStatus.Stopped ? cb() : (
                     event.emit(`bedClose:${unitId}`, cb)
                   )
@@ -79,7 +77,7 @@ const WorkbenchItem = (props: IProps) => {
               }
             }
           )()}
-        ></Button>
+        />
       </div>
     );
   };
@@ -87,15 +85,17 @@ const WorkbenchItem = (props: IProps) => {
   // 床位信息
   const renderTilte = item => {
     const { data = {}, bedname } = item;
-    const pregnancy = data && data.pregnancy;
-    console.log('pregnancy', pregnancy)
+    const havePregnancy = data && data.pregnancy;
+    const pregnancy = (typeof havePregnancy === 'object')
+      ? havePregnancy
+      : havePregnancy && JSON.parse(havePregnancy.replace(/'/g, '"'));
     // TODO 根据是否建档判断是否显示
     // const isCreated = havePregnancy && pregnancy.id;
     const { status } = data;
     let dd = pregnancy || {};
     if (status === 2) {
       const bed = JSON.parse(sessionStorage.getItem('bed'));
-      dd = bed[bedname] ? bed[bedname] : {};
+      dd = bed[bedname] ? JSON.parse(bed[bedname]) : {};
       // console.log('66666666666666', dd)
     }
     const text = (
@@ -107,7 +107,7 @@ const WorkbenchItem = (props: IProps) => {
         GP：<span>{dd.GP}</span>
         开始时间: <span>{data.starttime && moment(data.starttime).format('HH:mm')}</span>
       </span>
-    )
+    );
     // 是否已经建档绑定孕册
     return (
       <Tooltip title={text}>
@@ -139,10 +139,10 @@ const WorkbenchItem = (props: IProps) => {
           onDoubleClick={fullScreen}
           loading={spinning}
           showEcg={dataSource.data.ismulti}
-        ></L>
+        />
       </Card>
       <Toolbar {...props} suitObject={so} showSettingBar={true} showLoading={setSpinning} />
     </Col>
   );
-}
+};
 export default WorkbenchItem;
