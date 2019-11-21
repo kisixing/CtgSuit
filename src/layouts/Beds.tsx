@@ -36,8 +36,8 @@ function Beds({ dispatch, listData, wsData }) {
       //   }, 300);
       // }
 
-      dispatch({ type: 'list/appendDirty', unitId });
-      dispatch({ type: 'list/processListData' });
+      // dispatch({ type: 'list/appendDirty', unitId });
+      // dispatch({ type: 'list/processListData' });
       dispatch({ type: 'list/setState', payload: { showTodo: false } })
       dispatch(data);
 
