@@ -156,7 +156,7 @@ class Toolbar extends Component {
           }
           this.setState({ visible: false });
         } else {
-          console.info('archives/create', JSON.stringify(res));
+          // console.info('archives/create', JSON.stringify(res));
           message.error('建档异常，请稍后再试！', 3);
         }
       },
@@ -179,10 +179,8 @@ class Toolbar extends Component {
   end = item => {
     // TODO 逻辑混乱
     const { dispatch } = this.props;
-    const { deviceno, bedno, data, prenatalVisit, unitId, documentno } = item;
-
+    const { deviceno, bedno, data, unitId } = item;
     const pregnancy = data.pregnancy
-
     const isCreated = pregnancy && pregnancy.id;
 
     data.status === BedStatus.Working ?
@@ -195,23 +193,38 @@ class Toolbar extends Component {
         type: 'list/appendOffline',
         unitId,
       });
-    if (isCreated && prenatalVisit) {
+    if (isCreated) {
       // 已经建档 ,修改结束时间
       // 获取ctg曲线档案id，重新调用获取bedinfo
+      // 与app的流程一致
+      // app的结束 流程是 查bedinfo 获取 prental信息 然后 put prental-visits 接口成功调用ws endwork
+      // 避免 多客户端 之间通信的保持问题。 即使当前设备离线 流程应该也不影响
       dispatch({
-        type: 'archives/update',
+        type: 'list/fetchBed',
         payload: {
-          id: prenatalVisit.id,
-          pregnancy: {
-            id: pregnancy.id,
-          },
-          ctgexam: {
-            ...prenatalVisit.ctgexam,
-            startTime: moment(prenatalVisit.ctgexam.startTime),
-            endTime: moment(),
-            note: documentno,
-          },
+          'pregnancyId.equals': pregnancy.id,
         },
+        callback: res => {
+          const d = res[0];
+          if (d && d.id) {
+            const prenatalVisit = d['prenatalVisit'];
+            dispatch({
+              type: 'archives/update',
+              payload: {
+                id: prenatalVisit.id,
+                pregnancy: {
+                  id: pregnancy.id,
+                },
+                ctgexam: {
+                  ...prenatalVisit.ctgexam,
+                  startTime: moment(prenatalVisit.ctgexam.startTime),
+                  endTime: moment(),
+                  note: d.documentno,
+                },
+              },
+            });
+          }
+        }
       });
     } else {
       // 未建档提示简单保存或者放弃保存
@@ -225,13 +238,6 @@ class Toolbar extends Component {
       this.endCb();
       this.endCb = null;
     }
-    // if (data.status === '3') {
-    //   // 离线状态时，建档完成后关闭
-    //   dispatch({
-    //     type: 'list/removeDirty',
-    //     unitId: this.unitId,
-    //   });
-    // }
   };
 
   // 未建档停止监，选择建档时，重定向打开建档窗口
