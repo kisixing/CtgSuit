@@ -195,7 +195,7 @@ class Toolbar extends Component {
         type: 'list/appendOffline',
         unitId,
       });
-    if (isCreated && prenatalVisit.id) {
+    if (isCreated && prenatalVisit) {
       // 已经建档 ,修改结束时间
       // 获取ctg曲线档案id，重新调用获取bedinfo
       dispatch({
