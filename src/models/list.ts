@@ -251,12 +251,12 @@ export default {
     },
 
     // // 主要获取prenatalVisit信息
-    // *fetchBed({ payload, callback }, { call, put }) {
-    //   const res = yield call(getBedIfo, payload);
-    //   if (callback && typeof callback === 'function') {
-    //     callback(res); // 返回结果
-    //   }
-    // },
+    *fetchBed({ payload, callback }, { call, put }) {
+      const res = yield call(getBedIfo, payload);
+      if (callback && typeof callback === 'function') {
+        callback(res); // 返回结果
+      }
+    },
   },
   reducers: {
     setState(state, { payload }) {

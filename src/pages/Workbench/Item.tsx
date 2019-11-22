@@ -24,7 +24,6 @@ interface IProps {
 const WorkbenchItem = (props: IProps) => {
   const { dispatch, fullScreenId, itemHeight, itemSpan, dataSource, outPadding, data, bedname, unitId, isTodo, note } = props;
 
-
   const [so, setSo] = useState({ suit: null })
   console.log('alarm gg', so)
   const [ref, fullScreen] = useFullScreen(fullScreenId, unitId, dispatch)
@@ -88,7 +87,7 @@ const WorkbenchItem = (props: IProps) => {
   const renderTilte = item => {
     const { data = {}, bedname } = item;
     const pregnancy = data && data.pregnancy;
-    console.log('pregnancy', pregnancy)
+    // console.log('pregnancy', pregnancy)
     // TODO 根据是否建档判断是否显示
     // const isCreated = havePregnancy && pregnancy.id;
     const { status } = data;
@@ -96,7 +95,6 @@ const WorkbenchItem = (props: IProps) => {
     if (status === 2) {
       const bed = JSON.parse(sessionStorage.getItem('bed'));
       dd = bed[bedname] ? bed[bedname] : {};
-      // console.log('66666666666666', dd)
     }
     const text = (
       <span className={styles.tooltipTitle}>
