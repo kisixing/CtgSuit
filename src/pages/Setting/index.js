@@ -7,7 +7,7 @@ import ScoreSet from './ScoreSet';
 import Network from './Network';
 import Alarm from './Alarm';
 import Print from './Print';
-import BedInfo from './BedInfo';
+import Subscribe from './Subscribe/index';
 import Account from './Account';
 import Hospital from './Hospital';
 import VersionManager from './VersionManager';
@@ -20,7 +20,7 @@ class Setting extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      current: { label: '网络设置', value: '5' },
+      current: { label: '网络设置', value: '7' },
       results: {},
     };
   }
@@ -85,7 +85,7 @@ class Setting extends Component {
       case '6':
         return <Hospital />
       case '7':
-        return <BedInfo />
+        return <Subscribe />
       case '8':
         return <Account />
       case '9':
