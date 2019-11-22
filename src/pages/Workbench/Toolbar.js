@@ -195,16 +195,15 @@ class Toolbar extends Component {
         type: 'list/appendOffline',
         unitId,
       });
-    if (isCreated) {
+    if (isCreated && prenatalVisit.id) {
       // 已经建档 ,修改结束时间
-      const pregnancyId = pregnancy.id;
       // 获取ctg曲线档案id，重新调用获取bedinfo
       dispatch({
         type: 'archives/update',
         payload: {
           id: prenatalVisit.id,
           pregnancy: {
-            id: pregnancyId,
+            id: pregnancy.id,
           },
           ctgexam: {
             ...prenatalVisit.ctgexam,
