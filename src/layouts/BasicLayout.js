@@ -267,7 +267,7 @@ class BasicLayout extends Component {
             </Link>
             <div style={{ display: 'flex', lineHeight: '24px', justifyContent: 'space-around' }}>
               <this.ListLayout />
-              <div
+              {/* <div
                 style={{
                   marginLeft: 6,
                   borderRadius: 2,
@@ -289,7 +289,7 @@ class BasicLayout extends Component {
                     ></div>
                   }
                 </Spin>
-              </div>
+              </div> */}
             </div>
           </div>
 
