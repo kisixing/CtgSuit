@@ -8,6 +8,7 @@ export default {
     },
     effects: {
         *setData({ data }: { data: string[] }, { put }) {
+            data = [...new Set(data)]
             const str = data.join(',')
             store.set('area_devices', str)
             yield put({ type: 'setState', payload: { data } })

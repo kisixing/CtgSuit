@@ -61,4 +61,6 @@ export interface IBed {
     subdevice: string;
     type: string;
     updateTime: any;
+    areaname: string;
+    areano: string;
 }
