@@ -26,7 +26,6 @@ const C = (props: IProps) => {
 
     const rowSelection: TableRowSelection<IBed> = {
         onChange: (selectedRowKeys: string[], selectedRows) => {
-            console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
             setSelected(selectedRowKeys)
         },
         // getCheckboxProps: record => ({

@@ -48,13 +48,7 @@ const options = {
         })
     }
 };
-console.log(1111, JSON.stringify({
-    name: pkg.version,
-    description: pkg.description,
-    type: "ctg-suit",
-    uri: pkg.version,
-    createTime: moment(new Date(fileStat.birthtime)).format('YYYY-MM-DD HH:mm:ss')
-}, null, 2))
+
 
 request(options, function (err, res, body) {
     if (err) console.log('err', err);
