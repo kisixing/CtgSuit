@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {  Button, Row, Col, Icon, Popover } from "antd";
+import { Button, Row, Col, Icon, Popover } from "antd";
 
 import { connect, DispatchProp } from 'dva';
 import Table from "./Table";
@@ -55,7 +55,7 @@ const C = (props: IProps) => {
             <Row gutter={6}>
                 <Col span={20}>
                     <div style={{
-                        padding: 10, border: '2px solid var(--theme-color)', borderRadius: 4, height: 110, cursor: editable ? 'auto' : 'not-allowed'
+                        overflow: 'scroll', padding: 10, border: '2px solid var(--theme-color)', borderRadius: 4, height: 110, cursor: editable ? 'auto' : 'not-allowed'
                     }}>
                         {
                             selected.map(id => {
@@ -78,7 +78,7 @@ const C = (props: IProps) => {
                 <Col span={4}>
                     <Button style={{ marginBottom: 6, width: 74 }} onClick={() => editable ? comfirm() : setEditable(!editable)}>{editable ? '确认' : '编辑'}</Button><br />
                     <Button style={{ marginBottom: 6, width: 74 }} onClick={cancel}>重置</Button><br />
-                    <Popover placement="right" content={<img style={{width:100,height:100}} src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARgAAAEYCAIAAAAI7H7bAAAEfUlEQVR4nO3dS24bQRAFQdHQ/a9M38AqwOly9zBiLYg/JHrz0PN6v99fwN/59b/fADyBkCAgJAgICQJCgoCQICAkCAgJAkKCgJAgICQIfE/+6PV6/ev3cbLJHPHSr+jBH60yHKM6kSAgJAgICQJCgoCQICAkCAgJAkKCgJAgICQICAkCo63dxKX341VDsmq0Nvwaw3+V+PBf/8uJBAkhQUBIEBASBIQEASFBQEgQEBIEhAQBIUFASBDItnYTyzeknTYAC9/P8rQv8exf34kEASFBQEgQEBIEhAQBIUFASBAQEgSEBAEhQUBIEFjd2j3Y5v144ctRcSJBQEgQEBIEhAQBIUFASBAQEgSEBAEhQUBIEBASBGztGtUtasMR3WlX9uFEgoCQICAkCAgJAkKCgJAgICQICAkCQoKAkCAgJAgICQKro9UPn1p++K2Oz/71nUgQEBIEhAQBIUFASBAQEgSEBAEhQUBIEBASBIQEgWxr9+FDssnHn4zNwq+xekvVaz2bEwkCQoKAkCAgJAgICQJCgoCQICAkCAgJAkKCgJAg8Hr2bWNPtbmjY8KJBAEhQUBIEBASBIQEASFBQEgQEBIEhAQBIUFASBBY3dodePnbxOZbWh7IHbjZO+06vuFrOZEgICQICAkCQoKAkCAgJAgICQJCgoCQICAkCAgJAqvPkK1Ga8P50+Zqq/poZoSV5RmhEwkCQoKAkCAgJAgICQJCgoCQICAkCAgJAkKCgJAg8OR77W4ckoUfbdPysO3AYacTCQJCgoCQICAkCAgJAkKCgJAgICQICAkCQoKAkCAgJAhkF0RWHnxD4qV3X25+/KHlQeqEEwkCQoKAkCAgJAgICQJCgoCQICAkCAgJAkKCgJAgkF0QedpNi1+7b2l52TVx2h7PBZHAD4QEASFBQEgQEBIEhAQBIUFASBAQEgSEBAEhQWD1YcwPduDWrnLgRztw2OlEgoCQICAkCAgJAkKCgJAgICQICAkCQoKAkCAgJAiMtnbLz3U9zeaQ7MAHrS6/1qWLRCcSBIQEASFBQEgQEBIEhAQBIUFASBAQEgSEBAEhQeC7+keXTqSqsdnyTWub68fql7306cBDTiQICAkCQoKAkCAgJAgICQJCgoCQICAkCAgJAkKCQLa1m1i+H+/G+d+DrxBcvteuumpv+H6cSBAQEgSEBAEhQUBIEBASBIQEASFBQEgQEBIEhAQBIUFgdbT6YJc+07paiIbrz+pfhW9pwokEASFBQEgQEBIEhAQBIUFASBAQEgSEBAEhQUBIELC1a1z6MOYD538TB+7xnEgQEBIEhAQBIUFASBAQEgSEBAEhQUBIEBASBIQEgdWt3Y1PRx6qll2Xjt8mwo+2+cDmIScSBIQEASFBQEgQEBIEhAQBIUFASBAQEgSEBAEhQeB16cNPN21OBJe/6s1ff/nKPvfawX2EBAEhQUBIEBASBIQEASFBQEgQEBIEhAQBIUFgtLUD/syJBAEhQUBIEBASBIQEASFBQEgQEBIEhAQBIUFASBAQEgR+AwAEHzh5cZZFAAAAAElFTkSuQmCC" />} trigger="click">
+                    <Popover placement="right" content={<img style={{ width: 100, height: 100 }} src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARgAAAEYCAIAAAAI7H7bAAAEfUlEQVR4nO3dS24bQRAFQdHQ/a9M38AqwOly9zBiLYg/JHrz0PN6v99fwN/59b/fADyBkCAgJAgICQJCgoCQICAkCAgJAkKCgJAgICQIfE/+6PV6/ev3cbLJHPHSr+jBH60yHKM6kSAgJAgICQJCgoCQICAkCAgJAkKCgJAgICQICAkCo63dxKX341VDsmq0Nvwaw3+V+PBf/8uJBAkhQUBIEBASBIQEASFBQEgQEBIEhAQBIUFASBDItnYTyzeknTYAC9/P8rQv8exf34kEASFBQEgQEBIEhAQBIUFASBAQEgSEBAEhQUBIEFjd2j3Y5v144ctRcSJBQEgQEBIEhAQBIUFASBAQEgSEBAEhQUBIEBASBGztGtUtasMR3WlX9uFEgoCQICAkCAgJAkKCgJAgICQICAkCQoKAkCAgJAgICQKro9UPn1p++K2Oz/71nUgQEBIEhAQBIUFASBAQEgSEBAEhQUBIEBASBIQEgWxr9+FDssnHn4zNwq+xekvVaz2bEwkCQoKAkCAgJAgICQJCgoCQICAkCAgJAkKCgJAg8Hr2bWNPtbmjY8KJBAEhQUBIEBASBIQEASFBQEgQEBIEhAQBIUFASBBY3dodePnbxOZbWh7IHbjZO+06vuFrOZEgICQICAkCQoKAkCAgJAgICQJCgoCQICAkCAgJAqvPkK1Ga8P50+Zqq/poZoSV5RmhEwkCQoKAkCAgJAgICQJCgoCQICAkCAgJAkKCgJAg8OR77W4ckoUfbdPysO3AYacTCQJCgoCQICAkCAgJAkKCgJAgICQICAkCQoKAkCAgJAhkF0RWHnxD4qV3X25+/KHlQeqEEwkCQoKAkCAgJAgICQJCgoCQICAkCAgJAkKCgJAgkF0QedpNi1+7b2l52TVx2h7PBZHAD4QEASFBQEgQEBIEhAQBIUFASBAQEgSEBAEhQWD1YcwPduDWrnLgRztw2OlEgoCQICAkCAgJAkKCgJAgICQICAkCQoKAkCAgJAiMtnbLz3U9zeaQ7MAHrS6/1qWLRCcSBIQEASFBQEgQEBIEhAQBIUFASBAQEgSEBAEhQeC7+keXTqSqsdnyTWub68fql7306cBDTiQICAkCQoKAkCAgJAgICQJCgoCQICAkCAgJAkKCQLa1m1i+H+/G+d+DrxBcvteuumpv+H6cSBAQEgSEBAEhQUBIEBASBIQEASFBQEgQEBIEhAQBIUFgdbT6YJc+07paiIbrz+pfhW9pwokEASFBQEgQEBIEhAQBIUFASBAQEgSEBAEhQUBIELC1a1z6MOYD538TB+7xnEgQEBIEhAQBIUFASBAQEgSEBAEhQUBIEBASBIQEgdWt3Y1PRx6qll2Xjt8mwo+2+cDmIScSBIQEASFBQEgQEBIEhAQBIUFASBAQEgSEBAEhQeB16cNPN21OBJe/6s1ff/nKPvfawX2EBAEhQUBIEBASBIQEASFBQEgQEBIEhAQBIUFgtLUD/syJBAEhQUBIEBASBIQEASFBQEgQEBIEhAQBIUFASBAQEgR+AwAEHzh5cZZFAAAAAElFTkSuQmCC" />} trigger="click">
                         <Button onClick={cancel}>二维码</Button><br />
 
                     </Popover>
