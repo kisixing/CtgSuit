@@ -88,7 +88,8 @@ const PrintPreview = (props) => {
     );
   }
   const v = useMemo(() => { return {} }, []);
-  const docid = (dataSource.ctgexam && dataSource.ctgexam.note) || dataSource.documentno
+  const docid =
+    (dataSource.ctgexam && dataSource.ctgexam.note) || (dataSource.data && dataSource.data.docid);
   return (
     <Context.Provider value={v}>
       <Modal
