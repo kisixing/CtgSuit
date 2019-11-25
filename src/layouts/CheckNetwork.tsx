@@ -15,17 +15,6 @@ function CheckNetwork(props) {
             WsService._this.off(EWsEvents.pong, cb)
         }
     }, [])
-    useEffect(() => {
-        window.addEventListener('online', function () {
-            alert("onLine");
-        });
-        window.addEventListener('offline', function () {
-            alert("offLine");
-        });
-
-        return () => {
-        };
-    }, [])
 
     return (
         v && <div style={{

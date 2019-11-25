@@ -81,7 +81,6 @@ export default function useTodo(showTodo: boolean): [IRemain[], boolean] {
         },
         []
     )
-    console.log('todo', todo)
     return [
         todo, todoLoading
     ]

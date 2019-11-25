@@ -25,7 +25,6 @@ const WorkbenchItem = (props: IProps) => {
   const { dispatch, fullScreenId, itemHeight, itemSpan, dataSource, outPadding, data, bedname, unitId, isTodo, note } = props;
 
   const [so, setSo] = useState({ suit: null })
-  console.log('alarm gg', so)
   const [ref, fullScreen] = useFullScreen(fullScreenId, unitId, dispatch)
   const [alarmStatus] = useItemAlarm(so.suit)
 

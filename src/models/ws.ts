@@ -20,7 +20,6 @@ export default {
       if (status === EWsStatus.Success) return;
 
       let data: ICache = yield call(wsService.getDatacache.bind(wsService));
-      console.log('datacache', data)
       const offline = [...data.entries()].filter(([k, v]) => v.status === BedStatus.Offline).map(([k, v]) => k)
       yield put({ type: 'setState', payload: { data } });
       yield put({ type: 'list/setState', payload: { offline: new Set(offline) } });

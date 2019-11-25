@@ -9,7 +9,6 @@ const AliyunOSSUpload = (props: { [x: string]: any }) => {
 
     const onChange = ({ fileList }) => {
         const { onChange } = props;
-        console.log('Aliyun OSS:', fileList);
         if (onChange && fileList.length > 0) {
             onChange([fileList[fileList.length - 1]]);
         }

@@ -7,17 +7,14 @@ export default (suit: Suit) => {
     const [alarmStatus, setAlarmStatus] = useState<string>(null)
 
     useEffect(() => {
-        console.log('alarm',suit)
         const _setAlarmStatus = throttle((alarmType) => {
             setAlarmStatus(alarmType)
         }, 0)
         const onCb = (alarmType: string) => {
-            console.log('alarmtype',alarmType);
             event.emit(`Suit:alarmOn`, alarmType)
             _setAlarmStatus(alarmType)
         }
         const offCb = (alarmType: string) => {
-            console.log('alarmtype-Off',alarmType);
             event.emit(`Suit:alarmOff`, alarmType)
             _setAlarmStatus(null)
         }

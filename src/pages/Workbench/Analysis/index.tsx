@@ -13,7 +13,6 @@ function Analysis({
   dataSource,
   docid = '',
 }) {
-  console.log(dataSource)
   return (
     <Modal
       maskClosable={false}
