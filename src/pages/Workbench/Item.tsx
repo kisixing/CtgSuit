@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { Card, Col, Button, Tag, Tooltip, Spin } from 'antd';
 import moment from 'moment';
 import { Ctg as L } from '@lianmed/lmg';

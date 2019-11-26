@@ -122,10 +122,10 @@ const RadioGroup = ({ value, onChange }) => {
         <Radio value={'左上'}>左上</Radio>
       </div>
       <div style={{ ...itemStyle, borderBottom: borderStyle }}>
-        <Radio value={'左下'}>左下</Radio>
+        <Radio value={'右上'}>右上</Radio>
       </div>
       <div style={{ ...itemStyle, borderRight: borderStyle }}>
-        <Radio value={'右上'}>右上</Radio>
+        <Radio value={'左下'}>左下</Radio>
       </div>
       <div style={{ ...itemStyle }}>
         <Radio value={'右下'}>右下</Radio>
