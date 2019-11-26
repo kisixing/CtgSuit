@@ -11,7 +11,7 @@ import { Partogram } from '@lianmed/lmg';
 import { PartogramTable } from '@lianmed/components';
 class C extends Component {
   render() {
-    const { visible, onCancel, onCreate, dataSource } = this.props;
+    const { visible, onCancel, dataSource } = this.props;
     return (
       <Modal
         getContainer={false}
@@ -24,10 +24,9 @@ class C extends Component {
         okText="创建"
         cancelText="取消"
         footer={null}
-        onOk={onCreate}
         bodyStyle={{ paddingRight: '48px', background: '#fff' }}
         wrapClassName={modalStyles.modal}
-        onCancel={() => onCancel('partogramVisible')}
+        onCancel={onCancel}
       >
         <div style={{ height: 450 }}>
           <Partogram />

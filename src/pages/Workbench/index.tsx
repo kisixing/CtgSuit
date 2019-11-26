@@ -5,11 +5,11 @@ import { connect } from 'react-redux';
 import './index.less';
 import Item from './Item';
 // import { Spin } from 'antd';
-import { IDevice } from '@/models/list';
+import { IBed } from '@/types';
 import useTodo, { IRemain } from "./useTodo";
 
 interface IProps {
-  pageItems: IDevice[],
+  pageItems: IBed[],
   [x: string]: any
 }
 
@@ -43,10 +43,10 @@ const Home = (props: IProps) => {
       {
         (
           <Row style={{ padding: outPadding, height: contentHeight }} >
-            {items.length ? items.map((item: IDevice | IRemain) => {
+            {items.length ? items.map((item: IBed | IRemain) => {
               // console.log('item', item)
               const { data, bedname } = item;
-              const { unitId } = (item as IDevice)
+              const { unitId } = (item as IBed)
               const { isTodo, note } = (item as IRemain)
               return (
                 <Item

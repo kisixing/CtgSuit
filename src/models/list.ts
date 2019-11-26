@@ -1,11 +1,11 @@
 import { message } from 'antd';
 import { newPregnancies, getPregnancy, getBedIfo } from '@/services/api';
 import { getList } from '@/services/list';
-import { BedStatus } from "@lianmed/lmg/lib/services/WsService";
+// import { BedStatus } from "@lianmed/lmg/lib/services/WsService";
 // import store from "@/utils/SettingStore";
 // const downStatus = [BedStatus.Working, BedStatus.Offline];
-
-function checkVisible(_: IDevice, dirty: Set<string>, offline: Set<string>): boolean {
+import { IBed } from "@/types";
+function checkVisible(_: IBed, dirty: Set<string>, offline: Set<string>): boolean {
   return (!offline.has(_.unitId)) && (!dirty.has(_.unitId))
 };
 
@@ -30,7 +30,7 @@ export default {
       const state = yield select();
       let { subscribe } = state;
 
-      let data: IDevice[] = yield call(getList);
+      let data: IBed[] = yield call(getList);
 
       if (!subscribe.data.length) {
         yield put({ type: 'subscribe/setData', data: [...new Set(data.map(_ => _.deviceno))] })
@@ -66,7 +66,7 @@ export default {
       const pageItemsCount: number = listLayout[0] * listLayout[1];
 
 
-      listData = (listData as IDevice[]).filter(_ => checkVisible(_, dirty, offline))
+      listData = (listData as IBed[]).filter(_ => checkVisible(_, dirty, offline))
       listData.reduce((pre, cur) => {
         cur.pageIndex = Math.floor(pre / pageItemsCount)
         return pre + 1
@@ -279,52 +279,15 @@ interface IState {
 }
 interface IListState {
   offline: Set<string>,
-  headData: IDevice[],
-  listData: IDevice[],
-  rawData: IDevice[],
+  headData: IBed[],
+  listData: IBed[],
+  rawData: IBed[],
   dirty: Set<string>,
   pageData: any[],
   pageCount: number,
   page: number,
-  pageItems: IDevice[],
+  pageItems: IBed[],
   fullScreenId: string,
   pregnancy: object,
 }
 
-export interface IDevice {
-  bedname: string;
-  bedno: string;
-  deviceno: string;
-  documentno: string;
-  id: number;
-  unitId: string;
-  pageIndex: number;
-  data: any;
-  pregnancy: {
-    age: number;
-    dob: any;
-    doctor: any;
-    edd: any;
-    ethnic: any;
-    gender: any;
-    gravidity: number;
-    id: number;
-    idNO: any;
-    idType: any;
-    inpatientNO: string;
-    insuranceType: any;
-    lmp: any;
-    name: string;
-    organization: any;
-    outpatientNO: any;
-    parity: number;
-    prenatalscreens: any;
-    riskRecords: any[];
-    sureEdd: any;
-    telephone: string;
-  };
-  status: number;
-  subdevice: string;
-  type: string;
-  updateTime: string;
-}

@@ -9,7 +9,6 @@ export const Context = React.createContext({});
 function Analysis({
   visible,
   onCancel,
-  onCreate,
   dataSource,
   docid = '',
 }) {
@@ -43,8 +42,7 @@ function Analysis({
       }
       okText="创建"
       cancelText="取消"
-      onCancel={() => onCancel('analysisVisible')}
-      onOk={onCreate}
+      onCancel={onCancel}
     // bodyStyle={{background:'#f1f1f1'}}
     // wrapClassName={styles.modal}
     >

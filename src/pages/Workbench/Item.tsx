@@ -6,23 +6,24 @@ import { mapStatusToColor, mapStatusToText } from '@/constant';
 import Toolbar from './Toolbar';
 import { event } from "@lianmed/utils";
 import { BedStatus } from "@lianmed/lmg/lib/services/WsService";
-import { IDevice } from "@/models/list";
+import { IBed } from "@/types";
 import { IRemain } from './useTodo';
 import useItemAlarm from "./useItemAlarm";
 import useFullScreen from "./useFullScreen";
 let styles = require('./Item.less')
 
 interface IProps {
-  dataSource: IDevice | IRemain
+  dataSource: IBed | IRemain
   [x: string]: any
   data: any
   bedname: string
   unitId: string
   isTodo: boolean
   note: string
+  ismulti: boolean
 }
 const WorkbenchItem = (props: IProps) => {
-  const { dispatch, fullScreenId, itemHeight, itemSpan, dataSource, outPadding, data, bedname, unitId, isTodo, note } = props;
+  const { dispatch, fullScreenId, itemHeight, itemSpan, dataSource, outPadding, data, bedname, unitId, isTodo, note, ismulti } = props;
 
   const [so, setSo] = useState({ suit: null })
   const [ref, fullScreen] = useFullScreen(fullScreenId, unitId, dispatch)
@@ -134,10 +135,10 @@ const WorkbenchItem = (props: IProps) => {
           onReady={suit => setSo({ suit })}
           onDoubleClick={fullScreen}
           loading={spinning}
-          showEcg={dataSource.data.ismulti}
+          showEcg={ismulti}
         ></L>
       </Card>
-      <Toolbar {...props} suitObject={so} showSettingBar={true} showLoading={setSpinning} />
+      <Toolbar ismulti={ismulti} isTodo={isTodo} {...props} suitObject={so} showLoading={setSpinning} />
     </Col>
   );
 }

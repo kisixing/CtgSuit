@@ -6,7 +6,7 @@ import React, { Component } from 'react';
 import { Button, Modal, Form, Radio } from 'antd';
 import moment from 'moment';
 
-export class SignModal extends Component {
+export class SignModal extends Component<any, any> {
   componentDidMount() {
     // const { form } = this.props;
     // form.setFieldsValue({
@@ -32,7 +32,7 @@ export class SignModal extends Component {
   }
 
   render() {
-    const { visible, onCancel, form, dataSource, loading } = this.props;
+    const { visible, onCancel, form, dataSource } = this.props;
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -81,8 +81,7 @@ export class SignModal extends Component {
           <div style={{ textAlign: 'center' }}>
             <Button
               type="primary"
-              loading={loading.effects['item/sign']}
-              onClick={() => this.handleCreate(dataSource)}
+              onClick={this.handleCreate}
             >
               确认
             </Button>
@@ -96,9 +95,9 @@ export class SignModal extends Component {
   }
 }
 
-export default Form.create()(SignModal);
+export default Form.create<any>()(SignModal);
 
-const RadioGroup = ({ value, onChange }) => {
+const RadioGroup = ({ value = "", onChange = () => { } }) => {
   const itemStyle = {
     width: '76px',
     height: '40px',

@@ -1,3 +1,5 @@
+import { ICacheItem } from "@lianmed/lmg/lib/services/types";
+
 export interface ICtgexam {
     diagnosis: any;
     endTime: any;
@@ -63,4 +65,8 @@ export interface IBed {
     updateTime: any;
     areaname: string;
     areano: string;
+
+    unitId?: string;
+    pageIndex?: number;
+    data?: ICacheItem;
 }

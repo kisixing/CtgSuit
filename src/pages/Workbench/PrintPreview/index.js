@@ -17,7 +17,7 @@ export const Context = React.createContext({})
 
 
 const PrintPreview = (props) => {
-  const { visible, onCancel, onCreate, dataSource, from } = props;
+  const { visible, onCancel, dataSource, from } = props;
 
 
 
@@ -105,7 +105,6 @@ const PrintPreview = (props) => {
         bodyStyle={{ height: "80vh" }}
         wrapClassName={styles.modal}
         onCancel={() => onCancel('printVisible')}
-        onOk={onCreate}
         maskClosable={false}
       >
         <Report docid={docid} onDownload={onDownload} {...getPreviewData()} print_interval={20} />
