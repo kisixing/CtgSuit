@@ -20,7 +20,7 @@ const socket = WsService._this;
 
 
 interface IProps {
-  dataSource: IBed
+  dataSource: any
   dispatch: any
   suitObject: { suit: Suit }
   showLoading: (s: boolean) => void
@@ -39,7 +39,7 @@ function Toolbar(props: IProps) {
     showModal('confirmVisible');
   };
   const { dataSource, showLoading, isTodo, dispatch, ...rest } = props
-  const { unitId, data, bedname, deviceno, bedno, } = dataSource
+  const { unitId, data, bedname, deviceno, bedno, } = dataSource as IBed
 
 
 
