@@ -1,5 +1,5 @@
-import React, { useMemo, useState } from 'react';
-import { Card, Col, Button, Tag, Tooltip, Spin } from 'antd';
+import React, { useState } from 'react';
+import { Card, Col, Button, Tag, Tooltip } from 'antd';
 import moment from 'moment';
 import { Ctg as L } from '@lianmed/lmg';
 import { mapStatusToColor, mapStatusToText } from '@/constant';
@@ -132,7 +132,6 @@ const WorkbenchItem = (props: IProps) => {
         <L
           data={data}
           onReady={suit => setSo({ suit })}
-          itemHeight={itemHeight}
           onDoubleClick={fullScreen}
           loading={spinning}
           showEcg={dataSource.data.ismulti}
