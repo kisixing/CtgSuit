@@ -38,24 +38,11 @@ const C = (props: IProps) => {
 
     return (
         <div style={{}} >
-            <div style={{ fontWeight: 600, lineHeight: '40px' }}>
-                <span>子机订阅</span>
 
-                {/* {
-                    editable ? (
-                        <>
-                            <Button style={{ marginLeft: 10 }} onClick={empty}>全空</Button>
-                            <Button style={{ marginLeft: 10 }} onClick={all}>全选</Button>
-                            <Button style={{ marginLeft: 10 }} type="primary" onClick={comfirm}>确认</Button>
-                        </>
-                    ) : (
-                        )
-                } */}
-            </div>
             <Row gutter={6}>
                 <Col span={20}>
                     <div style={{
-                        overflow: 'scroll', padding: 10, border: '2px solid var(--theme-color)', borderRadius: 4, height: 110, cursor: editable ? 'auto' : 'not-allowed'
+                        overflow: 'scroll', background: 'var(--theme-shadow-color)', padding: 10, borderRadius: 4, height: 140, cursor: editable ? 'auto' : 'not-allowed'
                     }}>
                         {
                             selected.map(id => {
@@ -89,30 +76,3 @@ const C = (props: IProps) => {
 };
 
 export default connect((state: any) => ({ subscribeData: state.subscribe.data, data: [...new Set(state.list.rawData.map(_ => `${_.areaname}-${_.bedname}-${_.deviceno}`))] }))(C)
-const columns = [
-    {
-        title: '病区号',
-        dataIndex: 'areano',
-        key: 'areano',
-    },
-    {
-        title: '病区名',
-        dataIndex: 'areaname',
-        key: 'areaname',
-    },
-    {
-        title: '设备号',
-        dataIndex: 'deviceno',
-        key: 'deviceno',
-    },
-    {
-        title: '设备名',
-        dataIndex: 'bedname',
-        key: 'bedname',
-    },
-    {
-        title: '子机号',
-        dataIndex: 'bedno',
-        key: 'bedno',
-    },
-];
