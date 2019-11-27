@@ -24,6 +24,20 @@ class TableList extends Component {
         ...this.getColumnSearchProps('inpatientNO'),
       },
       {
+        title: '床号',
+        dataIndex: 'bedNO',
+        key: 'bedNO',
+        sorter: (a, b) => a.bedNO - b.bedNO,
+        ...this.getColumnSearchProps('bedNO'),
+      },
+      {
+        //TODO render 名称
+        // 10 住院中  20 出院
+        title: '入院状态',
+        dataIndex: 'recordstate',
+        key: 'recordstate',
+      },
+      {
         title: '姓名',
         dataIndex: 'name',
         key: 'name',
