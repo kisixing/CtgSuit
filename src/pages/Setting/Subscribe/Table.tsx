@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {  Button,   Table, Input } from "antd";
+import { Button, Table, Input } from "antd";
 import store from "@/utils/SettingStore";
 import { connect, DispatchProp } from 'dva';
 import { TableRowSelection } from 'antd/lib/table';
@@ -41,7 +41,7 @@ const C = (props: IProps) => {
         <>
             <div style={{ margin: '20px 0 10px' }}>
                 <Input value={areano} onChange={e => setAreano(e.target.value)} style={{ width: 140 }} placeholder="输入病区号" />
-                <Button style={{ marginLeft: 6 }} type="primary" onClick={fetchList}>搜索</Button>
+                <Button style={{ marginLeft: 6 }} onClick={fetchList}>搜索</Button>
                 <Button style={{ marginLeft: 6 }} type="primary" onClick={() => dispatch({ type: 'subscribe/setData', data: selected.concat(subscribeData) })}>添加</Button>
 
             </div>
@@ -53,7 +53,7 @@ const C = (props: IProps) => {
 };
 
 export default connect((state: any) => ({ subscribeData: state.subscribe.data }))(C)
-const columns = [
+const columns = ([
     {
         title: '病区号',
         dataIndex: 'areano',
@@ -79,4 +79,4 @@ const columns = [
         dataIndex: 'bedno',
         key: 'bedno',
     },
-];
+] as any[]).map(_ => ({ ..._, align: 'left' }));
