@@ -2,6 +2,8 @@ import { useCallback, useState, useEffect } from "react";
 import request from "@lianmed/request";
 import { event } from "@lianmed/utils";
 import { Modal } from "antd";
+import { IPregnancy, IPrenatalVisit } from "@/types";
+import { BedStatus } from "@lianmed/lmg/lib/services/types";
 export default function useTodo(showTodo: boolean): [IRemain[], boolean] {
     const [todo, setTodo] = useState<IRemain[]>([])
     const [todoLoading, setTodoLoading] = useState(false)
@@ -9,7 +11,9 @@ export default function useTodo(showTodo: boolean): [IRemain[], boolean] {
         (value: INewArchive) => {
             const target = todo.find(_ => _.note === value.ctgexam.note)
             if (target) {
-                target.data.pregnancy = value.pregnancy
+                const { pregnancy } = value
+                target.data.pregnancy = pregnancy
+                target.prenatalVisit = value as any
             }
         },
         [todo],
@@ -70,8 +74,8 @@ export default function useTodo(showTodo: boolean): [IRemain[], boolean] {
                             isTodo: true,
                             bedname,
                             id: _.note,
-                            type:'',
-                            data: { ...all[index], docid: _.note, starttime }
+                            type: '',
+                            data: { ...all[index], docid: _.note, starttime, ismulti: false, GP: '/', status: null }
                         }
                     }
                     ))
@@ -95,14 +99,18 @@ export interface IRemain {
     report: any;
     result: any;
     startTime: any;
-    type:string;
+    type: string;
+    prenatalVisit: IPrenatalVisit
     data: {
         fhr1: string;
         fhr2: string;
         fhr3: string;
         fm: string;
         toco: string;
-        pregnancy?: any;
+        pregnancy?: IPregnancy;
+        ismulti: false
+        docid: string
+        status: any
     }
 }
 export interface INewArchive {
@@ -128,32 +136,7 @@ export interface INewArchive {
     labExams: any;
     pelvicExam: any;
     physicalExam: any;
-    pregnancy: {
-        adminDate: any;
-        age: number;
-        areaNO: string;
-        bedNO: string;
-        dob: any;
-        doctor: any;
-        edd: any;
-        ethnic: any;
-        gender: any;
-        gravidity: number;
-        id: number;
-        idNO: any;
-        idType: any;
-        inpatientNO: string;
-        insuranceType: any;
-        lmp: any;
-        name: string;
-        organization: any;
-        outpatientNO: any;
-        parity: number;
-        riskRecords: any[];
-        roomNO: any;
-        sureEdd: any;
-        telephone: any;
-    };
+    pregnancy: IPregnancy;
     visitDate: string;
     visitTime: string;
     visitType: any;

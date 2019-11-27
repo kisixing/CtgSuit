@@ -5,28 +5,80 @@ import { Ctg as L } from '@lianmed/lmg';
 import { mapStatusToColor, mapStatusToText } from '@/constant';
 import Toolbar from './Toolbar';
 import { event } from "@lianmed/utils";
-import { BedStatus } from "@lianmed/lmg/lib/services/WsService";
-import { IBed } from "@/types";
+import { BedStatus, ICacheItem } from "@lianmed/lmg/lib/services/WsService";
+import { IBed, IPregnancy, IPrenatalVisit } from "@/types";
 import { IRemain } from './useTodo';
 import useItemAlarm from "./useItemAlarm";
 import useFullScreen from "./useFullScreen";
 let styles = require('./Item.less')
 
 interface IProps {
-  dataSource: IBed | IRemain
-  [x: string]: any
-  data: any
+  data: ICacheItem
   bedname: string
   unitId: string
   isTodo: boolean
   note: string
   ismulti: boolean
+  inpatientNO: string
+  name: string
+  age: number
+  gestationalWeek: string
+  deviceno: string
+  bedNO: string
+  docid: string
+  status: BedStatus
+  pregnancyId: number
+  index: any
+  startTime: string
+  outPadding: number
+  fullScreenId: string
+  itemHeight: number
+  itemSpan: number
+  GP: string
 }
 const WorkbenchItem = (props: IProps) => {
-  const { dispatch, fullScreenId, itemHeight, itemSpan, dataSource, outPadding, data, bedname, unitId, isTodo, note, ismulti } = props;
+  const {
+    fullScreenId,
+    itemHeight,
+    itemSpan,
+    outPadding,
+    data,
+    bedname,
+    unitId,
+    isTodo,
+    note,
+    ismulti,
+    docid,
+    deviceno,
+    index,
+    pregnancyId,
+    status,
+    startTime,
+    gestationalWeek,
+    name,
+    age,
+    inpatientNO,
+    GP,
+    bedNO
+  } = props;
+
+  // let safeP = pregnancy || { name: null, age: null, inpatientNO: null, GP: '/', bedNO: null, id: null }
+
+
+
+  // if (status === 2) {
+  //   const bed = JSON.parse(sessionStorage.getItem('bed'));
+  //   bed[bedname] && (safeP = bed[bedname])
+  // }
+
+
+  // const { name, age, inpatientNO, GP, bedNO } = safeP
+
+  // let safePv = prenatalVisit || { gestationalWeek: null, ctgexam: { startTime: null } }
+
 
   const [so, setSo] = useState({ suit: null })
-  const [ref, fullScreen] = useFullScreen(fullScreenId, unitId, dispatch)
+  const [ref, fullScreen] = useFullScreen(fullScreenId, unitId)
   const [alarmStatus] = useItemAlarm(so.suit)
 
   // set loading
@@ -34,15 +86,14 @@ const WorkbenchItem = (props: IProps) => {
 
   // TODO 停止状态下没有孕册信息返回，监护窗口header 暂时处理方案
   // 保存建档孕册信息 1/运行  2/停止 3/离线
-  const { status, pregnancy } = data;
   const b = sessionStorage.getItem('bed');
   let bed = b ? JSON.parse(b) : {};
-  if (status !== 2) {
-    // 停止监护
-    bed[bedname] = pregnancy;
-    const bedString = JSON.stringify(bed); // JSON.parse(str)
-    sessionStorage.setItem('bed', bedString);
-  }
+  // if (status !== 2) {
+  //   // 停止监护
+  //   bed[bedname] = pregnancy;
+  //   const bedString = JSON.stringify(bed); // JSON.parse(str)
+  //   sessionStorage.setItem('bed', bedString);
+  // }
 
   // item右上角icon
   const renderExtra = (bedname: string, status: number) => {
@@ -60,50 +111,30 @@ const WorkbenchItem = (props: IProps) => {
           size="small"
           type="link"
           style={{ color: "#fff" }}
-          onClick={(
+          onClick={
             () => {
-              return () => {
-                if (isTodo) {
-                  event.emit('todo:discard', note)
-                } else {
-                  const cb = () => {
-                    dispatch({
-                      type: 'list/appendDirty', unitId
-                    })
-                  }
-                  status === BedStatus.Stopped ? cb() : (
-                    event.emit(`bedClose:${unitId}`, cb)
-                  )
-                }
-              }
+              event.emit('bedClose', unitId, status, isTodo, note)
             }
-          )()}
+          }
         ></Button>
-      </div>
+      </div >
     );
   };
 
   // 床位信息
-  const renderTilte = item => {
-    const { data = {}, bedname } = item;
-    const pregnancy = data && data.pregnancy;
+  const renderTilte = () => {
     // console.log('pregnancy', pregnancy)
     // TODO 根据是否建档判断是否显示
     // const isCreated = havePregnancy && pregnancy.id;
-    const { status } = data;
-    let dd = pregnancy || {};
-    if (status === 2) {
-      const bed = JSON.parse(sessionStorage.getItem('bed'));
-      dd = bed[bedname] ? bed[bedname] : {};
-    }
+
     const text = (
       <span className={styles.tooltipTitle}>
-        床号: <span>{dd.bedNO}</span>
+        床号: <span>{bedNO}</span>
         {/* 住院号: <span>{dd.inpatientNO}</span> */}
-        姓名: <span>{dd.name}</span>
-        年龄：<span>{dd.age}</span>
-        GP：<span>{dd.GP}</span>
-        开始时间: <span>{data.starttime && moment(data.starttime).format('HH:mm')}</span>
+        姓名: <span>{name}</span>
+        年龄：<span>{age}</span>
+        GP：<span>{GP}</span>
+        开始时间: <span>{startTime && moment(startTime).format('HH:mm')}</span>
       </span>
     )
     // 是否已经建档绑定孕册
@@ -124,9 +155,9 @@ const WorkbenchItem = (props: IProps) => {
       <Card
         size="small"
         // loading={spinning}
-        title={renderTilte(dataSource)}
+        title={renderTilte()}
         className={styles.card}
-        extra={renderExtra(bedname, data.status)}
+        extra={renderExtra(bedname, status)}
         headStyle={{ background: 'var(--theme-color)', color: '#fff' }}
         bodyStyle={{ padding: 0, height: 'calc(100% - 38px)' }}
       >
@@ -138,7 +169,25 @@ const WorkbenchItem = (props: IProps) => {
           showEcg={ismulti}
         ></L>
       </Card>
-      <Toolbar ismulti={ismulti} isTodo={isTodo} {...props} suitObject={so} showLoading={setSpinning} />
+      <Toolbar
+        inpatientNO={inpatientNO}
+        name={name}
+        age={age}
+        gestationalWeek={gestationalWeek}
+        unitId={unitId}
+        bedname={bedname}
+        deviceno={deviceno}
+        bedNO={bedNO}
+        docid={docid}
+        status={status}
+        pregnancyId={pregnancyId}
+        index={index}
+        startTime={startTime}
+        isTodo={isTodo}
+
+        suitObject={so}
+        showLoading={setSpinning}
+      />
     </Col>
   );
 }

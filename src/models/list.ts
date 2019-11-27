@@ -223,40 +223,10 @@ export default {
       }
     },
 
-    // 新建档案modal页面的搜索功能，检索个人孕册信息
-    *fetchPregnancy({ payload, callback }, { call, put }) {
-      const res = yield call(getPregnancy, payload);
-      if (callback && typeof callback === 'function') {
-        callback(res); // 返回结果
-      }
-      if (res.length) {
-        yield put({
-          type: 'setState',
-          payload: {
-            pregnancy: res[0],
-          },
-        });
-      }
-    },
 
-    // 新建孕册
-    *createPregnancy({ payload, callback }, { call, put, select }) {
-      const res = yield call(newPregnancies, payload);
-      if (res && res.id) {
-        message.success('孕册创建成功！');
-        if (callback && typeof callback === 'function') {
-          callback(res); // 返回结果
-        }
-      }
-    },
 
-    // // 主要获取prenatalVisit信息
-    *fetchBed({ payload, callback }, { call, put }) {
-      const res = yield call(getBedIfo, payload);
-      if (callback && typeof callback === 'function') {
-        callback(res); // 返回结果
-      }
-    },
+
+
   },
   reducers: {
     setState(state, { payload }) {

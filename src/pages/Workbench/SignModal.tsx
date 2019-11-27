@@ -2,97 +2,112 @@
  * 胎位标记modal窗口
  *
  */
-import React, { Component } from 'react';
+import React from 'react';
 import { Button, Modal, Form, Radio } from 'antd';
-import moment from 'moment';
+import { WrappedFormUtils } from 'antd/lib/form/Form';
+import { Suit } from '@lianmed/lmg/lib/Ctg/Suit';
+import { request } from '@lianmed/utils';
+// import moment from 'moment';
 
-export class SignModal extends Component<any, any> {
-  componentDidMount() {
-    // const { form } = this.props;
-    // form.setFieldsValue({
-    //   fhr1: '左上',
-    //   fhr2: '左下',
-    //   fhr3: '右上',
-    // });
-  }
+interface IProps {
+  form: WrappedFormUtils
+  startTime: string
+  bedname: string
+  docid: string
+  visible: boolean
+  onCancel: () => void
+  suit: Suit
+}
 
-  handleCreate = () => {
-    const { form, onCreate, dataSource } = this.props;
-    const { data: { docid, starttime }, unitId } = dataSource;
-    const other = {
-      unitId: unitId,
-      startTime: moment(starttime),
-      note: docid,
-    };
-    form.validateFields((err, values) => {
-      const fetalposition = JSON.stringify(values);
-      // console.log('8888888888888', values);
-      onCreate({ fetalposition, ...other });
+export const SignModal = (props: IProps) => {
+  const { form, startTime, bedname, docid, visible, onCancel, suit } = props;
+
+
+
+  const handleCreate = values => {
+
+  
+    form.validateFields(async (err, values) => {
+      setTimeout(onCancel, 1500);
+
+      await request.put(`/ctg-exams-note`, {
+        data: {
+          fetalposition:JSON.stringify(values),
+          startTime,
+          note: docid,
+          endTime: '',
+        }
+      });
     });
-  }
 
-  render() {
-    const { visible, onCancel, form, dataSource } = this.props;
-    const { getFieldDecorator } = form;
-    const formItemLayout = {
-      labelCol: {
-        xs: { span: 24 },
-        sm: { span: 8 },
-      },
-      wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 12 },
-      },
-    };
-    return (
-      <Modal
-        getContainer={false}
-        centered
-        destroyOnClose
-        visible={visible}
-        title={`【${dataSource.bedname}】 胎位标记`}
-        footer={null}
-        okText="创建"
-        cancelText="取消"
-        bodyStyle={{ paddingRight: '48px' }}
-        onCancel={() => onCancel('signVisible')}
-      >
-        <Form {...formItemLayout} layout="horizontal">
-          <Form.Item label="FHR1">
-            {getFieldDecorator('fhr1', {
-              rules: [{ max: 2, message: '最大长度为2' }],
-            })(<RadioGroup />)}
-          </Form.Item>
-          <Form.Item label="FHR2">
-            {getFieldDecorator('fhr2', {
-              rules: [{ max: 2, message: '最大长度为2' }],
-            })(<RadioGroup />)}
-          </Form.Item>
-          <Form.Item label="FHR3">
-            {getFieldDecorator('fhr3', {
-              rules: [{ max: 2, message: '最大长度为2' }],
-            })(<RadioGroup />)}
-          </Form.Item>
-          {/* <div>
+    const position = JSON.parse(values.fetalposition);
+    suit.setfetalposition(position.fhr1, position.fhr2, position.fhr3);
+
+
+
+
+  };
+
+
+  const { getFieldDecorator } = form;
+  const formItemLayout = {
+    labelCol: {
+      xs: { span: 24 },
+      sm: { span: 8 },
+    },
+    wrapperCol: {
+      xs: { span: 24 },
+      sm: { span: 12 },
+    },
+  };
+  return (
+    <Modal
+      getContainer={false}
+      centered
+      destroyOnClose
+      visible={visible}
+      title={`【${bedname}】 胎位标记`}
+      footer={null}
+      okText="创建"
+      cancelText="取消"
+      bodyStyle={{ paddingRight: '48px' }}
+      onCancel={onCancel}
+    >
+      <Form {...formItemLayout} layout="horizontal">
+        <Form.Item label="FHR1">
+          {getFieldDecorator('fhr1', {
+            rules: [{ max: 2, message: '最大长度为2' }],
+          })(<RadioGroup />)}
+        </Form.Item>
+        <Form.Item label="FHR2">
+          {getFieldDecorator('fhr2', {
+            rules: [{ max: 2, message: '最大长度为2' }],
+          })(<RadioGroup />)}
+        </Form.Item>
+        <Form.Item label="FHR3">
+          {getFieldDecorator('fhr3', {
+            rules: [{ max: 2, message: '最大长度为2' }],
+          })(<RadioGroup />)}
+        </Form.Item>
+        {/* <div>
             <Button block type="dashed" icon="plus">
               增加
             </Button>
           </div> */}
-          <div style={{ textAlign: 'center' }}>
-            <Button
-              type="primary"
-              onClick={this.handleCreate}
-            >
-              确认
+        <div style={{ textAlign: 'center' }}>
+          <Button
+            type="primary"
+            onClick={handleCreate}
+          >
+            确认
             </Button>
-            <Button style={{ marginLeft: '24px' }} onClick={() => onCancel('signVisible')}>
-              取消
+          <Button style={{ marginLeft: '24px' }} onClick={onCancel}>
+            取消
             </Button>
-          </div>
-        </Form>
-      </Modal>
-    );
-  }
+        </div>
+      </Form>
+    </Modal>
+  );
 }
 
 export default Form.create<any>()(SignModal);

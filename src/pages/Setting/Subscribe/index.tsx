@@ -42,7 +42,7 @@ const C = (props: IProps) => {
             <Row gutter={6}>
                 <Col span={20}>
                     <div style={{
-                        overflow: 'scroll', background: 'var(--theme-shadow-color)', padding: 10, borderRadius: 4, height: 140, cursor: editable ? 'auto' : 'not-allowed'
+                        overflow: 'scroll', background: 'var(--theme-shadow-color)', padding: 4, borderRadius: 4, height: 140, cursor: editable ? 'auto' : 'not-allowed'
                     }}>
                         {
                             selected.map(id => {

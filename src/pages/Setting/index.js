@@ -105,7 +105,7 @@ class Setting extends Component {
           <div className={styles.sideMenu}>{this.menus()}</div>
         </Sider>
         <Layout className={styles.main}>
-          <Header className={styles.headerTitle}>{`系统设置/${current.label}`}</Header>
+          {/* <Header className={styles.headerTitle}>{`系统设置/${current.label}`}</Header> */}
           <Layout className={styles.formBox}>{this.switchComponent()}</Layout>
         </Layout>
       </Layout>

@@ -152,9 +152,7 @@ export default {
       }
     },
     
-    *noSaveCTG({ payload }, { call }) {
-      const res = yield call(nosaveCTG, payload);
-    },
+
   },
   reducers: {
     updateState(state, { payload }) {

@@ -11,7 +11,7 @@ import { Partogram } from '@lianmed/lmg';
 import { PartogramTable } from '@lianmed/components';
 class C extends Component {
   render() {
-    const { visible, onCancel, dataSource } = this.props;
+    const { visible, onCancel, bedname, pregnancyId } = this.props;
     return (
       <Modal
         getContainer={false}
@@ -20,7 +20,7 @@ class C extends Component {
         width="92%"
         height="96%"
         visible={visible}
-        title={`【${dataSource.bedname}】 产程图`}
+        title={`【${bedname}】 产程图`}
         okText="创建"
         cancelText="取消"
         footer={null}
@@ -34,7 +34,7 @@ class C extends Component {
         <PartogramTable
           url="/prenatal-visits"
           style={{ padding: '20px' }}
-          id={dataSource.pregnancy && dataSource.pregnancy.id}
+          id={pregnancyId}
         />
       </Modal>
     );

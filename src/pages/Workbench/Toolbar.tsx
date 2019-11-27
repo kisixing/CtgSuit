@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from 'antd';
-import { connect } from 'dva';
 import moment from 'moment';
 import cx from 'classnames';
-import { event } from "@lianmed/utils";
+import { event, request } from "@lianmed/utils";
 import CollectionCreateForm from './CollectionCreateForm';
 import Analysis from './Analysis';
 import PrintPreview from './PrintPreview';
@@ -11,8 +10,8 @@ import Partogram from './Partogram';
 import ModalConfirm from './ModalConfirm';
 import SignModal from './SignModal';
 import { WsService } from '@lianmed/lmg';
-import { BedStatus } from '@lianmed/lmg/lib/services/WsService';
-import { IBed } from '@/types';
+import { BedStatus, ICacheItem } from '@lianmed/lmg/lib/services/WsService';
+import { IPregnancy } from '@/types';
 import { Suit } from '@lianmed/lmg/lib/Ctg/Suit';
 let styles = require('./Item.less')
 
@@ -20,15 +19,24 @@ const socket = WsService._this;
 
 
 interface IProps {
-  dataSource: any
-  dispatch: any
   suitObject: { suit: Suit }
   showLoading: (s: boolean) => void
   isTodo: boolean
+  inpatientNO: string
+  name: string
+  age: number
+  startTime: string
+  gestationalWeek: string
+  unitId: string
+  bedname: string
+  deviceno: string
+  bedNO: string
+  docid: string
+  status: BedStatus
+  index: any
+  pregnancyId: number
 }
-
 function Toolbar(props: IProps) {
-
   const [showSetting, setShowSetting] = useState(false)
 
   const [isStopMonitorWhenCreated, setIsStopMonitorWhenCreated] = useState(false)
@@ -36,14 +44,35 @@ function Toolbar(props: IProps) {
   const [modalName, setModalName] = useState('')
   const onclose = cb => {
     endCb = cb;
-    showModal('confirmVisible');
+    setModalName('confirmVisible');
   };
-  const { dataSource, showLoading, isTodo, dispatch, ...rest } = props
-  const { unitId, data, bedname, deviceno, bedno, } = dataSource as IBed
+  const { showLoading,
+    isTodo,
+    inpatientNO,
+    name,
+    gestationalWeek,
+    startTime,
+    age,
+    suitObject,
+    docid,
+    status,
+    unitId,
+    index,
+    deviceno,
+    bedNO: bedno,
+    bedname,
+    pregnancyId
+  } = props
 
 
 
-  const { docid, starttime } = data
+
+  // 处于监护状态
+  const isMonitor = status === BedStatus.Working;
+  // 离线状态
+  const isOffline = status === BedStatus.Offline;
+
+  const isCreated = !!pregnancyId;
 
   useEffect(() => {
     event.on(`bedClose:${unitId}`, onclose)
@@ -65,15 +94,7 @@ function Toolbar(props: IProps) {
     autoHide();
   };
 
-  const showModal = name => {
-    // props.dispatch({
-    //   type: 'item/updateState',
-    //   payload: {
-    //     ctgData: null,
-    //   },
-    // });
-    setModalName(name);
-  };
+
 
   const handleCancel = () => {
     setModalName('');
@@ -101,62 +122,45 @@ function Toolbar(props: IProps) {
   };
 
   // 停止监护
-  const end = () => {
+  const end = async () => {
     // TODO 逻辑混乱
-    const { dispatch } = props;
 
-    const pregnancy = data.pregnancy
-    const isCreated = pregnancy && pregnancy.id;
-    data.status === BedStatus.Working ?
-      // dispatch({
-      //   type: 'list/appendDirty',
-      //   unitId,
-      // })
-      console.log('working end')
-      : dispatch({
-        type: 'list/appendOffline',
-        unitId,
-      });
+
     if (isCreated) {
       // 已经建档 ,修改结束时间
       // 获取ctg曲线档案id，重新调用获取bedinfo
       // 与app的流程一致
       // app的结束 流程是 查bedinfo 获取 prental信息 然后 put prental-visits 接口成功调用ws endwork
       // 避免 多客户端 之间通信的保持问题。 即使当前设备离线 流程应该也不影响
-      dispatch({
-        type: 'list/fetchBed',
-        payload: {
-          'pregnancyId.equals': pregnancy.id,
-        },
-        callback: res => {
-          const d = res[0];
-          if (d && d.id) {
-            const prenatalVisit = d['prenatalVisit'];
-            dispatch({
-              type: 'archives/update',
-              payload: {
-                id: prenatalVisit.id,
-                pregnancy: {
-                  id: pregnancy.id,
-                },
-                ctgexam: {
-                  ...prenatalVisit.ctgexam,
-                  startTime: moment(prenatalVisit.ctgexam.startTime),
-                  endTime: moment(),
-                  note: d.documentno,
-                },
-              },
-            });
-          }
-        }
-      });
+
+
+      const res = await request.get(`/bedinfos?pregnancyId.equals=${pregnancyId}`);
+      const d = res[0];
+      if (d && d.id) {
+        const prenatalVisit = d['prenatalVisit'];
+
+        debugger
+        await request.put(`/prenatal-visits`, {
+          data: {
+            id: prenatalVisit.id,
+            pregnancy: { id: pregnancyId, },
+            ctgexam: {
+              ...prenatalVisit.ctgexam,
+              startTime: moment(prenatalVisit.ctgexam.startTime),
+              endTime: moment(),
+              note: d.documentno,
+            },
+          },
+        });
+
+      }
+
+
     } else {
       // 未建档提示简单保存或者放弃保存
-      dispatch({
-        type: 'archives/noSaveCTG',
-        payload: docid,
-      });
+      await request.get(`/ctg-exams-nosaving/${docid}`);
     }
+
     socket.endwork(deviceno, bedno);
     if (endCb) {
       endCb();
@@ -171,39 +175,8 @@ function Toolbar(props: IProps) {
 
   };
 
-  // TODO 未实现CTG组件更新
-  // 11.14 胎位标记 fhr position
-  const sign = values => {
-    const { dispatch, suitObject } = props;
-    const position = JSON.parse(values.fetalposition);
-    console.log('Received values of form: ', suitObject, position);
-    suitObject.suit.setfetalposition(position.fhr1, position.fhr2, position.fhr3);
-    dispatch({
-      type: 'item/updateCTGnote',
-      payload: {
-        ...values,
-        endTime: '',
-      },
-    }).then(() => {
-      setModalName('')
-    });
-
-    setTimeout(() => {
-      setModalName('')
-
-    }, 1500);
-  };
 
 
-
-  // 处于监护状态
-  const isMonitor = data && data.status === 1;
-  // 离线状态
-  const isOffline = data && data.status === 3;
-  // 已建档状态
-  const pregnancy = data && data.pregnancy;
-
-  const isCreated = pregnancy && pregnancy.id;
   return (
     <>
       <div className={cx(styles.toolbar, { [styles.show]: showSetting })}>
@@ -211,13 +184,13 @@ function Toolbar(props: IProps) {
           <Button
             icon="pause-circle"
             type="link"
-            onClick={() => showModal('confirmVisible')}
+            onClick={() => setModalName('confirmVisible')}
           >
             停止监护
             </Button>
         ) : (
             <Button
-              disabled={data.index === undefined}
+              disabled={index === undefined}
               icon="play-circle"
               type="link"
               onClick={start}
@@ -229,8 +202,8 @@ function Toolbar(props: IProps) {
         <Button
           icon="user-add"
           type="link"
-          disabled={(isCreated && docid) || isCreated}
-          onClick={() => showModal('visible')}
+          disabled={isCreated}
+          onClick={() => setModalName('visible')}
         >
           {isCreated ? '已建档' : '建档'}
         </Button>
@@ -238,7 +211,7 @@ function Toolbar(props: IProps) {
           disabled={!isCreated}
           icon="pushpin"
           type="link"
-          onClick={() => showModal('signVisible')}
+          onClick={() => setModalName('signVisible')}
         >
           胎位标记
           </Button>
@@ -246,7 +219,7 @@ function Toolbar(props: IProps) {
           disabled={!isCreated}
           icon="pie-chart"
           type="link"
-          onClick={() => showModal('analysisVisible')}
+          onClick={() => setModalName('analysisVisible')}
         >
           电脑分析
           </Button>
@@ -254,7 +227,7 @@ function Toolbar(props: IProps) {
           disabled={!isCreated}
           icon="printer"
           type="link"
-          onClick={() => showModal('printVisible')}
+          onClick={() => setModalName('printVisible')}
         >
           报告
           </Button>
@@ -289,14 +262,11 @@ function Toolbar(props: IProps) {
           onCancel={() => {
             handleCancel()
             setIsStopMonitorWhenCreated(false);
-
           }}
-          // dataSource={dataSource}
           isTodo={isTodo}
           docid={docid}
-          starttime={starttime}
+          starttime={startTime}
           bedname={bedname}
-          dispatch={dispatch}
           onCreated={res => {
             // setState({ isCreated: true });
             event.emit('newArchive', res);
@@ -311,24 +281,37 @@ function Toolbar(props: IProps) {
       <Analysis
         visible={modalName === 'analysisVisible'}
         onCancel={handleCancel}
-        dataSource={dataSource}
         docid={docid}
+        inpatientNO={inpatientNO}
+        name={name}
+        age={age}
+        gestationalWeek={gestationalWeek}
+        startTime={startTime}
+      // inpatientNO={pregnancy.inpatientNO}
+      // name={}
       />
       {modalName === 'printVisible' ? (
         <PrintPreview
           visible={modalName === 'printVisible'}
           onCancel={handleCancel}
-          dataSource={dataSource}
+          docid={docid}
+          inpatientNO={inpatientNO}
+          name={name}
+          age={age}
+          gestationalWeek={gestationalWeek}
+          startTime={startTime}
         />
       ) : null}
       <Partogram
         visible={modalName === 'partogramVisible'}
         onCancel={handleCancel}
-        dataSource={dataSource}
+        bedname={bedname}
+        pregnancyId={pregnancyId}
       />
       <ModalConfirm
         visible={modalName === 'confirmVisible'}
-        dataSource={dataSource}
+        bedname={bedname}
+        isOffine={isOffline}
         isCreated={isCreated}
         isMonitor={isMonitor}
         onCancel={handleCancel}
@@ -336,18 +319,21 @@ function Toolbar(props: IProps) {
         onCreate={redirectCreate}
       />
       <SignModal
-        {...rest}
         visible={modalName === 'signVisible'}
-        dataSource={dataSource}
         isCreated={isCreated}
         isMonitor={isMonitor}
         onCancel={handleCancel}
-        onCreate={sign}
+        startTime={startTime}
+        bedname={bedname}
+        docid={docid}
+
+        suit={suitObject.suit}
+
+
+
       />
     </>
   );
 }
 
-export default connect(({ item }: any) => ({
-  pregnancy: item.pregnancy,
-}))(Toolbar);
+export default Toolbar

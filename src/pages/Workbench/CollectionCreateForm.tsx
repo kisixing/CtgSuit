@@ -5,7 +5,8 @@ import React, { useState } from 'react';
 import { Button, Modal, Form, Input, Row, Col, InputNumber, message } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import moment from 'moment';
-import { Dispatch } from 'redux';
+import { request } from '@lianmed/utils';
+import { stringify } from 'qs';
 let styles = require('./index.less')
 
 const width = '200px';
@@ -14,7 +15,6 @@ interface IProps {
   starttime: string
   docid: string
   isTodo: boolean
-  dispatch?: Dispatch
   bedname: string
   visible: boolean
   onCancel: () => void
@@ -22,7 +22,7 @@ interface IProps {
 }
 const CollectionCreateForm = (props: IProps) => {
 
-  const { starttime, docid, isTodo, dispatch, bedname, visible, onCancel, form, onCreated } = props
+  const { starttime, docid, isTodo, bedname, visible, onCancel, form, onCreated } = props
 
 
   const { getFieldDecorator } = form;
@@ -36,7 +36,7 @@ const CollectionCreateForm = (props: IProps) => {
     setDisabled(false)
   };
 
-  const onCreate = (values) => {
+  const onCreate = async (values) => {
     // 新建孕册 后台会自动检验孕册是否已经存在
     // ture -> 提示孕册已经存在
     const pregnancyId = values.id;
@@ -66,78 +66,62 @@ const CollectionCreateForm = (props: IProps) => {
       newArchive(data);
     } else {
       // 无孕册pregnancyId 新建孕册获并获取到pregnancyId
-      dispatch({
-        type: 'list/createPregnancy',
-        // TODO 默认01病区
-        payload: { ...values, areaNO: '01', recordstate: '10' },
-        callback: res => {
-          if (res && res.id) {
-            // 新建孕册成功
-            const data = { ...d, pregnancy: { id: res.id } };
-            // 新建（绑定）档案
-            newArchive(data);
-          } else {
-            // 孕册存在，取到孕册信息
-            message.info('该患者信息已存在！');
-          }
-        },
-      });
+      // 新建孕册
+      const res = await request.post('/pregnancies', { data: { ...values, areaNO: '01', recordstate: '10' } })
+      if (res && res.id) {
+        message.success('孕册创建成功！');
+        if (res && res.id) {
+          // 新建孕册成功
+          const data = { ...d, pregnancy: { id: res.id } };
+          // 新建（绑定）档案
+          newArchive(data);
+        } else {
+          // 孕册存在，取到孕册信息
+          message.info('该患者信息已存在！');
+        }
+      }
 
     }
   };
 
-  /**
-   * 绑定（新建）档案信息
-   * @param {object} params 条件参数
-   * @param {object} item item原始数据
-   */
-  const newArchive = (params) => {
-    const { dispatch } = props;
-    dispatch({
-      type: 'archives/create',
-      payload: params,
-      callback: res => {
-        if (res && res.id) {
 
-          onCreated(res)
-          onCancel();
-        } else {
-          // console.info('archives/create', JSON.stringify(res));
-          message.error('建档异常，请稍后再试！', 3);
-        }
-      },
-    });
+  const newArchive = async (params) => {
+    const res = await request.post(`/prenatal-visits`, {
+      data: params,
+    }).catch(({ data }) => data.then(e => { message.error(e.title); }))
+    if (res && res.id) {
+      onCreated(res)
+      onCancel();
+    } else {
+      message.error('建档异常，请稍后再试！', 3);
+    }
+
   };
 
 
   // modal里面的搜索按钮事件、调入
   const handleSearch = () => {
     setErrorText('')
-    form.validateFields((err, values) => {
+    form.validateFields(async (err, values) => {
       if (err) {
         return;
       }
-      // 获取孕册信息,只做床号检索
-      dispatch({
-        type: 'list/fetchPregnancy',
-        payload: {
-          // TODO
-          // 默认病区 、默认住院状态
-          'recordstate.equals': '10', // 住院中
-          'areaNO.equals': '01', // 默认病区
-          'bedNO.equals': values.bedNO, // 床号
-        },
-        callback: res => {
-          // 成功调入孕妇信息后，禁止修改。
-          // 重新选择调入、新建孕妇信息 --> '取消'后再重复操作
-          if (!res.length) {
-            setErrorText('没有这个孕册，请新建孕册。')
-          } else {
-            setDisabled(true)
-            form.setFieldsValue(res[0]);
-          }
-        },
-      })
+      const res = await request.get(`/pregnanciespage?${stringify({
+        // TODO
+        // 默认病区 、默认住院状态
+        'recordstate.equals': '10', // 住院中
+        'areaNO.equals': '01', // 默认病区
+        'bedNO.equals': values.bedNO, // 床号
+      })}`)
+      // 成功调入孕妇信息后，禁止修改。
+      // 重新选择调入、新建孕妇信息 --> '取消'后再重复操作
+      if (!res.length) {
+        setErrorText('没有这个孕册，请新建孕册。')
+      } else {
+        setDisabled(true)
+        form.setFieldsValue(res[0]);
+      }
+
     });
   };
 
@@ -145,7 +129,7 @@ const CollectionCreateForm = (props: IProps) => {
 
     form.validateFields((err, values) => {
       if (err) {
-        return;
+        return 0
       } else {
         if (!values.bedNO) {
           return message.error('请输入患者床号！');
@@ -156,7 +140,7 @@ const CollectionCreateForm = (props: IProps) => {
         if (!values.inpatientNO) {
           return message.error('请输入患者住院号！');
         }
-        onCreate(values);
+        return onCreate(values);
       }
     })
   };
@@ -313,7 +297,7 @@ const CollectionCreateForm = (props: IProps) => {
               {getFieldDecorator('age', {
                 rules: [
                   { required: false, message: '请填写孕妇住年龄!' },
-                  { validator: validateAge },
+                  // { validator: validateAge },
                 ],
               })(
                 <InputNumber
@@ -322,7 +306,7 @@ const CollectionCreateForm = (props: IProps) => {
                   disabled={disabled}
                   placeholder="输入孕妇年龄..."
                   style={{ width }}
-                />,
+                />
               )}
             </Form.Item>
           </Col>

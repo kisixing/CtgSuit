@@ -10,7 +10,7 @@ export interface ICtgexam {
     report: any;
     result: any;
     sign: any;
-    startTime: any;
+    startTime: string;
 }
 
 export interface IPrenatalVisit {
@@ -21,9 +21,11 @@ export interface IPrenatalVisit {
     visitDate: string;
     visitTime: string;
     visitType: any;
+    pregnancy: IPregnancy
 }
 
 export interface IPregnancy {
+    GP: string
     adminDate: any;
     age: number;
     areaNO: string;

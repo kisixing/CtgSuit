@@ -5,22 +5,19 @@ import styles from './ModalConfirm.less';
 export default function ModalConfirm({
   visible = false,
   title = "提示窗口",
-  dataSource,
   isCreated,
   isMonitor,
   onCancel = () => { },
-  onOk = (item) => { }, // end事件，停止监护
-  onCreate = () => { }
+  onOk = () => { }, // end事件，停止监护
+  onCreate = () => { },
+  bedname,
+  isOffine
 }) {
-  const { bedname, data } = dataSource;
-  // 离线状态
-  const isOffine = data && data.status === 3;
-  const pregnancy = data && data.pregnancy;
-  const isCreate = pregnancy && pregnancy.id && data && data.pregnancy;
+
 
   // 放弃建档
   const handleOk = () => {
-    onOk(dataSource);
+    onOk();
     onCancel('confirmVisible');
   }
 
@@ -80,15 +77,8 @@ export default function ModalConfirm({
       <div className={styles.content}>{content}</div>
       <div className={styles.buttons}>
         <Button onClick={() => onCancel('confirmVisible')}>取消</Button>
-        {isCreate
-          ? <Button type="primary" onClick={handleOk}>确定</Button>
-          : <Button onClick={handleOk}>放弃</Button>
-        }
-        {isCreate ? null : (
-          <Button type="primary" onClick={onCreate}>
-            建档
-          </Button>
-        )}
+        {isCreated ? <Button type="primary" onClick={handleOk}>确定</Button> : <Button onClick={handleOk}>放弃</Button>}
+        {isCreated ? null : (<Button type="primary" onClick={onCreate}>建档</Button>)}
       </div>
     </Modal>
   );

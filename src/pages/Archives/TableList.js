@@ -452,21 +452,30 @@ class TableList extends Component {
         ) : null}
         {printVisible ? (
           <PrintPreview
-            from="archives"
             visible={printVisible}
             onCancel={this.handleCancel}
             onCreate={this.handleCreate}
-            dataSource={current}
+            
+            docid={selected.ctgexam && selected.ctgexam.note}
+            startTime={selected.ctgexam && selected.ctgexam.startTime}
+            inpatientNO={selected.pregnancy && selected.pregnancy.inpatientNO}
+            name={selected.pregnancy && selected.pregnancy.name}
+            age={selected.pregnancy && selected.pregnancy.age}
+            gestationalWeek={selected && selected.gestationalWeek}
           />
         ) : null}
         {analysisVisible ? (
           <Analysis
-            from="archives"
             visible={analysisVisible}
             onCancel={this.handleCancel}
             onCreate={this.handleCreate}
-            dataSource={selected}
             docid={selected.ctgexam && selected.ctgexam.note}
+
+            startTime={selected.ctgexam && selected.ctgexam.startTime}
+            inpatientNO={selected.pregnancy && selected.pregnancy.inpatientNO}
+            name={selected.pregnancy && selected.pregnancy.name}
+            age={selected.pregnancy && selected.pregnancy.age}
+            gestationalWeek={selected && selected.gestationalWeek}
           />
         ) : null}
       </div>
