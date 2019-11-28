@@ -73,8 +73,8 @@ function Beds({ dispatch, listData, wsData }) {
                 style={{
                   marginLeft: 4,
                   marginTop: 4,
-                  padding: 0,
-                  width: 40,
+                  padding: '0 6px',
+                  // width: 70,
                   // height: 40,
                   display: 'flex',
                   alignItems: 'center',

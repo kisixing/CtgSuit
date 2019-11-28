@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, Col, Button, Tag, Tooltip } from 'antd';
 import moment from 'moment';
 import { Ctg as L } from '@lianmed/lmg';
@@ -12,9 +12,18 @@ import useItemAlarm from "./useItemAlarm";
 import useFullScreen from "./useFullScreen";
 let styles = require('./Item.less')
 
+
+interface IC {
+  bedNO?: string
+  GP?: string
+  name?: string
+  age?: number
+  startTime?: string
+}
 interface IProps {
   data: ICacheItem
   bedname: string
+  bedno: string
   unitId: string
   isTodo: boolean
   note: string
@@ -53,17 +62,16 @@ const WorkbenchItem = (props: IProps) => {
     index,
     pregnancyId,
     status,
-    startTime,
     gestationalWeek,
-    name,
-    age,
+
     inpatientNO,
-    GP,
-    bedNO
+    bedno
   } = props;
 
-  // let safeP = pregnancy || { name: null, age: null, inpatientNO: null, GP: '/', bedNO: null, id: null }
+  let { bedNO, GP, name, age, startTime, } = props
 
+  const [cache, setCache] = useState<IC>({})
+  // let safeP = pregnancy || { name: null, age: null, inpatientNO: null, GP: '/', bedNO: null, id: null }
 
 
   // if (status === 2) {
@@ -84,10 +92,23 @@ const WorkbenchItem = (props: IProps) => {
   // set loading
   const [spinning, setSpinning] = useState(false);
 
+
+  useEffect(() => {
+    if (status === BedStatus.Stopped) {
+      bedNO = cache.bedNO
+      GP = cache.GP
+      name = cache.name
+      age = cache.age
+      startTime = cache.startTime
+    } else {
+      setCache({ bedNO, GP, name, age, startTime, })
+    }
+  }, [status])
+
   // TODO 停止状态下没有孕册信息返回，监护窗口header 暂时处理方案
   // 保存建档孕册信息 1/运行  2/停止 3/离线
-  const b = sessionStorage.getItem('bed');
-  let bed = b ? JSON.parse(b) : {};
+  // const b = sessionStorage.getItem('bed');
+  // let bed = b ? JSON.parse(b) : {};
   // if (status !== 2) {
   //   // 停止监护
   //   bed[bedname] = pregnancy;
@@ -123,18 +144,18 @@ const WorkbenchItem = (props: IProps) => {
 
   // 床位信息
   const renderTilte = () => {
-    // console.log('pregnancy', pregnancy)
-    // TODO 根据是否建档判断是否显示
-    // const isCreated = havePregnancy && pregnancy.id;
 
     const text = (
-      <span className={styles.tooltipTitle}>
-        床号: <span>{bedNO}</span>
-        {/* 住院号: <span>{dd.inpatientNO}</span> */}
-        姓名: <span>{name}</span>
-        年龄：<span>{age}</span>
-        GP：<span>{GP}</span>
-        开始时间: <span>{startTime && moment(startTime).format('HH:mm')}</span>
+      <span>
+        {
+          [
+            ['床号', bedNO],
+            ['姓名', name],
+            ['年龄', age],
+            ['GP', GP],
+            ['开始时间', startTime && moment(startTime).format('HH:mm')],
+          ].map(([a, b]) => (<span style={{ marginRight: 12 }}>{a}：{b}</span>))
+        }
       </span>
     )
     // 是否已经建档绑定孕册
@@ -170,6 +191,7 @@ const WorkbenchItem = (props: IProps) => {
         ></L>
       </Card>
       <Toolbar
+        bedno={bedno}
         inpatientNO={inpatientNO}
         name={name}
         age={age}
@@ -177,14 +199,12 @@ const WorkbenchItem = (props: IProps) => {
         unitId={unitId}
         bedname={bedname}
         deviceno={deviceno}
-        bedNO={bedNO}
         docid={docid}
         status={status}
         pregnancyId={pregnancyId}
         index={index}
         startTime={startTime}
         isTodo={isTodo}
-
         suitObject={so}
         showLoading={setSpinning}
       />

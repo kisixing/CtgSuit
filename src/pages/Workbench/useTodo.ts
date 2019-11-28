@@ -73,6 +73,7 @@ export default function useTodo(showTodo: boolean): [IRemain[], boolean] {
                             ..._,
                             isTodo: true,
                             bedname,
+                            bedno: null,
                             id: _.note,
                             type: '',
                             data: { ...all[index], docid: _.note, starttime, ismulti: false, GP: '/', status: null }
@@ -91,6 +92,7 @@ export default function useTodo(showTodo: boolean): [IRemain[], boolean] {
 }
 export interface IRemain {
     bedname: string;
+    bedno: string;
     isTodo: true;
     diagnosis: any;
     endTime: any;

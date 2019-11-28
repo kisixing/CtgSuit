@@ -75,7 +75,7 @@ const Home = (props: IProps) => {
           <Row style={{ padding: outPadding, height: contentHeight }} >
             {items.length ? items.map((item: IBed | IRemain) => {
               // console.log('item', item)
-              const { data, bedname, prenatalVisit } = item;
+              const { data, bedname, prenatalVisit, bedno } = item;
               const { unitId } = (item as IBed)
               const { isTodo, note } = (item as IRemain)
               const safePregnancy = data.pregnancy || { age: null, name: null, inpatientNO: null, bedNO: null, id: null, GP: null }
@@ -84,6 +84,20 @@ const Home = (props: IProps) => {
               return (
                 <Item
                   data={data as any}
+                  ismulti={data.ismulti}
+                  docid={data.docid}
+                  status={data.status}
+
+                  pregnancyId={safePregnancy.id}
+                  name={safePregnancy.name}
+                  age={safePregnancy.age}
+                  inpatientNO={safePregnancy.inpatientNO}
+                  GP={safePregnancy.GP}
+                  bedNO={safePregnancy.bedNO}
+                  
+                  startTime={safePrenatalVisit.ctgexam.startTime}
+                  gestationalWeek={safePrenatalVisit.gestationalWeek}
+                  
                   bedname={bedname}
                   unitId={unitId}
                   isTodo={isTodo}
@@ -96,22 +110,11 @@ const Home = (props: IProps) => {
                   fullScreenId={fullScreenId}
                   // pregnancy={data.pregnancy}
                   // prenatalVisit={safePrenatalVisit}
-                  ismulti={data.ismulti}
 
-                  docid={data.docid}
                   deviceno={(item as IBed).deviceno}
                   index={{}}
-                  startTime={safePrenatalVisit.ctgexam.startTime}
-                  gestationalWeek={safePrenatalVisit.gestationalWeek}
 
-                  status={data.status}
-                  pregnancyId={safePregnancy.id}
-                  name={safePregnancy.name}
-                  age={safePregnancy.age}
-                  inpatientNO={safePregnancy.inpatientNO}
-                  GP={safePregnancy.GP}
-                  bedNO={safePregnancy.bedNO}
-
+                  bedno={bedno}
 
 
                 />

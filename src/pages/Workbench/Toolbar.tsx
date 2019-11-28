@@ -30,7 +30,7 @@ interface IProps {
   unitId: string
   bedname: string
   deviceno: string
-  bedNO: string
+  bedno: string
   docid: string
   status: BedStatus
   index: any
@@ -46,7 +46,8 @@ function Toolbar(props: IProps) {
     endCb = cb;
     setModalName('confirmVisible');
   };
-  const { showLoading,
+  const {
+    showLoading,
     isTodo,
     inpatientNO,
     name,
@@ -59,7 +60,7 @@ function Toolbar(props: IProps) {
     unitId,
     index,
     deviceno,
-    bedNO: bedno,
+    bedno,
     bedname,
     pregnancyId
   } = props
@@ -138,8 +139,6 @@ function Toolbar(props: IProps) {
       const d = res[0];
       if (d && d.id) {
         const prenatalVisit = d['prenatalVisit'];
-
-        debugger
         await request.put(`/prenatal-visits`, {
           data: {
             id: prenatalVisit.id,
@@ -256,28 +255,26 @@ function Toolbar(props: IProps) {
           onClick={toggleTool}
         />
       </div>
-      {modalName === 'visible' ? (
-        <CollectionCreateForm
-          visible={modalName === 'visible'}
-          onCancel={() => {
-            handleCancel()
+      <CollectionCreateForm
+        visible={modalName === 'visible'}
+        onCancel={() => {
+          handleCancel()
+          setIsStopMonitorWhenCreated(false);
+        }}
+        isTodo={isTodo}
+        docid={docid}
+        starttime={startTime}
+        bedname={bedname}
+        onCreated={res => {
+          // setState({ isCreated: true });
+          event.emit('newArchive', res);
+          // 完成绑定后判断是否停止监护工作（未建档停止监护时补充建档内容）
+          if (isStopMonitorWhenCreated) {
+            end();
             setIsStopMonitorWhenCreated(false);
-          }}
-          isTodo={isTodo}
-          docid={docid}
-          starttime={startTime}
-          bedname={bedname}
-          onCreated={res => {
-            // setState({ isCreated: true });
-            event.emit('newArchive', res);
-            // 完成绑定后判断是否停止监护工作（未建档停止监护时补充建档内容）
-            if (isStopMonitorWhenCreated) {
-              end();
-              setIsStopMonitorWhenCreated(false);
-            }
-          }}
-        />
-      ) : null}
+          }
+        }}
+      />
       <Analysis
         visible={modalName === 'analysisVisible'}
         onCancel={handleCancel}
@@ -290,18 +287,16 @@ function Toolbar(props: IProps) {
       // inpatientNO={pregnancy.inpatientNO}
       // name={}
       />
-      {modalName === 'printVisible' ? (
-        <PrintPreview
-          visible={modalName === 'printVisible'}
-          onCancel={handleCancel}
-          docid={docid}
-          inpatientNO={inpatientNO}
-          name={name}
-          age={age}
-          gestationalWeek={gestationalWeek}
-          startTime={startTime}
-        />
-      ) : null}
+      <PrintPreview
+        visible={modalName === 'printVisible'}
+        onCancel={handleCancel}
+        docid={docid}
+        inpatientNO={inpatientNO}
+        name={name}
+        age={age}
+        gestationalWeek={gestationalWeek}
+        startTime={startTime}
+      />
       <Partogram
         visible={modalName === 'partogramVisible'}
         onCancel={handleCancel}
@@ -326,11 +321,7 @@ function Toolbar(props: IProps) {
         startTime={startTime}
         bedname={bedname}
         docid={docid}
-
         suit={suitObject.suit}
-
-
-
       />
     </>
   );
