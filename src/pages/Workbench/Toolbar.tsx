@@ -10,33 +10,15 @@ import Partogram from './Partogram';
 import ModalConfirm from './ModalConfirm';
 import SignModal from './SignModal';
 import { WsService } from '@lianmed/lmg';
-import { BedStatus, ICacheItem } from '@lianmed/lmg/lib/services/WsService';
-import { IPregnancy } from '@/types';
-import { Suit } from '@lianmed/lmg/lib/Ctg/Suit';
+import { BedStatus } from '@lianmed/lmg/lib/services/WsService';
+import { FetalItem } from "./types";
+
 let styles = require('./Item.less')
 
 const socket = WsService._this;
 
 
-interface IProps {
-  suitObject: { suit: Suit }
-  showLoading: (s: boolean) => void
-  isTodo: boolean
-  inpatientNO: string
-  name: string
-  age: number
-  startTime: string
-  gestationalWeek: string
-  unitId: string
-  bedname: string
-  deviceno: string
-  bedno: string
-  docid: string
-  status: BedStatus
-  index: any
-  pregnancyId: number
-}
-function Toolbar(props: IProps) {
+function Toolbar(props: FetalItem.IToolbarProps) {
   const [showSetting, setShowSetting] = useState(false)
 
   const [isStopMonitorWhenCreated, setIsStopMonitorWhenCreated] = useState(false)
@@ -66,13 +48,10 @@ function Toolbar(props: IProps) {
   } = props
 
 
-
-
   // 处于监护状态
   const isMonitor = status === BedStatus.Working;
   // 离线状态
   const isOffline = status === BedStatus.Offline;
-
   const isCreated = !!pregnancyId;
 
   useEffect(() => {
@@ -94,8 +73,6 @@ function Toolbar(props: IProps) {
     setShowSetting(!showSetting);
     autoHide();
   };
-
-
 
   const handleCancel = () => {
     setModalName('');

@@ -3,7 +3,6 @@ import request from "@lianmed/request";
 import { event } from "@lianmed/utils";
 import { Modal } from "antd";
 import { IPregnancy, IPrenatalVisit } from "@/types";
-import { BedStatus } from "@lianmed/lmg/lib/services/types";
 export default function useTodo(showTodo: boolean): [IRemain[], boolean] {
     const [todo, setTodo] = useState<IRemain[]>([])
     const [todoLoading, setTodoLoading] = useState(false)
@@ -76,7 +75,7 @@ export default function useTodo(showTodo: boolean): [IRemain[], boolean] {
                             bedno: null,
                             id: _.note,
                             type: '',
-                            data: { ...all[index], docid: _.note, starttime, ismulti: false, GP: '/', status: null }
+                            data: { ...all[index], docid: _.note, starttime, ismulti: false, GP: '/', status: null, }
                         }
                     }
                     ))
@@ -91,6 +90,7 @@ export default function useTodo(showTodo: boolean): [IRemain[], boolean] {
     ]
 }
 export interface IRemain {
+    deviceno: null
     bedname: string;
     bedno: string;
     isTodo: true;
@@ -104,6 +104,7 @@ export interface IRemain {
     type: string;
     prenatalVisit: IPrenatalVisit
     data: {
+        index: number
         fhr1: string;
         fhr2: string;
         fhr3: string;

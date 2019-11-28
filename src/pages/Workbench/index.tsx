@@ -94,26 +94,21 @@ const Home = (props: IProps) => {
                   inpatientNO={safePregnancy.inpatientNO}
                   GP={safePregnancy.GP}
                   bedNO={safePregnancy.bedNO}
-                  
+
                   startTime={safePrenatalVisit.ctgexam.startTime}
                   gestationalWeek={safePrenatalVisit.gestationalWeek}
-                  
+
                   bedname={bedname}
                   unitId={unitId}
                   isTodo={isTodo}
                   note={note}
                   key={item.id}
-                  // dataSource={item}
                   itemHeight={itemHeight}
                   itemSpan={itemSpan}
                   outPadding={outPadding}
                   fullScreenId={fullScreenId}
-                  // pregnancy={data.pregnancy}
-                  // prenatalVisit={safePrenatalVisit}
-
                   deviceno={(item as IBed).deviceno}
-                  index={{}}
-
+                  index={data.index}
                   bedno={bedno}
 
 

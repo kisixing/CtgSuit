@@ -13,12 +13,12 @@ import { formItemLayout, tailFormItemLayout } from './utils';
 import styles from './style.less';
 
 const colors = {
-  normalarea: '正常区域',
-  selectarea: '打印区域',
-  rule: '刻度',
-  scale: '时间轴',
-  primarygrid: '主网格',
-  secondarygrid: '次网格',
+  // normalarea: '正常区域',
+  // selectarea: '打印区域',
+  // rule: '刻度',
+  // scale: '时间轴',
+  // primarygrid: '主网格',
+  // secondarygrid: '次网格',
   fhrcolor1: 'FHR1',
   fhrcolor2: 'FHR2',
   fhrcolor3: 'FHR3',
@@ -119,9 +119,7 @@ class Network extends Component {
     } = this.props;
     return (
       <Form layout="horizontal" {...formItemLayout} className={styles.form}>
-        <Form.Item>
-          <div className={styles.subTitle}>CTG设置</div>
-        </Form.Item>
+
         <Row>
           <Col span={8}>
             <Form.Item label="胎心率上限">
