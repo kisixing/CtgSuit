@@ -209,7 +209,7 @@ class BasicLayout extends Component {
   menus = () => {
     // ['操作说明', 'question-circle'],
     return (
-      <Fragment>
+      <>
         {[
           ['档案管理', 'ordered-list', '/archives'],
           ['系统设置', 'setting', '/setting'],
@@ -232,7 +232,7 @@ class BasicLayout extends Component {
             </Button>
           );
         })}
-      </Fragment>
+      </>
     );
   };
 
@@ -267,34 +267,11 @@ class BasicLayout extends Component {
             </Link>
             <div style={{ display: 'flex', lineHeight: '24px', justifyContent: 'space-around' }}>
               <this.ListLayout />
-              {/* <div
-                style={{
-                  marginLeft: 6,
-                  borderRadius: 2,
-                  overflow: 'hidden',
-                  display: 'flex',
-                  alignItems: 'center',
-                }}
-              >
-                <Spin spinning={wsStatus === EWsStatus.Pendding}>
-                  {
-                    <div
-                      style={{
-                        background: wsStatusColor,
-                        borderRadius: 10,
-                        cursor: 'pointer',
-                        width: 20,
-                        height: 20,
-                      }}
-                    ></div>
-                  }
-                </Spin>
-              </div> */}
             </div>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-            <div style={{ display: 'flex', flex: 1, overflow: 'hidden', margin: '6px' }}>
+            <div style={{ display: 'flex', flex: 1 }}>
               <Beds {...this.props} />
               <div className={styles.actionBar}>{this.menus()}</div>
             </div>

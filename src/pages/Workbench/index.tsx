@@ -53,7 +53,7 @@ const Home = (props: IProps) => {
 
   const itemSpan = 24 / listLayout[0];
   const outPadding = 6;
-  const contentHeight = parseInt(getComputedStyle(document.body).height) - 28 - 106
+  const contentHeight = parseInt(getComputedStyle(document.body).height) - 28 - 125
   const itemHeight =
     (contentHeight - outPadding * 2) / listLayout[1];
   const items: any[] = (showTodo ? todo : pageItems);

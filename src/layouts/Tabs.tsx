@@ -16,7 +16,7 @@ function Tabs({ pageData, page, dispatch, showTodo }) {
               dispatch({ type: 'list/setPage', page: index });
               router.replace('/workbench');
             }}
-            style={{ margin: '4px' }}
+            style={{ margin: '0 4px' }}
             size="small"
             type={(!showTodo && page === index) ? 'default' : 'primary'}
           >
@@ -27,7 +27,7 @@ function Tabs({ pageData, page, dispatch, showTodo }) {
         );
       })}
       {pageData.length > 0 && (
-        <Button size="small" style={{ margin: '4px', marginLeft: 80, background: showTodo ? 'white' : 'var(--theme-hover-color)' }} onClick={() => {
+        <Button size="small" style={{ margin: '0 4px', marginLeft: 80, background: showTodo ? 'white' : 'var(--theme-hover-color)' }} onClick={() => {
           router.replace('/workbench');
           setTimeout(() => {
             dispatch({ type: 'list/setState', payload: { showTodo: true } })
