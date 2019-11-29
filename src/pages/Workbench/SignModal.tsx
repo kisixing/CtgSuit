@@ -7,7 +7,6 @@ import { Button, Modal, Form, Radio } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { Suit } from '@lianmed/lmg/lib/Ctg/Suit';
 import { request } from '@lianmed/utils';
-// import moment from 'moment';
 
 interface IProps {
   form: WrappedFormUtils
@@ -21,33 +20,21 @@ interface IProps {
 
 export const SignModal = (props: IProps) => {
   const { form, startTime, bedname, docid, visible, onCancel, suit } = props;
-
-
-
-  const handleCreate = values => {
-
-  
+  const handleCreate = () => {
     form.validateFields(async (err, values) => {
-      setTimeout(onCancel, 1500);
-
+      setTimeout(onCancel, 600);
       await request.put(`/ctg-exams-note`, {
         data: {
-          fetalposition:JSON.stringify(values),
+          fetalposition: JSON.stringify(values),
           startTime,
           note: docid,
           endTime: '',
         }
       });
+      const position = { ...values }; // JSON.parse(values.fetalposition);
+      suit.setfetalposition(position.fhr1, position.fhr2, position.fhr3);
     });
-
-    const position = JSON.parse(values.fetalposition);
-    suit.setfetalposition(position.fhr1, position.fhr2, position.fhr3);
-
-
-
-
   };
-
 
   const { getFieldDecorator } = form;
   const formItemLayout = {

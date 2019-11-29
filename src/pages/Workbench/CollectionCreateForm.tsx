@@ -23,7 +23,6 @@ const CollectionCreateForm = (props: IProps) => {
 
   const { starttime, docid, isTodo, bedname, visible, onCancel, form, onCreated } = props
 
-
   const { getFieldDecorator } = form;
 
   const [disabled, setDisabled] = useState(false)
@@ -98,9 +97,7 @@ const CollectionCreateForm = (props: IProps) => {
     } else {
       message.error('建档异常，请稍后再试！', 3);
     }
-
   };
-
 
   // modal里面的搜索按钮事件、调入
   const handleSearch = () => {
@@ -124,12 +121,10 @@ const CollectionCreateForm = (props: IProps) => {
         setDisabled(true)
         form.setFieldsValue(res[0]);
       }
-
     });
   };
 
   const handleCreate = () => {
-
     form.validateFields((err, values) => {
       if (err) {
         return 0
@@ -147,6 +142,12 @@ const CollectionCreateForm = (props: IProps) => {
       }
     })
   };
+
+  // 关闭窗口是，重置disabled
+  const handleCancel = () => {
+    setDisabled(false);
+    onCancel();
+  }
 
   // 不能输入非汉字效验  效验不能输入非空字符串
   const validateNoChinese = (rule, value, callback) => {
@@ -217,8 +218,6 @@ const CollectionCreateForm = (props: IProps) => {
   // 所有空格消除
   const replace = event => event.target.value.replace(/\s+/g, '');
 
-
-
   const formItemLayout = {
     labelCol: {
       xs: { span: 24 },
@@ -242,7 +241,7 @@ const CollectionCreateForm = (props: IProps) => {
       okText="创建"
       cancelText="取消"
       bodyStyle={{ paddingRight: '48px' }}
-      onCancel={onCancel}
+      onCancel={handleCancel}
     >
       <Form id="Modal_Message_Container" layout="horizontal" {...formItemLayout}>
         <Row gutter={24}>
@@ -263,12 +262,7 @@ const CollectionCreateForm = (props: IProps) => {
                 ],
                 getValueFromEvent: event => event.target.value.replace(/\s+/g, ''),
               })(
-                <Input
-                  autoFocus
-                  disabled={disabled}
-                  placeholder="输入床号..."
-                  style={{ width }}
-                />,
+                <Input autoFocus disabled={disabled} placeholder="输入床号..." style={{ width }} />,
               )}
             </Form.Item>
           </Col>
@@ -309,17 +303,14 @@ const CollectionCreateForm = (props: IProps) => {
                   disabled={disabled}
                   placeholder="输入孕妇年龄..."
                   style={{ width }}
-                />
+                />,
               )}
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item label="孕次">
               {getFieldDecorator('gravidity', {
-                rules: [
-                  { required: false, message: '请输入孕次!' },
-                  { validator: validateMaxMin },
-                ],
+                rules: [{ required: false, message: '请输入孕次!' }, { validator: validateMaxMin }],
               })(
                 <InputNumber
                   min={1}
@@ -334,10 +325,7 @@ const CollectionCreateForm = (props: IProps) => {
           <Col span={12}>
             <Form.Item label="产次">
               {getFieldDecorator('parity', {
-                rules: [
-                  { required: false, message: '请输入产次!' },
-                  { validator: validateMaxMin },
-                ],
+                rules: [{ required: false, message: '请输入产次!' }, { validator: validateMaxMin }],
               })(
                 <InputNumber
                   min={0}
@@ -365,32 +353,33 @@ const CollectionCreateForm = (props: IProps) => {
             {/* 清空form数据 */}
             <Button onClick={reset}>重置</Button>
             {/* 建档后，不支持再次修改信息 */}
-            <Button
-              style={{ margin: '0 20px' }}
-              type="primary"
-              onClick={handleSearch}
-            >
+            <Button style={{ margin: '0 20px' }} type="primary" onClick={handleSearch}>
               调入
-              </Button>
-            <Button
-              type="primary"
-              onClick={handleCreate}
-            >
+            </Button>
+            <Button type="primary" onClick={handleCreate}>
               确认
-              </Button>
+            </Button>
           </Col>
-          <Col span={24} style={{
-            position: 'relative',
-            color: '#999',
-            textAlign: 'center'
-          }}>
-            <span style={{
-              position: 'absolute',
-              left: 18,
-              bottom: 42,
-            }}>{errorText}</span>
+          <Col
+            span={24}
+            style={{
+              position: 'relative',
+              color: '#999',
+              textAlign: 'center',
+            }}
+          >
+            <span
+              style={{
+                position: 'absolute',
+                left: 18,
+                bottom: 42,
+                color: '#f00',
+              }}
+            >
+              {errorText}
+            </span>
             提示：调入孕产妇信息时，输入床号即可。调入档案后，如需要更改，请先点击'重置'按钮，再进行操作。
-            </Col>
+          </Col>
         </Row>
       </Form>
     </Modal>
