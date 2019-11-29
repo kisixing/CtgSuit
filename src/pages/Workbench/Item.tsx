@@ -46,7 +46,6 @@ const WorkbenchItem = (props: FetalItem.IProps) => {
         GP={GP}
         onSuitRead={suit => setSo({ suit })}
         onClose={() => { event.emit('bedClose', unitId, status, isTodo, docid) }}
-        th
       />
       <Toolbar
         startTime={startTime}
