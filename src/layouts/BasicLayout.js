@@ -37,7 +37,11 @@ class BasicLayout extends Component {
     this.state = {
       current: '',
     };
-    const ws = new WsService(settingData);
+    const ws = new WsService(settingData).on('explode', data => {
+      this.props.dispatch({
+        type: 'ws/updateData', payload: { data }
+      })
+    })
     try {
       ws.connect().catch(err => {
         router.push('/setting')

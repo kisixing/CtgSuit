@@ -7,7 +7,6 @@ import { WrappedFormUtils } from 'antd/lib/form/Form';
 import moment from 'moment';
 import { request } from '@lianmed/utils';
 import { stringify } from 'qs';
-let styles = require('./index.less')
 
 const width = '200px';
 interface IProps {
@@ -67,7 +66,11 @@ const CollectionCreateForm = (props: IProps) => {
     } else {
       // 无孕册pregnancyId 新建孕册获并获取到pregnancyId
       // 新建孕册
-      const res = await request.post('/pregnancies', { data: { ...values, areaNO: '01', recordstate: '10' } })
+      const res = await request.post('/pregnancies', { data: { ...values, areaNO: '01', recordstate: '10' } }).catch(({ data }) => {
+        data.then(({ title }) => {
+          message.info(title);
+        })
+      })
       if (res && res.id) {
         message.success('孕册创建成功！');
         if (res && res.id) {
@@ -358,11 +361,12 @@ const CollectionCreateForm = (props: IProps) => {
             </Col> */}
         </Row>
         <Row>
-          <Col span={24} className={styles.buttons}>
+          <Col span={24} style={{ marginBottom: 24, textAlign: 'center' }}>
             {/* 清空form数据 */}
             <Button onClick={reset}>重置</Button>
             {/* 建档后，不支持再次修改信息 */}
             <Button
+              style={{ margin: '0 20px' }}
               type="primary"
               onClick={handleSearch}
             >
@@ -375,8 +379,16 @@ const CollectionCreateForm = (props: IProps) => {
               确认
               </Button>
           </Col>
-          <Col span={24} className={styles.tips}>
-            <span className={styles.error}>{errorText}</span>
+          <Col span={24} style={{
+            position: 'relative',
+            color: '#999',
+            textAlign: 'center'
+          }}>
+            <span style={{
+              position: 'absolute',
+              left: 18,
+              bottom: 42,
+            }}>{errorText}</span>
             提示：调入孕产妇信息时，输入床号即可。调入档案后，如需要更改，请先点击'重置'按钮，再进行操作。
             </Col>
         </Row>

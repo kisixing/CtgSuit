@@ -180,6 +180,9 @@ export default {
           dirty
         }
       })
+      yield put({
+        type: 'processListData'
+      })
     },
 
     *appendOffline({ unitId }, { call, put, select }) {

@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useRef } from 'react';
 import { Button } from 'antd';
 import moment from 'moment';
-import cx from 'classnames';
 import { event, request } from "@lianmed/utils";
 import CollectionCreateForm from './CollectionCreateForm';
 import Analysis from './Analysis';
@@ -12,20 +11,17 @@ import SignModal from './SignModal';
 import { WsService } from '@lianmed/lmg';
 import { BedStatus } from '@lianmed/lmg/lib/services/WsService';
 import { FetalItem } from "./types";
-
-let styles = require('./Item.less')
+import { ButtonProps } from 'antd/lib/button';
 
 const socket = WsService._this;
 
-
 function Toolbar(props: FetalItem.IToolbarProps) {
   const [showSetting, setShowSetting] = useState(false)
-
   const [isStopMonitorWhenCreated, setIsStopMonitorWhenCreated] = useState(false)
-  let endCb: () => {};
+  const endCb = useRef(null)
   const [modalName, setModalName] = useState('')
   const onclose = cb => {
-    endCb = cb;
+    endCb.current = cb;
     setModalName('confirmVisible');
   };
   const {
@@ -48,9 +44,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
   } = props
 
 
-  // 处于监护状态
   const isMonitor = status === BedStatus.Working;
-  // 离线状态
   const isOffline = status === BedStatus.Offline;
   const isCreated = !!pregnancyId;
 
@@ -74,24 +68,10 @@ function Toolbar(props: FetalItem.IToolbarProps) {
     autoHide();
   };
 
-  const handleCancel = () => {
-    setModalName('');
-  };
-
-  // 检验数据库是否已经建册了
-
-  /**
-   * 建档（绑定孕册信息）
-   *
-   * @param {object} item 改设备数据
-   * @param {object} values 创建表单form数据
-   */
+  const handleCancel = () => setModalName('');
 
 
-  // 开始设备监控
-  // 增加2s的loading
   const start = () => {
-
     showLoading(true);
     socket.startwork(deviceno, bedno);
     setTimeout(() => {
@@ -99,9 +79,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
     }, 1500);
   };
 
-  // 停止监护
   const end = async () => {
-    // TODO 逻辑混乱
 
 
     if (isCreated) {
@@ -131,16 +109,16 @@ function Toolbar(props: FetalItem.IToolbarProps) {
 
       }
 
-
     } else {
       // 未建档提示简单保存或者放弃保存
       await request.get(`/ctg-exams-nosaving/${docid}`);
     }
 
     socket.endwork(deviceno, bedno);
-    if (endCb) {
-      endCb();
-      endCb = null;
+
+    if (endCb.current) {
+      endCb.current();
+      endCb.current = null;
     }
   };
 
@@ -151,62 +129,76 @@ function Toolbar(props: FetalItem.IToolbarProps) {
 
   };
 
-
-
+  const B = (p: ButtonProps) => <Button style={{ padding: '0 8px' }} {...p}>{p.children}</Button>
+  const fp = 12
   return (
     <>
-      <div className={cx(styles.toolbar, { [styles.show]: showSetting })}>
+      <div style={{
+        position: 'absolute',
+        left: 5 * fp,
+        bottom: 2 * fp,
+        // right: 3 * @float-padding + 60px,
+        zIndex: 9,
+        height: 32,
+        width: showSetting ? `calc(100% - ${4 * fp}px - 36px)` : 0,
+        background: '#fff',
+        overflow: 'hidden',
+        borderRadius: 3,
+        boxShadow: '#aaa 3px 3px 5px 1px',
+        opacity: showSetting ? 1 : 0,
+        transition: 'all 0.2s ease-out',
+      }}>
         {isMonitor || isOffline ? (
-          <Button
+          <B
             icon="pause-circle"
             type="link"
             onClick={() => setModalName('confirmVisible')}
           >
             停止监护
-            </Button>
+            </B>
         ) : (
-            <Button
+            <B
               disabled={index === undefined}
               icon="play-circle"
               type="link"
               onClick={start}
             >
               开始监护
-            </Button>
+            </B>
           )}
         {/* 停止状态下不可以建档，监护、离线都是可以建档的 */}
-        <Button
+        <B
           icon="user-add"
           type="link"
           disabled={isCreated}
           onClick={() => setModalName('visible')}
         >
           {isCreated ? '已建档' : '建档'}
-        </Button>
-        <Button
+        </B>
+        <B
           disabled={!isCreated}
           icon="pushpin"
           type="link"
           onClick={() => setModalName('signVisible')}
         >
           胎位标记
-          </Button>
-        <Button
+          </B>
+        <B
           disabled={!isCreated}
           icon="pie-chart"
           type="link"
           onClick={() => setModalName('analysisVisible')}
         >
           电脑分析
-          </Button>
-        <Button
+          </B>
+        <B
           disabled={!isCreated}
           icon="printer"
           type="link"
           onClick={() => setModalName('printVisible')}
         >
           报告
-          </Button>
+          </B>
         {/* <Button
             disabled={!isCreated}
             icon="line-chart"
@@ -222,7 +214,12 @@ function Toolbar(props: FetalItem.IToolbarProps) {
           </Link> */}
       </div>
       <div
-        className={styles.actionButton}
+        style={{
+          position: 'absolute',
+          bottom: 2 * fp,
+          left: 2 * fp,
+          zIndex: 99,
+        }}
       >
         <Button
           icon={showSetting ? 'left' : 'right'}

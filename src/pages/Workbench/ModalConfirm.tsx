@@ -1,6 +1,5 @@
 import React from 'react';
 import { Modal, Button } from 'antd';
-import styles from './ModalConfirm.less';
 
 export default function ModalConfirm({
   visible = false,
@@ -18,10 +17,10 @@ export default function ModalConfirm({
   // 放弃建档
   const handleOk = () => {
     onOk();
-    onCancel('confirmVisible');
+    onCancel();
   }
 
-  let content = '';
+  let content: any = '';
   if (isMonitor) {
     content = isCreated ? (
       `确认子机: ${bedname} 停止监护 ?`
@@ -67,18 +66,22 @@ export default function ModalConfirm({
       width={416}
       visible={visible}
       maskClosable={false}
-      title={title}
       footer={null}
       okText="创建"
       cancelText="取消"
-      wrapClassName={styles.modalConfirm}
+      onCancel={onCancel}
     >
-      <div className={styles.title}>{title}</div>
-      <div className={styles.content}>{content}</div>
-      <div className={styles.buttons}>
-        <Button onClick={() => onCancel('confirmVisible')}>取消</Button>
-        {isCreated ? <Button type="primary" onClick={handleOk}>确定</Button> : <Button onClick={handleOk}>放弃</Button>}
-        {isCreated ? null : (<Button type="primary" onClick={onCreate}>建档</Button>)}
+      <div style={{
+        fontSize: 16,
+        fontWeight: 600,
+        color: '#666',
+        marginBottom: 12,
+      }}>{title}</div>
+      <div style={{ marginBottom: 12 }}>{content}</div>
+      <div style={{ textAlign: 'right' }}>
+        <Button style={{ marginLeft: 12 }} onClick={onCancel}>取消</Button>
+        {isCreated ? <Button style={{ marginLeft: 12 }} type="primary" onClick={handleOk}>确定</Button> : <Button style={{ marginLeft: 12 }} onClick={handleOk}>放弃</Button>}
+        {isCreated ? null : (<Button style={{ marginLeft: 12 }} type="primary" onClick={onCreate}>建档</Button>)}
       </div>
     </Modal>
   );

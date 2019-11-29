@@ -6,7 +6,7 @@ let styles = require('./Tabs.less')
 
 function Tabs({ pageData, page, dispatch, showTodo }) {
   return (
-    <div className={styles.tabs} >
+    pageData.length > 0 && <div className={styles.tabs} >
       {pageData.map((bednames: string[], index) => {
         return (
           <Button
@@ -26,16 +26,14 @@ function Tabs({ pageData, page, dispatch, showTodo }) {
           </Button>
         );
       })}
-      {pageData.length > 0 && (
-        <Button size="small" style={{ margin: '0 4px', marginLeft: 80, background: showTodo ? 'white' : 'var(--theme-hover-color)' }} onClick={() => {
-          router.replace('/workbench');
-          setTimeout(() => {
-            dispatch({ type: 'list/setState', payload: { showTodo: true } })
-          }, 0);
+      <Button size="small" style={{ margin: '0 4px', marginLeft: 80, background: showTodo ? 'white' : 'var(--theme-hover-color)' }} onClick={() => {
+        router.replace('/workbench');
+        setTimeout(() => {
+          dispatch({ type: 'list/setState', payload: { showTodo: true } })
+        }, 0);
 
 
-        }} type={showTodo ? 'default' : 'primary'}>待处理</ Button>
-      )}
+      }} type={showTodo ? 'default' : 'primary'}>待处理</ Button>
 
     </div>
   );

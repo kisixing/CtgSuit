@@ -1,12 +1,22 @@
 import React from "react";
 import { Table, Input, Popconfirm, Form, Button, Select } from 'antd';
 import { connect } from "dva";
-import { mapStatusToText } from '@/constant'
+// import { mapStatusToText } from '@/constant'
 import request from "@lianmed/request";
-import { IBed } from '@/types'
-import Subscribe from "./Subscribe";
+// import { IBed } from '@/types'
+// import Subscribe from "./Subscribe";
 import { WrappedFormUtils } from "antd/lib/form/Form";
-import AddBed from "./AddBed";
+
+const mapStatusToText = {
+  1: '离线',
+  2: '停止',
+  3: '监护中',
+  null: '未知'
+};
+
+
+
+
 const data = [];
 for (let i = 0; i < 100; i++) {
   data.push({
@@ -75,7 +85,7 @@ class EditableCell extends React.Component<any, any> {
   }
 }
 
-class EditableTable extends React.Component<{ data: IBed[], dispatch: any, form: any }, any> {
+class EditableTable extends React.Component<{ data: any[], dispatch: any, form: any }, any> {
   columns: any[]
   constructor(props) {
     super(props);
@@ -174,9 +184,9 @@ class EditableTable extends React.Component<{ data: IBed[], dispatch: any, form:
     this.setState({ editingKey: '' });
   };
   componentDidMount() {
-    this.props.dispatch({
-      type: 'setting/fetchBed',
-    });
+
+    request.get(`/bedinfos`).then(dd => this.setState({dd}))
+
   }
   save(form, id) {
     form.validateFields((error, row) => {
@@ -242,7 +252,7 @@ class EditableTable extends React.Component<{ data: IBed[], dispatch: any, form:
           components={components}
           bordered
           rowKey="id"
-          dataSource={this.props.data}
+          dataSource={this.state.dd}
           columns={columns}
           // rowClassName="editable-row"
           pagination={{
@@ -254,7 +264,7 @@ class EditableTable extends React.Component<{ data: IBed[], dispatch: any, form:
             type: 'setting/fetchBed',
           });
         }} /> */}
-        <Subscribe />
+        {/* <Subscribe /> */}
       </EditableContext.Provider>
     );
   }
