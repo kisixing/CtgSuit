@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { router } from 'umi';
-import { Table, Divider, Popconfirm, Input, Button, Icon } from 'antd';
+import { Table, Divider, /* Popconfirm, */ Input, Button, Icon } from 'antd';
 import Highlighter from 'react-highlight-words';
 import EditModal from './EditModal';
 import styles from './TableList.less';
@@ -36,6 +36,7 @@ class TableList extends Component {
         title: '入院状态',
         dataIndex: 'recordstate',
         key: 'recordstate',
+        render: text => text === '10' ? '住院中' : '出院'
       },
       {
         title: '姓名',

@@ -20,7 +20,7 @@ class Setting extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      current: { label: '网络设置', value: '7' },
+      current: { label: '网络设置', value: '5' },
       results: {},
     };
   }
@@ -40,14 +40,10 @@ class Setting extends Component {
   menus = () => {
     const { current } = this.state;
     return (
-      <Menu
-        mode="inline"
-        selectedKeys={[current.value]}
-        onClick={this.handleMenuClick}
-      >
+      <Menu mode="inline" selectedKeys={[current.value]} onClick={this.handleMenuClick}>
         <Menu.Item key="5">网络设置</Menu.Item>
-        <Menu.Item key="7">床位设置</Menu.Item>
         <Menu.Item key="6">医院设置</Menu.Item>
+        <Menu.Item key="7">床位设置</Menu.Item>
         <Menu.Item key="8">账号管理</Menu.Item>
         <Menu.Item key="9">CTG设置</Menu.Item>
         <Menu.Item key="3">打印设置</Menu.Item>
