@@ -274,7 +274,7 @@ const CollectionCreateForm = (props: IProps) => {
               {getFieldDecorator('name', {
                 rules: [
                   { required: false, message: '请填写孕妇姓名!' },
-                  { max: 12, message: '姓名的最大长度为12' },
+                  { max: 32, message: '姓名的最大长度为32' },
                 ],
                 getValueFromEvent: event => event.target.value.trim(),
               })(<Input disabled={disabled} placeholder="输入孕妇姓名..." style={{ width }} />)}
@@ -285,7 +285,7 @@ const CollectionCreateForm = (props: IProps) => {
               {getFieldDecorator('inpatientNO', {
                 rules: [
                   { required: false, message: '请填写孕妇住院号!' },
-                  { max: 10, message: '住院号的最大长度为12' },
+                  { max: 12, message: '住院号的最大长度为12' },
                   { validator: validateNoChinese },
                 ],
                 getValueFromEvent: event => event.target.value.replace(/\s+/g, ''),

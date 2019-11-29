@@ -1,6 +1,6 @@
 {
   "name": "ctg-suit",
-  "version": "1.1.10",
+  "version": "1.2.0",
   "license": "lianmed-1.0.0",
   "private": true,
   "scripts": {
@@ -72,6 +72,9 @@
   "build": {
     "productName": "ctg-suit",
     "appId": "lian-med-ctgsuit",
+    "copyright": "Copyright © 2019 lian-med",
+    "compression": "maximum",
+    "asar": true,
     "directories": {
       "output": "release"
     },
@@ -79,7 +82,8 @@
       "target": ["dmg", "zip"]
     },
     "win": {
-      "target": ["nsis", "zip"]
+      "target": ["nsis", "zip"],
+      "icon": "build/icon.ico"
     },
     "linux": {
       "target": [
@@ -90,10 +94,10 @@
     },
     "nsis": {
       "oneClick": false,
+      "menuCategory": true,
       "allowElevation": true,
       "allowToChangeInstallationDirectory": true
-    },
-    "compression": "maximum"
+    }
   },
   "lint-staged": {
     "*.{js,jsx}": [
@@ -108,6 +112,6 @@
     "name": "Lian-Med",
     "email": "lian-med@163.com",
     "hospital": "xxx 医院",
-    "date": "2019-11-25"
+    "date": "2019-11-29"
   }
 }
