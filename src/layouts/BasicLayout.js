@@ -253,12 +253,12 @@ class BasicLayout extends Component {
       <Layout
         className={styles.container}
         onClickCapture={e => {
-          if (wsStatus !== EWsStatus.Success) {
-            // e.stopPropagation()
-            notification.warning({
-              message: '未建立链接, 请联系支持人员',
-            });
-          }
+          // if (wsStatus !== EWsStatus.Success) {
+          //   // e.stopPropagation()
+          //   notification.warning({
+          //     message: '未建立链接, 请联系支持人员',
+          //   });
+          // }
         }}
       >
         <CheckNetwork visible={wsStatus !== EWsStatus.Success} />
