@@ -8,7 +8,6 @@ export namespace FetalItem {
         bedno: string
         unitId: string
         isTodo: boolean
-        note: string
         ismulti: boolean
         inpatientNO: string
         name: string
