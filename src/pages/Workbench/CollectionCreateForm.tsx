@@ -27,6 +27,7 @@ const CollectionCreateForm = (props: IProps) => {
 
   const [disabled, setDisabled] = useState(false)
   const [errorText, setErrorText] = useState('')
+  const [loading, setLoading] = useState(false)
 
   const reset = () => {
     // 清空form表单数据、输入框状态变为可输入状态
@@ -71,7 +72,7 @@ const CollectionCreateForm = (props: IProps) => {
         })
       })
       if (res && res.id) {
-        message.success('孕册创建成功！');
+        // message.success('孕册创建成功！');
         if (res && res.id) {
           // 新建孕册成功
           const data = { ...d, pregnancy: { id: res.id } };
@@ -92,8 +93,13 @@ const CollectionCreateForm = (props: IProps) => {
       data: params,
     }).catch(({ data }) => data.then(e => { message.error(e.title); }))
     if (res && res.id) {
-      onCreated(res)
-      onCancel();
+      setLoading(true)
+      setTimeout(() => {
+        message.success('建档成功！')
+        onCreated(res)
+        onCancel();
+        setLoading(false)
+      }, 3000);
     } else {
       message.error('建档异常，请稍后再试！', 3);
     }
@@ -355,8 +361,12 @@ const CollectionCreateForm = (props: IProps) => {
             {/* 建档后，不支持再次修改信息 */}
             <Button style={{ margin: '0 20px' }} type="primary" onClick={handleSearch}>
               调入
-            </Button>
-            <Button type="primary" onClick={handleCreate}>
+              </Button>
+            <Button
+              type="primary"
+              onClick={handleCreate}
+              loading={loading}
+            >
               确认
             </Button>
           </Col>

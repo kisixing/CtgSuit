@@ -15,6 +15,7 @@ interface IProps extends React.Props<any> {
     gestationalWeek: string
 }
 function Shell({ visible, onCancel, docid = '', name = '', age = 0, startTime = '', inpatientNO = '', gestationalWeek = '', children }: IProps) {
+    const S = props => <span style={{marginRight:6}} {...props}>{props.children}</span>
     return (
         <Modal
             maskClosable={false}
@@ -27,19 +28,19 @@ function Shell({ visible, onCancel, docid = '', name = '', age = 0, startTime = 
             visible={visible}
             title={
                 <div >
-                    <span>档案号：{docid}</span>
+                    <S>档案号：{docid}</S>
                     {/* <span>档案号：{(dataSource.ctgexam && dataSource.ctgexam.note) || dataSource.documentno}</span> */}
-                    <span>住院号：{inpatientNO}</span>
+                    <S>住院号：{inpatientNO}</S>
                     {/* <span>住院号：{(dataSource.pregnancy && dataSource.pregnancy.inpatientNO)}</span> */}
-                    <span>姓名：{name}</span>
+                    <S>姓名：{name}</S>
                     {/* <span>姓名：{dataSource.pregnancy && dataSource.pregnancy.name}</span> */}
-                    <span>年龄：{age}</span>
+                    <S>年龄：{age}</S>
                     {/* <span>年龄：{dataSource.pregnancy && dataSource.pregnancy.age}</span> */}
-                    <span>孕周： {gestationalWeek}</span>
+                    <S>孕周： {gestationalWeek}</S>
                     {/* <span>孕周： {dataSource.gestationalWeek}</span> */}
-                    <span>监护日期：{startTime && moment(startTime).format('YYYY-MM-DD HH:mm:ss')}
-                        {/* <span>监护日期：{dataSource.ctgexam && dataSource.ctgexam.startTime && moment(dataSource.ctgexam.startTime).format('YYYY-MM-DD HH:mm:ss')} */}
-                    </span>
+                    <S>监护日期：{startTime && moment(startTime).format('YYYY-MM-DD HH:mm:ss')}
+                        {/* <S>监护日期：{dataSource.ctgexam && dataSource.ctgexam.startTime && moment(dataSource.ctgexam.startTime).format('YYYY-MM-DD HH:mm:ss')} */}
+                    </S>
                 </div>
             }
 
