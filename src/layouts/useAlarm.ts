@@ -3,6 +3,10 @@ import { event } from "@lianmed/utils";
 import { notification } from "antd";
 import { IBed } from '@/types';
 
+notification.config({
+  top: 136
+});
+
 export default (listData: IBed[]) => {
 
     const findName = useCallback((unitId: string) => {
@@ -30,7 +34,7 @@ export default (listData: IBed[]) => {
             speechSU.voice = voices;
             speechSU.rate = rate;
             speechSynthesis.speak(speechSU);
-            notification.info({ message: `${text}号子机监护时间到`, duration: 10, top: 130, bottom: 100 })
+            notification.info({ message: `${text}号子机监护时间到`, duration: 10})
 
         }
 
