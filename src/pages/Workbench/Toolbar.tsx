@@ -1,5 +1,5 @@
 import React, { useState, useEffect,useRef } from 'react';
-import { Button } from 'antd';
+import { Button, message } from 'antd';
 import moment from 'moment';
 import { event, request } from "@lianmed/utils";
 import CollectionCreateForm from './CollectionCreateForm';
@@ -80,8 +80,6 @@ function Toolbar(props: FetalItem.IToolbarProps) {
   };
 
   const end = async () => {
-
-
     if (isCreated) {
       // 已经建档 ,修改结束时间
       // 获取ctg曲线档案id，重新调用获取bedinfo
@@ -89,9 +87,14 @@ function Toolbar(props: FetalItem.IToolbarProps) {
       // app的结束 流程是 查bedinfo 获取 prental信息 然后 put prental-visits 接口成功调用ws endwork
       // 避免 多客户端 之间通信的保持问题。 即使当前设备离线 流程应该也不影响
 
-
-      const res = await request.get(`/bedinfos?pregnancyId.equals=${pregnancyId}`);
+      const res = await request.get(
+        `/bedinfos?pregnancyId.equals=${pregnancyId}&documentno.equals=${docid}`,
+      );
       const d = res[0];
+      if (!d.prenatalVisit) {
+        console.error('未能正确取得prenatalVisit!');
+        return message.info('暂时无法停止改监护，请稍后再试。');
+      }
       if (d && d.id) {
         const prenatalVisit = d['prenatalVisit'];
         await request.put(`/prenatal-visits`, {
@@ -106,9 +109,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
             },
           },
         });
-
       }
-
     } else {
       // 未建档提示简单保存或者放弃保存
       await request.get(`/ctg-exams-nosaving/${docid}`);
