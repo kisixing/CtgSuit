@@ -48,6 +48,10 @@ function Toolbar(props: FetalItem.IToolbarProps) {
   const isOffline = status === BedStatus.Offline;
   const isCreated = !!pregnancyId;
 
+  if (pregnancyId) {
+
+  }
+
   useEffect(() => {
     event.on(`bedClose:${unitId}`, onclose)
     return () => {
@@ -80,7 +84,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
   };
 
   const end = async () => {
-    if (isCreated) {
+    if (isCreated || isStopMonitorWhenCreated) {
       // 已经建档 ,修改结束时间
       // 获取ctg曲线档案id，重新调用获取bedinfo
       // 与app的流程一致
@@ -88,7 +92,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
       // 避免 多客户端 之间通信的保持问题。 即使当前设备离线 流程应该也不影响
 
       const res = await request.get(
-        `/bedinfos?pregnancyId.equals=${pregnancyId}&documentno.equals=${docid}`,
+        `/bedinfos?&documentno.equals=${docid}`,
       );
       const d = res[0];
       if (!d.prenatalVisit) {
@@ -97,10 +101,11 @@ function Toolbar(props: FetalItem.IToolbarProps) {
       }
       if (d && d.id) {
         const prenatalVisit = d['prenatalVisit'];
+        const pregnancyId = d['pregnancy']['id'];
         await request.put(`/prenatal-visits`, {
           data: {
             id: prenatalVisit.id,
-            pregnancy: { id: pregnancyId, },
+            pregnancy: { id: pregnancyId },
             ctgexam: {
               ...prenatalVisit.ctgexam,
               startTime: moment(prenatalVisit.ctgexam.startTime),
@@ -127,7 +132,6 @@ function Toolbar(props: FetalItem.IToolbarProps) {
   const redirectCreate = () => {
     setIsStopMonitorWhenCreated(true)
     setModalName('visible')
-
   };
 
   const B = (p: ButtonProps) => <Button style={{ padding: '0 8px' }} {...p}>{p.children}</Button>

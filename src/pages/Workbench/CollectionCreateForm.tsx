@@ -87,7 +87,6 @@ const CollectionCreateForm = (props: IProps) => {
     }
   };
 
-
   const newArchive = async (params) => {
     const res = await request.post(`/prenatal-visits`, {
       data: params,
@@ -97,8 +96,8 @@ const CollectionCreateForm = (props: IProps) => {
       setTimeout(() => {
         message.success('建档成功！')
         onCreated(res)
-        onCancel();
         setLoading(false)
+        onCancel();
       }, 3000);
     } else {
       message.error('建档异常，请稍后再试！', 3);
