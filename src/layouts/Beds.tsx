@@ -2,11 +2,18 @@ import React, { useEffect } from 'react';
 import { Button } from 'antd';
 import { router } from 'umi';
 import { mapStatusToColor } from '@/constant';
-import { BedStatus } from "@lianmed/lmg/lib/services/WsService";
+import { BedStatus, ICache } from "@lianmed/lmg/lib/services/WsService";
 import useAlarm from "./useAlarm";
-function Beds({ dispatch, listData, wsData }) {
-  let clickTimeout = null;
-  useAlarm()
+import { IBed } from '@/types';
+
+interface IProps {
+  listData: IBed[]
+  wsData: ICache
+  dispatch: (d: any) => void
+}
+
+function Beds({ dispatch, listData, wsData }: IProps) {
+  useAlarm(listData)
   const handleClicks = ({ pageIndex, unitId }) => {
     return () => {
       const data = { type: 'list/setPageByUnitId', unitId };
@@ -55,7 +62,7 @@ function Beds({ dispatch, listData, wsData }) {
         // borderRadius: 4,
         alignContent: ' flex-start',
         flexWrap: 'wrap',
-        overflow:'scroll'
+        overflow: 'scroll'
       }}
     >
       {
