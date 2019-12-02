@@ -5,7 +5,7 @@
  */
 
 import React, { PureComponent } from 'react';
-import { Form, Button, Input, message } from 'antd';
+import { Form, Button, Input, message,Select } from 'antd';
 import { formItemLayout, tailFormItemLayout } from './utils';
 import store from '@/utils/SettingStore';
 import { getDisplaySize } from '@/utils/utils';
@@ -20,10 +20,11 @@ class Hospital extends PureComponent {
     const { form } = this.props;
     // 获取显示器尺寸
     const { w, h } = getDisplaySize();
-    store.getObj().then(({ hospital_name, areano, version_number, build_date }) => {
+    store.getObj().then(({ hospital_name, areano,area_type, version_number, build_date }) => {
       form.setFieldsValue({
         hospital_name,
-        areano
+        areano,
+        area_type
       });
     });
     // 设置版本信息
@@ -59,6 +60,14 @@ class Hospital extends PureComponent {
           {getFieldDecorator('hospital_name', {
             rules: [{ required: false, message: '请输入医院名称!' }],
           })(<Input placeholder="请输入医院名称!" />)}
+        </Form.Item>
+        <Form.Item label="病区类型">
+          {getFieldDecorator('area_type', {
+            rules: [{ required: false, message: '请输入区号!' }],
+          })(<Select placeholder="请输入病区类型!">
+                  <Select.Option value="in">住院</Select.Option>
+                  <Select.Option value="out">门诊</Select.Option>
+            </Select>)}
         </Form.Item>
         <Form.Item label="病区号">
           {getFieldDecorator('areano', {
