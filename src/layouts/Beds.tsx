@@ -16,7 +16,6 @@ function Beds({ dispatch, listData, wsData }: IProps) {
   useAlarm(listData)
   const handleClicks = ({ pageIndex, unitId }) => {
     return () => {
-      const data = { type: 'list/setPageByUnitId', unitId };
 
       // if (clickTimeout !== null) {
       //   clearTimeout(clickTimeout);
@@ -45,8 +44,9 @@ function Beds({ dispatch, listData, wsData }: IProps) {
 
       // dispatch({ type: 'list/appendDirty', unitId });
       // dispatch({ type: 'list/processListData' });
+      dispatch({ type: 'list/removeDirty', unitId })
       dispatch({ type: 'list/setState', payload: { showTodo: false } })
-      dispatch(data);
+      dispatch({ type: 'list/setPageByUnitId', unitId });
 
 
       router.replace('/workbench');
