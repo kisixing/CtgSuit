@@ -40,7 +40,7 @@ const C = (props: IProps) => {
                 <Button style={{ marginLeft: 6 }} type="primary" onClick={() => onAdd(selected)}>添加</Button>
 
             </div>
-            <Table Bordered scroll={{ y: 440 }} size="small" rowSelection={rowSelection} columns={columns} dataSource={list} rowKey="deviceno" pagination={false} />
+            <Table bordered scroll={{ y: 440 }} size="small" rowSelection={rowSelection} columns={columns} dataSource={list} rowKey="deviceno" pagination={false} />
         </>
 
 
