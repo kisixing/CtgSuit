@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect,useRef } from 'react';
 import { Button, message } from 'antd';
 import moment from 'moment';
 import { event, request } from "@lianmed/utils";
@@ -12,7 +12,7 @@ import { WsService } from '@lianmed/lmg';
 import { BedStatus } from '@lianmed/lmg/lib/services/WsService';
 import { FetalItem } from "./types";
 import { ButtonProps } from 'antd/lib/button';
-const styles = require('./Toolbar.less')
+
 const socket = WsService._this;
 
 function Toolbar(props: FetalItem.IToolbarProps) {
@@ -138,46 +138,34 @@ function Toolbar(props: FetalItem.IToolbarProps) {
   const fp = 12
   return (
     <>
-      <div style={{
-        position: 'absolute',
-        left: 5 * fp,
-        bottom: 2 * fp,
-        // right: 3 * @float-padding + 60px,
-        zIndex: 9,
-        height: 32,
-        width: showSetting ? `calc(100% - ${4 * fp}px - 36px)` : 0,
-        background: '#fff',
-        overflow: 'hidden',
-        borderRadius: 3,
-        boxShadow: '#aaa 3px 3px 5px 1px',
-        opacity: showSetting ? 1 : 0,
-        transition: 'all 0.2s ease-out',
-      }}>
+      <div
+        style={{
+          position: 'absolute',
+          left: 5 * fp,
+          bottom: 2 * fp,
+          // right: 3 * @float-padding + 60px,
+          zIndex: 9,
+          height: 32,
+          width: showSetting ? `calc(100% - ${4 * fp}px - 36px)` : 0,
+          background: '#fff',
+          overflow: 'hidden',
+          borderRadius: 3,
+          boxShadow: '#aaa 3px 3px 5px 1px',
+          opacity: showSetting ? 1 : 0,
+          transition: 'all 0.2s ease-out',
+        }}
+      >
         {isMonitor || isOffline ? (
-          <B
-            icon="pause-circle"
-            type="link"
-            onClick={() => setModalName('confirmVisible')}
-          >
+          <B icon="pause-circle" type="link" onClick={() => setModalName('confirmVisible')}>
             停止监护
-            </B>
+          </B>
         ) : (
-            <B
-              disabled={index === undefined}
-              icon="play-circle"
-              type="link"
-              onClick={start}
-            >
-              开始监护
-            </B>
-          )}
+          <B disabled={index === undefined} icon="play-circle" type="link" onClick={start}>
+            开始监护
+          </B>
+        )}
         {/* 停止状态下不可以建档，监护、离线都是可以建档的 */}
-        <B
-          icon="user-add"
-          type="link"
-          disabled={isCreated}
-          onClick={() => setModalName('visible')}
-        >
+        <B icon="user-add" type="link" disabled={isCreated} onClick={() => setModalName('visible')}>
           {isCreated ? '已建档' : '建档'}
         </B>
         <B
@@ -187,7 +175,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
           onClick={() => setModalName('signVisible')}
         >
           胎位标记
-          </B>
+        </B>
         <B
           disabled={!isCreated}
           icon="pie-chart"
@@ -195,7 +183,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
           onClick={() => setModalName('analysisVisible')}
         >
           电脑分析
-          </B>
+        </B>
         <B
           disabled={!isCreated}
           icon="printer"
@@ -203,7 +191,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
           onClick={() => setModalName('printVisible')}
         >
           报告
-          </B>
+        </B>
         {/* <Button
             disabled={!isCreated}
             icon="line-chart"
@@ -230,7 +218,6 @@ function Toolbar(props: FetalItem.IToolbarProps) {
           icon={showSetting ? 'left' : 'right'}
           shape={showSetting ? 'circle' : null}
           style={{ boxShadow: '#aaa 3px 3px 5px 1px' }}
-          className={styles.btn}
           type="primary"
           onClick={toggleTool}
         />
@@ -238,13 +225,14 @@ function Toolbar(props: FetalItem.IToolbarProps) {
       <CollectionCreateForm
         visible={modalName === 'visible'}
         onCancel={() => {
-          handleCancel()
+          handleCancel();
           setIsStopMonitorWhenCreated(false);
         }}
         isTodo={isTodo}
         docid={docid}
         starttime={startTime}
         bedname={bedname}
+        isStopMonitorWhenCreated={isStopMonitorWhenCreated}
         onCreated={res => {
           // setState({ isCreated: true });
           event.emit('newArchive', res);
@@ -264,8 +252,8 @@ function Toolbar(props: FetalItem.IToolbarProps) {
         age={age}
         gestationalWeek={gestationalWeek}
         startTime={startTime}
-      // inpatientNO={pregnancy.inpatientNO}
-      // name={}
+        // inpatientNO={pregnancy.inpatientNO}
+        // name={}
       />
       <PrintPreview
         visible={modalName === 'printVisible'}

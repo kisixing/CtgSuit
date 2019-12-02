@@ -46,7 +46,17 @@ interface IProps {
 }
 const CollectionCreateForm = (props: IProps) => {
 
-  const { starttime, docid, isTodo, bedname, visible, onCancel, form, onCreated } = props
+  const {
+    starttime,
+    docid,
+    isTodo,
+    bedname,
+    visible,
+    onCancel,
+    form,
+    onCreated,
+    isStopMonitorWhenCreated,
+  } = props;
 
   const { getFieldDecorator } = form;
   const [areaNO, setAreaNO] = useState('');
@@ -117,22 +127,33 @@ const CollectionCreateForm = (props: IProps) => {
           message.info('该患者信息已存在！');
         }
       }
-
     }
   };
 
-  const newArchive = async (params) => {
-    const res = await request.post(`/prenatal-visits`, {
-      data: params,
-    }).catch(({ data }) => data.then(e => { message.error(e.title); }))
+  const newArchive = async params => {
+    setLoading(true);
+    const res = await request
+      .post(`/prenatal-visits`, {
+        data: params,
+      })
+      .catch(({ data }) =>
+        data.then(e => {
+          message.error(e.title);
+        }),
+      );
     if (res && res.id) {
-      setLoading(true)
-      setTimeout(() => {
-        message.success('建档成功！')
-        onCreated(res)
-        setLoading(false)
+      if (isStopMonitorWhenCreated) {
+        setTimeout(() => {
+          onCreated(res);
+          setLoading(false);
+          handleCancel();
+          message.success('建档成功！');
+        }, 3000);
+      } else {
+        setLoading(false);
         handleCancel();
-      }, 3000);
+        onCreated(res);
+      }
     } else {
       message.error('建档异常，请稍后再试！', 3);
     }
