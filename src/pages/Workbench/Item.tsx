@@ -6,7 +6,7 @@ import useFullScreen from "./useFullScreen";
 import { FetalItem } from "./types";
 import { Ctg_Item } from "@lianmed/pages";
 import { event } from "@lianmed/utils";
-
+const styles = require('./Toolbar.less')
 const WorkbenchItem = (props: FetalItem.IProps) => {
   const { fullScreenId, itemHeight, itemSpan, outPadding, data, bedname, isTodo, docid, ismulti, status, unitId, ...others } = props;
   let { bedNO, GP, name, age, startTime, } = props
@@ -28,6 +28,7 @@ const WorkbenchItem = (props: FetalItem.IProps) => {
 
   return (
     <Col
+      className={styles.col}
       span={itemSpan}
       ref={ref}
       style={{ padding: outPadding, height: itemHeight, background: `var(--theme-light-color)`, position: 'relative' }}
@@ -59,7 +60,7 @@ const WorkbenchItem = (props: FetalItem.IProps) => {
         showLoading={setSpinning}
         unitId={unitId}
         docid={docid}
-        
+
         {...others}
       />
     </Col >

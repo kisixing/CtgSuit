@@ -114,6 +114,7 @@ export interface IRemain {
         ismulti: false
         docid: string
         status: any
+        starttime: any
     }
 }
 export interface INewArchive {
