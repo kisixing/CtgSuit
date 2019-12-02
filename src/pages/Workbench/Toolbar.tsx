@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button, message } from 'antd';
 import moment from 'moment';
 import { event, request } from "@lianmed/utils";
@@ -12,7 +12,7 @@ import { WsService } from '@lianmed/lmg';
 import { BedStatus } from '@lianmed/lmg/lib/services/WsService';
 import { FetalItem } from "./types";
 import { ButtonProps } from 'antd/lib/button';
-
+const styles = require('./Toolbar.less')
 const socket = WsService._this;
 
 function Toolbar(props: FetalItem.IToolbarProps) {
@@ -230,6 +230,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
           icon={showSetting ? 'left' : 'right'}
           shape={showSetting ? 'circle' : null}
           style={{ boxShadow: '#aaa 3px 3px 5px 1px' }}
+          className={styles.btn}
           type="primary"
           onClick={toggleTool}
         />

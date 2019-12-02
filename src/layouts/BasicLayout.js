@@ -4,10 +4,10 @@
  * @Date: 2019-09-23 20:34:58
  */
 
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { AntdThemeManipulator } from '@lianmed/components';
 
-import { Layout, Menu, Icon, Button, Modal, Avatar, Spin, Select, notification } from 'antd';
+import { Layout, Menu, Icon, Button, Modal, Avatar, Spin, Select } from 'antd';
 import { connect } from 'dva';
 import { router } from 'umi';
 import withRouter from 'umi/withRouter';
@@ -23,7 +23,7 @@ import Tabs from './Tabs';
 import settingStore from "@/utils/SettingStore";
 import { WsService } from "@lianmed/lmg";
 import CheckNetwork from "./CheckNetwork";
-
+import { QR } from "@/pages/Setting/Subscribe/index";
 
 const EWsStatus = WsService.wsStatus
 const settingData = settingStore.cache
@@ -289,6 +289,12 @@ class BasicLayout extends Component {
             Copyright <Icon type="copyright" style={{ margin: '0 4px' }} /> {config.copyright}
           </span>
           <span>
+            <QR>
+              <Icon
+                type="qrcode"
+                className={styles.question}
+              />
+            </QR>
             <Icon
               type="question-circle"
               className={styles.question}

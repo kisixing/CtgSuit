@@ -1,26 +1,22 @@
 import React, { useState } from 'react';
 import { Button, Table, Input } from "antd";
 import store from "@/utils/SettingStore";
-import { connect, DispatchProp } from 'dva';
 import { TableRowSelection } from 'antd/lib/table';
 import useStupidConcat from './useStupidConcat'
 import { IBed } from '@/types';
-interface IProps extends DispatchProp {
-    subscribeData?: string[]
-    [x: string]: any;
+interface IProps {
+    onAdd: (data: string[]) => void
+    [x: string]: any
 }
 
 const C = (props: IProps) => {
 
-    const { subscribeData, dispatch } = props
+    const { onAdd } = props
     const [selected, setSelected] = useState<string[]>([])
     const [areano, setAreano] = useState<string>(store.getSync('areano') as string)
 
     const { list, fetchList } = useStupidConcat(areano)
 
-    // useEffect(() => {
-    //     setSelected(subscribeData)
-    // }, [subscribeData])
 
 
 
@@ -40,19 +36,18 @@ const C = (props: IProps) => {
 
         <>
             <div style={{ margin: '20px 0 10px' }}>
-                <Input value={areano} onChange={e => setAreano(e.target.value)} style={{ width: 140 }} placeholder="输入病区号" />
-                <Button style={{ marginLeft: 6 }} onClick={fetchList}>搜索</Button>
-                <Button style={{ marginLeft: 6 }} type="primary" onClick={() => dispatch({ type: 'subscribe/setData', data: selected.concat(subscribeData) })}>添加</Button>
+                <Input.Search value={areano} onSearch={fetchList} onChange={e => setAreano(e.target.value)} style={{ width: 160 }} placeholder="输入病区号" />
+                <Button style={{ marginLeft: 6 }} type="primary" onClick={() => onAdd(selected)}>添加</Button>
 
             </div>
-            <Table scroll={{ y: 440 }} size="small" rowSelection={rowSelection} columns={columns} dataSource={list} rowKey="deviceno" pagination={false} />
+            <Table bordered scroll={{ y: 440 }} size="small" rowSelection={rowSelection} columns={columns} dataSource={list} rowKey="deviceno" pagination={false} />
         </>
 
 
     );
 };
 
-export default connect((state: any) => ({ subscribeData: state.subscribe.data }))(C)
+export default C
 const columns = ([
     {
         title: '病区号',

@@ -66,7 +66,8 @@ const Home = (props: IProps) => {
                 GP={safePregnancy.GP}
                 bedNO={safePregnancy.bedNO}
 
-                startTime={safePrenatalVisit.ctgexam.startTime}
+                // startTime={safePrenatalVisit.ctgexam.startTime}
+                startTime={data.starttime}
                 gestationalWeek={safePrenatalVisit.gestationalWeek}
 
                 bedname={bedname}
