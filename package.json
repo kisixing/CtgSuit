@@ -1,6 +1,6 @@
 {
   "name": "ctg-suit",
-  "version": "1.12.02",
+  "version": "1.12.3",
   "license": "lianmed-1.0.0",
   "private": true,
   "scripts": {
@@ -19,7 +19,8 @@
     "dist:ia32": "electron-builder --ia32",
     "precommit": "lint-staged",
     "update:lianmed": "yarn upgrade @lianmed/lmg @lianmed/components @lianmed/utils @lianmed/request",
-    "link:lianmed": "npm link @lianmed/lmg @lianmed/components @lianmed/utils @lianmed/request @lianmed/pages"
+    "link:lianmed": "npm link @lianmed/lmg @lianmed/components @lianmed/utils @lianmed/request @lianmed/pages",
+    "vh": "node ./scripts/versionHandler.js --target pack-ia32"
   },
   "main": "./app/main/index.js",
   "dependencies": {
@@ -79,10 +80,16 @@
       "output": "release"
     },
     "mac": {
-      "target": ["dmg", "zip"]
+      "target": [
+        "dmg",
+        "zip"
+      ]
     },
     "win": {
-      "target": ["nsis", "zip"],
+      "target": [
+        "nsis",
+        "zip"
+      ],
       "icon": "build/icon.ico"
     },
     "linux": {
@@ -112,6 +119,6 @@
     "name": "Lian-Med",
     "email": "lian-med@163.com",
     "hospital": "xxx 医院",
-    "date": "2019-12-02"
+    "date": "2019-12-3"
   }
 }

@@ -166,7 +166,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
           </B>
           )}
         {/* 停止状态下不可以建档，监护、离线都是可以建档的 */}
-        <B icon="user-add" type="link" disabled={!isMonitor || isCreated} onClick={() => setModalName('visible')}>
+        <B icon="user-add" type="link" disabled={(!isMonitor && !isTodo) || isCreated} onClick={() => setModalName('visible')}>
           {isCreated ? '已建档' : '建档'}
         </B>
         <B
