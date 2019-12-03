@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button, message } from 'antd';
 import moment from 'moment';
 import { event, request } from "@lianmed/utils";
@@ -161,12 +161,12 @@ function Toolbar(props: FetalItem.IToolbarProps) {
             停止监护
           </B>
         ) : (
-          <B disabled={index === undefined} icon="play-circle" type="link" onClick={start}>
-            开始监护
+            <B disabled={index === undefined} icon="play-circle" type="link" onClick={start}>
+              开始监护
           </B>
-        )}
+          )}
         {/* 停止状态下不可以建档，监护、离线都是可以建档的 */}
-        <B icon="user-add" type="link" disabled={isCreated} onClick={() => setModalName('visible')}>
+        <B icon="user-add" type="link" disabled={!isMonitor || isCreated} onClick={() => setModalName('visible')}>
           {isCreated ? '已建档' : '建档'}
         </B>
         <B
@@ -254,8 +254,8 @@ function Toolbar(props: FetalItem.IToolbarProps) {
         age={age}
         gestationalWeek={gestationalWeek}
         startTime={startTime}
-        // inpatientNO={pregnancy.inpatientNO}
-        // name={}
+      // inpatientNO={pregnancy.inpatientNO}
+      // name={}
       />
       <PrintPreview
         visible={modalName === 'printVisible'}

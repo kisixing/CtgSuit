@@ -51,7 +51,7 @@ const Home = (props: IProps) => {
             const { unitId } = (item as IBed)
             const { isTodo } = (item as IRemain)
             const safePregnancy = data.pregnancy || { age: null, name: null, inpatientNO: null, bedNO: null, id: null, GP: null }
-            const safePrenatalVisit = prenatalVisit || { ctgexam: { startTime: null }, gestationalWeek: null, }
+            const safePrenatalVisit = prenatalVisit || { gestationalWeek: null, }
             return (
               <Item
                 data={data as any}

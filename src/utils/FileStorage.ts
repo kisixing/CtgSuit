@@ -100,7 +100,7 @@ export default class FileStorage {
 
         return this.box(o)
     }
-    setSnc(key, value) {
+    setSync(key, value) {
         const obj = this.getObjSync()
         const data = this._handleWriteString(obj, key, value)
         fs.writeFileSync(this.path, data, this.encoding)

@@ -26,7 +26,7 @@ export const SignModal = (props: IProps) => {
       await request.put(`/ctg-exams-note`, {
         data: {
           fetalposition: JSON.stringify(values),
-          startTime,
+          // startTime,
           note: docid,
           endTime: '',
         }
