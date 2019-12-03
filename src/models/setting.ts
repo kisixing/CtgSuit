@@ -1,5 +1,4 @@
-import store from 'store';
-import { getBedIfo } from '@/services/api';
+import store from '@/utils/SettingStore';
 
 const fakeData = [{
   key: '1',
@@ -23,7 +22,9 @@ const fakeData = [{
 export default {
   namespace: 'setting',
   state: {
-    listLayout: store.get('listLayout') || [2, 2],
+    listLayout: store.getSync('listLayout') || [2, 2],
+    area_type: store.getSync('area_type'),
+    areano: store.getSync('areano'),
     listLayoutOptions: [
       [1, 2],
       [2, 2],
@@ -34,7 +35,6 @@ export default {
       [4, 3],
       [4, 4],
     ],
-    bedinfo: [], // 床位信息
     accounts: fakeData || [], // 所有账户信息列表
   },
   effects: {
@@ -43,21 +43,11 @@ export default {
       yield put({ type: 'setState', payload })
       yield put({ type: 'list/processListData' })
     },
-    *fetchBed({ payload, callback }, { call, put }) {
-      const res = yield call(getBedIfo, payload);
-      if (callback && typeof callback === 'function') {
-        callback(res); // 返回结果
-      }
-      yield put({
-        type: 'setState',
-        payload: {
-          bedinfo: res || []
-        }
-      })
-    }
+
   },
   reducers: {
     setState(state, { payload }) {
+      store.setSync(Object.keys(payload), Object.values(payload))
       return {
         ...state, ...payload
       }

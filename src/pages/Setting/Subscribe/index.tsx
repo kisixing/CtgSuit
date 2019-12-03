@@ -5,7 +5,7 @@ import { connect, DispatchProp } from 'dva';
 import Table from "./Table";
 import useStupidConcat from './useStupidConcat'
 import store from '@/utils/SettingStore'
-console.log('qqq', qrcode)
+
 interface IProps extends DispatchProp {
     subscribeData?: string[]
     [x: string]: any;
@@ -100,13 +100,13 @@ const C = (props: IProps) => {
 
 
 const S = connect((state: any) => ({ subscribeData: state.subscribe.data }))(C)
-export const QR = connect((state: any) => ({ subscribeData: state.subscribe.data }))(
+export const QR = connect(({ subscribe, setting }: any) => ({ subscribeData: subscribe.data, area_type: setting.area_type, areano: setting.areano }))(
     (props: { subscribeData: string[], [x: string]: any }) => {
-        const { subscribeData, children, ...others } = props
+        const { subscribeData, area_type, areano, children, ...others } = props
         const [src, setSrc] = useState('')
         useEffect(() => {
-            qrcode.toDataURL(` subscribe_${store.getSync('area_type')}_${subscribeData.join(',')}`).then(_ => setSrc(_))
-        }, [])
+            qrcode.toDataURL(` subscribe_${area_type || null}_${areano || null}_${subscribeData.join(',') || null}`).then(_ => setSrc(_))
+        }, [subscribeData, area_type, areano])
         return (
             <Popover {...others} content={<img style={{ width: 100, height: 100 }} src={src} />} trigger="click">
                 {
