@@ -126,7 +126,7 @@ export default {
         list,
       } = state;
       let { pageCount } = list as IListState
-      page = page > pageCount ? pageCount - 1 : page
+      page = page > pageCount - 1 ? pageCount - 1 : page
       yield put({
         type: 'setState',
         payload: { page }
