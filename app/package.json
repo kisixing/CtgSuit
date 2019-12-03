@@ -1,6 +1,6 @@
 {
   "name": "ctgsuit-electron",
-  "version": "1.11.30",
+  "version": "1.12.02",
   "description": "umi.js width electron",
   "main": "main/index.js",
   "author": "Timdan",
