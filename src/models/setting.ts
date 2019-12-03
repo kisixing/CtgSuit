@@ -1,5 +1,5 @@
-import store from '@/utils/SettingStore';
-
+import SettingStore from '@/utils/SettingStore';
+import store from 'store'
 const fakeData = [{
   key: '1',
   name: 'John Brown',
@@ -22,9 +22,9 @@ const fakeData = [{
 export default {
   namespace: 'setting',
   state: {
-    listLayout: store.getSync('listLayout') || [2, 2],
-    area_type: store.getSync('area_type'),
-    areano: store.getSync('areano'),
+    listLayout: store.get('listLayout') || [2, 2],
+    area_type: SettingStore.getSync('area_type'),
+    areano: SettingStore.getSync('areano'),
     listLayoutOptions: [
       [1, 2],
       [2, 2],
@@ -47,7 +47,7 @@ export default {
   },
   reducers: {
     setState(state, { payload }) {
-      store.setSync(Object.keys(payload), Object.values(payload))
+      SettingStore.setSync(Object.keys(payload), Object.values(payload))
       return {
         ...state, ...payload
       }
