@@ -13,6 +13,7 @@ export default function useTodo(showTodo: boolean): [IRemain[], boolean] {
                 const { pregnancy } = value
                 target.data.pregnancy = pregnancy
                 target.prenatalVisit = value as any
+                setTodo([...todo])
             }
         },
         [todo],
