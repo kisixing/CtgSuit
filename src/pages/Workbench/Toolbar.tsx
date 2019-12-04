@@ -44,7 +44,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
     pregnancyId
   } = props
 
-
+  const timeout = useRef(null)
   const isMonitor = status === BedStatus.Working;
   const isOffline = status === BedStatus.Offline;
   const isCreated = !!pregnancyId;
@@ -61,10 +61,10 @@ function Toolbar(props: FetalItem.IToolbarProps) {
   }, [unitId])
 
 
-  let timeout = null;
+
   const autoHide = () => {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => {
+    clearTimeout(timeout.current);
+    timeout.current = setTimeout(() => {
       setShowSetting(false)
     }, 15000);
   };
