@@ -31,9 +31,9 @@ const Home = (props: IProps) => {
         event.emit('todo:discard', docid)
       } else {
         const cb = () => {
-          dispatch({ type: 'list/appendDirty', unitId })
+          dispatch({ type: `list/appendDirty`, unitId })
         }
-        status === BedStatus.Stopped ? cb() : event.emit(`bedClose:${unitId}`, cb)
+        [BedStatus.Stopped, BedStatus.OfflineStopped].includes(status) ? cb() : event.emit(`bedClose:${unitId}`, cb)
       }
     }
     const fullScreenCb = () => dispatch({ type: 'list/setState', payload: { fullScreenId: null } })

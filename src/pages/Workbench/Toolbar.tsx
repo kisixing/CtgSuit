@@ -47,6 +47,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
   const timeout = useRef(null)
   const isMonitor = status === BedStatus.Working;
   const isOffline = status === BedStatus.Offline;
+  const isOfflineStopped = status === BedStatus.OfflineStopped;
   const isCreated = !!pregnancyId;
 
   if (pregnancyId) {
@@ -135,7 +136,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
     setModalName('visible')
   };
 
-  const B = (p: ButtonProps) => <Button style={{ padding: '0 8px' }} {...p}>{p.children}</Button>
+  const B = (p: ButtonProps) => <Button style={{ padding: '0 8px' }} {...p} disabled={p.disabled || isOfflineStopped}>{p.children}</Button>
   const fp = 12
   return (
     <>
@@ -166,7 +167,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
           </B>
           )}
         {/* 停止状态下不可以建档，监护、离线都是可以建档的 */}
-        <B icon="user-add" type="link" disabled={(!isMonitor && !isTodo) || isCreated} onClick={() => setModalName('visible')}>
+        <B icon="user-add" type="link" disabled={(!isMonitor && !isTodo && !isOffline) || isCreated} onClick={() => setModalName('visible')}>
           {isCreated ? '已建档' : '建档'}
         </B>
         <B

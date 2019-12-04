@@ -36,7 +36,7 @@ export default {
         if (v.status !== BedStatus.Offline && newOffline.has(k)) {
           newOffline.delete(k)
         }
-        if (v.status !== BedStatus.Stopped && newDirty.has(k)) {
+        if (![BedStatus.Stopped, BedStatus.OfflineStopped].includes(v.status) && newDirty.has(k)) {
           newDirty.delete(k)
         }
       })

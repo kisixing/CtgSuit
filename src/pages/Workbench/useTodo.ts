@@ -63,7 +63,7 @@ export default function useTodo(showTodo: boolean): [IRemain[], boolean] {
                     setTodoLoading(false);
                     setTodo(res.map((_, index) => {
                         const _index = _.note.lastIndexOf('_')
-                        const bedname = _.note.slice(0, _index).split('_')[0]
+                        const bedname = _.bedname || _.note.slice(0, _index).split('_')[0]
                         const dateString = _.note.slice(_index + 1)
                         const t = ["-", "-", " ", ":", ":", ""]
                         let starttime = '20' + dateString.split('').reduce((a, b, index) => {

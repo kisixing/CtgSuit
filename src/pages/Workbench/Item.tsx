@@ -16,7 +16,7 @@ const WorkbenchItem = (props: FetalItem.IProps) => {
   const [ref, fullScreen] = useFullScreen(fullScreenId, unitId)
   const [spinning, setSpinning] = useState(false);
 
-  if (status === BedStatus.Stopped) {
+  if ([BedStatus.Stopped, BedStatus.OfflineStopped].includes(status)) {
     bedNO = cache.bedNO
     GP = cache.GP
     name = cache.name

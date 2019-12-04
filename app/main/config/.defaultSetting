@@ -1,7 +1,7 @@
-ws_url=192.168.124.10:8084
-xhr_url=192.168.124.10:9987
+ws_url=192.168.123.10:8084
+xhr_url=192.168.123.10:9987
 print_interval=20
-theme=#006064
+theme=#4a148c
 hospital_name=xxx医院
 version_number=1.0.1
 build_date=2019-10-15
