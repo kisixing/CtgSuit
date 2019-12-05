@@ -9,7 +9,7 @@ import { event } from "@lianmed/utils";
 const styles = require('./Toolbar.less')
 const WorkbenchItem = (props: FetalItem.IProps) => {
   const { fullScreenId, activeId, itemHeight, itemSpan, outPadding, data, bedname, isTodo, docid, ismulti, status, unitId, ...others } = props;
-  let { bedNO, GP, name, age, startTime, } = props
+  let { bedNO, GP, name, age, startTime, pregnancyId } = props
 
   const [cache, setCache] = useState<FetalItem.IItemTitle>({})
   const [so, setSo] = useState({ suit: null })
@@ -22,8 +22,9 @@ const WorkbenchItem = (props: FetalItem.IProps) => {
     name = cache.name
     age = cache.age
     startTime = cache.startTime
+    pregnancyId = cache.pregnancyId
   } else {
-    bedNO !== cache.bedNO && name !== cache.name && setCache({ bedNO, GP, name, age, startTime, })
+    bedNO !== cache.bedNO && name !== cache.name && pregnancyId !== cache.pregnancyId && setCache({ bedNO, GP, name, age, startTime, pregnancyId })
   }
 
   return (
@@ -49,19 +50,20 @@ const WorkbenchItem = (props: FetalItem.IProps) => {
         onClose={() => { event.emit('bedClose', unitId, status, isTodo, docid) }}
       />
       <Toolbar
+        {...others}
+
         startTime={startTime}
         name={name}
         age={age}
         status={status}
         bedname={bedname}
-
+        pregnancyId={pregnancyId}
         isTodo={isTodo}
         suitObject={so}
         showLoading={setSpinning}
         unitId={unitId}
         docid={docid}
 
-        {...others}
       />
     </Col >
   );

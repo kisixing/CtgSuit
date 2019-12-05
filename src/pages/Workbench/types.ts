@@ -34,6 +34,8 @@ export namespace FetalItem {
         name?: string
         age?: number
         startTime?: string
+        pregnancyId?: number
+
     }
     export interface IToolbarProps {
         suitObject: { suit: Suit }
