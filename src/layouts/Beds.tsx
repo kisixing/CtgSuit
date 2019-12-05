@@ -5,6 +5,7 @@ import { mapStatusToColor } from '@/constant';
 import { BedStatus, ICache } from "@lianmed/lmg/lib/services/WsService";
 import useAlarm from "./useAlarm";
 import { IBed } from '@/types';
+import { connect } from 'dva';
 
 interface IProps {
   listData: IBed[]
@@ -100,4 +101,10 @@ function Beds({ dispatch, listData, wsData }: IProps) {
   );
 }
 
-export default Beds;
+export default connect(({ list, ws }: any) => {
+  return {
+    listData: list.listData,
+    wsData: ws.data,
+  }
+})(Beds);
+

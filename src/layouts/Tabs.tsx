@@ -4,6 +4,8 @@ import { router } from 'umi';
 import { connect } from 'dva';
 let styles = require('./Tabs.less')
 
+
+
 function Tabs({ pageData, page, dispatch, showTodo }) {
   return (
     <div className={styles.tabs} >
@@ -41,6 +43,8 @@ function Tabs({ pageData, page, dispatch, showTodo }) {
 
 export default connect(({ list }: any) => {
   return {
-    showTodo: list.showTodo
+    showTodo: list.showTodo,
+    pageData: list.pageData,
+    page: list.page,
   }
 })(Tabs);
