@@ -1,0 +1,73 @@
+@import '../../utils/utils.less';
+
+.wrapper {
+  height: 100%;
+  background: #fff;
+  transition: all 0.3s;
+
+  h2 {
+    margin-bottom: 12px;
+    color: rgba(0, 0, 0, .65);
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .var {
+      display: inline-block;
+      min-width: 16px;
+      margin-left: 6px;
+      margin-right: 6px;
+      font-weight: 600;
+      color: @primary-color;
+    }
+  }
+
+  .chart {
+    height: calc(100% - 32px);;
+    border: 1px solid #ddd;
+
+    :global {
+      .ant-spin-nested-loading {
+        height: 100%;
+      }
+      .ant-spin-container {
+        height: 100%;
+      }
+    }
+  }
+}
+
+.fullscreen {
+  height: 100vh;
+  padding: 24px;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+
+  .header {
+    background-color: @primary-color;
+    padding: 24px;
+    font-size: 18px;
+    color: #fff;
+
+    .var {
+      color: #fff;
+    }
+
+    button {
+      color: #fff;
+    }
+  }
+
+  .chart {
+    height: calc(100% - 88px);
+  }
+}

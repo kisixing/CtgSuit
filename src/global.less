@@ -1,0 +1,113 @@
+@import '~antd/lib/style/themes/default.less';
+
+html,
+body,
+#root {
+  height: 100%;
+  background:var(--theme-light-color)
+}
+
+.colorWeak {
+  filter: invert(80%);
+}
+
+.ant-layout {
+  min-height: 100vh;
+}
+
+canvas {
+  display: block;
+}
+
+body {
+  margin: 0;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.globalSpin {
+  width: 100%;
+  margin: 40px 0 !important;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+.confirm-title {
+  font-weight: 600,
+}
+
+.confirm-content {
+  color: #666;
+  font-weight: 600,
+}
+
+.ant-btn-link {
+  border: none !important;
+
+  &:hover {
+    border: none;
+  }
+}
+
+.primary-link {
+  cursor: pointer;
+  color: @primary-color;
+  :hover {
+    color: @link-hover-color;
+  }
+}
+
+.delete-link {
+  cursor: pointer;
+}
+
+.required {
+  &::before {
+    display: inline-block;
+    margin-right: 4px;
+    color: #f5222d;
+    font-size: 14px;
+    font-family: SimSun, sans-serif;
+    line-height: 1;
+    content: '*';
+  }
+}
+
+// table filter width
+.ant-table-filter-icon {
+  width: 65px !important;
+}
+
+// react-pdf
+.react-pdf__Page {
+  display: inline-block;
+}
+
+@media (max-width: @screen-xs) {
+  .ant-table {
+    width: 100%;
+    overflow-x: auto;
+    &-thead > tr,
+    &-tbody > tr {
+      > th,
+      > td {
+        white-space: pre;
+        > span {
+          display: block;
+        }
+      }
+    }
+  }
+}
+:global{
+  .ant-tooltip {
+    max-width: 500px !important;
+  }
+  .ant-empty-image {
+    height:140px !important;
+  }
+}

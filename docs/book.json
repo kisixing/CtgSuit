@@ -1,0 +1,84 @@
+{
+    "title": "胎监工作站操作说明书",
+    "author": "lian-med",
+    "description": "CTG SUIT handbook",
+    "language": "zh-hans",
+    "gitbook": "3.2.3",
+    "styles": {
+        "website": "./styles/website.css"
+    },
+    "structure": {
+        "readme": "README.md"
+    },
+    "plugins": [
+        "-sharing",
+        "splitter",
+        "expandable-chapters-small",
+        "anchors",
+        "github",
+        "github-buttons",
+        "donate",
+        "sharing-plus",
+        "anchor-navigation-ex",
+        "favicon"
+    ],
+    "pluginsConfig": {
+        "github": {
+            "url": ""
+        },
+        "prism": {
+          "css": [
+            "prism-themes/themes/prism-base16-ateliersulphurpool.light.css"
+          ]
+        },
+        "donate": {
+            "alipay": "",
+            "title": "",
+            "button": "",
+            "alipayText": ""
+        },
+        "sharing": {
+            "douban": false,
+            "facebook": false,
+            "google": false,
+            "hatenaBookmark": false,
+            "instapaper": false,
+            "line": false,
+            "linkedin": false,
+            "messenger": false,
+            "pocket": false,
+            "qq": false,
+            "qzone": false,
+            "stumbleupon": false,
+            "twitter": false,
+            "viber": false,
+            "vk": false,
+            "weibo": false,
+            "whatsapp": false
+        },
+        "anchor-navigation-ex": {
+            "showLevel": false
+        },
+        "favicon":{
+            "shortcut": "./source/images/favicon.jpg",
+            "bookmark": "./source/images/favicon.jpg",
+            "appleTouch": "./source/images/apple-touch-icon.jpg",
+            "appleTouchMore": {
+                "120x120": "./source/images/apple-touch-icon.jpg",
+                "180x180": "./source/images/apple-touch-icon.jpg"
+            }
+        },
+        "versions": {
+            "options": [
+                {
+                    "value": "",
+                    "text": "v3.2.3"
+                },
+                {
+                    "value": "",
+                    "text": "v2.6.4"
+                }
+            ]
+        }
+    }
+}

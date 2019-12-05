@@ -1,0 +1,32 @@
+@import '../../utils/utils.less';
+
+.tableList {
+  height: 305px;
+  padding: 12px 24px;
+  background: #fff;
+
+  :global {
+    .ant-table-placeholder {
+      height: 196px;
+    }
+  }
+
+  .selectedRow {
+    & > td {
+      background-color: @select-item-active-bg !important;
+    }
+  }
+}
+
+.buttonView {
+  margin: 18px;
+
+    button {
+      margin-right: 24px;
+    }
+}
+
+.textOver {
+  // display: inline-block;
+  .textOverflow
+}

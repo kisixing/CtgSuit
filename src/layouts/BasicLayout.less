@@ -1,0 +1,133 @@
+@import '../utils/utils.less';
+
+@pro-header-hover-bg: rgba(255, 255, 255, 0.35);
+
+.container {
+  height: 100%;
+  background: var(--theme-light-color);
+}
+
+.header {
+  display: flex;
+  height: @header-height;
+  padding: 10px;
+  background-color: var(--theme-color) ;
+  :global {
+    .ant-btn-primary {  
+      box-shadow: none;
+    }
+  }
+  .logo {
+    display: flex;
+    height: 64px;
+    flex-shrink: 0;
+    img {
+      width: 80px;
+      margin-right: 12px;
+    }
+    h1 {
+      color: white;
+      font-size: 21px;
+      font-weight: bold;
+      letter-spacing: 4px;
+    }
+  }
+
+  .actionBar {
+    margin-left: 16px;
+    overflow: hidden;
+    display: flex;
+    width: 250px;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-items: right;
+
+    button {
+      min-width: 120px;
+      margin: 2px;
+    }
+
+    .action {
+      display: inline-block;
+      height: 32px;
+      width: 110px;
+      line-height: 32px;
+      padding: 0 16px;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: all 0.3s;
+      > i {
+        color: @text-color;
+        vertical-align: middle;
+      }
+      &:hover {
+        background: @pro-header-hover-bg;
+      }
+      &:global(.opened) {
+        background: @pro-header-hover-bg;
+      }
+    }
+    .search {
+      padding: 0 12px;
+      &:hover {
+        background: transparent;
+      }
+    }
+    .account {
+      .avatar {
+        margin: ~'calc((@{layout-header-height} - 24px) / 2)' 0;
+        margin-right: 8px;
+        margin-top: 4px;
+        margin-bottom: 4px;
+        color: @primary-color;
+        vertical-align: top;
+        background: rgba(255, 255, 255, 0.85);
+      }
+    }
+
+    .loading {
+      line-height: normal;
+      border-radius: 3px;
+
+      :global {
+        .ant-spin-container {
+          border-radius: 3px;
+        }
+      }
+    }
+  }
+}
+.name {
+  color:#fff
+}
+.main {
+  overflow: auto;
+}
+
+.footer {
+  height: @footer-height;
+  overflow: hidden;
+  display: flex;
+  padding: 5px;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--theme-color);
+
+  & > span {
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    color: rgba(255, 255, 255, .65)
+  }
+
+  > div {
+    line-height: 1;
+  }
+
+  .question {
+    padding-right: 12px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+  }
+}

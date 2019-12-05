@@ -1,31 +1,52 @@
 {
-  "name": "umi-elctron",
-  "version": "0.0.1",
-  "license": "CC0-1.0",
+  "name": "ctg-suit",
+  "version": "1.12.4",
+  "license": "lianmed-1.0.0",
   "private": true,
   "scripts": {
-    "start": "umi dev",
-    "dev:main": "electron .",
-    "build:render": "umi build",
+    "start:dev": "concurrently  'yarn start' 'yarn run dev:main'",
+    "start": "cross-env PORT=1702 BROWSER=none umi dev",
+    "start:runtime": "cross-env PORT=1702 TARGET=0 umi dev",
+    "dev:main": "run-electron .",
+    "build:render": "cross-env BROWSER=none umi build",
     "test": "umi test",
     "lint": "eslint --ext .js src mock tests",
     "rebuild": "electron-rebuild -m ./app",
     "pack": "npm run build:render && npm run rebuild && electron-builder --dir =./app",
-    "pack-linux": "npm run build:render && npm run rebuild && electron-builder build --linux ",
+    "pack-ia32": "npm run build:render && npm run rebuild && electron-builder  --ia32 --dir =./app",
+    "pack-linux": "npm run build:render && npm run rebuild && electron-builder build --linux",
     "dist": "electron-builder",
-    "precommit": "lint-staged"
+    "dist:ia32": "electron-builder --ia32",
+    "precommit": "lint-staged",
+    "update:lianmed": "yarn upgrade @lianmed/lmg @lianmed/components @lianmed/utils @lianmed/request",
+    "link:lianmed": "npm link @lianmed/lmg @lianmed/components @lianmed/utils @lianmed/request @lianmed/pages",
+    "vh": "node ./scripts/versionHandler.js --target pack-ia32"
   },
   "main": "./app/main/index.js",
   "dependencies": {
     "antd": "^3.19.5",
     "dva": "^2.6.0-beta.6",
+    "electron-store": "^5.0.0",
+    "ramda": "^0.26.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "umi-request": "^1.2.2"
+    "react-highlight-words": "^0.16.0",
+    "react-pdf": "^4.1.0",
+    "run-electron": "^1.0.0",
+    "store": "^2.0.12",
+    "umi-request": "^1.2.2",
+    "@lianmed/components": "NenX/components",
+    "@lianmed/lmg": "NenX/lianmed_lmg.git",
+    "@lianmed/request": "NenX/request",
+    "@lianmed/utils": "NenX/lianmed_utils.git",
+    "@lianmed/pages": "NenX/lianmed_pages.git"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.144",
+    "@types/request": "^2.48.3",
     "babel-eslint": "^9.0.0",
-    "concurrently": "^4.1.1",
+    "concurrently": "^4.1.2",
+    "cross-env": "^6.0.0",
     "electron": "^5.0.8",
     "electron-builder": "^21.1.5",
     "electron-rebuild": "^1.8.5",
@@ -35,19 +56,41 @@
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jsx-a11y": "^5.1.1",
     "eslint-plugin-react": "^7.11.1",
+    "glob": "^7.1.6",
     "husky": "^0.14.3",
     "lint-staged": "^7.2.2",
+    "mockjs": "^1.0.1-beta3",
+    "progress": "^2.0.3",
     "react-test-renderer": "^16.7.0",
+    "roadhog-api-doc": "^1.1.2",
+    "shx": "^0.3.2",
     "slash": "^3.0.0",
     "umi": "^2.7.7",
     "umi-plugin-react": "^1.8.4",
-    "webpack-chain": "^6.0.0"
+    "webpack-chain": "^6.0.0",
+    "yargs-parser": "^16.1.0"
   },
   "build": {
-    "productName": "umi-electron",
-    "appId": "umi-electron",
+    "productName": "ctg-suit",
+    "appId": "lian-med-ctgsuit",
+    "copyright": "Copyright © 2019 lian-med",
+    "compression": "maximum",
+    "asar": true,
     "directories": {
-      "output": "OutputApp"
+      "output": "release"
+    },
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ]
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "zip"
+      ],
+      "icon": "build/icon.ico"
     },
     "linux": {
       "target": [
@@ -55,6 +98,12 @@
         "AppImage"
       ],
       "category": "Development"
+    },
+    "nsis": {
+      "oneClick": false,
+      "menuCategory": true,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true
     }
   },
   "lint-staged": {
@@ -67,7 +116,9 @@
     "node": ">=8.0.0"
   },
   "author": {
-    "name": "Timdan",
-    "email": "tim_zsd@163.com"
+    "name": "Lian-Med",
+    "email": "lian-med@163.com",
+    "hospital": "xxx 医院",
+    "date": "2019-12-3"
   }
 }
