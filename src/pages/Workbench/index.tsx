@@ -12,10 +12,10 @@ interface IProps {
   [x: string]: any
 }
 const Home = (props: IProps) => {
-  const { listLayout = [], pageItems, fullScreenId, activeId, dispatch, showTodo } = props;
+  const { listLayout = [], pageItems, fullScreenId, activeId, dispatch, showTodo, subscribeData } = props;
   const wrap = useRef(null);
   const empty = useRef(null)
-  const [todo] = useTodo(showTodo)
+  const [todo] = useTodo(showTodo, subscribeData)
 
   const itemSpan = 24 / listLayout[0];
   const outPadding = 6;
@@ -96,12 +96,13 @@ const Home = (props: IProps) => {
   );
 };
 
-export default connect(({ setting, list }: any) => {
+export default connect(({ setting, list, subscribe }: any) => {
   return {
     listLayout: setting.listLayout,
     pageItems: list.pageItems,
     fullScreenId: list.fullScreenId,
     activeId: list.activeId,
-    showTodo: list.showTodo
+    showTodo: list.showTodo,
+    subscribeData: subscribe.data
   };
 })(Home);

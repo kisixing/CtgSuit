@@ -6,7 +6,7 @@ let styles = require('./Tabs.less')
 
 function Tabs({ pageData, page, dispatch, showTodo }) {
   return (
-    pageData.length > 0 && <div className={styles.tabs} >
+    <div className={styles.tabs} >
       {pageData.map((bednames: string[], index) => {
         return (
           <Button
@@ -26,7 +26,7 @@ function Tabs({ pageData, page, dispatch, showTodo }) {
           </Button>
         );
       })}
-      <Button size="small" style={{ margin: '0 4px', marginLeft: 80, background: showTodo ? 'white' : 'var(--theme-hover-color)' }} onClick={() => {
+      <Button size="small" style={{ marginL: '0 4px', marginLeft: pageData.length && 80, background: showTodo ? 'white' : 'var(--theme-hover-color)' }} onClick={() => {
         router.replace('/workbench');
         setTimeout(() => {
           dispatch({ type: 'list/setState', payload: { showTodo: true } })
