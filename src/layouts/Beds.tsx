@@ -8,13 +8,13 @@ import { IBed } from '@/types';
 import { connect } from 'dva';
 
 interface IProps {
-  listData: IBed[]
+  headData: IBed[]
   wsData: ICache
   dispatch: (d: any) => void
 }
 
-function Beds({ dispatch, listData, wsData }: IProps) {
-  useAlarm(listData)
+function Beds({ dispatch, headData, wsData }: IProps) {
+  useAlarm(headData)
   const handleClicks = ({ pageIndex, unitId }) => {
     return () => {
 
@@ -67,7 +67,7 @@ function Beds({ dispatch, listData, wsData }: IProps) {
       }}
     >
       {
-        listData.filter(({ unitId }) => {
+        headData.filter(({ unitId }) => {
           const status = wsData.get(unitId) && wsData.get(unitId).status
           return [BedStatus.Working, BedStatus.Stopped].includes(status)
           // return true
@@ -103,7 +103,7 @@ function Beds({ dispatch, listData, wsData }: IProps) {
 
 export default connect(({ list, ws }: any) => {
   return {
-    listData: list.listData,
+    headData: list.headData,
     wsData: ws.data,
   }
 })(Beds);

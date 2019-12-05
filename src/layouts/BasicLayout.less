@@ -2,6 +2,25 @@
 
 @pro-header-hover-bg: rgba(255, 255, 255, 0.35);
 
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content:center;
+  height: 64px;
+  flex-shrink: 0;
+  img {
+    width: 80px;
+    margin-right: 12px;
+  }
+  span {
+    color: white;
+    font-size: 21px;
+    font-weight: bold;
+    letter-spacing: 4px;
+  }
+}
+
 .container {
   height: 100%;
   background: var(--theme-light-color);
@@ -17,21 +36,7 @@
       box-shadow: none;
     }
   }
-  .logo {
-    display: flex;
-    height: 64px;
-    flex-shrink: 0;
-    img {
-      width: 80px;
-      margin-right: 12px;
-    }
-    h1 {
-      color: white;
-      font-size: 21px;
-      font-weight: bold;
-      letter-spacing: 4px;
-    }
-  }
+
 
   .actionBar {
     margin-left: 16px;

@@ -95,7 +95,7 @@ const H = (props: any) => {
                 <Menu.Item key="signout">
                     <Icon type="user" />
                     注销登录
-        </Menu.Item>
+                </Menu.Item>
                 <Menu.Divider />
                 <Menu.Item key="logout">
                     <Icon type="logout" />
@@ -161,7 +161,7 @@ const H = (props: any) => {
             <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <Link to="/workbench" className={styles.logo}>
                     {/* <img alt="logo" src={logo} /> */}
-                    <h1>胎监工作站</h1>
+                    <span>胎监工作站</span>
                 </Link>
                 <div style={{ display: 'flex', lineHeight: '24px', justifyContent: 'space-around' }}>
                     <LayoutSetting />

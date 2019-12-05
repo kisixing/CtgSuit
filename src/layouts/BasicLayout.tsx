@@ -12,7 +12,7 @@ import { WsService } from "@lianmed/lmg";
 import CheckNetwork from "./CheckNetwork";
 import Foot from "./Foot";
 import Head from "./Head";
-// import Side from "./Side";
+import Side from "./Side";
 
 const styles = require('./BasicLayout.less')
 
@@ -23,12 +23,13 @@ const { Content } = Layout;
 
 const BasicLayout = (props: any) => {
 
+  const { dispatch, fashionable, children, wsStatus } = props;
 
 
   useLayoutEffect(() => {
 
     const ws = new WsService(settingData).on('explode', data => {
-      props.dispatch({
+      dispatch({
         type: 'ws/updateData', payload: { data }
       })
     })
@@ -40,7 +41,6 @@ const BasicLayout = (props: any) => {
       router.push('/setting')
     }
 
-    const { dispatch } = props;
     dispatch({
       type: 'global/fetchAccount',
     });
@@ -71,7 +71,6 @@ const BasicLayout = (props: any) => {
 
 
 
-  const { children, wsStatus } = props;
 
   return (
     <Layout
@@ -90,7 +89,11 @@ const BasicLayout = (props: any) => {
 
       <Layout>
 
-        {/* <Side /> */}
+        {
+          fashionable && <Side />
+        }
+
+
 
         <Layout>
           <Head />
@@ -106,5 +109,6 @@ const BasicLayout = (props: any) => {
 
 export default connect(({ global, list, loading, setting, ws, subscribe, ...rest }: any) => ({
   wsStatus: ws.status,
+  fashionable: setting.fashionable
 
 }))(withRouter(BasicLayout));
