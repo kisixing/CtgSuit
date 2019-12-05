@@ -5,7 +5,7 @@ import { event } from "@lianmed/utils";
 type clickCb = ((event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void)
 type IUseReturn = [MutableRefObject<any>, clickCb]
 
-export default (fullScreenId: string, unitId: string): IUseReturn => {
+export default (fullScreenId: string, unitId: string, activeId: string): IUseReturn => {
     const ref = useRef(null)
     const fullScreen: clickCb = useCallback(
         (e) => {
@@ -25,11 +25,15 @@ export default (fullScreenId: string, unitId: string): IUseReturn => {
             fullScreen(null);
             event.emit('bedFullScreen', unitId)
         }
-
+        if (activeId === unitId) {
+            // const el: HTMLDivElement = ReactDOM.findDOMNode(ref.current);
+            // el.style.transition = 'all .2s '
+            // el.style.transform = 'translateY(-20px)'
+        }
 
         return () => {
 
         };
-    }, [fullScreenId])
+    }, [fullScreenId, activeId])
     return [ref, fullScreen]
 }

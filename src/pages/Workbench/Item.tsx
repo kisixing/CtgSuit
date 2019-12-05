@@ -8,12 +8,12 @@ import { Ctg_Item } from "@lianmed/pages";
 import { event } from "@lianmed/utils";
 const styles = require('./Toolbar.less')
 const WorkbenchItem = (props: FetalItem.IProps) => {
-  const { fullScreenId, itemHeight, itemSpan, outPadding, data, bedname, isTodo, docid, ismulti, status, unitId, ...others } = props;
+  const { fullScreenId, activeId, itemHeight, itemSpan, outPadding, data, bedname, isTodo, docid, ismulti, status, unitId, ...others } = props;
   let { bedNO, GP, name, age, startTime, } = props
 
   const [cache, setCache] = useState<FetalItem.IItemTitle>({})
   const [so, setSo] = useState({ suit: null })
-  const [ref, fullScreen] = useFullScreen(fullScreenId, unitId)
+  const [ref, fullScreen] = useFullScreen(fullScreenId, unitId, activeId)
   const [spinning, setSpinning] = useState(false);
 
   if ([BedStatus.Stopped, BedStatus.OfflineStopped].includes(status)) {

@@ -22,6 +22,7 @@ export namespace FetalItem {
         startTime: string
         outPadding: number
         fullScreenId: string
+        activeId: string
         itemHeight: number
         itemSpan: number
         GP: string
