@@ -3,8 +3,7 @@ import { Button, Row, Col, Icon, Popover } from "antd";
 import { qrcode } from '@lianmed/utils'
 import { connect, DispatchProp } from 'dva';
 import Table from "./Table";
-import useStupidConcat from './useStupidConcat'
-import store from '@/utils/SettingStore'
+import useStupidConcat from './useStupidConcat';
 
 interface IProps extends DispatchProp {
     subscribeData?: string[]
@@ -108,12 +107,14 @@ export const QR = connect(({ subscribe, setting }: any) => ({ subscribeData: sub
             qrcode.toDataURL(` subscribe_${area_type || null}_${areano || null}_${subscribeData.join(',') || null}`).then(_ => setSrc(_))
         }, [subscribeData, area_type, areano])
         return (
-            <Popover {...others} content={<img style={{ width: 100, height: 100 }} src={src} />} trigger="click">
-                {
-                    children
-                }
-            </Popover>
-        )
+          <Popover
+            {...others}
+            content={<img alt="Popover" style={{ width: 100, height: 100 }} src={src} />}
+            trigger="click"
+          >
+            {children}
+          </Popover>
+        );
     }
 )
 
