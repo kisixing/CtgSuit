@@ -18,7 +18,6 @@ export namespace FetalItem {
         docid: string
         status: BedStatus
         pregnancyId: number
-        index: any
         startTime: string
         outPadding: number
         fullScreenId: string
@@ -26,6 +25,7 @@ export namespace FetalItem {
         itemHeight: number
         itemSpan: number
         GP: string
+        isOn:boolean
     }
 
     export interface IItemTitle {
@@ -52,7 +52,6 @@ export namespace FetalItem {
         bedno: string
         docid: string
         status: BedStatus
-        index: any
         pregnancyId: number
     }
 }

@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { AntdThemeManipulator } from '@lianmed/components';
 
-import { Layout,  Icon, } from 'antd';
+import { Layout, Icon, } from 'antd';
 import { ipcRenderer } from 'electron';
 import config from '@/utils/config';
 // import logo from '../assets/logo.png';
 
 import settingStore from "@/utils/SettingStore";
 import { QR } from "@/pages/Setting/Subscribe/index";
+import LayoutSetting from "./LayoutSetting";
 
 const styles = require('./BasicLayout.less')
 
@@ -24,10 +25,11 @@ const Foot = (props: any) => {
     return (
 
         <Footer className={styles.footer}>
-            <span />
-            <span>
+            <LayoutSetting />
+
+            {/* <span>
                 Copyright <Icon type="copyright" style={{ margin: '0 4px' }} /> {config.copyright}
-            </span>
+            </span> */}
             <span>
                 <QR>
                     <Icon

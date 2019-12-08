@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Col } from 'antd';
 import Toolbar from './Toolbar';
 import { BedStatus } from "@lianmed/lmg/lib/services/WsService";
@@ -8,7 +8,7 @@ import { Ctg_Item } from "@lianmed/pages";
 import { event } from "@lianmed/utils";
 const styles = require('./Toolbar.less')
 const WorkbenchItem = (props: FetalItem.IProps) => {
-  const { fullScreenId, activeId, itemHeight, itemSpan, outPadding, data, bedname, isTodo, docid, ismulti, status, unitId, ...others } = props;
+  const { fullScreenId, activeId, itemHeight, itemSpan, outPadding, data, bedname, isTodo, docid, ismulti, status, unitId, isOn, ...others } = props;
   let { bedNO, GP, name, age, startTime, pregnancyId } = props
 
   // const [cache, setCache] = useState<FetalItem.IItemTitle>({})
@@ -27,8 +27,9 @@ const WorkbenchItem = (props: FetalItem.IProps) => {
     startTime = c.startTime
     pregnancyId = c.pregnancyId
   } else {
-    bedNO !== c.bedNO && pregnancyId !== c.pregnancyId && Object.assign(c, { bedNO, GP, name, age, startTime, pregnancyId })
+    Object.assign(c, { bedNO, GP, name, age, startTime, pregnancyId })
   }
+
 
   return (
     <Col
@@ -43,7 +44,7 @@ const WorkbenchItem = (props: FetalItem.IProps) => {
         name={name}
         age={age}
         bedname={bedname}
-
+        status={isOn ? status : null}
         data={data}
         onDoubleClick={fullScreen}
         loading={spinning}

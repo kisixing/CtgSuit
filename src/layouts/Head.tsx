@@ -12,6 +12,7 @@ import HeaderDropdown from '@/components/HeaderDropdown';
 import Beds from './Beds';
 import Tabs from './Tabs';
 import LayoutSetting from "./LayoutSetting";
+import { request } from '@lianmed/utils';
 
 const styles = require('./BasicLayout.less')
 
@@ -27,7 +28,7 @@ const H = (props: any) => {
 
 
     const handleMenuClick = key => {
-
+        request.get('/account')
         // let timestamp = Date.parse(new Date());
         if (key === '操作说明') {
             ipcRenderer.send('newWindow', '操作说明');
@@ -163,9 +164,9 @@ const H = (props: any) => {
                     {/* <img alt="logo" src={logo} /> */}
                     <span>胎监工作站</span>
                 </Link>
-                <div style={{ display: 'flex', lineHeight: '24px', justifyContent: 'space-around' }}>
+                {/* <div style={{ display: 'flex', lineHeight: '24px', justifyContent: 'space-around' }}>
                     <LayoutSetting />
-                </div>
+                </div> */}
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>

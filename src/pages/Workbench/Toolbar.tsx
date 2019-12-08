@@ -37,7 +37,6 @@ function Toolbar(props: FetalItem.IToolbarProps) {
     docid,
     status,
     unitId,
-    index,
     deviceno,
     bedno,
     bedname,
