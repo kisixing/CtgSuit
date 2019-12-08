@@ -12,15 +12,15 @@ interface IProps {
   [x: string]: any
 }
 const Home = (props: IProps) => {
-  const { listLayout = [], pageItems, fullScreenId, activeId, dispatch, showTodo, subscribeData } = props;
+  const { listLayout = [], pageItems, fullScreenId, activeId, dispatch, showTodo, subscribeData, isOn } = props;
   const wrap = useRef(null);
   const empty = useRef(null)
   const [todo] = useTodo(showTodo, subscribeData)
 
-  const itemSpan = 24 / listLayout[0];
+  const itemSpan = 24 / listLayout[1];
   const outPadding = 6;
   const contentHeight = parseInt(getComputedStyle(document.body).height) - 28 - 125
-  const itemHeight = (contentHeight - outPadding * 2) / listLayout[1];
+  const itemHeight = (contentHeight - outPadding * 2) / listLayout[0];
   const items: any[] = (showTodo ? todo : pageItems);
 
   useEffect(() => {
@@ -80,8 +80,8 @@ const Home = (props: IProps) => {
                 fullScreenId={fullScreenId}
                 activeId={activeId}
                 deviceno={(item as IBed).deviceno}
-                index={data.index}
                 bedno={bedno}
+                isOn={isOn}
               />
             );
           }) : (
@@ -96,13 +96,14 @@ const Home = (props: IProps) => {
   );
 };
 
-export default connect(({ setting, list, subscribe }: any) => {
+export default connect(({ ws, setting, list, subscribe }: any) => {
   return {
     listLayout: setting.listLayout,
     pageItems: list.pageItems,
     fullScreenId: list.fullScreenId,
     activeId: list.activeId,
     showTodo: list.showTodo,
-    subscribeData: subscribe.data
+    subscribeData: subscribe.data,
+    isOn: ws.isOn
   };
 })(Home);

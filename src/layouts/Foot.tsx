@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { AntdThemeManipulator } from '@lianmed/components';
 
-import { Layout,  Icon, } from 'antd';
+import { Layout, Button, } from 'antd';
 import { ipcRenderer } from 'electron';
-import config from '@/utils/config';
 // import logo from '../assets/logo.png';
 
 import settingStore from "@/utils/SettingStore";
 import { QR } from "@/pages/Setting/Subscribe/index";
+import LayoutSetting from "./LayoutSetting";
 
 const styles = require('./BasicLayout.less')
 
@@ -24,22 +24,24 @@ const Foot = (props: any) => {
     return (
 
         <Footer className={styles.footer}>
-            <span />
             <span>
-                Copyright <Icon type="copyright" style={{ margin: '0 4px' }} /> {config.copyright}
-            </span>
-            <span>
+                <LayoutSetting />
                 <QR>
-                    <Icon
-                        type="qrcode"
-                        className={styles.question}
-                    />
+                    <Button icon="qrcode" type="primary">
+
+                    </Button>
                 </QR>
-                <Icon
-                    type="question-circle"
-                    className={styles.question}
+                <Button
+                    icon="question-circle"
+                    type="primary"
                     onClick={() => ipcRenderer.send('newWindow', '操作说明')}
                 />
+            </span>
+
+            {/* <span>
+                Copyright <Icon type="copyright" style={{ margin: '0 4px' }} /> {config.copyright}
+            </span> */}
+            <span>
                 <AntdThemeManipulator
                     primaryColor={primaryColor}
                     placement="topLeft"
@@ -47,6 +49,8 @@ const Foot = (props: any) => {
                         settingStore.set('theme', color);
                     }}
                 />
+
+
             </span>
         </Footer>
     );

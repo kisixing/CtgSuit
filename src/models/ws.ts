@@ -8,7 +8,8 @@ export default {
   namespace: 'ws',
   state: {
     data: new Map(),
-    status: EWsStatus.Pendding
+    status: EWsStatus.Pendding,
+    isOn: false
   },
   effects: {
     *connectWs(_, { put, call, select }) {

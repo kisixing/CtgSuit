@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Col } from 'antd';
 import Toolbar from './Toolbar';
 import { BedStatus } from "@lianmed/lmg/lib/services/WsService";
@@ -8,24 +8,28 @@ import { Ctg_Item } from "@lianmed/pages";
 import { event } from "@lianmed/utils";
 const styles = require('./Toolbar.less')
 const WorkbenchItem = (props: FetalItem.IProps) => {
-  const { fullScreenId, activeId, itemHeight, itemSpan, outPadding, data, bedname, isTodo, docid, ismulti, status, unitId, ...others } = props;
+  const { fullScreenId, activeId, itemHeight, itemSpan, outPadding, data, bedname, isTodo, docid, ismulti, status, unitId, isOn, ...others } = props;
   let { bedNO, GP, name, age, startTime, pregnancyId } = props
 
-  const [cache, setCache] = useState<FetalItem.IItemTitle>({})
+  // const [cache, setCache] = useState<FetalItem.IItemTitle>({})
   const [so, setSo] = useState({ suit: null })
   const [ref, fullScreen] = useFullScreen(fullScreenId, unitId, activeId)
   const [spinning, setSpinning] = useState(false);
 
+  let w: any = window
+  const k = `spinfo_${unitId}`
+  const c = w[k] || (w[k] = {})
   if ([BedStatus.Stopped, BedStatus.OfflineStopped].includes(status)) {
-    bedNO = cache.bedNO
-    GP = cache.GP
-    name = cache.name
-    age = cache.age
-    startTime = cache.startTime
-    pregnancyId = cache.pregnancyId
+    bedNO = c.bedNO
+    GP = c.GP
+    name = c.name
+    age = c.age
+    startTime = c.startTime
+    pregnancyId = c.pregnancyId
   } else {
-    bedNO !== cache.bedNO && name !== cache.name && pregnancyId !== cache.pregnancyId && setCache({ bedNO, GP, name, age, startTime, pregnancyId })
+    Object.assign(c, { bedNO, GP, name, age, startTime, pregnancyId })
   }
+
 
   return (
     <Col
@@ -40,7 +44,7 @@ const WorkbenchItem = (props: FetalItem.IProps) => {
         name={name}
         age={age}
         bedname={bedname}
-
+        status={isOn ? status : null}
         data={data}
         onDoubleClick={fullScreen}
         loading={spinning}

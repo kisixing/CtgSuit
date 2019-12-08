@@ -1,23 +1,16 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { Button } from 'antd';
-import { WsService } from "@lianmed/lmg";
-import { EWsEvents } from '@lianmed/lmg/lib/services/types';
+import React, { useEffect, useState } from 'react';
+import { useCheckNetwork } from "@lianmed/lmg";
+import { connect } from 'dva';
 
 function CheckNetwork(props) {
-    const [v, setV] = useState(true)
+    const { dispatch, isOn } = props
     const [small, setSmall] = useState(true)
-    const cb = useCallback((status: any) => {
-        setV(!status)
-    }, [])
-    useEffect(() => {
-        WsService._this.on(EWsEvents.pong, cb)
-        return () => {
-            WsService._this.off(EWsEvents.pong, cb)
-        }
-    }, [])
+
+
+    useCheckNetwork(isOn => dispatch({ type: 'ws/setState', payload: { isOn } }))
 
     return (
-        v && <div style={{
+        isOn || <div style={{
             display: 'flex', justifyContent: 'center',
             position: "absolute",
             left: 0,
@@ -55,4 +48,4 @@ function CheckNetwork(props) {
     );
 }
 
-export default CheckNetwork;
+export default connect(({ ws }: any) => ({ isOn: ws.isOn }))(CheckNetwork);
