@@ -108,7 +108,7 @@ export const QR = connect(({ subscribe, setting }: any) => ({ subscribeData: sub
             qrcode.toDataURL(` subscribe_${area_type || null}_${areano || null}_${subscribeData.join(',') || null}`).then(_ => setSrc(_))
         }, [subscribeData, area_type, areano])
         return (
-            <Popover {...others} content={<img style={{ width: 100, height: 100 }} src={src} />} trigger="click">
+            <Popover {...others} content={<img style={{ width: 100, height: 100 }} src={src} />} >
                 {
                     children
                 }

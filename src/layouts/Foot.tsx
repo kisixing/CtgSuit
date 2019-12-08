@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { AntdThemeManipulator } from '@lianmed/components';
 
-import { Layout, Icon, } from 'antd';
+import { Layout, Button, } from 'antd';
 import { ipcRenderer } from 'electron';
-import config from '@/utils/config';
 // import logo from '../assets/logo.png';
 
 import settingStore from "@/utils/SettingStore";
@@ -25,23 +24,24 @@ const Foot = (props: any) => {
     return (
 
         <Footer className={styles.footer}>
-            <LayoutSetting />
+            <span>
+                <LayoutSetting />
+                <QR>
+                    <Button icon="qrcode" type="primary">
+
+                    </Button>
+                </QR>
+                <Button
+                    icon="question-circle"
+                    type="primary"
+                    onClick={() => ipcRenderer.send('newWindow', '操作说明')}
+                />
+            </span>
 
             {/* <span>
                 Copyright <Icon type="copyright" style={{ margin: '0 4px' }} /> {config.copyright}
             </span> */}
             <span>
-                <QR>
-                    <Icon
-                        type="qrcode"
-                        className={styles.question}
-                    />
-                </QR>
-                <Icon
-                    type="question-circle"
-                    className={styles.question}
-                    onClick={() => ipcRenderer.send('newWindow', '操作说明')}
-                />
                 <AntdThemeManipulator
                     primaryColor={primaryColor}
                     placement="topLeft"
@@ -49,6 +49,8 @@ const Foot = (props: any) => {
                         settingStore.set('theme', color);
                     }}
                 />
+
+
             </span>
         </Footer>
     );
