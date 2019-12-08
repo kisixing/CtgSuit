@@ -26,7 +26,7 @@ const ListLayout = (props: any) => {
         }}>
             {
                 listLayoutOptions.map(_ => {
-                    return <Menu.Item key={renderText(_)}>{`${_[0]} 行 ${_[1]} 列 `}</Menu.Item>
+                    return <Menu.Item key={renderText(_)}>{`${_[0]} 行 x ${_[1]} 列 `}</Menu.Item>
                 })
             }
         </Menu>

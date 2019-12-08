@@ -159,15 +159,14 @@ const H = (props: any) => {
     return (
 
         <Header className={styles.header}>
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
+            {/* <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <Link to="/workbench" className={styles.logo}>
-                    {/* <img alt="logo" src={logo} /> */}
                     <span>胎监工作站</span>
                 </Link>
-                {/* <div style={{ display: 'flex', lineHeight: '24px', justifyContent: 'space-around' }}>
+                <div style={{ display: 'flex', lineHeight: '24px', justifyContent: 'space-around' }}>
                     <LayoutSetting />
-                </div> */}
-            </div>
+                </div>
+            </div> */}
 
             <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
                 <div style={{ display: 'flex', flex: 1 }}>
