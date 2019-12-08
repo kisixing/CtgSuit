@@ -4,7 +4,7 @@ import { qrcode } from '@lianmed/utils'
 import { connect, DispatchProp } from 'dva';
 import Table from "./Table";
 import useStupidConcat from './useStupidConcat'
-import store from '@/utils/SettingStore'
+// import store from '@/utils/SettingStore'
 
 interface IProps extends DispatchProp {
     subscribeData?: string[]

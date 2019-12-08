@@ -17,10 +17,10 @@ const Home = (props: IProps) => {
   const empty = useRef(null)
   const [todo] = useTodo(showTodo, subscribeData)
 
-  const itemSpan = 24 / listLayout[0];
+  const itemSpan = 24 / listLayout[1];
   const outPadding = 6;
   const contentHeight = parseInt(getComputedStyle(document.body).height) - 28 - 125
-  const itemHeight = (contentHeight - outPadding * 2) / listLayout[1];
+  const itemHeight = (contentHeight - outPadding * 2) / listLayout[0];
   const items: any[] = (showTodo ? todo : pageItems);
 
   useEffect(() => {
