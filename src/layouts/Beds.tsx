@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { } from 'react';
 import { Button } from 'antd';
 import { router } from 'umi';
 import { mapStatusToColor } from '@/constant';
@@ -60,7 +60,7 @@ function Beds({ dispatch, headData, wsData }: IProps) {
         flex: 1,
         display: 'flex',
         backgroundColor: '#fff',
-        // borderRadius: 4,
+        borderRadius: 3,
         alignContent: ' flex-start',
         flexWrap: 'wrap',
         overflow: 'scroll'

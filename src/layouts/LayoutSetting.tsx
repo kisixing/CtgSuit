@@ -18,7 +18,7 @@ const ListLayout = (props: any) => {
 
 
     const menu = (
-        <Menu style={{ textIndent:10 }} onClick={({ key }) => {
+        <Menu style={{ textIndent:6 }} onClick={({ key }) => {
             dispatch({
                 type: 'setting/setListLayout',
                 payload: { listLayout: key.split(joinSymbol).map(_ => +_) },
@@ -36,7 +36,7 @@ const ListLayout = (props: any) => {
     return (
         <Dropdown overlay={menu}>
             <Button type="primary">
-                <span> 窗口排列：</span>
+                <span> 窗口：</span>
                 {
                     renderText(listLayout)
                 }
