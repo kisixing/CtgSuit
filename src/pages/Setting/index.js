@@ -50,7 +50,7 @@ class Setting extends Component {
         {/* <Menu.Item key="2">评分设置</Menu.Item>
         <Menu.Item key="4">事件设置</Menu.Item> */}
         <Menu.Item key="1">维护设置</Menu.Item>
-        <Menu.Item key="0">版本管理</Menu.Item>
+        {/* <Menu.Item key="0">版本管理</Menu.Item> */}
       </Menu>
     );
   };
