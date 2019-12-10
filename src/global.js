@@ -1,4 +1,4 @@
-import { message } from 'antd';
+import { message,notification } from 'antd';
 import "antd/dist/antd.css";
 import { Suit } from "@lianmed/lmg/lib/Ctg/Suit";
 import store from "@/utils/SettingStore";
@@ -6,6 +6,9 @@ Suit.option = store.cache
 message.config({
     top: 150,
     duration: 2,
+});
+notification.config({
+    top: 136,
 });
 
 
