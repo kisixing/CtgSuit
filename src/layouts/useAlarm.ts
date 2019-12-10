@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from "react";
+import { useLayoutEffect, useCallback } from "react";
 import { event } from "@lianmed/utils";
 import { notification } from "antd";
 import { IBed } from '@/types';
@@ -12,7 +12,7 @@ export default (listData: IBed[]) => {
 
         return target && target.bedname
     }, [listData])
-    useEffect(() => {
+    useLayoutEffect(() => {
         const audio: HTMLAudioElement = document.querySelector('#alarm')
         let timeout: NodeJS.Timeout
 

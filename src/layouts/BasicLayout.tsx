@@ -13,6 +13,7 @@ import CheckNetwork from "./CheckNetwork";
 import Foot from "./Foot";
 import Head from "./Head";
 import Side from "./Side";
+import useAlarm from "./useAlarm";
 
 const styles = require('./BasicLayout.less')
 
@@ -23,7 +24,7 @@ const { Content } = Layout;
 
 const BasicLayout = (props: any) => {
 
-  const { dispatch, fashionable, children, wsStatus } = props;
+  const { dispatch, fashionable, children, wsStatus,listData } = props;
 
 
   useLayoutEffect(() => {
@@ -70,7 +71,7 @@ const BasicLayout = (props: any) => {
   }, [])
 
 
-
+  useAlarm(listData)
 
   return (
     <Layout
@@ -109,6 +110,7 @@ const BasicLayout = (props: any) => {
 
 export default connect(({ global, list, loading, setting, ws, subscribe, ...rest }: any) => ({
   wsStatus: ws.status,
-  fashionable: setting.fashionable
+  fashionable: setting.fashionable,
+  listData:list.listData
 
 }))(withRouter(BasicLayout));
