@@ -2,6 +2,7 @@ import { useLayoutEffect, useCallback } from "react";
 import { event } from "@lianmed/utils";
 import { notification } from "antd";
 import { IBed } from '@/types';
+declare var __DEV__: boolean;
 
 
 export default (listData: IBed[]) => {
@@ -33,8 +34,7 @@ export default (listData: IBed[]) => {
             speechSU.voice = voices;
             speechSU.rate = rate;
             speechSynthesis.speak(speechSU);
-            notification.info({ message: `${text}号子机监护时间到`, duration: 10 })
-
+            __DEV__ || notification.info({ message: `${text}号子机监护时间到`, duration: 10 })
         }
 
         event
