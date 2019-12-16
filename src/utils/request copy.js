@@ -4,7 +4,8 @@
  */
 import { extend } from 'umi-request';
 import { notification } from 'antd';
-import router from 'umi/router';
+import router from 'dva';
+
 import store from 'store';
 import { TOKEN } from '@/utils/constant';
 

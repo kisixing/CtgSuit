@@ -1,4 +1,5 @@
-import { routerRedux } from 'dva/router';
+import { routerRedux } from 'dva';
+
 import { parse } from 'qs';
 import store from 'store';
 import { TOKEN } from '@/utils/constant';

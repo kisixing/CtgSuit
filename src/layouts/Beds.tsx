@@ -1,9 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { } from 'react';
 import { Button } from 'antd';
 import { router } from 'umi';
 import { mapStatusToColor } from '@/constant';
 import { BedStatus, ICache } from "@lianmed/lmg/lib/services/WsService";
-import useAlarm from "./useAlarm";
 import { IBed } from '@/types';
 import { connect } from 'dva';
 
@@ -14,7 +13,6 @@ interface IProps {
 }
 
 function Beds({ dispatch, headData, wsData }: IProps) {
-  useAlarm(headData)
   const handleClicks = ({ pageIndex, unitId }) => {
     return () => {
 
@@ -60,7 +58,7 @@ function Beds({ dispatch, headData, wsData }: IProps) {
         flex: 1,
         display: 'flex',
         backgroundColor: '#fff',
-        // borderRadius: 4,
+        borderRadius: 3,
         alignContent: ' flex-start',
         flexWrap: 'wrap',
         overflow: 'scroll'

@@ -67,7 +67,8 @@ export default {
   },
   outputPath: './app/render', // 更改输出目录
   define: {
-    TARGET: process.env.TARGET
+    TARGET: process.env.TARGET,
+    __DEV__: process.env.NODE_ENV !== 'production'
   },
 
   alias: {
