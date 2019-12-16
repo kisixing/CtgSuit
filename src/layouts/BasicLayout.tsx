@@ -63,7 +63,7 @@ const BasicLayout = (props: any) => {
         type: 'login/verification',
         payload: account
       });
-    }, 1000 * 60 * 60);
+    }, 1000 * 60 * 60 * 2);
     return () => {
       clearInterval(interval);
     };
