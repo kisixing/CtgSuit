@@ -14,9 +14,11 @@ import {
   InputNumber,
   message,
 } from 'antd';
+import SettingStore from '@/utils/SettingStore';
 import styles from './index.less';
 
 const width = '200px';
+const areaNO = SettingStore.getSync('areano');
 
 const EditModal = Form.create({
   name: 'editor_form',
@@ -106,7 +108,7 @@ const EditModal = Form.create({
               if (!bedNO) {
                 return message.error('请输入床号！');
               }
-              onCreate({ areaNO: '01', ...values });
+              onCreate({ areaNO: areaNO, ...values });
               onCancel();
             }
           }

@@ -1,19 +1,18 @@
-import React, { useEffect } from 'react';
+import React, { } from 'react';
 import { Button } from 'antd';
 import { router } from 'umi';
 import { mapStatusToColor } from '@/constant';
 import { BedStatus, ICache } from "@lianmed/lmg/lib/services/WsService";
-import useAlarm from "./useAlarm";
 import { IBed } from '@/types';
+import { connect } from 'dva';
 
 interface IProps {
-  listData: IBed[]
+  headData: IBed[]
   wsData: ICache
   dispatch: (d: any) => void
 }
 
-function Beds({ dispatch, listData, wsData }: IProps) {
-  useAlarm(listData)
+function Beds({ dispatch, headData, wsData }: IProps) {
   const handleClicks = ({ pageIndex, unitId }) => {
     return () => {
 
@@ -47,7 +46,7 @@ function Beds({ dispatch, listData, wsData }: IProps) {
       dispatch({ type: 'list/removeDirty', unitId })
       dispatch({ type: 'list/setState', payload: { showTodo: false } })
       dispatch({ type: 'list/setPageByUnitId', unitId });
-
+      dispatch({ type: 'list/setState', payload: { activeId: unitId } });
 
       router.replace('/workbench');
     };
@@ -59,14 +58,14 @@ function Beds({ dispatch, listData, wsData }: IProps) {
         flex: 1,
         display: 'flex',
         backgroundColor: '#fff',
-        // borderRadius: 4,
+        borderRadius: 3,
         alignContent: ' flex-start',
         flexWrap: 'wrap',
         overflow: 'scroll'
       }}
     >
       {
-        listData.filter(({ unitId }) => {
+        headData.filter(({ unitId }) => {
           const status = wsData.get(unitId) && wsData.get(unitId).status
           return [BedStatus.Working, BedStatus.Stopped].includes(status)
           // return true
@@ -100,4 +99,10 @@ function Beds({ dispatch, listData, wsData }: IProps) {
   );
 }
 
-export default Beds;
+export default connect(({ list, ws }: any) => {
+  return {
+    headData: list.headData,
+    wsData: ws.data,
+  }
+})(Beds);
+

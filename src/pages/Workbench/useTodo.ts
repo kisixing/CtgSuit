@@ -3,7 +3,7 @@ import request from "@lianmed/request";
 import { event } from "@lianmed/utils";
 import { Modal } from "antd";
 import { IPregnancy, IPrenatalVisit } from "@/types";
-export default function useTodo(showTodo: boolean): [IRemain[], boolean] {
+export default function useTodo(showTodo: boolean, subscribeData: string[]): [IRemain[], boolean] {
     const [todo, setTodo] = useState<IRemain[]>([])
     const [todoLoading, setTodoLoading] = useState(false)
     const cb = useCallback(
@@ -61,25 +61,26 @@ export default function useTodo(showTodo: boolean): [IRemain[], boolean] {
             request.get('/ctg-exams-remain').then((res: IRemain[]) => {
                 return Promise.all(res.map(_ => request.get(`/ctg-exams-data/${_.note}`))).then(all => {
                     setTodoLoading(false);
-                    setTodo(res.map((_, index) => {
-                        const _index = _.note.lastIndexOf('_')
-                        const bedname = _.bedname || _.note.slice(0, _index).split('_')[0]
-                        const dateString = _.note.slice(_index + 1)
-                        const t = ["-", "-", " ", ":", ":", ""]
-                        let starttime = '20' + dateString.split('').reduce((a, b, index) => {
-                            return a.concat(b) + ((index & 1) ? t[~~(index / 2)] : '')
-                        }, '')
-                        return {
-                            ..._,
-                            isTodo: true,
-                            bedname,
-                            bedno: null,
-                            id: _.note,
-                            type: '',
-                            data: { ...all[index], docid: _.note, starttime, ismulti: false, GP: '/', status: null, }
-                        }
-                    }
-                    ))
+                    setTodo(
+                        res.map((_, index) => {
+                            const _index = _.note.lastIndexOf('_')
+                            const deviceno = _.note.slice(0, _index).split('_')[0]
+                            const dateString = _.note.slice(_index + 1)
+                            const t = ["-", "-", " ", ":", ":", ""]
+                            let starttime = '20' + dateString.split('').reduce((a, b, index) => {
+                                return a.concat(b) + ((index & 1) ? t[~~(index / 2)] : '')
+                            }, '')
+                            return {
+                                ..._,
+                                isTodo: true,
+                                deviceno,
+                                bedno: null,
+                                id: _.note,
+                                type: '',
+                                data: { ...all[index], docid: _.note, starttime, ismulti: false, GP: '/', status: null, }
+                            }
+                        }).filter(_ => subscribeData.includes(_.deviceno))
+                    )
                 })
             })
 
@@ -91,10 +92,10 @@ export default function useTodo(showTodo: boolean): [IRemain[], boolean] {
     ]
 }
 export interface IRemain {
-    deviceno: null
+    deviceno: string
     bedname: string;
     bedno: string;
-    isTodo: true;
+    isTodo: boolean;
     diagnosis: any;
     endTime: any;
     id: any;

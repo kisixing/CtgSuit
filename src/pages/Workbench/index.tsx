@@ -12,15 +12,15 @@ interface IProps {
   [x: string]: any
 }
 const Home = (props: IProps) => {
-  const { listLayout = [], pageItems, fullScreenId, dispatch, showTodo } = props;
+  const { listLayout = [], pageItems, fullScreenId, activeId, dispatch, showTodo, subscribeData, isOn } = props;
   const wrap = useRef(null);
   const empty = useRef(null)
-  const [todo] = useTodo(showTodo)
+  const [todo] = useTodo(showTodo, subscribeData)
 
-  const itemSpan = 24 / listLayout[0];
+  const itemSpan = 24 / listLayout[1];
   const outPadding = 6;
   const contentHeight = parseInt(getComputedStyle(document.body).height) - 28 - 125
-  const itemHeight = (contentHeight - outPadding * 2) / listLayout[1];
+  const itemHeight = (contentHeight - outPadding * 2) / listLayout[0];
   const items: any[] = (showTodo ? todo : pageItems);
 
   useEffect(() => {
@@ -37,9 +37,9 @@ const Home = (props: IProps) => {
       }
     }
     const fullScreenCb = () => dispatch({ type: 'list/setState', payload: { fullScreenId: null } })
-    event.on('bedEnd', endCb).on('bedClose', closeCb).on('bedFullScreen', fullScreenCb)
-
-    return () => event.off('bedEnd', endCb).off('bedClose', closeCb).off('bedFullScreen', fullScreenCb)
+    const activeCb = () => dispatch({ type: 'list/setState', payload: { activeId: null } })
+    event.on('bedEnd', endCb).on('bedClose', closeCb).on('bedFullScreen', fullScreenCb).on('bedActive', activeCb)
+    return () => event.off('bedEnd', endCb).off('bedClose', closeCb).off('bedFullScreen', fullScreenCb).off('bedActive', activeCb)
   }, [])
 
   return (
@@ -78,9 +78,10 @@ const Home = (props: IProps) => {
                 itemSpan={itemSpan}
                 outPadding={outPadding}
                 fullScreenId={fullScreenId}
+                activeId={activeId}
                 deviceno={(item as IBed).deviceno}
-                index={data.index}
                 bedno={bedno}
+                isOn={isOn}
               />
             );
           }) : (
@@ -95,11 +96,14 @@ const Home = (props: IProps) => {
   );
 };
 
-export default connect(({ setting, list }: any) => {
+export default connect(({ ws, setting, list, subscribe }: any) => {
   return {
     listLayout: setting.listLayout,
     pageItems: list.pageItems,
     fullScreenId: list.fullScreenId,
-    showTodo: list.showTodo
+    activeId: list.activeId,
+    showTodo: list.showTodo,
+    subscribeData: subscribe.data,
+    isOn: ws.isOn
   };
 })(Home);

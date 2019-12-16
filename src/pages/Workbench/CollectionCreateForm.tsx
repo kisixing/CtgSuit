@@ -7,7 +7,7 @@ import { WrappedFormUtils } from 'antd/lib/form/Form';
 import moment from 'moment';
 import { request } from '@lianmed/utils';
 import { stringify } from 'qs';
-import store from '@/utils/SettingStore';
+import SettingStore from '@/utils/SettingStore';
 
 const width = '200px';
 const columns = [
@@ -59,15 +59,15 @@ const CollectionCreateForm = (props: IProps) => {
   } = props;
 
   const { getFieldDecorator } = form;
-  const [areaNO, setAreaNO] = useState('');
+  const [areaNO, setAreaNO] = useState(SettingStore.getSync('areano'));
   // 搜索值
   const [pregnancyList, setPregnancyList] = useState([]);
-  const [disabled, setDisabled] = useState(false)
-  const [errorText, setErrorText] = useState('')
-  const [loading, setLoading] = useState(false)
+  const [disabled, setDisabled] = useState(false);
+  const [errorText, setErrorText] = useState('');
+  const [loading, setLoading] = useState(false);
 
   // 获取病区好
-  store.getObj().then(e => setAreaNO(e.areaNO));
+  // const areaNO = SettingStore.getSync('areano');
 
   const reset = () => {
     // 清空form表单数据、输入框状态变为可输入状态

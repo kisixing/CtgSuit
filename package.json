@@ -1,6 +1,6 @@
 {
   "name": "ctg-suit",
-  "version": "1.12.4",
+  "version": "1.12.10",
   "license": "lianmed-1.0.0",
   "private": true,
   "scripts": {
@@ -13,7 +13,7 @@
     "lint": "eslint --ext .js src mock tests",
     "rebuild": "electron-rebuild -m ./app",
     "pack": "npm run build:render && npm run rebuild && electron-builder --dir =./app",
-    "pack-ia32": "npm run build:render && npm run rebuild && electron-builder  --ia32 --dir =./app",
+    "pack:ia32": "npm run build:render && npm run rebuild && electron-builder  --ia32 --dir =./app",
     "pack-linux": "npm run build:render && npm run rebuild && electron-builder build --linux",
     "dist": "electron-builder",
     "dist:ia32": "electron-builder --ia32",

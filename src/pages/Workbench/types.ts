@@ -18,13 +18,14 @@ export namespace FetalItem {
         docid: string
         status: BedStatus
         pregnancyId: number
-        index: any
         startTime: string
         outPadding: number
         fullScreenId: string
+        activeId: string
         itemHeight: number
         itemSpan: number
         GP: string
+        isOn:boolean
     }
 
     export interface IItemTitle {
@@ -33,6 +34,8 @@ export namespace FetalItem {
         name?: string
         age?: number
         startTime?: string
+        pregnancyId?: number
+
     }
     export interface IToolbarProps {
         suitObject: { suit: Suit }
@@ -49,7 +52,6 @@ export namespace FetalItem {
         bedno: string
         docid: string
         status: BedStatus
-        index: any
         pregnancyId: number
     }
 }

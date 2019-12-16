@@ -2,6 +2,25 @@
 
 @pro-header-hover-bg: rgba(255, 255, 255, 0.35);
 
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content:center;
+  height: 64px;
+  flex-shrink: 0;
+  img {
+    width: 80px;
+    margin-right: 12px;
+  }
+  span {
+    color: white;
+    font-size: 21px;
+    font-weight: bold;
+    letter-spacing: 4px;
+  }
+}
+
 .container {
   height: 100%;
   background: var(--theme-light-color);
@@ -17,21 +36,7 @@
       box-shadow: none;
     }
   }
-  .logo {
-    display: flex;
-    height: 64px;
-    flex-shrink: 0;
-    img {
-      width: 80px;
-      margin-right: 12px;
-    }
-    h1 {
-      color: white;
-      font-size: 21px;
-      font-weight: bold;
-      letter-spacing: 4px;
-    }
-  }
+
 
   .actionBar {
     margin-left: 16px;
@@ -43,14 +48,15 @@
     justify-items: right;
 
     button {
-      min-width: 120px;
+      width: 120px;
       margin: 2px;
     }
 
     .action {
       display: inline-block;
       height: 32px;
-      width: 110px;
+      width: 120px;
+      margin:2px;
       line-height: 32px;
       padding: 0 16px;
       border-radius: 3px;
@@ -87,11 +93,11 @@
 
     .loading {
       line-height: normal;
-      border-radius: 3px;
+      // border-radius: 3px;
 
       :global {
         .ant-spin-container {
-          border-radius: 3px;
+          // border-radius: 3px;
         }
       }
     }
@@ -108,7 +114,7 @@
   height: @footer-height;
   overflow: hidden;
   display: flex;
-  padding: 5px;
+  padding: 0 6px;
   align-items: center;
   justify-content: space-between;
   background-color: var(--theme-color);

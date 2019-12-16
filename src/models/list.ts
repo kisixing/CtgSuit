@@ -21,6 +21,7 @@ export default {
     pageCount: 0, // 页码长度
     pageItems: [], // [listItem,...] 床位信息
     fullScreenId: null,
+    activeId: null,
     pregnancy: {}, // 初始化，暂无使用
     showTodo: false,
     headData: []
@@ -261,6 +262,7 @@ interface IListState {
   page: number,
   pageItems: IBed[],
   fullScreenId: string,
+  activeId: string,
   pregnancy: object,
 }
 

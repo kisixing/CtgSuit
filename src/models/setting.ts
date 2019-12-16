@@ -26,7 +26,7 @@ export default {
     area_type: SettingStore.getSync('area_type'),
     areano: SettingStore.getSync('areano'),
     listLayoutOptions: [
-      [1, 2],
+      [2, 1],
       [2, 2],
       [3, 2],
       [3, 3],
@@ -36,6 +36,7 @@ export default {
       [4, 4],
     ],
     accounts: fakeData || [], // 所有账户信息列表
+    fashionable: false
   },
   effects: {
     *setListLayout({ payload }, { put }) {

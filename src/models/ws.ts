@@ -8,7 +8,8 @@ export default {
   namespace: 'ws',
   state: {
     data: new Map(),
-    status: EWsStatus.Pendding
+    status: EWsStatus.Pendding,
+    isOn: false
   },
   effects: {
     *connectWs(_, { put, call, select }) {
@@ -20,9 +21,15 @@ export default {
       if (status === EWsStatus.Success) return;
 
       let data: ICache = yield call(wsService.getDatacache.bind(wsService));
-      const offline = [...data.entries()].filter(([k, v]) => v.status === BedStatus.Offline).map(([k, v]) => k)
+      // const offline = [...data.entries()].filter(([k, v]) => v.status === BedStatus.Offline).map(([k, v]) => k)
+      const dirty = [...data.entries()].filter(([k, v]) => [BedStatus.Stopped, BedStatus.OfflineStopped].includes(v.status)).map(([k, v]) => k)
       yield put({ type: 'setState', payload: { data } });
-      yield put({ type: 'list/setState', payload: { offline: new Set(offline) } });
+      yield put({
+        type: 'list/setState', payload: {
+          // offline: new Set(offline),
+          dirty: new Set(dirty)
+        }
+      });
       yield put({ type: 'list/processListData' });
     },
     *updateData({ payload }, { put, select }) {

@@ -1,19 +1,19 @@
-import { useEffect, useCallback } from "react";
+import { useLayoutEffect, useCallback } from "react";
 import { event } from "@lianmed/utils";
 import { notification } from "antd";
 import { IBed } from '@/types';
+declare var __DEV__: boolean;
 
-notification.config({
-  top: 136
-});
 
 export default (listData: IBed[]) => {
 
     const findName = useCallback((unitId: string) => {
         const target = listData.find(_ => _.unitId === unitId)
+        unitId === '48-48' && target && console.log('gg', target.bedname)
+
         return target && target.bedname
     }, [listData])
-    useEffect(() => {
+    useLayoutEffect(() => {
         const audio: HTMLAudioElement = document.querySelector('#alarm')
         let timeout: NodeJS.Timeout
 
@@ -34,16 +34,17 @@ export default (listData: IBed[]) => {
             speechSU.voice = voices;
             speechSU.rate = rate;
             speechSynthesis.speak(speechSU);
-            notification.info({ message: `${text}号子机监护时间到`, duration: 10})
-
+            __DEV__ || notification.info({ message: `${text}号子机监护时间到`, duration: 10 })
         }
 
-        event.on('suit:alarmOn', onCb)
-        event.on('bed:announcer', announcerCb)
+        event
+            .on('suit:alarmOn', onCb)
+            .on('bed:announcer', announcerCb)
         return () => {
-            event.off('suit:alarmOn', onCb)
-            event.off('bed:announcer', announcerCb)
+            event
+                .off('suit:alarmOn', onCb)
+                .off('bed:announcer', announcerCb)
         };
-    }, [])
+    }, [findName])
 
 }

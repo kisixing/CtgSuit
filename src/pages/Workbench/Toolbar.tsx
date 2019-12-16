@@ -37,7 +37,6 @@ function Toolbar(props: FetalItem.IToolbarProps) {
     docid,
     status,
     unitId,
-    index,
     deviceno,
     bedno,
     bedname,
@@ -45,8 +44,9 @@ function Toolbar(props: FetalItem.IToolbarProps) {
   } = props
 
   const timeout = useRef(null)
-  const isMonitor = status === BedStatus.Working;
+  const isWorking = status === BedStatus.Working;
   const isOffline = status === BedStatus.Offline;
+  const isStopped = status === BedStatus.Stopped;
   const isOfflineStopped = status === BedStatus.OfflineStopped;
   const isCreated = !!pregnancyId;
 
@@ -136,7 +136,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
     setModalName('visible')
   };
 
-  const B = (p: ButtonProps) => <Button style={{ padding: '0 8px' }} {...p} disabled={p.disabled || isOfflineStopped}>{p.children}</Button>
+  const B = (p: ButtonProps) => <Button style={{ padding: '0 8px' }} {...p} disabled={p.disabled || (isOfflineStopped && !pregnancyId)}>{p.children}</Button>
   const fp = 12
   return (
     <>
@@ -157,19 +157,22 @@ function Toolbar(props: FetalItem.IToolbarProps) {
           transition: 'all 0.2s ease-out',
         }}
       >
-        {isMonitor || isOffline ? (
+        {isWorking || isOffline ? (
           <B icon="pause-circle" type="link" onClick={() => setModalName('confirmVisible')}>
             停止监护
           </B>
         ) : (
-            <B disabled={index === undefined} icon="play-circle" type="link" onClick={start}>
+            <B disabled={!isStopped} icon="play-circle" type="link" onClick={start}>
               开始监护
           </B>
           )}
         {/* 停止状态下不可以建档，监护、离线都是可以建档的 */}
-        <B icon="user-add" type="link" disabled={(!isMonitor && !isTodo && !isOffline) || isCreated} onClick={() => setModalName('visible')}>
+
+        <B icon="user-add" type="link" disabled={isCreated} onClick={() => setModalName('visible')}>
           {isCreated ? '已建档' : '建档'}
         </B>
+
+
         <B
           disabled={!isCreated}
           icon="pushpin"
@@ -178,14 +181,16 @@ function Toolbar(props: FetalItem.IToolbarProps) {
         >
           胎位标记
         </B>
-        <B
+        {/* <B
           disabled={!isCreated}
           icon="pie-chart"
           type="link"
           onClick={() => setModalName('analysisVisible')}
         >
           电脑分析
-        </B>
+        </B> */}
+
+        {/* O */}
         <B
           disabled={!isCreated}
           icon="printer"
@@ -279,7 +284,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
         bedname={bedname}
         isOffine={isOffline}
         isCreated={isCreated}
-        isMonitor={isMonitor}
+        isMonitor={isWorking}
         onCancel={handleCancel}
         onOk={end}
         onCreate={redirectCreate}
@@ -287,7 +292,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
       <SignModal
         visible={modalName === 'signVisible'}
         isCreated={isCreated}
-        isMonitor={isMonitor}
+        isMonitor={isWorking}
         onCancel={handleCancel}
         startTime={startTime}
         bedname={bedname}
