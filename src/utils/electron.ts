@@ -25,8 +25,8 @@ const remote = {
     getGlobal(name: string) {
         const a = {
             constant: {
-                SETTING_PATH: '.setting',
-                DEFAULT_SETTING_PATH: '.defaultSetting'
+                SETTING_PATH: 'setting.json',
+                DEFAULT_SETTING_PATH: 'defaultSetting.json'
             }
 
         }

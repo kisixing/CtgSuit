@@ -1,7 +1,7 @@
 {
   "name": "ctgsuit-electron",
-  "version": "1.12.10",
-  "description": "umi.js width electron",
+  "version": "13.0.8",
+  "description": "host replace pack",
   "main": "main/index.js",
   "author": "Timdan",
   "license": "ISC",
@@ -9,6 +9,8 @@
     "electron-config": "^1.0.0",
     "electron-debug": "^2.0.0",
     "electron-is": "^3.0.0",
-    "electron-log": "^2.2.14"
-  }
+    "electron-log": "^2.2.14",
+    "compressing": "^1.5.0"
+  },
+  "devDependencies": {}
 }

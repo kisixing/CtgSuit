@@ -72,3 +72,12 @@ export interface IBed {
     pageIndex?: number;
     data?: ICacheItem;
 }
+
+export interface IArea {
+    wardName: string
+    wardId: string
+    id: number
+    wardType:string
+    wardNamezh: string
+    note: string
+}

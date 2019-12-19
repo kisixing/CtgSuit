@@ -1,5 +1,5 @@
 import React, { useLayoutEffect } from 'react';
-import { Layout } from 'antd';
+import { Layout, message } from 'antd';
 import { connect } from 'dva';
 import { router } from 'umi';
 import withRouter from 'umi/withRouter';
@@ -14,6 +14,7 @@ import Foot from "./Foot";
 import Head from "./Head";
 import Side from "./Side";
 import useAlarm from "./useAlarm";
+import { request } from '@lianmed/utils';
 
 const styles = require('./BasicLayout.less')
 
@@ -24,11 +25,23 @@ const { Content } = Layout;
 
 const BasicLayout = (props: any) => {
 
-  const { dispatch, fashionable, children, wsStatus,listData } = props;
+  const { dispatch, fashionable, children, wsStatus, listData } = props;
 
 
   useLayoutEffect(() => {
+    ipcRenderer.send('ready')
+    ipcRenderer.on('installed', () => {
+      message.success('更新成功', 2).then(() => {
+        // eslint-disable-next-line no-restricted-globals
+        location.reload()
+      }, null)
+    })
+    const ward = settingStore.getSync('ward') || { id: '' }
+    console.log('wardId', typeof ward, ward)
 
+    request.get(`/wards/${ward.id}`).then(res => {
+      res && res.note && dispatch({ type: 'subscribe/setData', data:res.note.split(',')})
+    })
     const ws = new WsService(settingData).on('explode', data => {
       dispatch({
         type: 'ws/updateData', payload: { data }
@@ -111,6 +124,6 @@ const BasicLayout = (props: any) => {
 export default connect(({ global, list, loading, setting, ws, subscribe, ...rest }: any) => ({
   wsStatus: ws.status,
   fashionable: setting.fashionable,
-  listData:list.listData
+  listData: list.listData
 
 }))(withRouter(BasicLayout));

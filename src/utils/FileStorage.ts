@@ -18,23 +18,23 @@ export default class FileStorage {
         if (!obj) return;
         Object.assign(this.cache, obj)
     }
-    box(obj) {
-        if (!obj) return '';
+    box(obj: Object) {
+        if (!obj || (obj.constructor !== Object)) return '';
         this.setCache(obj)
-        return Object.entries(obj).map(_ => _.join('=')).join('\r\n')
+        return JSON.stringify(obj, null, 2)
     }
-    deBox(str) {
+    deBox(str: string) {
         if (!str) {
-            return []
+            return {}
         }
-        const obj = str
-            .split('\r\n')
-            .filter(_ => !!_)
-            .map(_ => _.split('='))
-            .reduce((prev, curr) => {
-                prev[curr[0]] = curr[1].trim()
-                return prev
-            }, {})
+        let obj: { [x: string]: any }
+
+        try {
+            obj = JSON.parse(str)
+        } catch (error) {
+            obj = {}
+        }
+
         this.setCache(obj)
         return obj
     }
@@ -46,7 +46,7 @@ export default class FileStorage {
         })
     }
     getString() {
-        return new Promise((resolve, reject) => {
+        return new Promise<string>((resolve, reject) => {
             fs.readFile(this.path, this.encoding, (err, res) => {
                 if (!err) {
                     resolve(res)
@@ -83,7 +83,7 @@ export default class FileStorage {
         key.forEach(_ => {
             result.push(obj[_] || '')
         })
-        return result.length < 2 ? result.join('') : result
+        return result.length < 2 ? result[0] : result
     }
     _handleWriteString(obj, key, value) {
         if (!Array.isArray(key)) {
@@ -95,7 +95,7 @@ export default class FileStorage {
         const o = { ...obj }
         key.forEach((k, index) => {
             const v = value[index] || ''
-            o[k] = String(v)
+            o[k] = v
         })
 
         return this.box(o)
@@ -112,6 +112,7 @@ export default class FileStorage {
                 fs.writeFile(this.path, result, this.encoding, err => {
                     if (err) {
                         reject(err)
+                        throw err
                     } else {
                         resolve(true)
                     }
@@ -119,6 +120,8 @@ export default class FileStorage {
 
             }).catch(err => {
                 reject(err)
+                throw err
+
             })
         })
     }
@@ -129,6 +132,8 @@ export default class FileStorage {
                 resolve(this._handleReadString(obj, key))
             }).catch(err => {
                 reject(err)
+                throw err
+
             })
 
         })

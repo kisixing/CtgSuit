@@ -10,7 +10,7 @@ export default {
         *setData({ data }: { data: string[] }, { put }) {
             data = [...new Set(data)]
             const str = data.join(',')
-            store.set('area_devices', str)
+            store.setSync('area_devices', str)
             yield put({ type: 'setState', payload: { data } })
             yield put({ type: 'list/processListData' })
             WsService._this.send(JSON.stringify(

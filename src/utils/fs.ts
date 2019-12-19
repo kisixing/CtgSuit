@@ -1,4 +1,5 @@
 import store from "store";
+const defaultSetting = require('../../app/main/config/defaultSetting.json')
 
 const fs = {
     stat(path: string, cb) {
@@ -21,10 +22,10 @@ const fs = {
         store.set(path, value)
     }
 }
-fs.stat('.setting', (err, data: string) => {
+fs.stat('setting.json', (err, data: string) => {
     if (err || !data.includes('ws')) {
-        fs.writeFileSync('.setting', require('../setting').default)
-        fs.writeFileSync('.defaultSetting', require('../setting').default)
+        fs.writeFileSync('setting.json', JSON.stringify(defaultSetting))
+        fs.writeFileSync('defaultSetting.json', JSON.stringify(defaultSetting))
     }
 })
 export default fs

@@ -14,7 +14,7 @@ const styles = require('./BasicLayout.less')
 const settingData = settingStore.cache
 const colors = AntdThemeManipulator.colors
 const { Footer } = Layout;
-
+declare var __VERSION: string;
 const Foot = (props: any) => {
 
     const theme = useRef(null)
@@ -39,17 +39,9 @@ const Foot = (props: any) => {
                     style={{ display: 'none' }}
                     primaryColor={primaryColor}
                     onChange={color => {
-                        settingStore.set('theme', color);
+                        settingStore.setSync('theme', color);
                     }}
                 />
-
-            </span>
-
-            {/* <span>
-                Copyright <Icon type="copyright" style={{ margin: '0 4px' }} /> {config.copyright}
-            </span> */}
-            <span>
-
                 <QR>
                     <Button icon="qrcode" type="primary">
 
@@ -60,7 +52,13 @@ const Foot = (props: any) => {
                     type="primary"
                     onClick={() => ipcRenderer.send('newWindow', '操作说明')}
                 />
+            </span>
 
+            {/* <span>
+                Copyright <Icon type="copyright" style={{ margin: '0 4px' }} /> {config.copyright}
+            </span> */}
+            <span>
+                <span style={{ padding: '0 4px' }} title="当前版本" >v{__VERSION}</span>
             </span>
         </Footer>
     );

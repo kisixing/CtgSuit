@@ -1,8 +1,7 @@
 const path = require('path');
 const is = require('electron-is');
-
 function getMainPath() {
-  let filePath = `file://${path.join(__dirname, '..', '..', 'render/index.html')}`;
+  let filePath = `${path.join(__dirname, '..', '..', 'render/index.html')}`;
   if (is.dev()) {
     filePath = 'http://127.0.0.1:1702/';
   }

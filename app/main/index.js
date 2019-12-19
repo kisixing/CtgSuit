@@ -1,9 +1,9 @@
 // Modules to control application life and create native browser window
+require('./init')
 const { app, BrowserWindow, ipcMain, Menu, dialog } = require('electron');
 const { getMainPath, getNewPath } = require('./config/window');
 const menus = require('./config/menu');
-const fs = require('fs');
-const constant = require('./config/constant');
+
 const printerFatory = require('./utils/printerFatory')
 const printPdf = printerFatory('.tmp/')
 require('./utils/globalMount')()
@@ -125,15 +125,7 @@ function createWindow() {
     );
     e.preventDefault();
   });
-  fs.stat(constant.SETTING_PATH, err => {
-    if (err) {
-      const metaData = fs.readFileSync(constant.DEFAULT_SETTING_PATH,'utf-8')
-      fs.writeFile(constant.SETTING_PATH, metaData, () => { })
-      fs.writeFile(constant.DEFAULT_SETTING_PATH__RUNTIME, `export default ${JSON.stringify(metaData)}`, () => { })
 
-      // fs.createReadStream(constant.DEFAULT_SETTING_PATH).pipe(writeStream).pipe(writeStreamRuntime)
-    }
-  })
 
 }
 
@@ -163,3 +155,6 @@ app.on('activate', function () {
 // code. You can also put them in separate files and require them here.
 // 在这个文件中，你可以续写应用剩下主进程代码。
 // 也可以拆分成几个文件，然后用 require 导入。
+exports.getMainWindow = () => {
+  return mainWindow
+}

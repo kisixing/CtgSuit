@@ -49,7 +49,7 @@ function Tabs({ pageData, page, dispatch, showTodo, location }: IProps) {
           <B bednames={bednames} key={bednames.join(' ')} index={index} active={index === page} />
         );
       })}
-      <Button size="small" style={{ marginL: '0 4px', marginLeft: pageData.length && 80, background: showTodo ? 'white' : 'var(--theme-hover-color)' }} onClick={() => {
+      <Button size="small" style={{ margin: '0 4px', marginLeft: pageData.length && 80, background: showTodo ? 'white' : 'var(--theme-hover-color)' }} onClick={() => {
         location.pathname.includes('workbench') || router.replace('/workbench');
 
         setTimeout(() => {

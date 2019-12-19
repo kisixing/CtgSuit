@@ -4,11 +4,10 @@ const http = require('http')
 const execFile = require('child_process').execFile;
 const url = require('url')
 const printerPath = require('../config/constant').PRINTER_PATH
-
+const { tmp } = require('../config/path')
 
 module.exports = targetDir => {
-    targetDir = targetDir === void 0 ? '.tmp/' : targetDir
-    const tmpDir = path.resolve(targetDir)
+    const tmpDir = targetDir === void 0 ? tmp : path.resolve(targetDir)
 
     return fileUrl => {
         if (!fs.existsSync(tmpDir)) {

@@ -96,4 +96,4 @@
 //         return this._handleReadString(res, key)
 //     }
 // }
-// export const store = new Storage('./.setting')
+// export const store = new Storage('./setting.json')
