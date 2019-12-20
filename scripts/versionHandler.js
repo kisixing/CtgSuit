@@ -1,16 +1,12 @@
-const cp = require('child_process')
-const yp = require('yargs-parser')
-const fs = require('fs')
-const path = require('path')
-const pkgPath = path.resolve(__dirname, '../package.json')
-const pkgStr = fs.readFileSync(pkgPath, 'utf-8')
-const pkg = JSON.parse(pkgStr)
-pkg.version = `1.${new Date().getMonth() + 1}.${new Date().getDate()}`
-fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2))
+const { writeFile } = require('fs')
+const { pkg: pkgPath } = require('../app/main/config/path')
+delete require.cache[pkgPath];
+const pkg = require(pkgPath)
+const { version, description } = pkg
 
-const argvs = yp(process.argv.slice(2))
-const scriptName = argvs.target
-
-const p = cp.spawn('dir')
-p.stdout.on('data', d => console.log(d))
-p.on('error',e=>console.log(e))
+const arr = version.split('.')
+const len = arr.length
+arr[len - 1] = ~~arr[len - 1] + 1
+const newVersion = pkg.version = arr.join('.')
+writeFile(pkgPath, JSON.stringify(pkg, null, 2), e => console.log(e))
+return { version: newVersion, description }

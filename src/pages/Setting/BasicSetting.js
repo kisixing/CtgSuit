@@ -70,7 +70,7 @@ class BasicSetting extends Component {
         <Form.Item label="开发者工具">
           <Button onClick={() => ipcRenderer.send('openDevTools')}>开发者工具</Button>
         </Form.Item>
-        <Form.Item label="检查更新">
+        {/* <Form.Item label="检查更新">
 
           {newVersion ? (
 
@@ -85,7 +85,7 @@ class BasicSetting extends Component {
                 {newVersion ? '有版本更新' : '检查更新'}
               </Button>
             )}
-        </Form.Item>
+        </Form.Item> */}
       </Form>
     );
   }

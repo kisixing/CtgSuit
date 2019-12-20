@@ -1,11 +1,10 @@
 ws_url=192.168.123.10:8084
 xhr_url=192.168.123.10:9987
-print_interval=20
-theme=#4a148c
+print_interval=10
+theme=#0d47a1
 hospital_name=xxx医院
-version_number=1.0.1
-build_date=2019-10-15
-
+version_number=1.12.6
+build_date=2019-12-3
 normalarea=#ff0080
 selectarea=#8000ff
 rule=#408080
@@ -23,3 +22,8 @@ alarm_high=160
 alarm_low=110
 alarm_on_window=1
 alarm_on_sound=1
+area_devices=13,18,21,25,26,27,28,31,244,248,245,246,190,243
+areano=25w
+display_size=50.53 * 28.42 cm
+listLayout=2,2
+area_type=

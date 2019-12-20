@@ -60,7 +60,6 @@ export default {
             error: data,
           },
         });
-        throw data;
       }
     },
     *verification({ payload }, {call, put}) {

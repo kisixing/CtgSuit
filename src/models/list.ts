@@ -33,9 +33,9 @@ export default {
 
       let data: IBed[] = yield call(getList);
 
-      if (!subscribe.data.length) {
-        yield put({ type: 'subscribe/setData', data: [...new Set(data.map(_ => _.deviceno))] })
-      }
+      // if (!subscribe.data.length) {
+      //   yield put({ type: 'subscribe/setData', data: [...new Set(data.map(_ => _.deviceno))] })
+      // }
       yield put({
         type: 'setState',
         payload: { listData: data || [], rawData: data }

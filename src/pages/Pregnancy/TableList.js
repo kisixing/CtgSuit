@@ -6,6 +6,7 @@ import Highlighter from 'react-highlight-words';
 import EditModal from './EditModal';
 import styles from './TableList.less';
 import moment from 'moment';
+import SettingStore from '@/utils/SettingStore';
 
 class TableList extends Component {
   constructor(props) {
@@ -15,6 +16,8 @@ class TableList extends Component {
       current: {}, // 当前编辑孕册
       searchText: '', //
     };
+    this.isIn = SettingStore.getSync('area_type') === 'in'
+
     this.columns = [
       {
         title: '住院号',
@@ -30,7 +33,7 @@ class TableList extends Component {
         sorter: (a, b) => a.bedNO - b.bedNO,
         ...this.getColumnSearchProps('bedNO'),
       },
-      {
+      this.isIn && {
         //TODO render 名称
         // 10 住院中  20 出院
         title: '入院状态',
@@ -110,7 +113,7 @@ class TableList extends Component {
           );
         },
       },
-    ];
+    ].filter(_ => !!_);
   }
 
   componentDidMount() {
@@ -125,7 +128,7 @@ class TableList extends Component {
       type: 'pregnancy/fetchPregnancies',
       payload: {
         // 住院状态
-        'recordstate.equals': '10',
+        'recordstate.equals': this.isIn ? '10' : undefined,
         ...params
       },
     });
@@ -136,7 +139,7 @@ class TableList extends Component {
     dispatch({
       type: 'pregnancy/fetchCount',
       payload: {
-        'recordstate.equals': '10',
+        'recordstate.equals': this.isIn ? '10' : undefined,
         ...params
       },
     });
@@ -207,7 +210,7 @@ class TableList extends Component {
     const params = {
       'inpatientNO.contains': inpatientNO,
       'name.contains': name,
-      'recordstate.equals': recordstate,
+      'recordstate.equals': recordstate || undefined,
       'edd.equals': edd ? moment(edd).format('YYYY-MM-DD') : edd,
     };
     return params;

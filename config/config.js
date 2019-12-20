@@ -5,11 +5,24 @@ import { join } from 'path';
 import slash from 'slash';
 import path from 'path';
 import pageRoutes from './routes';
+import pxToViewPort from 'postcss-px-to-viewport';
 const isRuntime = process.env.BROWSER !== 'none'
+const pkg = require(path.resolve(__dirname, '../app/package.json'))
+
 export default {
   theme: {
     'primary-color': '#004c8c',
   },
+  // extraPostCSSPlugins: [
+  //   pxToViewPort({
+  //     viewportWidth: 1920,
+  //     unitPrecision: 5,
+  //     viewportUnit: 'vw',
+  //     selectorBlackList: [],
+  //     minPixelValue: 1,
+  //     mediaQuery: false,
+  //   }),
+  // ],
   treeShaking: true,
   publicPath: './',
   hash: true, // 是否开启 hash 文件后缀
@@ -68,7 +81,9 @@ export default {
   outputPath: './app/render', // 更改输出目录
   define: {
     TARGET: process.env.TARGET,
-    __DEV__: process.env.NODE_ENV !== 'production'
+    __DEV__: process.env.NODE_ENV !== 'production',
+    __VERSION: pkg.version,
+    __VERSION_MANIFEST: pkg.manifest
   },
 
   alias: {

@@ -22,7 +22,7 @@ export async function login(params) {
 export async function authenticate(params) {
   return request.post(`/authenticate`, {
     data: params,
-  });
+  })
 }
 
 /**
@@ -77,7 +77,7 @@ export async function getCTGrecords(params) {
   const string = stringify(params);
   return request.get(
     `/prenatal-visitspage?CTGExamId.specified=true&pregnancyId.specified=true${
-      string ? '&' : ''
+    string ? '&' : ''
     }${string}`,
   );
 }
@@ -92,7 +92,7 @@ export async function getCount(params) {
   const string = stringify(params);
   return request.get(
     `/prenatal-visits/count?CTGExamId.specified=true&pregnancyId.specified=true${
-      string ? '&' : ''
+    string ? '&' : ''
     }${string}`,
   );
 }

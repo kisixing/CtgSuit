@@ -35,7 +35,7 @@ function Tabs({ pageData, page, dispatch, showTodo, location }: IProps) {
         </Button>
       );
     },
-    [location, showTodo],
+    [dispatch, location.pathname, showTodo],
   )
   return (
     <div className={styles.tabs} >
@@ -44,10 +44,7 @@ function Tabs({ pageData, page, dispatch, showTodo, location }: IProps) {
           <B bednames={bednames} key={bednames.join(' ')} index={index} active={index === page} />
         );
       })}
-      <Button
-        size="small"
-        style={{ marginLeft: pageData.length && 80, background: showTodo ? 'white' : 'var(--theme-hover-color)' }}
-        onClick={() => {
+      <Button size="small" style={{ margin: '0 4px', marginLeft: pageData.length && 80, background: showTodo ? 'white' : 'var(--theme-hover-color)' }} onClick={() => {
         location.pathname.includes('workbench') || router.replace('/workbench');
           setTimeout(() => {
             dispatch({ type: 'list/setState', payload: { showTodo: true } })

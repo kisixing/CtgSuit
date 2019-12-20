@@ -39,7 +39,6 @@ export default function useTodo(showTodo: boolean, subscribeData: string[]): [IR
                 })
             }
 
-
         },
         [todo],
     )
@@ -59,33 +58,40 @@ export default function useTodo(showTodo: boolean, subscribeData: string[]): [IR
         () => {
             setTodoLoading(true);
             request.get('/ctg-exams-remain').then((res: IRemain[]) => {
-                return Promise.all(res.map(_ => request.get(`/ctg-exams-data/${_.note}`))).then(all => {
-                    setTodoLoading(false);
+                setTodoLoading(false);
+                res = res.map(_ => {
+                    const _index = _.note.lastIndexOf('_')
+                    const deviceno = _.note.slice(0, _index).split('_')[0]
+                    const dateString = _.note.slice(_index + 1)
+                    const t = ["-", "-", " ", ":", ":", ""]
+                    let starttime = '20' + dateString.split('').reduce((a, b, index) => {
+                        return a.concat(b) + ((index & 1) ? t[~~(index / 2)] : '')
+                    }, '')
+                    return {
+                        ..._,
+                        isTodo: true,
+                        deviceno,
+                        bedno: null,
+                        id: _.note,
+                        type: '',
+                        data: { docid: _.note, starttime, ismulti: false, GP: '/', status: null, } as any
+                    }
+                }).filter(_ => subscribeData.includes(_.deviceno))
+
+                return Promise.all(res.map(_ => request.get(`/ctg-exams-data/${_.note}`).catch(err => ({})))).then(all => {
                     setTodo(
                         res.map((_, index) => {
-                            const _index = _.note.lastIndexOf('_')
-                            const deviceno = _.note.slice(0, _index).split('_')[0]
-                            const dateString = _.note.slice(_index + 1)
-                            const t = ["-", "-", " ", ":", ":", ""]
-                            let starttime = '20' + dateString.split('').reduce((a, b, index) => {
-                                return a.concat(b) + ((index & 1) ? t[~~(index / 2)] : '')
-                            }, '')
                             return {
                                 ..._,
-                                isTodo: true,
-                                deviceno,
-                                bedno: null,
-                                id: _.note,
-                                type: '',
-                                data: { ...all[index], docid: _.note, starttime, ismulti: false, GP: '/', status: null, }
+                                data: { ..._.data, ...all[index], }
                             }
-                        }).filter(_ => subscribeData.includes(_.deviceno))
+                        })
                     )
-                })
+                }).catch(err => console.log(err))
             })
 
         },
-        []
+        [subscribeData]
     )
     return [
         todo, todoLoading

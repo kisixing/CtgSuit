@@ -1,7 +1,26 @@
 {
   "name": "ctgsuit-electron",
-  "version": "1.12.10",
-  "description": "umi.js width electron",
+  "version": "1.0.2",
+  "description": "host replace pack",
+  "manifest": [
+    {
+      "version": "1.0.1",
+      "details": [
+        "账号登录、登出、修改密码",
+        "待处理部分 bug修复，离线刷新获取优化",
+        "自动升级",
+        "多参部分显示优化，增加小比例显示",
+        "门诊建档支持",
+        "门诊、住院历史档案跟病区绑定"
+      ]
+    },
+    {
+      "version": "1.0.2",
+      "details": [
+        "移除左下角二维码图标"
+      ]
+    }
+  ],
   "main": "main/index.js",
   "author": "Timdan",
   "license": "ISC",
@@ -9,6 +28,8 @@
     "electron-config": "^1.0.0",
     "electron-debug": "^2.0.0",
     "electron-is": "^3.0.0",
-    "electron-log": "^2.2.14"
-  }
+    "electron-log": "^2.2.14",
+    "compressing": "^1.5.0"
+  },
+  "devDependencies": {}
 }

@@ -27,7 +27,7 @@ const C = (props: IProps) => {
 
     const comfirm = () => {
         setEditable(false)
-        dispatch({ type: 'subscribe/setData', data: selected })
+        dispatch({ type: 'subscribe/setData', note: selected.join(',') })
     }
     const remove = (key: string) => {
         const data = [...selected]
@@ -108,12 +108,12 @@ export const QR = connect(({ subscribe, setting }: any) => ({ subscribeData: sub
             qrcode.toDataURL(` subscribe_${area_type || null}_${areano || null}_${subscribeData.join(',') || null}`).then(_ => setSrc(_))
         }, [subscribeData, area_type, areano])
         return (
-          <Popover
-            {...others}
-            content={<img alt="Popover" style={{ width: 100, height: 100 }} src={src} />}
-          >
-            {children}
-          </Popover>
+            <Popover
+                {...others}
+                content={<img alt="Popover" style={{ width: 100, height: 100 }} src={src} />}
+            >
+                {children}
+            </Popover>
         );
     }
 )

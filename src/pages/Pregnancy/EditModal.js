@@ -17,6 +17,7 @@ import {
 import SettingStore from '@/utils/SettingStore';
 import styles from './index.less';
 
+
 const width = '200px';
 const areaNO = SettingStore.getSync('areano');
 
@@ -31,6 +32,8 @@ const EditModal = Form.create({
         required: false,
         searchValues: {},
       };
+      this.isIn = SettingStore.getSync('area_type') === 'in'
+
     }
 
     componentDidMount() {
@@ -234,19 +237,23 @@ const EditModal = Form.create({
                   )}
                 </Form.Item>
               </Col>
-              <Col span={12}>
-                <Form.Item label="住院状态">
-                  {getFieldDecorator('recordstate', {
-                    initialValue: '10',
-                    rules: [{ required: false, message: '请选择住院状态!' }],
-                  })(
-                    <Select allowClear style={{ width }}>
-                      <Select.Option value="10">住院中</Select.Option>
-                      <Select.Option value="11">已出院</Select.Option>
-                    </Select>,
-                  )}
-                </Form.Item>
-              </Col>
+              {
+                this.isIn && (
+                  <Col span={12}>
+                    <Form.Item label="住院状态">
+                      {getFieldDecorator('recordstate', {
+                        initialValue: '10',
+                        rules: [{ required: false, message: '请选择住院状态!' }],
+                      })(
+                        <Select allowClear style={{ width }}>
+                          <Select.Option value="10">住院中</Select.Option>
+                          <Select.Option value="11">已出院</Select.Option>
+                        </Select>,
+                      )}
+                    </Form.Item>
+                  </Col>
+                )
+              }
               <Col span={12}>
                 <Form.Item label="孕次">
                   {getFieldDecorator('gravidity', {

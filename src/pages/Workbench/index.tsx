@@ -7,6 +7,7 @@ import { IBed } from '@/types';
 import useTodo, { IRemain } from "./useTodo";
 import { event } from '@lianmed/utils';
 import { BedStatus } from '@lianmed/lmg/lib/services/types';
+
 interface IProps {
   pageItems: IBed[],
   [x: string]: any
@@ -19,7 +20,7 @@ const Home = (props: IProps) => {
 
   const itemSpan = 24 / listLayout[1];
   const outPadding = 6;
-  const contentHeight = parseInt(getComputedStyle(document.body).height) - 28 - 125
+  const contentHeight =document.querySelector('main').clientHeight 
   const itemHeight = (contentHeight - outPadding * 2) / listLayout[0];
   const items: any[] = (showTodo ? todo : pageItems);
 
