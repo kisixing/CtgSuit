@@ -15,14 +15,11 @@ interface IProps {
   location: Location
 }
 
-
 function Tabs({ pageData, page, dispatch, showTodo, location }: IProps) {
-
   const B = useCallback(
     ({ index, active }) => {
       return (
         <Button
-
           onClick={e => {
             dispatch({ type: 'list/setState', payload: { showTodo: false } })
             dispatch({ type: 'list/setPage', page: index });
@@ -40,8 +37,6 @@ function Tabs({ pageData, page, dispatch, showTodo, location }: IProps) {
     },
     [location, showTodo],
   )
-
-
   return (
     <div className={styles.tabs} >
       {pageData.map((bednames: string[], index) => {
@@ -49,15 +44,19 @@ function Tabs({ pageData, page, dispatch, showTodo, location }: IProps) {
           <B bednames={bednames} key={bednames.join(' ')} index={index} active={index === page} />
         );
       })}
-      <Button size="small" style={{ marginL: '0 4px', marginLeft: pageData.length && 80, background: showTodo ? 'white' : 'var(--theme-hover-color)' }} onClick={() => {
+      <Button
+        size="small"
+        style={{ marginLeft: pageData.length && 80, background: showTodo ? 'white' : 'var(--theme-hover-color)' }}
+        onClick={() => {
         location.pathname.includes('workbench') || router.replace('/workbench');
-
-        setTimeout(() => {
-          dispatch({ type: 'list/setState', payload: { showTodo: true } })
-        }, 0);
-
-
-      }} type={showTodo ? 'default' : 'primary'}>待处理</Button>
+          setTimeout(() => {
+            dispatch({ type: 'list/setState', payload: { showTodo: true } })
+          }, 0);
+        }}
+        type={showTodo ? 'default' : 'primary'}
+      >
+        待处理
+      </Button>
 
     </div>
   );

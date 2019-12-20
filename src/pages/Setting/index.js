@@ -11,6 +11,7 @@ import Subscribe from './Subscribe/index';
 import Account from './Account';
 import Hospital from './Hospital';
 import VersionManager from './VersionManager';
+import GroupAndWard from './GroupAndWard';
 
 import styles from './index.less';
 
@@ -20,7 +21,7 @@ class Setting extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      current: { label: '网络设置', value: '7' },
+      current: { label: '用户组和病区管理', value: '10' },
       results: {},
     };
   }
@@ -40,11 +41,16 @@ class Setting extends Component {
   menus = () => {
     const { current } = this.state;
     return (
-      <Menu mode="inline" selectedKeys={[current.value]} onClick={this.handleMenuClick}>
+      <Menu
+        mode="inline"
+        selectedKeys={[current.value]}
+        onClick={this.handleMenuClick}
+      >
         <Menu.Item key="5">网络设置</Menu.Item>
         <Menu.Item key="6">医院设置</Menu.Item>
         <Menu.Item key="7">订阅设置</Menu.Item>
         <Menu.Item key="8">账号管理</Menu.Item>
+        <Menu.Item key="10">用户组和病区管理</Menu.Item>
         <Menu.Item key="9">CTG设置</Menu.Item>
         <Menu.Item key="3">打印设置</Menu.Item>
         {/* <Menu.Item key="2">评分设置</Menu.Item>
@@ -86,6 +92,8 @@ class Setting extends Component {
         return <Account />
       case '9':
         return <Alarm />;
+      case '10':
+        return <GroupAndWard />
       case '0':
         return <VersionManager />;
       default:

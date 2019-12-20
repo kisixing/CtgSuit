@@ -1,13 +1,11 @@
 import React, { useMemo } from 'react';
 import { Ctg_Report as Report } from "@lianmed/pages";
-
 import moment from 'moment';
-
 import { ipcRenderer } from 'electron';
 import config from '@/utils/config';
-export const Context = React.createContext({})
 import Shell from "../Analysis/Shell";
 
+export const Context = React.createContext({});
 
 interface IProps {
   docid: string
@@ -22,8 +20,6 @@ interface IProps {
 
 const PrintPreview = (props: IProps) => {
   const { docid, name, age, gestationalWeek, inpatientNO, startTime } = props;
-
-
 
   const onDownload = () => {
     const filePath = `${config.apiPrefix}/ctg-exams-pdfurl/${docid}`

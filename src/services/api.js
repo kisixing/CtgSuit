@@ -197,3 +197,50 @@ export async function updateCTGNote(params) {
     data: params
   });
 }
+
+/**
+ * 修改个人账户密码
+ * @param {object} params {currentPassword, newPassword}
+ */
+export async function updatePassword(params) {
+  return request.post('/account/change-password', {
+    data: params,
+  });
+}
+
+/**
+ * 获取全部账户信息
+ */
+export async function getUsers() {
+  return request.get(`/users`);
+}
+
+/**
+ * 删除账户
+ *
+ * @export
+ * @param {*} username 登录名
+ * @returns
+ */
+export async function deleteUser(username) {
+  return request.delete(`/users/${username}`);
+}
+
+/**
+ * 修改账户信息
+ *
+ * @export
+ * @param {*} params
+ * @returns
+ */
+export async function updateUser(params) {
+  return request.put('/users', {
+    data: params,
+  });
+}
+
+export async function createUser(params) {
+  return request.post('/users', {
+    data: params,
+  });
+}

@@ -31,14 +31,14 @@ class TableList extends Component {
         title: '年龄',
         dataIndex: 'age',
         key: 'age',
-        width: 68,
+        width: 70,
         render: (text, record) => record.pregnancy && record.pregnancy.age,
       },
       {
         title: '孕周',
         dataIndex: 'gestationalWeek',
         key: 'gestationalWeek',
-        width: 68,
+        width: 70,
       },
       {
         title: '住院号',
@@ -82,7 +82,7 @@ class TableList extends Component {
         title: '档案号',
         dataIndex: 'comment',
         key: 'comment',
-        width: 150,
+        width: 180,
         align: 'center',
         render: (text, record) => record.ctgexam.note,
       },
@@ -91,15 +91,15 @@ class TableList extends Component {
         dataIndex: 'action',
         key: 'action',
         align: 'center',
-        width: 200,
+        width: 100,
         render: (text, record) => {
           return (
             <span>
-              <span className="primary-link" onClick={() => this.showPrint(record)}>
+              <span className="primary-link" onClick={(e) => this.showPrint(e, record)}>
                 报告
               </span>
               <Divider type="vertical" />
-              <span className="primary-link" onClick={() => this.showAnalysis(record)}>
+              <span className="primary-link" onClick={(e) => this.showAnalysis(e, record)}>
                 分析
               </span>
               {/* <Divider type="vertical" /> */}
@@ -175,14 +175,16 @@ class TableList extends Component {
     });
   };
 
-  showPrint = record => {
+  showPrint = (e, record) => {
+    e.stopPropagation();
     this.setState({ current: record }, () => {
       this.setState({ printVisible: true });
       this.handleRow(record);
     });
   };
 
-  showAnalysis = record => {
+  showAnalysis = (e, record) => {
+    e.stopPropagation();
     this.setState({ current: record }, () => {
       this.setState({ analysisVisible: true });
       this.handleRow(record);
@@ -407,16 +409,16 @@ class TableList extends Component {
         <Table
           bordered
           size="small"
-          scroll={{ x: 1250, y: 196 }}
+          scroll={{ x: 1280, y: 196 }}
           columns={this.columns}
           dataSource={dataSource}
-          // onRow={record => {
-          // // 当存在action时，会触发多个事件
-          //   return {
-          //     onClick: event => this.handleRow(record), // 点击行
-          //     onDoubleClick: event => {},
-          //   };
-          // }}
+          onRow={record => {
+          // 当存在action时，会触发多个事件
+            return {
+              onClick: event => this.handleRow(record), // 点击行
+              onDoubleClick: event => {},
+            };
+          }}
           loading={loading.effects['archives/fetchRecords']}
           rowKey="id"
           rowClassName={record => (record.id === selected.id ? styles.selectedRow : '')}
@@ -455,7 +457,6 @@ class TableList extends Component {
             visible={printVisible}
             onCancel={this.handleCancel}
             onCreate={this.handleCreate}
-            
             docid={selected.ctgexam && selected.ctgexam.note}
             startTime={selected.ctgexam && selected.ctgexam.startTime}
             inpatientNO={selected.pregnancy && selected.pregnancy.inpatientNO}
@@ -470,7 +471,6 @@ class TableList extends Component {
             onCancel={this.handleCancel}
             onCreate={this.handleCreate}
             docid={selected.ctgexam && selected.ctgexam.note}
-
             startTime={selected.ctgexam && selected.ctgexam.startTime}
             inpatientNO={selected.pregnancy && selected.pregnancy.inpatientNO}
             name={selected.pregnancy && selected.pregnancy.name}

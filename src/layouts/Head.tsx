@@ -1,24 +1,14 @@
 import React, { memo } from 'react';
-
 import { Layout } from 'antd';
-
 // import logo from '../assets/logo.png';
 import Beds from './Beds';
 import Tabs from './Tabs';
-
 import Menus from "./Menus";
 const styles = require('./BasicLayout.less')
 
-
-
 const { Header } = Layout;
-
 const H = () => {
-
-
-
     return (
-
         <Header className={styles.header}>
             {/* <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <Link to="/workbench" className={styles.logo}>
@@ -37,8 +27,6 @@ const H = () => {
                 <Tabs />
             </div>
         </Header>
-
-
     );
 }
 

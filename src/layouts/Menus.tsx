@@ -9,15 +9,7 @@ import { request } from '@lianmed/utils';
 import Account from "./Account";
 const styles = require('./BasicLayout.less')
 
-
-
-
 const M = (props: any) => {
-
-
-
-
-
     const handleMenuClick = useCallback(
         key => {
             request.get('/account')
@@ -38,17 +30,7 @@ const M = (props: any) => {
         []
     )
 
-
-
-
-
-
-
-
     return (
-
-
-
         <div className={styles.actionBar}>
 
             {[
@@ -75,8 +57,6 @@ const M = (props: any) => {
             })}
 
         </div>
-
-
     );
 }
 

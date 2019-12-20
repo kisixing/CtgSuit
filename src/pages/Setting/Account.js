@@ -10,6 +10,13 @@ import { connect } from 'dva';
 import { Table, Divider, Popconfirm, Button, Badge, Input, Select, message } from 'antd';
 import isEqual from 'lodash/isEqual';
 import moment from 'moment';
+import {
+  getUsers,
+  deleteUser,
+  updateUser,
+  createUser,
+} from '../../services/api';
+import { request } from '@lianmed/utils';
 
 class Account extends PureComponent {
   index = 0;
@@ -22,12 +29,14 @@ class Account extends PureComponent {
       loading: false,
       data: [],
       values: [],
+      groups: [],
+      wards: []
     };
     this.columns = [
       {
         title: '账号名称',
-        dataIndex: 'name',
-        key: 'name',
+        dataIndex: 'login',
+        key: 'id',
         width: 150,
         render: (text, record) => {
           if (record.editable) {
@@ -35,8 +44,8 @@ class Account extends PureComponent {
               <Input
                 value={text}
                 autoFocus
-                onChange={e => this.handleFieldChange(e, 'name', record.key)}
-                onKeyPress={e => this.handleKeyPress(e, record.key)}
+                onChange={e => this.handleFieldChange(e, 'login', record.id)}
+                onKeyPress={e => this.handleKeyPress(e, record.id)}
                 placeholder="账号名称"
               />
             );
@@ -55,19 +64,19 @@ class Account extends PureComponent {
               <Input.Password
                 value={text}
                 autoFocus
-                onChange={e => this.handleFieldChange(e, 'password', record.key)}
-                onKeyPress={e => this.handleKeyPress(e, record.key)}
+                onChange={e => this.handleFieldChange(e, 'password', record.id)}
+                onKeyPress={e => this.handleKeyPress(e, record.id)}
                 placeholder="账号密码"
               />
             );
           }
-          return text;
+          return '********'; // text;
         },
       },
       {
         title: '状态',
-        dataIndex: 'status',
-        key: 'status',
+        dataIndex: 'activated',
+        key: 'activated',
         width: 140,
         render: (text, record) => {
           if (record.editable) {
@@ -75,45 +84,135 @@ class Account extends PureComponent {
               <Select
                 value={text}
                 style={{ width: 120 }}
-                onChange={e => this.handleFieldChange(e, 'status', record.key)}
+                onChange={e =>
+                  this.handleFieldChange(e, 'activated', record.id)
+                }
                 // onKeyPress={e => this.handleKeyPress(e, record.key)}
                 placeholder="账户状态"
               >
-                <Select.Option value="0">停用</Select.Option>
-                <Select.Option value="1">激活</Select.Option>
-                <Select.Option value="2">注销</Select.Option>
+                <Select.Option value={true}>激活</Select.Option>
+                <Select.Option value={false}>停用</Select.Option>
               </Select>
             );
           }
-          if (text === '0') {
+          if (!text) {
             return <Badge status="error" text="停用" />;
-          } else if (text === '1') {
-            return <Badge status="success" text="激活" />;
           } else {
-            return <Badge status="default" text="注销" />;
+            return <Badge status="success" text="激活" />;
           }
         },
       },
       {
+        title: '用户组',
+        dataIndex: 'groups',
+        key: 'groups',
+        width: 150,
+        render: (text, record) => {
+          if (record.editable) {
+            const val = record['groups'].map(e => e && e.id);
+            const { groups } = this.state;
+            return (
+              <Select
+                mode="multiple"
+                value={val}
+                style={{ width: 136 }}
+                onFocus={this.fetchGroups}
+                onChange={e => {
+                  const { groups } = this.state;
+                  let selecteds = [];
+                  groups.map(a => {
+                    if (e.includes(a.id)) {
+                      selecteds.push(a);
+                    }
+                  })
+                  return this.handleFieldChange(selecteds, 'groups', record.id);
+                }}
+                placeholder="请选择用户组"
+              >
+                {groups && groups.length > 0 && groups.map(e => {
+                  return (
+                    <Select.Option key={e.id} value={e.id}>
+                      {e.nickname}
+                    </Select.Option>
+                  );
+                })}
+              </Select>
+            );
+          }
+          const str = record['groups'].map(e => e && e.nickname);
+          // console.log('TCL****', record, str.join(','));
+          return str.join(',');
+        },
+      },
+      {
+        title: '病区',
+        dataIndex: 'wards',
+        key: 'wards',
+        width: 150,
+        render: (text, record) => {
+          if (record.editable) {
+            const { wards } = this.state;
+            const val = record['wards'].map(e => e && e.wardId);
+            return (
+              <Select
+                mode="multiple"
+                value={val}
+                style={{ width: 136 }}
+                onFocus={this.fetchWards}
+                onChange={e => {
+                  const { wards } = this.state;
+                  let selecteds = [];
+                  wards.map(a => {
+                    if (e.includes(a.wardId)) {
+                      selecteds.push(a);
+                    }
+                  });
+                  return this.handleFieldChange(selecteds, 'wards', record.id);
+                }}
+                placeholder="请选择病区"
+              >
+                {wards &&
+                  wards.length > 0 &&
+                  wards.map(e => {
+                    return (
+                      <Select.Option key={e.wardId} value={e.wardId}>
+                        {e.wardName}
+                      </Select.Option>
+                    );
+                  })}
+              </Select>
+            );
+          }
+          const str = record['wards'].map(e => e && e.wardName);
+          return str.join(',');
+        },
+      },
+      {
         title: '创建者',
-        dataIndex: 'creator',
-        key: 'creator',
+        dataIndex: 'createdBy',
+        key: 'createdBy',
         width: 100,
       },
       {
         title: '创建时间',
-        dataIndex: 'createDate',
-        key: 'createTime',
+        dataIndex: 'createdDate',
+        key: 'createdDate',
         width: 150,
-        render: text => text && moment(text).format('YYYY-MM-DD HH:mm:ss'),
+        render: text =>
+          text
+            ? moment(text).format('YYYY-MM-DD HH:mm:ss')
+            : 'XXXX-XX-XX XX:XX',
       },
-      {
-        title: '最近更新',
-        dataIndex: 'updateDate',
-        key: 'updateDate',
-        width: 150,
-        render: text => text && moment(text).format('YYYY-MM-DD HH:mm:ss'),
-      },
+      // {
+      //   title: '最近更新',
+      //   dataIndex: 'lastModifiedDate',
+      //   key: 'lastModifiedDate',
+      //   width: 150,
+      //   render: text =>
+      //     text
+      //       ? moment(text).format('YYYY-MM-DD HH:mm:ss')
+      //       : 'XXXX-XX-XX XX:XX',
+      // },
       {
         title: '操作',
         dataIndex: 'actions',
@@ -128,9 +227,12 @@ class Account extends PureComponent {
             if (record.isNew) {
               return (
                 <span>
-                  <a onClick={e => this.saveRow(e, record.key)}>保存</a>
+                  <a onClick={e => this.saveRow(e, record.id)}>保存</a>
                   <Divider type="vertical" />
-                  <Popconfirm title="是否要删除此行？" onConfirm={() => this.remove(record.key)}>
+                  <Popconfirm
+                    title="是否要删除此行？"
+                    onConfirm={() => this.remove(record.id)}
+                  >
                     <a>删除</a>
                   </Popconfirm>
                 </span>
@@ -138,30 +240,36 @@ class Account extends PureComponent {
             }
             return (
               <span>
-                <a onClick={e => this.saveRow(e, record.key)}>保存</a>
+                <a onClick={e => this.saveRow(e, record.id)}>保存</a>
                 <Divider type="vertical" />
-                <a onClick={e => this.cancel(e, record.key)}>取消</a>
+                <a onClick={e => this.cancel(e, record.id)}>取消</a>
               </span>
             );
           } else {
-            const { status, key } = record;
+            const { activated, id } = record;
             let dom = null;
-            if (status === '0') {
-              dom = <a onClick={() => this.start(key)}>启用</a>;
-            } else if (status === '1') {
-              dom = <a onClick={() => this.stop(key)}>停用</a>;
+            if (!activated) {
+              dom = <a onClick={() => this.start(id)}>启用</a>;
             } else {
-              dom = <span>启用</span>;
+              dom = <a>停用</a>;
             }
             return (
               <>
-                <span className="primary-link" onClick={e => this.toggleEditable(e, record.key)}>
+                <span
+                  className="primary-link"
+                  onClick={e => this.toggleEditable(e, record.id)}
+                >
                   编辑
                 </span>
                 <Divider type="vertical" />
                 {dom}
                 <Divider type="vertical" />
-                <Popconfirm title="确认删除该条信息？" okText="确定" cancelText="取消">
+                <Popconfirm
+                  title="确认删除该条信息？"
+                  okText="确定"
+                  cancelText="取消"
+                  onConfirm={() => this.deleted(record.id, record.login)}
+                >
                   <span className="delete-link">删除</span>
                 </Popconfirm>
               </>
@@ -173,12 +281,24 @@ class Account extends PureComponent {
   }
 
   componentDidMount() {
-    const { dataSource } = this.props;
-    this.setState({
-      data: dataSource,
-      values: dataSource,
-    });
+    this.fetchUsers();
   }
+
+  // 获取全部账户信息
+  fetchUsers = () => {
+    this.setState({ loading: true });
+    getUsers()
+      .then(res => {
+        this.setState({ loading: false });
+        this.setState({
+          data: res,
+          values: res,
+        });
+      })
+      .catch(err => {
+        this.setState({ loading: false });
+      });
+  };
 
   start = key => {
     console.log('TCL: Account -> key -> start', key);
@@ -190,7 +310,7 @@ class Account extends PureComponent {
 
   getRowByKey(key, newData) {
     const { data } = this.state;
-    return (newData || data).filter(item => item.key === key)[0];
+    return (newData || data).filter(item => item.id === key)[0];
   }
 
   toggleEditable = (e, key) => {
@@ -214,25 +334,41 @@ class Account extends PureComponent {
     const newData = data.map(item => ({ ...item }));
     const date = moment();
     newData.push({
-      key: `NEW_TEMP_ID_${this.index}`,
-      name: '',
+      id: `NEW_TEMP_ID_${this.index}`,
+      login: '',
       password: '',
-      status: '1',
-      creator: account.login,
-      createDate: date,
-      updateDate: date,
+      activated: true,
+      createdBy: account.login,
+      createdDate: date,
+      lastModifiedBy: date,
       editable: true,
       isNew: true,
+      groups: [],
+      wards: [],
     });
     this.index += 1;
     this.setState({ data: newData });
   };
 
-  remove(key) {
+  // 删除本地新增的
+  remove = key => {
     const { data } = this.state;
-    const newData = data.filter(item => item.key !== key);
+    const newData = data.filter(item => item.id !== key);
     this.setState({ data: newData });
-  }
+  };
+
+  // 实际删除后台的
+  deleted = (key, name) => {
+    deleteUser(name)
+      .then(res => {
+        // 更新本地信息
+        message.success(`删除用户${name}成功！`);
+        this.remove(key);
+      })
+      .catch(err => {
+        message.error(`删除用户${name}失败，请稍后再试！`);
+      });
+  };
 
   handleKeyPress(e, key) {
     if (e.key === 'Enter') {
@@ -243,7 +379,13 @@ class Account extends PureComponent {
   handleFieldChange(e, fieldName, key) {
     const { data } = this.state;
     const newData = data.map(item => ({ ...item }));
-    console.log('TCL: Account -> handleFieldChange -> newData', newData);
+    console.log(
+      'TCL: Account -> handleFieldChange -> newData',
+      e,
+      fieldName,
+      key,
+      newData,
+    );
     const target = this.getRowByKey(key, newData);
     if (target) {
       const value = e.target ? e.target.value : e;
@@ -257,30 +399,55 @@ class Account extends PureComponent {
     this.setState({
       loading: true,
     });
-    setTimeout(() => {
-      if (this.clickedCancel) {
-        this.clickedCancel = false;
-        return;
-      }
-      const target = this.getRowByKey(key) || {};
-      if (!target.password || !target.name || !target.status) {
-        message.error('请填写完整成员信息。');
-        e.target.focus();
-        this.setState({
-          loading: false,
-        });
-        return;
-      }
-      delete target.isNew;
-      this.toggleEditable(e, key);
-      // const { data } = this.state;
-      // const { onChange } = this.props;
-      // onChange(data);
+    if (this.clickedCancel) {
+      this.clickedCancel = false;
+      return;
+    }
+    const target = this.getRowByKey(key) || {};
+    if (!target.password || !target.login) {
+      message.error('请填写完整成员信息。');
+      e.target.focus();
       this.setState({
         loading: false,
       });
-    }, 500);
+      return;
+    }
+    delete target.isNew;
+    console.log('TCL888', target);
+    this.toggleEditable(e, key);
+    const ID = target.id.toString();
+    if (ID.includes('NEW_TEMP_ID')) {
+      target.id = '';
+      this.create(target);
+    } else {
+      this.update(target);
+    }
+    this.setState({
+      loading: false,
+    });
   }
+
+  // 修改账户信息
+  update = params => {
+    updateUser(params)
+      .then(res => {
+        message.success(`修改用户${params.login}成功！`);
+      })
+      .catch(err => {
+        message.error(`修改用户${params.login}失败，请稍后再试！`);
+      });
+  };
+
+  // 新增账户
+  create = params => {
+    createUser(params)
+      .then(res => {
+        message.success(`新增用户${params.login}成功！`);
+      })
+      .catch(err => {
+        message.error(`新增用户${params.login}失败，请稍后再试！`);
+      });
+  };
 
   cancel(e, key) {
     this.clickedCancel = true;
@@ -297,11 +464,27 @@ class Account extends PureComponent {
     this.clickedCancel = false;
   }
 
+  fetchWards = () => {
+    request.get('/wards').then(res => {
+      this.setState({ wards: res });
+    });
+  };
+
+  fetchGroups = () => {
+    request.get('/groups').then(res => {
+      this.setState({ groups: res });
+    });
+  };
+
   render() {
     const { data, loading } = this.state;
     return (
       <>
-        <p style={{ fontWeight: 600, lineHeight: '40px', marginBottom: '24px' }}>账户管理</p>
+        <p
+          style={{ fontWeight: 600 }}
+        >
+          账户管理
+        </p>
         <Table
           loading={loading}
           size="small"
@@ -322,8 +505,6 @@ class Account extends PureComponent {
   }
 }
 
-export default connect(({ global, setting, loading }) => ({
+export default connect(({ global, setting }) => ({
   account: global.account,
-  dataSource: setting.accounts,
-  loading: loading,
 }))(Account);
