@@ -40,7 +40,7 @@ compressDir(rPath, tarName).then(v => {
 function flash(target) {
     const fileStat = statSync(target);
     const total = fileStat.size;
-    var bar = new progress('文件上传中[:bar] :rate/bps :percent :etas', {
+    var bar = new progress(`${version}上传中[:bar] :rate/bps :percent :etas`, {
         complete: '=',
         incomplete: ' ',
         width: 20,
