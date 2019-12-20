@@ -49,7 +49,7 @@ function appUpdate(e) {
                             f = false
                             enable ? run(tgzPath, tarPath) : (
                                 dialog.showMessageBox({
-                                    message: '检测到新版本，是否后台安装',
+                                    message: `检测到新版本${newV}，是否后台安装`,
                                     buttons: ['cancel', 'ok'],
                                 }, _ => {
                                     _ && run(tgzPath, tarPath)
@@ -72,13 +72,13 @@ function appUpdate(e) {
 
 
 module.exports = ['ready', appUpdate]
-appUpdate()
+
 function run(tgzPath, tarPath) {
     return gzip.uncompress(tgzPath, tarPath).then(() => {
         tar.uncompress(tarPath, isDev ? tmp : resources).then(() => {
             unlink(tarPath, e => !!e && logErr(e.stack))
             dialog.showMessageBox({
-                message: '应用更新成功，是否立即重启以生效？' + app.getVersion(),
+                message: '应用更新成功，是否立即重启以生效？',
                 buttons: ['cancel', 'ok'],
             }, _ => {
                 if (_) {

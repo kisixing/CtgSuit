@@ -4,15 +4,21 @@ const yp = require('yargs-parser')
 const request = require("request");
 var progress = require('progress');
 const compress = require('compressing')
-const { getVersionMessage } = require('./versionHandler')
-const { config: configPath } = require('../app/main/config/path')
+const { config: configPath, pkg: pkgPath } = require('../app/main/config/path')
 
 const { tar: { compressDir }, gzip: { compressFile } } = compress
 const { target, dir, base } = yp(process.argv.slice(2))
 
 const config = JSON.parse(readFileSync(configPath, 'utf-8'))
 
-const { version, description } = getVersionMessage()
+
+
+delete require.cache[pkgPath];
+const pkg = require(pkgPath)
+const { version, description } = pkg
+
+
+
 
 if (!target) return
 existsSync(dir) || mkdirSync(dir)

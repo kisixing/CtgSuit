@@ -8,13 +8,15 @@ import { ipcRenderer } from 'electron';
 import settingStore from "@/utils/SettingStore";
 import { QR } from "@/pages/Setting/Subscribe/index";
 import LayoutSetting from "./LayoutSetting";
-
+import VersionModal from "@/components/VersionModal";
 const styles = require('./BasicLayout.less')
 
 const settingData = settingStore.cache
 const colors = AntdThemeManipulator.colors
 const { Footer } = Layout;
 declare var __VERSION: string;
+declare var __VERSION_MANIFEST: string;
+console.log('__VERSION_MANIFEST', __VERSION_MANIFEST)
 const Foot = (props: any) => {
 
     const theme = useRef(null)
@@ -42,11 +44,11 @@ const Foot = (props: any) => {
                         settingStore.setSync('theme', color);
                     }}
                 />
-                <QR>
+                {/* <QR>
                     <Button icon="qrcode" type="primary">
 
                     </Button>
-                </QR>
+                </QR> */}
                 <Button
                     icon="question-circle"
                     type="primary"
@@ -60,6 +62,7 @@ const Foot = (props: any) => {
             <span>
                 <span style={{ padding: '0 4px' }} title="当前版本" >v{__VERSION}</span>
             </span>
+            <VersionModal />
         </Footer>
     );
 }

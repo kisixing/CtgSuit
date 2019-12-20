@@ -9,30 +9,7 @@ import { request } from '@lianmed/utils';
 import { stringify } from 'qs';
 import SettingStore from '@/utils/SettingStore';
 
-const width = '200px';
-const columns = [
-  {
-    title: '床号',
-    dataIndex: 'bedNO',
-    key: 'bedNO',
-    align: 'center',
-    width: '33.33%',
-  },
-  {
-    title: '姓名',
-    dataIndex: 'name',
-    key: 'name',
-    align: 'center',
-    width: '33.33%',
-  },
-  {
-    title: '住院号',
-    dataIndex: 'inpatientNO',
-    key: 'inpatientNO',
-    align: 'center',
-    width: '33.33%',
-  },
-];
+
 
 interface IProps {
   form: WrappedFormUtils
@@ -45,6 +22,35 @@ interface IProps {
   onCreated: any
 }
 const CollectionCreateForm = (props: IProps) => {
+
+  const isIn = SettingStore.getSync('area_type') === 'in'
+
+  const noLabel = isIn ? '住院号' : '门诊号'
+  const noKey = isIn ? 'inpatientNO' : 'outpatientNO'
+  const width = '200px';
+  const columns = [
+    isIn && {
+      title: '床号',
+      dataIndex: 'bedNO',
+      key: 'bedNO',
+      align: 'center',
+      width: '33.33%',
+    },
+    {
+      title: '姓名',
+      dataIndex: 'name',
+      key: 'name',
+      align: 'center',
+      width: '33.33%',
+    },
+    {
+      title: noLabel,
+      dataIndex: noKey,
+      key: noKey,
+      align: 'center',
+      width: '33.33%',
+    },
+  ].filter(_ => !!_);
 
   const {
     starttime,
@@ -173,7 +179,7 @@ const CollectionCreateForm = (props: IProps) => {
           'recordstate.equals': '10', // 住院中
           'areaNO.equals': areaNO, // 默认病区
           'bedNO.equals': values.bedNO ? values.bedNO : undefined, // 床号
-          'inpatientNO.equals': values.inpatientNO ? values.inpatientNO : undefined, // 住院号
+          [`${noKey}.equals`]: values[noKey] ? values[noKey] : undefined, // 住院号
           'name.equals': values.name ? values.name : undefined,
         })}`,
       );
@@ -194,8 +200,8 @@ const CollectionCreateForm = (props: IProps) => {
   };
 
   const selectRow = record => {
-     form.setFieldsValue(record);
-     setDisabled(true);
+    form.setFieldsValue(record);
+    setDisabled(true);
   };
 
   const handleCreate = () => {
@@ -203,14 +209,14 @@ const CollectionCreateForm = (props: IProps) => {
       if (err) {
         return null;
       } else {
-        if (!values.bedNO) {
+        if (!values.bedNO && isIn) {
           return message.error('请输入患者床号！');
         }
         if (!values.name) {
           return message.error('请输入患者姓名！');
         }
-        if (!values.inpatientNO) {
-          return message.error('请输入患者住院号！');
+        if (!values[noKey]) {
+          return message.error(`请输入患${noLabel}！`);
         }
         return onCreate(values);
       }
@@ -327,20 +333,24 @@ const CollectionCreateForm = (props: IProps) => {
               })(<Input />)}
             </Form.Item>
           </Col>
-          <Col span={12}>
-            <Form.Item label={<span className="required">床号</span>}>
-              {getFieldDecorator('bedNO', {
-                rules: [
-                  { required: false, message: '请填写孕妇床号!' },
-                  { max: 6, message: '床号的最大长度为6' },
-                  { validator: validateNoChinese },
-                ],
-                getValueFromEvent: event => event.target.value.replace(/\s+/g, ''),
-              })(
-                <Input autoFocus disabled={disabled} placeholder="输入床号..." style={{ width }} />,
-              )}
-            </Form.Item>
-          </Col>
+          {
+            isIn && (
+              <Col span={12}>
+                <Form.Item label={<span className="required">床号</span>}>
+                  {getFieldDecorator('bedNO', {
+                    rules: [
+                      { required: false, message: '请填写孕妇床号!' },
+                      { max: 6, message: '床号的最大长度为6' },
+                      { validator: validateNoChinese },
+                    ],
+                    getValueFromEvent: event => event.target.value.replace(/\s+/g, ''),
+                  })(
+                    <Input autoFocus disabled={disabled} placeholder="输入床号..." style={{ width }} />,
+                  )}
+                </Form.Item>
+              </Col>
+            )
+          }
           <Col span={12}>
             <Form.Item label={<span className="required">姓名</span>}>
               {getFieldDecorator('name', {
@@ -353,15 +363,15 @@ const CollectionCreateForm = (props: IProps) => {
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item label={<span className="required">住院号</span>}>
-              {getFieldDecorator('inpatientNO', {
+            <Form.Item label={<span className="required">{noLabel}</span>}>
+              {getFieldDecorator(noKey, {
                 rules: [
-                  { required: false, message: '请填写孕妇住院号!' },
-                  { max: 12, message: '住院号的最大长度为12' },
+                  { required: false, message: `请填写孕妇${noLabel}!` },
+                  { max: 12, message: `${noLabel}的最大长度为12` },
                   { validator: validateNoChinese },
                 ],
                 getValueFromEvent: event => event.target.value.replace(/\s+/g, ''),
-              })(<Input disabled={disabled} placeholder="输入住院号..." style={{ width }} />)}
+              })(<Input disabled={disabled} placeholder={`输入${noLabel}...`} style={{ width }} />)}
             </Form.Item>
           </Col>
           <Col span={12}>

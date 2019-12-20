@@ -1,4 +1,4 @@
-import React, { } from 'react';
+import React, { useState } from 'react';
 
 import { Menu, Icon, Modal, Avatar, Spin } from 'antd';
 import { connect } from 'dva';
@@ -7,6 +7,7 @@ import store from 'store';
 import { ipcRenderer } from 'electron';
 import HeaderDropdown from '@/components/HeaderDropdown';
 // import logo from '../assets/logo.png';
+import ChangePassword from "@/components/ChangePassword";
 
 const styles = require('./BasicLayout.less')
 
@@ -18,6 +19,7 @@ const A = (props: any) => {
     const { account, loading } = props;
 
 
+    const [changPassWordVisible, setChangPassWordVisible] = useState(false)
 
 
 
@@ -72,6 +74,10 @@ const A = (props: any) => {
                 <Icon type="logout" />
                 <span>退出系统</span>
             </Menu.Item>
+            <Menu.Item onClick={() => setChangPassWordVisible(true)}>
+                <Icon type="form" />
+                <span>修改密码</span>
+            </Menu.Item>
         </Menu>
     );
     return (
@@ -88,6 +94,8 @@ const A = (props: any) => {
                     <span className={styles.name}>{account.login}</span>
                 </span>
             </HeaderDropdown>
+            <ChangePassword visible={changPassWordVisible} onCancel={() => setChangPassWordVisible(false)} />
+
         </Spin>
     );
 };

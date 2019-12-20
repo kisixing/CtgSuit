@@ -16,8 +16,6 @@ const M = (props: any) => {
 
 
 
-
-
     const handleMenuClick = useCallback(
         key => {
             request.get('/account')
@@ -73,7 +71,6 @@ const M = (props: any) => {
                     </Button>
                 );
             })}
-
         </div>
 
 

@@ -73,11 +73,11 @@ export interface IBed {
     data?: ICacheItem;
 }
 
-export interface IArea {
-    wardName: string
-    wardId: string
-    id: number
-    wardType:string
-    wardNamezh: string
-    note: string
+export interface IWard {
+    wardName?: string
+    wardId?: string
+    id?: number
+    wardType?: 'in' | 'out'
+    wardNamezh?: string
+    note?: string
 }

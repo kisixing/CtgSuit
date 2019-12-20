@@ -3,7 +3,7 @@ import { connect } from 'dva';
 import { Button, Row, Form, Input, Icon, Alert, Select } from 'antd';
 import config from '@/utils/config';
 const styles = require('./Login.less')
-import { IArea } from "@/types";
+import { IWard } from "@/types";
 import { request } from '@lianmed/utils';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import store from '@/utils/SettingStore'
@@ -16,12 +16,12 @@ interface IProps {
 const Login = (props: IProps) => {
 
   const { loading, error, form, dispatch } = props;
-  const [areaList, setAreaList] = useState<IArea[]>([])
+  const [areaList, setAreaList] = useState<IWard[]>([])
   useEffect(() => {
     const old = store.getSync('ward')
     if (old) {
       setAreaList([old])
-      form.setFieldsValue({ wardId: old.id })
+      form.setFieldsValue({ wardId: old.id + '' })
     }
   }, [])
   const handleSubmit = e => {
@@ -35,13 +35,12 @@ const Login = (props: IProps) => {
       dispatch({ type: 'login/login', payload: others })
         .then(() => {
 
-          const ward = { id: wardId, wardName: areaList.find(_ => _.id == wardId).wardName }
-          store.setSync('ward', ward)
+          store.setSync('ward', areaList.find(_ => _.id == wardId))
           form.resetFields();
         })
     });
   };
-  const fetchAreaList = () => {
+  const onDropdownVisible = () => {
     request.get(`/users/${form.getFieldValue('username')}`).then(({ wards }) => {
       wards && setAreaList(wards)
     })
@@ -57,7 +56,7 @@ const Login = (props: IProps) => {
         <Form onSubmit={handleSubmit}>
           <FormItem hasFeedback>
             {getFieldDecorator('username', {
-              initialValue: 'admin',
+              // initialValue: 'admin',
 
               rules: [
                 {
@@ -76,7 +75,7 @@ const Login = (props: IProps) => {
           </FormItem>
           <FormItem hasFeedback>
             {getFieldDecorator('password', {
-              initialValue: '123456',
+              // initialValue: 'admin',
               rules: [
                 {
                   required: true,
@@ -104,7 +103,7 @@ const Login = (props: IProps) => {
               ],
             })(
 
-              <Select onDropdownVisibleChange={_ => _ && fetchAreaList()}>
+              <Select onDropdownVisibleChange={_ => _ && onDropdownVisible()}>
                 {
                   areaList.map(({ id, wardName }) => {
                     return (

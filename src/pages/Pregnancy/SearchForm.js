@@ -4,6 +4,7 @@ import moment from 'moment';
 import { connect } from 'dva';
 import { Form, Row, Col, Input, Select, DatePicker, Button, message } from 'antd';
 import EditModal from './EditModal';
+import SettingStore from '@/utils/SettingStore';
 
 import styles from './index.less';
 
@@ -14,10 +15,13 @@ class SearchForm extends Component {
     this.state = {
       visible: false,
     };
+    this.isIn = SettingStore.getSync('area_type') === 'in'
+    this.noKey = this.isIn ? 'inpatientNO' : 'outpatientNO'
+    this.noLabel = this.isIn ? '住院号' : '门诊号'
   }
 
   componentDidMount() {
-    this.props.form.setFieldsValue({ recordstate: '10' });
+    this.isIn && this.props.form.setFieldsValue({ recordstate: '10' });
   }
 
   hide = () => {
@@ -35,11 +39,11 @@ class SearchForm extends Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         // console.log('Received values of form: ', values);
-        const { inpatientNO, name, recordstate, edd } = values;
+        const { name, recordstate, edd } = values;
         const params = {
-          'inpatientNO.contains': inpatientNO,
+          [`${this.noKey}.contains`]: values[this.noKey],
           'name.contains': name,
-          'recordstate.equals': recordstate,
+          'recordstate.equals': recordstate || undefined,
           'edd.equals': edd ? moment(edd).format('YYYY-MM-DD') : edd,
         };
         this.props.dispatch({
@@ -65,7 +69,7 @@ class SearchForm extends Component {
     dispatch({
       type: 'pregnancy/fetchCount',
       payload: {
-        'recordstate.equals': '10',
+        'recordstate.equals': this.isIn ? '10' : undefined,
         ...params,
       },
     });
@@ -101,7 +105,7 @@ class SearchForm extends Component {
     dispatch({
       type: 'pregnancy/fetchPregnancies',
       payload: {
-        'recordstate.equals': '10',
+        'recordstate.equals': this.isIn ? '10' : undefined,
       },
     });
   };
@@ -117,9 +121,9 @@ class SearchForm extends Component {
         <Form layout="inline" className={styles.searchForm} onSubmit={this.handleSubmit}>
           <Row>
             <Col span={4}>
-              <Form.Item label="住院号">
-                {getFieldDecorator('inpatientNO', {
-                  rules: [{ required: false, message: '请输入住院号!' }],
+              <Form.Item label={this.noLabel}>
+                {getFieldDecorator(this.noKey, {
+                  rules: [{ required: false, message: `请输入${this.noLabel}!` }],
                   getValueFromEvent: event => event.target.value.replace(/\s+/g, ''),
                 })(<Input allowClear type="text" />)}
               </Form.Item>
@@ -131,16 +135,20 @@ class SearchForm extends Component {
                 })(<Input allowClear type="text" />)}
               </Form.Item>
             </Col>
-            <Col span={4}>
-              <Form.Item label="住院状态">
-                {getFieldDecorator('recordstate')(
-                  <Select allowClear style={{ width: 174 }}>
-                    <Select.Option value="10">住院中</Select.Option>
-                    <Select.Option value="11">已出院</Select.Option>
-                  </Select>,
-                )}
-              </Form.Item>
-            </Col>
+            {
+              this.isIn && (
+                <Col span={4}>
+                  <Form.Item label="住院状态">
+                    {getFieldDecorator('recordstate')(
+                      <Select allowClear style={{ width: 174 }}>
+                        <Select.Option value="10">住院中</Select.Option>
+                        <Select.Option value="11">已出院</Select.Option>
+                      </Select>,
+                    )}
+                  </Form.Item>
+                </Col>
+              )
+            }
             <Col span={4}>
               <Form.Item label="预产期">
                 {getFieldDecorator('edd')(

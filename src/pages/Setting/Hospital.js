@@ -66,15 +66,15 @@ class Hospital extends PureComponent {
         <Form.Item label="病区类型">
           {getFieldDecorator('area_type', {
             rules: [{ required: false, message: '请输入区号!' }],
-          })(<Select placeholder="请输入病区类型!">
+          })(<Select placeholder="请输入病区类型!" disabled>
             <Select.Option value="in">住院</Select.Option>
             <Select.Option value="out">门诊</Select.Option>
           </Select>)}
         </Form.Item>
-        <Form.Item label="病区号">
+        <Form.Item label="病区">
           {getFieldDecorator('areano', {
             rules: [{ required: false, message: '请输入区号!' }],
-          })(<Input placeholder="请输入区号!" />)}
+          })(<Input placeholder="请输入区号!" disabled />)}
         </Form.Item>
         <Form.Item label="系统信息">
           {getFieldDecorator('version_number', {

@@ -1,7 +1,26 @@
 {
   "name": "ctgsuit-electron",
-  "version": "13.0.8",
+  "version": "1.0.2",
   "description": "host replace pack",
+  "manifest": [
+    {
+      "version": "1.0.1",
+      "details": [
+        "账号登录、登出、修改密码",
+        "待处理部分 bug修复，离线刷新获取优化",
+        "自动升级",
+        "多参部分显示优化，增加小比例显示",
+        "门诊建档支持",
+        "门诊、住院历史档案跟病区绑定"
+      ]
+    },
+    {
+      "version": "1.0.2",
+      "details": [
+        "移除左下角二维码图标"
+      ]
+    }
+  ],
   "main": "main/index.js",
   "author": "Timdan",
   "license": "ISC",

@@ -15,7 +15,7 @@ import Head from "./Head";
 import Side from "./Side";
 import useAlarm from "./useAlarm";
 import { request } from '@lianmed/utils';
-
+import { IWard } from "@/types";
 const styles = require('./BasicLayout.less')
 
 
@@ -39,8 +39,9 @@ const BasicLayout = (props: any) => {
     const ward = settingStore.getSync('ward') || { id: '' }
     console.log('wardId', typeof ward, ward)
 
-    request.get(`/wards/${ward.id}`).then(res => {
-      res && res.note && dispatch({ type: 'subscribe/setData', data:res.note.split(',')})
+    request.get(`/wards/${ward.id}`).then(({ note, wardType, wardId }: IWard) => {
+
+      note && wardType && wardId && dispatch({ type: 'subscribe/setData', note, wardType, wardId })
     })
     const ws = new WsService(settingData).on('explode', data => {
       dispatch({
