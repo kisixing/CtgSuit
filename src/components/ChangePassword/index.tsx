@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Modal, Form, Radio, Input, message } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { Suit } from '@lianmed/lmg/lib/Ctg/Suit';
-import { request } from '@lianmed/utils';
+import request from '@/utils/request';
 
 interface IProps {
     form: WrappedFormUtils

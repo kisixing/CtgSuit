@@ -5,7 +5,7 @@ import { router } from 'umi';
 import withRouter from 'umi/withRouter';
 import { ipcRenderer } from 'electron';
 // import logo from '../assets/logo.png';
-import { request } from '@lianmed/utils';
+import request from '@/utils/request';
 import Account from "./Account";
 const styles = require('./BasicLayout.less')
 
