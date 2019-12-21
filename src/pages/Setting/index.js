@@ -50,7 +50,7 @@ class Setting extends Component {
         <Menu.Item key="6">医院设置</Menu.Item>
         <Menu.Item key="7">订阅设置</Menu.Item>
         <Menu.Item key="8">账号管理</Menu.Item>
-        <Menu.Item key="10">用户组和病区管理</Menu.Item>
+        {/* <Menu.Item key="10">用户组和病区管理</Menu.Item> */}
         <Menu.Item key="9">CTG设置</Menu.Item>
         <Menu.Item key="3">打印设置</Menu.Item>
         {/* <Menu.Item key="2">评分设置</Menu.Item>

@@ -3,8 +3,10 @@ import { Button, Row, Col, Icon, Popover } from "antd";
 import { qrcode } from '@lianmed/utils'
 import { connect, DispatchProp } from 'dva';
 import Table from "./Table";
-import useStupidConcat from './useStupidConcat'
-// import store from '@/utils/SettingStore'
+import useStupidConcat from './useStupidConcat';
+import request from "@lianmed/request";
+import store from '@/utils/SettingStore';
+import { IBed } from '@/types';
 
 interface IProps extends DispatchProp {
     subscribeData?: string[]
@@ -15,9 +17,12 @@ const C = (props: IProps) => {
 
     const { subscribeData, dispatch } = props
     const [editable, setEditable] = useState(false)
-    const [selected, setSelected] = useState<string[]>([])
+    const [selected, setSelected] = useState<string[]>([]);
+    const [opml, setOpml] = useState([])
+
     useEffect(() => {
-        setSelected(subscribeData)
+        setSelected(subscribeData);
+        fetch()
     }, [subscribeData])
 
     const cancel = () => {
@@ -34,7 +39,16 @@ const C = (props: IProps) => {
         data.splice(data.indexOf(key), 1)
         setSelected(data)
     }
-    const { list } = useStupidConcat()
+    // const areano = store.getSync('areano') || {}; // ward.wardId
+    // const { list } = useStupidConcat(areano);
+
+    const fetch = () => {
+      const ward = store.getSync('ward') || {};
+      request.get(`/wards/${ward.id}`).then((res) => {
+        const subs = res && res.note.split(',')
+        setOpml(subs);
+      })
+    }
 
     return (
         <div style={{}} >
@@ -47,24 +61,30 @@ const C = (props: IProps) => {
                     }}>
                         <div style={{ height: 140, overflow: 'scroll', padding: 4, }}>
                             {
-                                selected.map(id => {
-                                    const _ = list.find(_ => _.deviceno === id)
-                                    if (!_) return null
-                                    const deviceno = _.deviceno
-                                    return (
-                                        <Button onClick={e => { remove(deviceno) }} disabled={!editable} size="small" style={{ margin: '0 4px 4px 0' }} key={deviceno}>
-                                            {`${_.areaname}：${_.bedname}`}
-                                            {
-                                                editable && (
-                                                    <Icon type="close">
-
-                                                    </Icon>
-                                                )
-                                            }
-                                        </Button>
-                                    )
-                                })
+                                // selected.map(id => {
+                                //     const _ = list.find(_ => _.deviceno === id)
+                                //     if (!_) return null
+                                //     const deviceno = _.deviceno
+                                //     return (
+                                //         <Button onClick={e => { remove(deviceno) }} disabled={!editable} size="small" style={{ margin: '0 4px 4px 0' }} key={deviceno}>
+                                //             {`${_.areaname}：${_.bedname}`}
+                                //             {
+                                //                 editable && <Icon type="close"></Icon>
+                                //             }
+                                //         </Button>
+                                //     )
+                                // })
                             }
+                            {
+                              opml.map(e => {
+                                return (
+                                  <Button disabled={!editable} size="small" style={{ margin: '0 4px 4px 0' }} key={e}>
+                                    {e}
+                                  </Button>
+                                )
+                              })
+                            }
+                            
                         </div>
                         {
                             editable && (
@@ -80,7 +100,7 @@ const C = (props: IProps) => {
                     }
 
                 </Col>
-                <Col span={4}>
+                {/* <Col span={4}>
                     <Button style={{ marginBottom: 6, width: 74 }} type="primary" onClick={() => editable ? comfirm() : setEditable(!editable)}>{editable ? '确认' : '编辑'}</Button><br />
                     {
                         editable ? (
@@ -92,7 +112,7 @@ const C = (props: IProps) => {
                             )
                     }
 
-                </Col>
+                </Col> */}
             </Row>
         </div >
     );

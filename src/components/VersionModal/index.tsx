@@ -15,9 +15,9 @@ export const SignModal = (props: IProps) => {
         setVisible(isNew)
     }, [])
 
-    const target = __VERSION_MANIFEST.find(_ => _.version === __VERSION)
-    return (
-        target && target.details && (
+    const target = __VERSION_MANIFEST.find(_ => _.version === __VERSION);
+    if (target && target.details) {
+        return (
             <Modal
                 maskClosable={false}
                 destroyOnClose
@@ -43,8 +43,10 @@ export const SignModal = (props: IProps) => {
                 </ol>
 
             </Modal>
-        )
-    );
+        );
+    } else {
+        return null;
+    }
 }
 
 export default Form.create<IProps>()(SignModal);

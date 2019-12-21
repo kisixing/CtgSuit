@@ -6,7 +6,7 @@ import { ipcRenderer } from 'electron';
 // import logo from '../assets/logo.png';
 
 import settingStore from "@/utils/SettingStore";
-import { QR } from "@/pages/Setting/Subscribe/index";
+// import { QR } from "@/pages/Setting/Subscribe/index";
 import LayoutSetting from "./LayoutSetting";
 import VersionModal from "@/components/VersionModal";
 const styles = require('./BasicLayout.less')
@@ -16,7 +16,7 @@ const colors = AntdThemeManipulator.colors
 const { Footer } = Layout;
 declare var __VERSION: string;
 declare var __VERSION_MANIFEST: string;
-console.log('__VERSION_MANIFEST', __VERSION_MANIFEST)
+// console.log('__VERSION_MANIFEST', __VERSION_MANIFEST)
 const Foot = (props: any) => {
 
     const theme = useRef(null)

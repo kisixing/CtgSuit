@@ -14,7 +14,7 @@ import Foot from "./Foot";
 import Head from "./Head";
 import Side from "./Side";
 import useAlarm from "./useAlarm";
-import { request } from '@lianmed/utils';
+import request from '@/utils/request';
 import { IWard } from "@/types";
 
 const styles = require('./BasicLayout.less')
@@ -63,6 +63,7 @@ const BasicLayout = (props: any) => {
     dispatch({
       type: 'ws/connectWs',
     });
+    store.set();
     // send ipcMain
     ipcRenderer.send('clear-all-store', {
       name: 'clear all stroe!!!',
@@ -79,18 +80,17 @@ const BasicLayout = (props: any) => {
     }, 1000 * 60 * 60 * 2);
     return () => {
       clearInterval(interval);
+      store.clearAll();
     };
-  }, [dispatch])
+  }, [])
 
 
   useAlarm(listData);
 
-  useEffect(() => {
-    // Specify how to clean up after this effect:
-    return function cleanup() {
-      store.store.clearAll();
-    };
-  });
+  // useEffect(() => {
+  //   // Specify how to clean up after this effect:
+  //   return () => store.clearAll();
+  // });
 
   return (
     <Layout

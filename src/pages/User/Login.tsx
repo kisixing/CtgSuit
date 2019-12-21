@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'dva';
 import { Button, Row, Form, Input, Icon, Alert, Select } from 'antd';
 import config from '@/utils/config';
-const styles = require('./Login.less')
 import { IWard } from "@/types";
-import { request } from '@lianmed/utils';
+// import { request } from '@lianmed/utils';
+import request from '@/utils/request';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import store from '@/utils/SettingStore'
+import store from '@/utils/SettingStore';
+
+const styles = require('./Login.less');
 const FormItem = Form.Item;
 
 interface IProps {
@@ -17,16 +19,17 @@ const Login = (props: IProps) => {
 
   const { loading, error, form, dispatch } = props;
   const [areaList, setAreaList] = useState<IWard[]>([])
-  useEffect(() => {
-    const old = store.getSync('ward')
-    if (old) {
-      setAreaList([old])
-      form.setFieldsValue({ wardId: old.id + '' })
-    }
-  }, [])
+  // useEffect(() => {
+  //   // 病区保存在ward对象
+  //   const old = store.getSync('ward')
+  //   if (old) {
+  //     setAreaList([old])
+  //     form.setFieldsValue({ wardId: old.id + '' })
+  //   }
+  // }, []);
+
   const handleSubmit = e => {
     e.preventDefault();
-    const { } = props;
     const { validateFields } = form;
     validateFields((errors, { wardId, ...others }) => {
       if (errors) {
@@ -34,18 +37,22 @@ const Login = (props: IProps) => {
       }
       dispatch({ type: 'login/login', payload: others })
         .then(() => {
-
-          store.setSync('ward', areaList.find(_ => _.id == wardId))
+          // areano未旧的病区号
+          store.setSync('ward', areaList.find(_ => _.id == wardId));
+          store.setSync('areano', wardId);
           form.resetFields();
         })
     });
   };
+
   const onDropdownVisible = () => {
     request.get(`/users/${form.getFieldValue('username')}`).then(({ wards }) => {
       wards && setAreaList(wards)
     })
   }
+
   const { getFieldDecorator } = form;
+
   return (
     <>
       <div className={styles.container}>
@@ -102,18 +109,38 @@ const Login = (props: IProps) => {
                 },
               ],
             })(
-
-              <Select onDropdownVisibleChange={_ => _ && onDropdownVisible()}>
-                {
-                  areaList.map(({ id, wardName }) => {
-                    return (
-                      <Select.Option key={id}>
-                        {wardName}
-                      </Select.Option>
-                    )
-                  })
-                }
-              </Select>
+              <div style={{ position: 'relative' }}>
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: '5px',
+                    left: 0,
+                    display: 'inline-block',
+                    width: '30px',
+                    height: '30px',
+                    textAlign: 'right',
+                    lineHeight: '30px',
+                    zIndex: 9,
+                  }}
+                >
+                  <Icon type="gold" style={{ marginRight: '4px', color: '#999' }} />
+                </div>
+                <Select
+                  placeholder="选择病区"
+                  className={styles.select}
+                  onDropdownVisibleChange={_ => _ && onDropdownVisible()}
+                >
+                  {
+                    areaList.map(({ id, wardName }) => {
+                      return (
+                        <Select.Option key={id}>
+                          {wardName}
+                        </Select.Option>
+                      )
+                    })
+                  }
+                </Select>
+              </div>
             )}
           </FormItem>
           <Row>

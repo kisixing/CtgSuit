@@ -23,7 +23,7 @@ class Hospital extends PureComponent {
     store.getObj().then(({ hospital_name, areano, area_type, version_number, build_date }) => {
       form.setFieldsValue({
         hospital_name,
-        areano,
+        areano: store.getSync('ward').wardName,
         area_type
       });
     });
@@ -76,11 +76,11 @@ class Hospital extends PureComponent {
             rules: [{ required: false, message: '请输入区号!' }],
           })(<Input placeholder="请输入区号!" disabled />)}
         </Form.Item>
-        <Form.Item label="系统信息">
+        {/* <Form.Item label="系统信息">
           {getFieldDecorator('version_number', {
             rules: [{ required: false, message: '请输入系统信息!' }],
           })(<Input disabled placeholder="请输入系统信息!" />)}
-        </Form.Item>
+        </Form.Item> */}
         <Form.Item label="版本时间">
           {getFieldDecorator('build_date', {
             rules: [{ required: false, message: '请输入版本时间!' }],
