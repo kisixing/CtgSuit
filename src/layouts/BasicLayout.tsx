@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from 'react';
+import React, { useLayoutEffect, useEffect } from 'react';
 import { Layout, message } from 'antd';
 import { connect } from 'dva';
 import { router } from 'umi';
@@ -16,9 +16,8 @@ import Side from "./Side";
 import useAlarm from "./useAlarm";
 import { request } from '@lianmed/utils';
 import { IWard } from "@/types";
+
 const styles = require('./BasicLayout.less')
-
-
 const EWsStatus = WsService.wsStatus
 const settingData = settingStore.cache
 const { Content } = Layout;
@@ -26,7 +25,6 @@ const { Content } = Layout;
 const BasicLayout = (props: any) => {
 
   const { dispatch, fashionable, children, wsStatus, listData } = props;
-
 
   useLayoutEffect(() => {
     ipcRenderer.send('ready')
@@ -82,15 +80,21 @@ const BasicLayout = (props: any) => {
     return () => {
       clearInterval(interval);
     };
-  }, [])
+  }, [dispatch])
 
 
-  useAlarm(listData)
+  useAlarm(listData);
+
+  useEffect(() => {
+    // Specify how to clean up after this effect:
+    return function cleanup() {
+      store.store.clearAll();
+    };
+  });
 
   return (
     <Layout
       className={styles.container}
-
       onClickCapture={e => {
         // if (wsStatus !== EWsStatus.Success) {
         //   // e.stopPropagation()
@@ -107,9 +111,6 @@ const BasicLayout = (props: any) => {
         {
           fashionable && <Side />
         }
-
-
-
         <Layout>
           <Head />
 

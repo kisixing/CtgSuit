@@ -12,8 +12,6 @@ import {
 import { request } from '@lianmed/utils';
 import WardModal from './WardModal';
 
-import styles from './index.less';
-
 class Wards extends Component {
   constructor(params) {
     super(params);
@@ -145,9 +143,10 @@ class Wards extends Component {
       if (error) {
         return;
       }
+      const { note, ...filterValues } = values;
       request
         .post('/wards', {
-          data: values,
+          data: filterValues,
         })
         .then(res => {
           this.setState({ loading: false, visible: false });
@@ -169,7 +168,8 @@ class Wards extends Component {
       if (error) {
         return;
       }
-      const newValues = { ...selected, ...values };
+      const { note, ...filterValues } = values;
+      const newValues = { ...selected, ...filterValues };
       request
         .put('/wards', {
           data: newValues,

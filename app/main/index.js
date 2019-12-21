@@ -115,9 +115,9 @@ function createWindow() {
         } else {
           // ok
           // 窗口关闭按钮，提示弹窗，不清除登录信息，下次直接进入主页
-          ipcMain.on('clear-all-store', (event, params) => {
-            params.clearAll();
-          });
+          // ipcMain.on('clear-all-store', (event, params) => {
+          //   params.clearAll();
+          // });
           mainWindow = null;
           app.exit();
         }

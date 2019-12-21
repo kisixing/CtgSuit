@@ -108,8 +108,6 @@ export default {
         callback(res); // 返回结果
       }
     },
-    
-
   },
   reducers: {
     updateState(state, { payload }) {

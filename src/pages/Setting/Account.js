@@ -35,6 +35,28 @@ class Account extends PureComponent {
     this.columns = [
       {
         title: '账号名称',
+        dataIndex: 'firstName',
+        key: 'id',
+        width: 150,
+        render: (text, record) => {
+          if (record.editable) {
+            return (
+              <Input
+                value={text}
+                autoFocus
+                onChange={e =>
+                  this.handleFieldChange(e, 'firstName', record.id)
+                }
+                onKeyPress={e => this.handleKeyPress(e, record.id)}
+                placeholder="工号"
+              />
+            );
+          }
+          return text;
+        },
+      },
+      {
+        title: '工号',
         dataIndex: 'login',
         key: 'id',
         width: 150,
@@ -70,38 +92,38 @@ class Account extends PureComponent {
               />
             );
           }
-          return '********'; // text;
+          return '******'; // text;
         },
       },
-      {
-        title: '状态',
-        dataIndex: 'activated',
-        key: 'activated',
-        width: 140,
-        render: (text, record) => {
-          if (record.editable) {
-            return (
-              <Select
-                value={text}
-                style={{ width: 120 }}
-                onChange={e =>
-                  this.handleFieldChange(e, 'activated', record.id)
-                }
-                // onKeyPress={e => this.handleKeyPress(e, record.key)}
-                placeholder="账户状态"
-              >
-                <Select.Option value={true}>激活</Select.Option>
-                <Select.Option value={false}>停用</Select.Option>
-              </Select>
-            );
-          }
-          if (!text) {
-            return <Badge status="error" text="停用" />;
-          } else {
-            return <Badge status="success" text="激活" />;
-          }
-        },
-      },
+      // {
+      //   title: '状态',
+      //   dataIndex: 'activated',
+      //   key: 'activated',
+      //   width: 140,
+      //   render: (text, record) => {
+      //     if (record.editable) {
+      //       return (
+      //         <Select
+      //           value={text}
+      //           style={{ width: 120 }}
+      //           onChange={e =>
+      //             this.handleFieldChange(e, 'activated', record.id)
+      //           }
+      //           // onKeyPress={e => this.handleKeyPress(e, record.key)}
+      //           placeholder="账户状态"
+      //         >
+      //           <Select.Option value={true}>激活</Select.Option>
+      //           <Select.Option value={false}>停用</Select.Option>
+      //         </Select>
+      //       );
+      //     }
+      //     if (!text) {
+      //       return <Badge status="error" text="停用" />;
+      //     } else {
+      //       return <Badge status="success" text="激活" />;
+      //     }
+      //   },
+      // },
       {
         title: '用户组',
         dataIndex: 'groups',
@@ -116,7 +138,7 @@ class Account extends PureComponent {
                 mode="multiple"
                 value={val}
                 style={{ width: 136 }}
-                onFocus={this.fetchGroups}
+                // onFocus={this.fetchGroups}
                 onChange={e => {
                   const { groups } = this.state;
                   let selecteds = [];
@@ -124,18 +146,18 @@ class Account extends PureComponent {
                     if (e.includes(a.id)) {
                       selecteds.push(a);
                     }
-                  })
+                  });
                   return this.handleFieldChange(selecteds, 'groups', record.id);
                 }}
                 placeholder="请选择用户组"
               >
-                {groups && groups.length > 0 && groups.map(e => {
-                  return (
-                    <Select.Option value={e.id}>
-                      {e.nickname}
-                    </Select.Option>
-                  );
-                })}
+                {groups &&
+                  groups.length > 0 &&
+                  groups.map(e => {
+                    return (
+                      <Select.Option value={e.id}>{e.nickname}</Select.Option>
+                    );
+                  })}
               </Select>
             );
           }
@@ -158,7 +180,7 @@ class Account extends PureComponent {
                 mode="multiple"
                 value={val}
                 style={{ width: 136 }}
-                onFocus={this.fetchWards}
+                // onFocus={this.fetchWards}
                 onChange={e => {
                   const { wards } = this.state;
                   let selecteds = [];
@@ -175,9 +197,7 @@ class Account extends PureComponent {
                   wards.length > 0 &&
                   wards.map(e => {
                     return (
-                      <Select.Option value={e.id}>
-                        {e.wardName}
-                      </Select.Option>
+                      <Select.Option value={e.id}>{e.wardName}</Select.Option>
                     );
                   })}
               </Select>
@@ -318,6 +338,9 @@ class Account extends PureComponent {
     const { data } = this.state;
     const newData = data.map(item => ({ ...item }));
     const target = this.getRowByKey(key, newData);
+    // 获取select options
+    this.fetchGroups();
+    this.fetchWards()
     if (target) {
       // 进入编辑状态时保存原始数据
       if (!target.editable) {
@@ -336,6 +359,7 @@ class Account extends PureComponent {
     newData.push({
       id: `NEW_TEMP_ID_${this.index}`,
       login: '',
+      firstName: '',
       password: '',
       activated: true,
       createdBy: account.login,

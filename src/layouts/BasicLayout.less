@@ -56,12 +56,12 @@
       display: inline-block;
       height: 32px;
       width: 120px;
-      margin:2px;
+      margin: 2px;
       line-height: 32px;
-      padding-left: 16px;
       border-radius: 3px;
       cursor: pointer;
       transition: all 0.3s;
+      text-align: center;
       > i {
         color: @text-color;
         vertical-align: middle;
@@ -82,7 +82,7 @@
     .account {
       .avatar {
         margin: ~'calc((@{layout-header-height} - 24px) / 2)' 0;
-        margin-right: 8px;
+        margin-right: 4px;
         margin-top: 4px;
         margin-bottom: 4px;
         color: @primary-color;
@@ -104,6 +104,12 @@
   }
 }
 .name {
+  display: inline-block;
+  max-width: 90px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  word-break: break-all;
   color:#fff
 }
 .main {

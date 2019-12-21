@@ -52,16 +52,16 @@ class WardModal extends Component {
               </Select>,
             )}
           </Form.Item>
-          {/* <Form.Item label="订阅列表">
-            {getFieldDecorator('note', {
-              rules: [{ required: false, message: '请选择订阅列表!' }],
-            })(
-              <Select mode="multiple" placeholder="请选择订阅列表" disabled>
-                <Select.Option value="in">住院</Select.Option>
-                <Select.Option value="out">门诊</Select.Option>
-              </Select>,
-            )}
-          </Form.Item> */}
+          {title.includes('编辑') ? (
+            <Form.Item label="绑定设备列表">
+              {getFieldDecorator('note', {
+                rules: [{ required: false, message: '请选择订阅列表!' }],
+              })(
+                <Select mode="multiple" placeholder="请选择订阅列表" disabled>
+                </Select>,
+              )}
+            </Form.Item>
+          ) : null}
           <div style={{ textAlign: 'center' }}>
             <Button style={{ marginRight: '12px' }} onClick={onCancel}>
               取消

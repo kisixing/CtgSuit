@@ -5,7 +5,7 @@ import {
   newPregnancies
 } from '@/services/api';
 import { message } from 'antd';
-import SettingStore from '@/utils/SettingStore';
+// import SettingStore from '@/utils/SettingStore';
 
 export default {
   namespace: 'pregnancy',
@@ -31,12 +31,12 @@ export default {
         callback(res); // 返回结果
       }
       // 根据病区号过滤数据
-      const areaNO = SettingStore.getSync('areano');
-      const data = res.filter(e => e.pregnancy && e.pregnancy.areaNO === areaNO);
+      // const areaNO = SettingStore.getSync('areano');
+      // const data = res.filter(e => e.pregnancy && e.pregnancy.areaNO === areaNO);
       yield put({
         type: 'updateState',
         payload: {
-          pregnancies: data,
+          pregnancies: res,
           pagination: {
             size: params.size,
             page: params.page,
