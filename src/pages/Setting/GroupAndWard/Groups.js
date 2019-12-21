@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from 'react';
 import { Table, Card, Button, Divider, Tooltip, Popconfirm, message } from 'antd';
-import { request } from '@lianmed/utils';
+import request from '@/utils/request';
 import GroupModal from './GroupModal';
 
 import styles from './index.less';

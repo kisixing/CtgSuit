@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { BedStatus } from "@lianmed/lmg/lib/services/types";
-const { Working,Offline, Stopped } = BedStatus
+
+const { Working,Offline, Stopped } = BedStatus;
+
 export default (status: BedStatus, name: string, age: number) => {
     useEffect(() => {
         if ([Working]){

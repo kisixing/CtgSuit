@@ -5,7 +5,8 @@ import React, { useState } from 'react';
 import { Button, Modal, Form, Input, Row, Col, InputNumber, message, Table } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import moment from 'moment';
-import { request } from '@lianmed/utils';
+// import { request } from '@lianmed/utils';
+import request from '@/utils/request';
 import { stringify } from 'qs';
 import SettingStore from '@/utils/SettingStore';
 

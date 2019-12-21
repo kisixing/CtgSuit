@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Button, message } from 'antd';
 import moment from 'moment';
-import { event, request } from "@lianmed/utils";
+import { event } from "@lianmed/utils";
+import request from '@/utils/request';
 import CollectionCreateForm from './CollectionCreateForm';
 import Analysis from './Analysis';
 import PrintPreview from './PrintPreview';

@@ -4,7 +4,7 @@ import { qrcode } from '@lianmed/utils'
 import { connect, DispatchProp } from 'dva';
 import Table from "./Table";
 import useStupidConcat from './useStupidConcat';
-import request from "@lianmed/request";
+import request from '@/utils/request';
 import store from '@/utils/SettingStore';
 import { IBed } from '@/types';
 

@@ -31,15 +31,16 @@ const Login = (props: IProps) => {
   const handleSubmit = e => {
     e.preventDefault();
     const { validateFields } = form;
-    validateFields((errors, { wardId, ...others }) => {
+    validateFields((errors, { id, ...others }) => {
+      console.log('5555555555555555555555', id, others)
       if (errors) {
         return;
       }
       dispatch({ type: 'login/login', payload: others })
         .then(() => {
           // areano未旧的病区号
-          store.setSync('ward', areaList.find(_ => _.id == wardId));
-          store.setSync('areano', wardId);
+          store.setSync('ward', areaList.find(_ => _.id == id));
+          store.setSync('areano', areaList.find(_ => _.id == id)['wardId']);
           form.resetFields();
         })
     });
@@ -100,7 +101,34 @@ const Login = (props: IProps) => {
             )}
           </FormItem>
           <FormItem hasFeedback>
-            {getFieldDecorator('wardId', {
+            {getFieldDecorator('id', {
+              // initialValue: 'hi',
+              rules: [
+                {
+                  required: true,
+                  message: '请选择病区！',
+                },
+              ],
+            })(
+              <Select
+                  placeholder="选择病区"
+                  className={styles.select}
+                  onDropdownVisibleChange={_ => _ && onDropdownVisible()}
+                >
+                  {
+                    areaList.map(({ id, wardName }) => {
+                      return (
+                        <Select.Option value={id}>
+                          {wardName}
+                        </Select.Option>
+                      )
+                    })
+                  }
+                </Select>
+            )}
+          </FormItem>
+          {/* <FormItem hasFeedback>
+            {getFieldDecorator('id', {
               // initialValue: 'hi',
               rules: [
                 {
@@ -133,7 +161,7 @@ const Login = (props: IProps) => {
                   {
                     areaList.map(({ id, wardName }) => {
                       return (
-                        <Select.Option key={id}>
+                        <Select.Option value={id}>
                           {wardName}
                         </Select.Option>
                       )
@@ -142,7 +170,7 @@ const Login = (props: IProps) => {
                 </Select>
               </div>
             )}
-          </FormItem>
+          </FormItem> */}
           <Row>
             <Button type="primary" htmlType="submit" loading={loading.effects['login/login']}>
               <span>登陆</span>

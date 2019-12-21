@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import request from "@lianmed/request";
+import request from '@/utils/request';
 import { IBed } from '@/types';
 
 export default (areano?: string) => {

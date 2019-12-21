@@ -16,7 +16,8 @@ import {
   updateUser,
   createUser,
 } from '../../services/api';
-import { request } from '@lianmed/utils';
+// import { request } from '@lianmed/utils';
+import request from '@/utils/request';
 
 class Account extends PureComponent {
   index = 0;

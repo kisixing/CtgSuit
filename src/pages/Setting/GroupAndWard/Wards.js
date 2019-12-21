@@ -9,7 +9,7 @@ import {
   Popconfirm,
   message
 } from 'antd';
-import { request } from '@lianmed/utils';
+import request from '@/utils/request';
 import WardModal from './WardModal';
 
 class Wards extends Component {
