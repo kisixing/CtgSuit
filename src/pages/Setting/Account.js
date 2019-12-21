@@ -131,7 +131,7 @@ class Account extends PureComponent {
               >
                 {groups && groups.length > 0 && groups.map(e => {
                   return (
-                    <Select.Option key={e.id} value={e.id}>
+                    <Select.Option value={e.id}>
                       {e.nickname}
                     </Select.Option>
                   );
@@ -140,7 +140,6 @@ class Account extends PureComponent {
             );
           }
           const str = record['groups'].map(e => e && e.nickname);
-          // console.log('TCL****', record, str.join(','));
           return str.join(',');
         },
       },
@@ -152,7 +151,8 @@ class Account extends PureComponent {
         render: (text, record) => {
           if (record.editable) {
             const { wards } = this.state;
-            const val = record['wards'].map(e => e && e.wardId);
+            const val = record['wards'].map(e => e && e.id);
+            console.log('TCL666', val);
             return (
               <Select
                 mode="multiple"
@@ -163,7 +163,7 @@ class Account extends PureComponent {
                   const { wards } = this.state;
                   let selecteds = [];
                   wards.map(a => {
-                    if (e.includes(a.wardId)) {
+                    if (e.includes(a.id)) {
                       selecteds.push(a);
                     }
                   });
@@ -175,7 +175,7 @@ class Account extends PureComponent {
                   wards.length > 0 &&
                   wards.map(e => {
                     return (
-                      <Select.Option key={e.wardId} value={e.wardId}>
+                      <Select.Option value={e.id}>
                         {e.wardName}
                       </Select.Option>
                     );
