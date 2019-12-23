@@ -43,7 +43,8 @@ const A = (props: any) => {
                 cancelText: '取消',
                 onOk: function () {
                     // 清除sessionStorage
-                    store.clearAll();
+                    // store.clearAll();
+                    localStorage.removeItem('Lian-Med-Access-Token')
                     // 退出登录，回到登录页面
                     router.push('/user/login');
                 },

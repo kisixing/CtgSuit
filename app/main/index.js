@@ -74,7 +74,10 @@ function createWindow() {
     // webPreferences: {
     //   preload: path.join(__dirname, 'preload.js')
     // }
-  });
+  })
+  mainWindow.webContents.executeJavaScript(`
+    localStorage.removeItem('Lian-Med-Access-Token')
+  `)
 
   // 菜单栏设置
   Menu.setApplicationMenu(menus);
