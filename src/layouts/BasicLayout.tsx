@@ -68,7 +68,9 @@ const BasicLayout = (props: any) => {
     ipcRenderer.send('clear-all-store', {
       name: 'clear all stroe!!!',
       age: '18',
-      clearAll: () => store.clearAll(),
+      clearAll: () => {
+        localStorage.removeItem('Lian-Med-Access-Token')
+      },
     });
     // 每2h获取新的token
     const interval = setInterval(() => {
@@ -80,7 +82,7 @@ const BasicLayout = (props: any) => {
     }, 1000 * 60 * 60 * 2);
     return () => {
       clearInterval(interval);
-      store.clearAll();
+      // store.clearAll();
     };
   }, [])
 

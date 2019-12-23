@@ -62,7 +62,7 @@ export default {
         });
       }
     },
-    *verification({ payload }, {call, put}) {
+    *verification({ payload }, { call, put }) {
       // 验证用户登录
       const data = yield call(authenticate, payload);
       const auth = data && data.id_token ? true : false;
@@ -71,7 +71,7 @@ export default {
       }
     },
     *logout(_, { put }) {
-      store.clearAll();
+      localStorage.removeItem('Lian-Med-Access-Token')
       yield put({
         type: 'global/updateState',
         payload: {
