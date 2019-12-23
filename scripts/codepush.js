@@ -17,7 +17,7 @@ delete require.cache[pkgPath];
 const pkg = require(pkgPath)
 const { version, description } = pkg
 
-
+const { USERNAME: username } = process.env
 
 
 if (!target) return
@@ -26,7 +26,7 @@ existsSync(dir) || mkdirSync(dir)
 const dateTime = new Date().toLocaleString().replace(/[:]/g, '-')
 const rPath = path.resolve(base)
 const tarName = path.resolve(dir, `${target}`)
-const tgzName = path.resolve(dir, `${target} ${version} ${dateTime}`)
+const tgzName = path.resolve(dir, `${target} ${version} ${dateTime} ${username}`)
 
 compressDir(rPath, tarName).then(v => {
     compressFile(tarName, tgzName).then(() => {
@@ -55,7 +55,7 @@ function flash(target) {
         formData: {
             file: createReadStream(target).on('data', chunk => bar.tick(chunk.length)),
             name: version,
-            description: description,
+            description: `${username} 打的包`,
             type: "ctg-suit",
             uri: version,
         }

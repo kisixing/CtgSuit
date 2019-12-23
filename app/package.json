@@ -1,6 +1,6 @@
 {
   "name": "ctgsuit-electron",
-  "version": "1.0.16",
+  "version": "1.0.19",
   "description": "host replace pack",
   "manifest": [
     {
@@ -19,6 +19,12 @@
       "details": [
         "移除左下角二维码图标",
         "新增账号、用户组和病区管理"
+      ]
+    },
+    {
+      "version": "1.0.18",
+      "details": [
+        "测试更新"
       ]
     }
   ],
