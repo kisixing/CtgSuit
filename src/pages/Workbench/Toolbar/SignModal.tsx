@@ -1,7 +1,4 @@
-/**
- * 胎位标记modal窗口
- *
- */
+
 import React from 'react';
 import { Button, Modal, Form, Radio } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';

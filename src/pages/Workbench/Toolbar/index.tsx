@@ -4,14 +4,15 @@ import moment from 'moment';
 import { event } from "@lianmed/utils";
 import request from '@/utils/request';
 import CollectionCreateForm from './CollectionCreateForm';
-import Analysis from './Analysis';
-import PrintPreview from './PrintPreview';
+import Analysis from '../Analysis';
+import PrintPreview from '../PrintPreview';
 import Partogram from './Partogram';
 import ModalConfirm from './ModalConfirm';
 import SignModal from './SignModal';
+import SoundModal from './SoundModal';
 import { WsService } from '@lianmed/lmg';
 import { BedStatus } from '@lianmed/lmg/lib/services/WsService';
-import { FetalItem } from "./types";
+import { FetalItem } from "../types";
 import { ButtonProps } from 'antd/lib/button';
 
 const styles = require('./Toolbar.less');
@@ -19,6 +20,8 @@ const socket = WsService._this;
 
 function Toolbar(props: FetalItem.IToolbarProps) {
   const [showSetting, setShowSetting] = useState(false)
+  const [tocozeroLoading, setTocozeroLoading] = useState(false)
+  const [volumeDataLoading, setVolumeDataLoading] = useState(false)
   const [isStopMonitorWhenCreated, setIsStopMonitorWhenCreated] = useState(false)
   const endCb = useRef(null)
   const [modalName, setModalName] = useState('')
@@ -41,7 +44,10 @@ function Toolbar(props: FetalItem.IToolbarProps) {
     deviceno,
     bedno,
     bedname,
-    pregnancyId
+    pregnancyId,
+    is_include_tocozero,
+    is_include_volume,
+    volumeData
   } = props
 
   const timeout = useRef(null)
@@ -51,8 +57,13 @@ function Toolbar(props: FetalItem.IToolbarProps) {
   const isOfflineStopped = status === BedStatus.OfflineStopped;
   const isCreated = !!pregnancyId;
 
-  if (pregnancyId) {
-
+  function setTocozero() {
+    setTocozeroLoading(true)
+    socket.setTocozero(+deviceno, +bedno)
+    setTimeout(() => {
+      setTocozeroLoading(false)
+      message.success('设置成功')
+    }, 1000);
   }
 
   useEffect(() => {
@@ -200,6 +211,30 @@ function Toolbar(props: FetalItem.IToolbarProps) {
         >
           报告
         </B>
+        <B
+          disabled={!is_include_tocozero}
+          icon={tocozeroLoading ? 'loading' : 'control'}
+          type="link"
+          onClick={setTocozero}
+        >
+          宫缩调零
+        </B>
+        <B
+          // disabled={!isCreated}
+          icon={volumeDataLoading ? 'loading' : 'sound'}
+          type="link"
+          onClick={() => {
+            socket.getVolume(+deviceno, +bedno)
+            setVolumeDataLoading(true)
+            setTimeout(() => {
+              setVolumeDataLoading(false)
+              setModalName('soundVisible')
+            }, 1200);
+          }}
+          disabled={!is_include_volume}
+        >
+          音量调节
+        </B>
         {/* <Button
             disabled={!isCreated}
             icon="line-chart"
@@ -292,6 +327,19 @@ function Toolbar(props: FetalItem.IToolbarProps) {
       />
       <SignModal
         visible={modalName === 'signVisible'}
+        isCreated={isCreated}
+        isMonitor={isWorking}
+        onCancel={handleCancel}
+        startTime={startTime}
+        bedname={bedname}
+        docid={docid}
+        suit={suitObject.suit}
+      />
+      <SoundModal
+        deviceno={+deviceno}
+        bedno={+bedno}
+        volumeData={volumeData}
+        visible={modalName === 'soundVisible'}
         isCreated={isCreated}
         isMonitor={isWorking}
         onCancel={handleCancel}

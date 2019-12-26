@@ -4,6 +4,7 @@ import request from '@/utils/request';
 import { event } from "@lianmed/utils";
 import { Modal } from "antd";
 import { IPregnancy, IPrenatalVisit } from "@/types";
+import { IVolumeData } from "@lianmed/lmg";
 
 export default function useTodo(showTodo: boolean, subscribeData: string[]): [IRemain[], boolean] {
     const [todo, setTodo] = useState<IRemain[]>([])
@@ -114,6 +115,10 @@ export interface IRemain {
     type: string;
     prenatalVisit: IPrenatalVisit
     data: {
+        volumeData: IVolumeData
+        deviceType: string
+        is_include_tocozero: false
+        is_include_volume: false
         index: number
         fhr1: string;
         fhr2: string;
@@ -126,6 +131,7 @@ export interface IRemain {
         status: any
         starttime: any
     }
+    [x: string]: any
 }
 export interface INewArchive {
     appointmentDate: any;

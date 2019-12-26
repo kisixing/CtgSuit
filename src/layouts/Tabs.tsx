@@ -12,10 +12,11 @@ interface IProps {
   page: number
   dispatch: Dispatch
   showTodo: boolean
+  headCollapsed: boolean
   location: Location
 }
 
-function Tabs({ pageData, page, dispatch, showTodo, location }: IProps) {
+function Tabs({ pageData, page, dispatch, showTodo, location, headCollapsed }: IProps) {
   const B = useCallback(
     ({ index, active }) => {
       return (
@@ -46,23 +47,27 @@ function Tabs({ pageData, page, dispatch, showTodo, location }: IProps) {
       })}
       <Button size="small" style={{ margin: '0 4px', marginLeft: pageData.length && 80, background: showTodo ? 'white' : 'var(--theme-hover-color)' }} onClick={() => {
         location.pathname.includes('workbench') || router.replace('/workbench');
-          setTimeout(() => {
-            dispatch({ type: 'list/setState', payload: { showTodo: true } })
-          }, 0);
-        }}
+        setTimeout(() => {
+          dispatch({ type: 'list/setState', payload: { showTodo: true } })
+        }, 0);
+      }}
         type={showTodo ? 'default' : 'primary'}
       >
         待处理
       </Button>
+      <Button title={`${headCollapsed ? '显示' : '隐藏'}子机列表`} size="small" icon={`vertical-align-${headCollapsed ? 'bottom' : 'top'}`} style={{ position: 'absolute', bottom: 0, right: 6 }} onClick={e => {
+        dispatch({ type: 'setting/setHeadCollapsed', payload: { headCollapsed: !headCollapsed } })
 
+      }} />
     </div>
   );
 }
 
-export default connect(({ list }: any) => {
+export default connect(({ list, setting }: any) => {
   return {
     showTodo: list.showTodo,
     pageData: list.pageData,
     page: list.page,
+    headCollapsed: setting.headCollapsed
   }
 })(withRouter<any, any>(Tabs));

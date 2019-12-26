@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Col } from 'antd';
-import Toolbar from './Toolbar';
+import Toolbar from './Toolbar/index';
 import { BedStatus } from "@lianmed/lmg/lib/services/WsService";
 import useFullScreen from "./useFullScreen";
 import { FetalItem } from "./types";
 import { Ctg_Item } from "@lianmed/pages";
 import { event } from "@lianmed/utils";
-const styles = require('./Toolbar.less')
+const styles = require('./Toolbar/Toolbar.less')
 const WorkbenchItem = (props: FetalItem.IProps) => {
   const { fullScreenId, activeId, itemHeight, itemSpan, outPadding, data, bedname, isTodo, docid, ismulti, status, unitId, isOn, ...others } = props;
   let { bedNO, GP, name, age, startTime, pregnancyId } = props

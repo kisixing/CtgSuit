@@ -23,6 +23,7 @@ export default {
   namespace: 'setting',
   state: {
     listLayout: store.get('listLayout') || [2, 2],
+    headCollapsed: store.get('headCollapsed') || false,
     area_type: SettingStore.getSync('area_type'),
     areano: SettingStore.getSync('areano'),
     listLayoutOptions: [
@@ -43,6 +44,10 @@ export default {
       store.set('listLayout', payload.listLayout)
       yield put({ type: 'setState', payload })
       yield put({ type: 'list/processListData' })
+    },
+    *setHeadCollapsed({ payload }, { put }) {
+      store.set('headCollapsed', payload.headCollapsed)
+      yield put({ type: 'setState', payload })
     },
 
   },

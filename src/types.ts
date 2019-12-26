@@ -54,6 +54,7 @@ export interface IPregnancy {
 }
 
 export interface IBed {
+    deviceType: string
     bedname: string;
     bedno: string;
     deviceno: string;

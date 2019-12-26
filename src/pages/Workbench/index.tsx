@@ -7,21 +7,19 @@ import { IBed } from '@/types';
 import useTodo, { IRemain } from "./useTodo";
 import { event } from '@lianmed/utils';
 import { BedStatus } from '@lianmed/lmg/lib/services/types';
-
+import { useItemHeight } from "./useItemHeight";
 interface IProps {
   pageItems: IBed[],
   [x: string]: any
 }
 const Home = (props: IProps) => {
-  const { listLayout = [], pageItems, fullScreenId, activeId, dispatch, showTodo, subscribeData, isOn } = props;
+  const { listLayout = [], pageItems, fullScreenId, activeId, dispatch, showTodo, subscribeData, isOn, headCollapsed } = props;
   const wrap = useRef(null);
   const empty = useRef(null)
   const [todo] = useTodo(showTodo, subscribeData)
 
   const itemSpan = 24 / listLayout[1];
-  const outPadding = 6;
-  const contentHeight =document.querySelector('main').clientHeight 
-  const itemHeight = (contentHeight - outPadding * 2) / listLayout[0];
+  const { itemHeight, contentHeight, outPadding } = useItemHeight(headCollapsed, listLayout)
   const items: any[] = (showTodo ? todo : pageItems);
 
   useEffect(() => {
@@ -66,7 +64,10 @@ const Home = (props: IProps) => {
                 inpatientNO={safePregnancy.inpatientNO}
                 GP={safePregnancy.GP}
                 bedNO={safePregnancy.bedNO}
-
+               
+                volumeData = {data.volumeData}
+                is_include_tocozero = {data.is_include_tocozero}
+                is_include_volume = {data.is_include_volume}
                 // startTime={safePrenatalVisit.ctgexam.startTime}
                 startTime={data.starttime}
                 gestationalWeek={safePrenatalVisit.gestationalWeek}
@@ -105,6 +106,7 @@ export default connect(({ ws, setting, list, subscribe }: any) => {
     activeId: list.activeId,
     showTodo: list.showTodo,
     subscribeData: subscribe.data,
-    isOn: ws.isOn
+    isOn: ws.isOn,
+    headCollapsed: setting.headCollapsed
   };
 })(Home);

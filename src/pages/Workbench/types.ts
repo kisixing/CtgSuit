@@ -1,8 +1,11 @@
-import { BedStatus, ICacheItem } from "@lianmed/lmg/lib/services/WsService";
+import { BedStatus, ICacheItem, IVolumeData } from "@lianmed/lmg/lib/services/WsService";
 import { Suit } from "@lianmed/lmg/lib/Ctg/Suit";
 
 export namespace FetalItem {
     export interface IProps {
+        is_include_tocozero: boolean
+        is_include_volume: boolean
+        volumeData?: IVolumeData
         data: ICacheItem
         bedname: string
         bedno: string
@@ -25,7 +28,8 @@ export namespace FetalItem {
         itemHeight: number
         itemSpan: number
         GP: string
-        isOn:boolean
+        isOn: boolean
+
     }
 
     export interface IItemTitle {
@@ -38,6 +42,9 @@ export namespace FetalItem {
 
     }
     export interface IToolbarProps {
+        is_include_tocozero: boolean
+        is_include_volume: boolean
+        volumeData?: IVolumeData
         suitObject: { suit: Suit }
         showLoading: (s: boolean) => void
         isTodo: boolean
