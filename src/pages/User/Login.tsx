@@ -1,6 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { connect } from 'dva';
-import { Button, Row, Form, Input, Icon, Alert, Select } from 'antd';
+import {
+  Button,
+  Row,
+  Form,
+  Input,
+  Icon,
+  Alert,
+  Select,
+  message,
+  Popconfirm
+} from 'antd';
 import config from '@/utils/config';
 import { IWard } from "@/types";
 // import { request } from '@lianmed/utils';
@@ -16,9 +26,9 @@ interface IProps {
   [x: string]: any
 }
 const Login = (props: IProps) => {
-
   const { loading, error, form, dispatch } = props;
-  const [areaList, setAreaList] = useState<IWard[]>([])
+  const [areaList, setAreaList] = useState<IWard[]>([]);
+  const dateRef = useRef();
   // useEffect(() => {
   //   // 病区保存在ward对象
   //   const old = store.getSync('ward')
@@ -32,7 +42,6 @@ const Login = (props: IProps) => {
     e.preventDefault();
     const { validateFields } = form;
     validateFields((errors, { id, ...others }) => {
-      console.log('5555555555555555555555', id, others)
       if (errors) {
         return;
       }
@@ -50,6 +59,24 @@ const Login = (props: IProps) => {
     request.get(`/users/${form.getFieldValue('username')}`).then(({ wards }) => {
       wards && setAreaList(wards)
     })
+  }
+
+  function onConfirm() {
+    message.info('Clicked on Yes.');
+    dateRef.current.props.form.validateFields((err, values) => {
+      if (err) {
+        return;
+      }
+      store.set(Object.keys(values), Object.values(values)).then(status => {
+        if (status) {
+          message.success('设置成功,2s 后重启', 2).then(() => {
+            // eslint-disable-next-line no-restricted-globals
+            location.reload();
+          });
+        }
+      });
+      // console.log('Received values of form: ', values);
+    });;
   }
 
   const { getFieldDecorator } = form;
@@ -76,14 +103,15 @@ const Login = (props: IProps) => {
               <Input
                 autoFocus
                 placeholder="用户名"
-                prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                prefix={
+                  <Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />
+                }
                 onPressEnter={handleSubmit}
               />,
             )}
           </FormItem>
           <FormItem hasFeedback>
             {getFieldDecorator('password', {
-              // initialValue: 'admin',
               rules: [
                 {
                   required: true,
@@ -95,14 +123,15 @@ const Login = (props: IProps) => {
                 type="password"
                 placeholder="密码"
                 autoComplete="new-password"
-                prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                prefix={
+                  <Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />
+                }
                 onPressEnter={handleSubmit}
               />,
             )}
           </FormItem>
           <FormItem hasFeedback>
             {getFieldDecorator('id', {
-              // initialValue: 'hi',
               rules: [
                 {
                   required: true,
@@ -111,68 +140,26 @@ const Login = (props: IProps) => {
               ],
             })(
               <Select
-                  placeholder="选择病区"
-                  className={styles.select}
-                  onDropdownVisibleChange={_ => _ && onDropdownVisible()}
-                >
-                  {
-                    areaList.map(({ id, wardName }) => {
-                      return (
-                        <Select.Option value={id}>
-                          {wardName}
-                        </Select.Option>
-                      )
-                    })
-                  }
-                </Select>
+                placeholder="选择病区"
+                className={styles.select}
+                onDropdownVisibleChange={_ => _ && onDropdownVisible()}
+              >
+                {areaList.map(({ id, wardName }) => {
+                  return (
+                    <Select.Option key={id} value={id}>
+                      {wardName}
+                    </Select.Option>
+                  );
+                })}
+              </Select>,
             )}
           </FormItem>
-          {/* <FormItem hasFeedback>
-            {getFieldDecorator('id', {
-              // initialValue: 'hi',
-              rules: [
-                {
-                  required: true,
-                  message: '请选择病区！',
-                },
-              ],
-            })(
-              <div style={{ position: 'relative' }}>
-                <div
-                  style={{
-                    position: 'absolute',
-                    top: '5px',
-                    left: 0,
-                    display: 'inline-block',
-                    width: '30px',
-                    height: '30px',
-                    textAlign: 'right',
-                    lineHeight: '30px',
-                    zIndex: 9,
-                  }}
-                >
-                  <Icon type="gold" style={{ marginRight: '4px', color: '#999' }} />
-                </div>
-                <Select
-                  placeholder="选择病区"
-                  className={styles.select}
-                  onDropdownVisibleChange={_ => _ && onDropdownVisible()}
-                >
-                  {
-                    areaList.map(({ id, wardName }) => {
-                      return (
-                        <Select.Option value={id}>
-                          {wardName}
-                        </Select.Option>
-                      )
-                    })
-                  }
-                </Select>
-              </div>
-            )}
-          </FormItem> */}
           <Row>
-            <Button type="primary" htmlType="submit" loading={loading.effects['login/login']}>
+            <Button
+              type="primary"
+              htmlType="submit"
+              loading={loading.effects['login/login']}
+            >
               <span>登陆</span>
             </Button>
           </Row>
@@ -185,11 +172,61 @@ const Login = (props: IProps) => {
       <div className={styles.footer}>
         <>
           Copyright <Icon type="copyright" /> {config.copyright}
+          <Popconfirm
+            placement="topRight"
+            trigger="click"
+            title={<NetWork wrappedComponentRef={dateRef} />}
+            onConfirm={onConfirm}
+            okText="确定"
+            cancelText="取消"
+          >
+            <Icon
+              type="setting"
+              style={{ float: 'right', margin: '6px 12px' }}
+            />
+          </Popconfirm>
         </>
       </div>
     </>
   );
 }
+
+const NetWork = Form.create()(
+  class extends React.Component {
+    componentDidMount() {
+      const { form } = this.props;
+
+      store.get(['ws_url', 'xhr_url']).then(([ws_url, xhr_url]) => {
+        form.setFieldsValue({ xhr_url, ws_url });
+      });
+    }
+    render() {
+      const { form } = this.props;
+      const { getFieldDecorator } = form;
+      return (
+        <Form layout="inline" className={styles.netWork}>
+          <div style={{ marginBottom: '12px' }}>网络设置</div>
+          <Form.Item label="web socket">
+            {getFieldDecorator('ws_url')(
+              <Input
+                addonBefore="ws://"
+                placeholder="请输入web socket服务地址!"
+              />,
+            )}
+          </Form.Item>
+          <Form.Item label="web service">
+            {getFieldDecorator('xhr_url')(
+              <Input
+                addonBefore="http://"
+                placeholder="请输入web service服务地址!"
+              />,
+            )}
+          </Form.Item>
+        </Form>
+      );
+    }
+  },
+);
 
 export default connect(({ loading, login }: any) => ({
   loading,
