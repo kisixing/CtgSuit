@@ -1,6 +1,6 @@
 {
   "name": "ctgsuit-electron",
-  "version": "1.0.26",
+  "version": "1.0.27",
   "description": "host replace pack",
   "manifest": [
     {
@@ -22,9 +22,10 @@
       ]
     },
     {
-      "version": "1.0.23",
+      "version": "1.0.28",
       "details": [
-        "平板拖动优化"
+        "登录页网络设置",
+        "报告页（选段、工具按钮部分）"
       ]
     }
   ],
