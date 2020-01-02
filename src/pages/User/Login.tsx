@@ -9,6 +9,7 @@ import {
   Alert,
   Select,
   message,
+  notification,
   Popconfirm
 } from 'antd';
 import config from '@/utils/config';
@@ -56,9 +57,24 @@ const Login = (props: IProps) => {
   };
 
   const onDropdownVisible = () => {
-    request.get(`/users/${form.getFieldValue('username')}`).then(({ wards }) => {
-      wards && setAreaList(wards)
-    })
+    const username = form.getFieldValue('username');
+    if (!username) {
+      return message.error('请先输入用户名...');;
+    }
+    return request
+      .get(`/users/${username}`)
+      .then(({ wards }) => {
+        wards && setAreaList(wards);
+      })
+      .catch(error => {
+        const url = error.url;
+        const pos = url.indexOf("api");
+        const api = url.slice(pos);
+        notification.warning({
+          message: `Network Error 请求错误 ${error.status}`,
+          description: `${api}, ${error.errortext}`,
+        });
+      });
   }
 
   function onConfirm() {
@@ -69,7 +85,7 @@ const Login = (props: IProps) => {
       }
       store.set(Object.keys(values), Object.values(values)).then(status => {
         if (status) {
-          message.success('设置成功,2s 后重启', 2).then(() => {
+          message.success('设置成功,2s 后重启', 1).then(() => {
             // eslint-disable-next-line no-restricted-globals
             location.reload();
           });
