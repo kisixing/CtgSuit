@@ -1,6 +1,6 @@
 {
   "name": "ctgsuit-electron",
-  "version": "1.0.28",
+  "version": "1.0.30",
   "description": "host replace pack",
   "manifest": [
     {
@@ -22,10 +22,12 @@
       ]
     },
     {
-      "version": "1.0.28",
+      "version": "1.0.30",
       "details": [
         "登录页网络设置",
-        "报告页（选段、工具按钮部分）"
+        "报告页（选段、工具按钮部分）",
+        "订阅显示设备名",
+        "宫缩调零、音量调节按钮按需隐藏"
       ]
     }
   ],
