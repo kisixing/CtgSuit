@@ -83,7 +83,7 @@ export default {
     TARGET: process.env.TARGET,
     __DEV__: process.env.NODE_ENV !== 'production',
     __VERSION: pkg.version,
-    __VERSION_MANIFEST: pkg.manifest
+    __VERSION_MANIFEST: pkg.details
   },
 
   alias: {

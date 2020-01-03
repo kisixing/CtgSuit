@@ -21,7 +21,7 @@ class Setting extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      current: { label: '账号管理', value: '8' },
+      current: { label: '账号管理', value: '7' },
       results: {},
     };
   }

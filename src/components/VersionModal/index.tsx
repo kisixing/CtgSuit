@@ -3,7 +3,7 @@ import { Modal, Form } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 
 declare var __VERSION: string;
-declare var __VERSION_MANIFEST: { details: string[], version: string }[];
+declare var __VERSION_MANIFEST: string[]
 interface IProps {
     form: WrappedFormUtils
 }
@@ -15,38 +15,34 @@ export const SignModal = (props: IProps) => {
         setVisible(isNew)
     }, [])
 
-    const target = __VERSION_MANIFEST.find(_ => _.version === __VERSION);
-    if (target && target.details) {
-        return (
-            <Modal
-                maskClosable={false}
-                destroyOnClose
-                visible={visible}
-                title={`${__VERSION}版本更新说明`}
-                cancelText={null}
-                onCancel={() => {
-                    setVisible(false)
-                    localStorage.setItem('version', __VERSION)
-                }}
-                onOk={() => {
-                    setVisible(false)
-                    localStorage.setItem('version', __VERSION)
-                }}
-            >
-                <ol>
-                    {
-                        target && target.details.map((_, i) => {
-                            return <li>{i + 1}、{_}</li>
-                        })
 
-                    }
-                </ol>
+    return !!__VERSION_MANIFEST && (
+        <Modal
+            maskClosable={false}
+            destroyOnClose
+            visible={visible}
+            title={`${__VERSION}版本更新说明`}
+            cancelText={null}
+            onCancel={() => {
+                setVisible(false)
+                localStorage.setItem('version', __VERSION)
+            }}
+            onOk={() => {
+                setVisible(false)
+                localStorage.setItem('version', __VERSION)
+            }}
+        >
+            <ol>
+                {
+                    __VERSION_MANIFEST.map((_, i) => {
+                        return <li key={i}>{i + 1}、{_}</li>
+                    })
 
-            </Modal>
-        );
-    } else {
-        return null;
-    }
+                }
+            </ol>
+
+        </Modal>
+    )
 }
 
 export default Form.create<IProps>()(SignModal);

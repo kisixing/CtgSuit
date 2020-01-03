@@ -14,8 +14,7 @@ const settingData = settingStore.cache
 const colors = AntdThemeManipulator.colors
 const { Footer } = Layout;
 declare var __VERSION: string;
-declare var __VERSION_MANIFEST: string;
-// console.log('__VERSION_MANIFEST', __VERSION_MANIFEST)
+
 
 const Foot = (props: any) => {
 

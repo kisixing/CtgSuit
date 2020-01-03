@@ -6,7 +6,7 @@ import Highlighter from 'react-highlight-words';
 import CreateRecordModal from './CreateRecordModal';
 import PrintPreview from '../Workbench/PrintPreview';
 import Analysis from '../Workbench/Analysis';
-
+import ReportPreview from "./ReportPreview";
 import styles from './TableList.less';
 
 class TableList extends Component {
@@ -16,6 +16,7 @@ class TableList extends Component {
       visible: false,
       printVisible: false,
       analysisVisible: false,
+      reportVisible: false,
       type: 'edit',
       current: {}, // 当前行
     };
@@ -70,7 +71,7 @@ class TableList extends Component {
         title: 'GP',
         dataIndex: 'GP',
         key: 'GP',
-        width: 100,
+        width: 60,
         render: (text, record) => {
           if (record.pregnancy) {
             return `${record.pregnancy.gravidity} / ${record.pregnancy.parity}`;
@@ -91,13 +92,30 @@ class TableList extends Component {
         dataIndex: 'action',
         key: 'action',
         align: 'center',
-        width: 100,
+        width: 140,
         render: (text, record) => {
+          const ctgexam = record.ctgexam
+          const hasSigned = !!ctgexam.report
+          const signable = !!ctgexam.signable
           return (
             <span>
-              <span className="primary-link" onClick={(e) => this.showPrint(e, record)}>
-                报告
-              </span>
+              {
+                signable && (
+                  <span className="primary-link" onClick={(e) => this.showPrint(e, record)}>
+                    {hasSigned ? '重新生成' : '报告生成'}
+                  </span>
+                )
+              }
+              {
+                hasSigned && (
+                  <>
+                    <Divider type="vertical" />
+                    <span className="primary-link" onClick={(e) => this.showReport(e, record)}>
+                      查看
+                    </span>
+                  </>
+                )
+              }
               <Divider type="vertical" />
               <span className="primary-link" onClick={(e) => this.showAnalysis(e, record)}>
                 分析
@@ -183,6 +201,13 @@ class TableList extends Component {
     });
   };
 
+  showReport = (e, record) => {
+    e.stopPropagation();
+    this.setState({ current: record }, () => {
+      this.setState({ reportVisible: true });
+      this.handleRow(record);
+    });
+  };
   showAnalysis = (e, record) => {
     e.stopPropagation();
     this.setState({ current: record }, () => {
@@ -196,6 +221,7 @@ class TableList extends Component {
       visible: false,
       printVisible: false,
       analysisVisible: false,
+      reportVisible: false
     });
   };
 
@@ -402,7 +428,7 @@ class TableList extends Component {
 
   render() {
     const { selected, dataSource, count, loading, pagination: { size, page } } = this.props;
-    const { visible, printVisible, analysisVisible, type, current } = this.state;
+    const { visible, printVisible, analysisVisible, reportVisible, type, current } = this.state;
 
     return (
       <div className={styles.tableList}>
@@ -413,10 +439,10 @@ class TableList extends Component {
           columns={this.columns}
           dataSource={dataSource}
           onRow={record => {
-          // 当存在action时，会触发多个事件
+            // 当存在action时，会触发多个事件
             return {
               onClick: event => this.handleRow(record), // 点击行
-              onDoubleClick: event => {},
+              onDoubleClick: event => { },
             };
           }}
           loading={loading.effects['archives/fetchRecords']}
@@ -475,6 +501,19 @@ class TableList extends Component {
             inpatientNO={selected.pregnancy && selected.pregnancy.inpatientNO}
             name={selected.pregnancy && selected.pregnancy.name}
             age={selected.pregnancy && selected.pregnancy.age}
+            gestationalWeek={selected && selected.gestationalWeek}
+          />
+        ) : null}
+        {reportVisible ? (
+          <ReportPreview
+            visible={reportVisible}
+            onCancel={this.handleCancel}
+            docid={selected.ctgexam && selected.ctgexam.docid}
+            report={selected.ctgexam && selected.ctgexam.report}
+            inpatientNO={selected.pregnancy && selected.pregnancy.inpatientNO}
+            name={selected.pregnancy && selected.pregnancy.name}
+            age={selected.pregnancy && selected.pregnancy.age}
+            startTime={selected.ctgexam && selected.ctgexam.startTime}
             gestationalWeek={selected && selected.gestationalWeek}
           />
         ) : null}

@@ -17,6 +17,7 @@ export default {
             wardId && settingStore.setSync('areano', wardId)
             yield put({ type: 'setState', payload: { data } })
             yield put({ type: 'list/processListData' })
+
             WsService._this.send(JSON.stringify(
                 {
                     name: "area_devices",
@@ -24,11 +25,11 @@ export default {
                 }
             ))
         },
-        *pdate(payload, { put }) {
+        *update(payload, { put }) {
             const ward = settingStore.cache.ward || { id: '' }
             const data: IWard = yield request.get(`/wards/${ward.id}`)
             const { note, wardType, wardId } = data
-            note && wardType && wardId && put({ type: 'setData', note, wardType, wardId })
+            yield note && wardType && wardId && put({ type: 'setData', note, wardType, wardId })
         }
 
     },
