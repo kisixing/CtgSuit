@@ -211,30 +211,34 @@ function Toolbar(props: FetalItem.IToolbarProps) {
         >
           报告
         </B>
-        <B
-          disabled={!is_include_tocozero}
-          icon={tocozeroLoading ? 'loading' : 'control'}
-          type="link"
-          onClick={setTocozero}
-        >
-          宫缩调零
+        {
+          !!is_include_tocozero && <B
+            disabled={!is_include_tocozero}
+            icon={tocozeroLoading ? 'loading' : 'control'}
+            type="link"
+            onClick={setTocozero}
+          >
+            宫缩调零
         </B>
-        <B
-          // disabled={!isCreated}
-          icon={volumeDataLoading ? 'loading' : 'sound'}
-          type="link"
-          onClick={() => {
-            socket.getVolume(+deviceno, +bedno)
-            setVolumeDataLoading(true)
-            setTimeout(() => {
-              setVolumeDataLoading(false)
-              setModalName('soundVisible')
-            }, 1200);
-          }}
-          disabled={!is_include_volume}
-        >
-          音量调节
+        }
+        {
+          !!is_include_volume && <B
+            // disabled={!isCreated}
+            icon={volumeDataLoading ? 'loading' : 'sound'}
+            type="link"
+            onClick={() => {
+              socket.getVolume(+deviceno, +bedno)
+              setVolumeDataLoading(true)
+              setTimeout(() => {
+                setVolumeDataLoading(false)
+                setModalName('soundVisible')
+              }, 1200);
+            }}
+            disabled={!is_include_volume}
+          >
+            音量调节
         </B>
+        }
         {/* <Button
             disabled={!isCreated}
             icon="line-chart"

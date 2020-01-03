@@ -24,12 +24,11 @@ export const SignModal = (props: IProps) => {
   const [fetel_num, setFetel_num] = useState(0)
   const handleCreate = () => {
     form.validateFields(async (err, values) => {
-    
+
       const { vol, ...o } = values
       socket.change_volume(deviceno, bedno, vol)
       Object.entries(o).forEach(([k, v]) => {
         const fetel_no = +k.slice(6)
-        console.log('fetel_no', fetel_no, k, o)
         socket.mute_volume(deviceno, bedno, fetel_no, +v)
       })
       onCancel()
@@ -80,7 +79,9 @@ export const SignModal = (props: IProps) => {
           {getFieldDecorator('vol', {
             // rules: [{ max: 2, message: '最大长度为2' }],
             initialValue: 0
-          })(<Slider />)}
+          })(<Slider onAfterChange={v=>{
+            socket.change_volume(deviceno, bedno, v as number)
+          }}/>)}
         </Form.Item>
 
         <Form.Item label="静音">
@@ -92,7 +93,9 @@ export const SignModal = (props: IProps) => {
             return (
               <Form.Item label={`第${n}胎`} key={i}>
                 {getFieldDecorator(`isMute${n}`, {})(
-                  <S />
+                  <S onChange={v => {
+                    socket.mute_volume(deviceno, bedno, n, +v)
+                  }} />
                 )}
               </Form.Item>
             )
@@ -101,7 +104,7 @@ export const SignModal = (props: IProps) => {
 
 
 
-
+{/* 
         <div style={{ textAlign: 'center' }}>
           <Button
             type="primary"
@@ -112,7 +115,7 @@ export const SignModal = (props: IProps) => {
           <Button style={{ marginLeft: '24px' }} onClick={onCancel}>
             取消
             </Button>
-        </div>
+        </div> */}
       </Form>
     </Modal>
   );

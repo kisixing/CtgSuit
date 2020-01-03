@@ -10,7 +10,7 @@ import config from "@/utils/config";
 
 const request = r.config({
   prefix: config.apiPrefix,
-  hideErr: true,
+  hideErr: false,
   errHandler({ status, errortext, url }) {
     if (status === 401) {
       // @HACK

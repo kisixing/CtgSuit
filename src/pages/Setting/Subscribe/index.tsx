@@ -3,26 +3,21 @@ import { Button, Row, Col, Icon, Popover } from "antd";
 import { qrcode } from '@lianmed/utils'
 import { connect, DispatchProp } from 'dva';
 import Table from "./Table";
-import useStupidConcat from './useStupidConcat';
-import request from '@/utils/request';
-import store from '@/utils/SettingStore';
-import { IBed } from '@/types';
+import useStupidConcat from './useStupidConcat'
+import store from '@/utils/SettingStore'
 
 interface IProps extends DispatchProp {
     subscribeData?: string[]
+    areano: string
     [x: string]: any;
 }
 
 const C = (props: IProps) => {
-
-    const { subscribeData, dispatch } = props
+    const { subscribeData, dispatch, areano } = props
     const [editable, setEditable] = useState(false)
-    const [selected, setSelected] = useState<string[]>([]);
-    const [opml, setOpml] = useState([])
-
+    const [selected, setSelected] = useState<string[]>([])
     useEffect(() => {
-        setSelected(subscribeData);
-        fetch()
+        setSelected(subscribeData)
     }, [subscribeData])
 
     const cancel = () => {
@@ -39,16 +34,7 @@ const C = (props: IProps) => {
         data.splice(data.indexOf(key), 1)
         setSelected(data)
     }
-    // const areano = store.getSync('areano') || {}; // ward.wardId
-    // const { list } = useStupidConcat(areano);
-
-    const fetch = () => {
-      const ward = store.getSync('ward') || {};
-      request.get(`/wards/${ward.id}`).then((res) => {
-        const subs = res && res.note.split(',')
-        setOpml(subs);
-      })
-    }
+    const { list } = useStupidConcat()
 
     return (
         <div style={{}} >
@@ -61,30 +47,24 @@ const C = (props: IProps) => {
                     }}>
                         <div style={{ height: 140, overflow: 'scroll', padding: 4, }}>
                             {
-                                // selected.map(id => {
-                                //     const _ = list.find(_ => _.deviceno === id)
-                                //     if (!_) return null
-                                //     const deviceno = _.deviceno
-                                //     return (
-                                //         <Button onClick={e => { remove(deviceno) }} disabled={!editable} size="small" style={{ margin: '0 4px 4px 0' }} key={deviceno}>
-                                //             {`${_.areaname}：${_.bedname}`}
-                                //             {
-                                //                 editable && <Icon type="close"></Icon>
-                                //             }
-                                //         </Button>
-                                //     )
-                                // })
+                                selected.map(id => {
+                                    const _ = list.find(_ => _.deviceno === id)
+                                    if (!_) return null
+                                    const deviceno = _.deviceno
+                                    return (
+                                        <Button onClick={e => { remove(deviceno) }} disabled={!editable} size="small" style={{ margin: '0 4px 4px 0' }} key={deviceno}>
+                                            {`${_.areano === areano ? '' : `${_.areaname}：`}${_.bedname}`}
+                                            {
+                                                editable && (
+                                                    <Icon type="close">
+
+                                                    </Icon>
+                                                )
+                                            }
+                                        </Button>
+                                    )
+                                })
                             }
-                            {
-                              opml.map(e => {
-                                return (
-                                  <Button disabled={!editable} size="small" style={{ margin: '0 4px 4px 0' }} key={e}>
-                                    {e}
-                                  </Button>
-                                )
-                              })
-                            }
-                            
                         </div>
                         {
                             editable && (
@@ -119,7 +99,7 @@ const C = (props: IProps) => {
 };
 
 
-const S = connect((state: any) => ({ subscribeData: state.subscribe.data }))(C)
+const S = connect((state: any) => ({ subscribeData: state.subscribe.data, areano: state.setting.areano }))(C)
 export const QR = connect(({ subscribe, setting }: any) => ({ subscribeData: subscribe.data, area_type: setting.area_type, areano: setting.areano }))(
     (props: { subscribeData: string[], [x: string]: any }) => {
         const { subscribeData, area_type, areano, children, ...others } = props
