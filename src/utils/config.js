@@ -6,7 +6,7 @@ const xhrUrl = store.getSync(XHR_KEY)
 
 export default {
   siteName: '胎监工作站',
-  copyright: 'Copyright © 莲印医疗', // 莲印医疗科技
+  copyright: 'Copyright © 莲印医疗', // 莲印医疗lian-med
   logoPath: require('../assets/logo.png'),
   avatar: '',
   apiPrefix: `http://${xhrUrl}/api`,

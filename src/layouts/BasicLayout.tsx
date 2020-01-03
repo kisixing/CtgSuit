@@ -14,8 +14,6 @@ import Foot from "./Foot";
 import Head from "./Head";
 import Side from "./Side";
 import useAlarm from "./useAlarm";
-import request from '@/utils/request';
-import { IWard } from "@/types";
 
 const styles = require('./BasicLayout.less')
 const EWsStatus = WsService.wsStatus
@@ -23,8 +21,11 @@ const settingData = settingStore.cache
 const { Content } = Layout;
 const { EWsEvents } = WsService
 const BasicLayout = (props: any) => {
-
-  const { dispatch, fashionable, children, wsStatus, listData } = props;
+  const { dispatch, fashionable, children, wsStatus, listData, isLogin } = props;
+  // 判断是否返回登录页
+  if (!isLogin) {
+    return router.replace('/user/login');
+  }
 
   useLayoutEffect(() => {
     ipcRenderer.send('ready')
@@ -85,7 +86,6 @@ const BasicLayout = (props: any) => {
     };
   }, [])
 
-
   useAlarm(listData);
 
   // useEffect(() => {
@@ -127,6 +127,6 @@ const BasicLayout = (props: any) => {
 export default connect(({ global, list, loading, setting, ws, subscribe, ...rest }: any) => ({
   wsStatus: ws.status,
   fashionable: setting.fashionable,
-  listData: list.listData
-
+  listData: list.listData,
+  isLogin: global.isLogin,
 }))(withRouter(BasicLayout));

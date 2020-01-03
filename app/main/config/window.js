@@ -3,6 +3,7 @@ const is = require('electron-is');
 function getMainPath() {
   let filePath = `${path.join(__dirname, '..', '..', 'render/index.html')}`;
   if (is.dev()) {
+    console.log('----------开发环境----------');
     filePath = 'http://127.0.0.1:1702/';
   }
   return filePath;
