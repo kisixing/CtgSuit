@@ -194,7 +194,11 @@ const CollectionCreateForm = (props: IProps) => {
       } else if (res.length === 1) {
         // 搜索结果只有一个，默认赋值
         setDisabled(true);
-        form.setFieldsValue(res[0]);
+        const current = res[0];
+        form.setFieldsValue(current);
+        // 年龄检验判断
+        const age = current.age;
+        validateAge(age);
       } else {
         setPregnancyList(res);
         // setDisabled(true)
@@ -231,6 +235,7 @@ const CollectionCreateForm = (props: IProps) => {
   const handleCancel = () => {
     setDisabled(false);
     setPregnancyList([]);
+    setAgeWarning({ status: '', help: '' });
     onCancel();
   }
 
@@ -285,18 +290,13 @@ const CollectionCreateForm = (props: IProps) => {
   };
 
   // 年龄校验
-  const validateAge = (rule, value, callback) => {
-    // 大于0 小于100
-    // const reg = /^99$|^(\d|[1-9]\d)$/;
+  const validateAge = (value: number) => {
     if (value >= 35) {
-      // callback('该孕妇年龄高于35！');
       setAgeWarning({ status: 'warning', help: '该孕妇年龄偏大...' });
     }
     if (value < 18) {
-      // callback('该孕妇年龄低于13！');
       setAgeWarning({ status: 'warning', help: '该孕妇年龄偏小...' });
     }
-    // callback();
   };
 
   // 前后空格消除
@@ -409,10 +409,7 @@ const CollectionCreateForm = (props: IProps) => {
               help={ageWarning.help} // "该孕妇年龄偏小..."
             >
               {getFieldDecorator('age', {
-                rules: [
-                  { required: false, message: '请填写孕妇住年龄!' },
-                  { validator: validateAge },
-                ],
+                rules: [{ required: false, message: '请填写孕妇住年龄!' }],
               })(
                 <InputNumber
                   min={1}
@@ -420,6 +417,7 @@ const CollectionCreateForm = (props: IProps) => {
                   disabled={disabled}
                   placeholder="输入孕妇年龄..."
                   style={{ width }}
+                  onChange={validateAge}
                 />,
               )}
             </Form.Item>
