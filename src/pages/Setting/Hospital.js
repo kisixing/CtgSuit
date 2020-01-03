@@ -55,9 +55,7 @@ class Hospital extends PureComponent {
     } = this.props;
     return (
       <Form layout="horizontal" {...formItemLayout} className={styles.form}>
-        <Form.Item>
-          <div className={styles.subTitle}>医院信息</div>
-        </Form.Item>
+        <div className={styles.subTitle}>医院信息</div>
         <Form.Item label="医院名称">
           {getFieldDecorator('hospital_name', {
             rules: [{ required: false, message: '请输入医院名称!' }],
@@ -66,10 +64,12 @@ class Hospital extends PureComponent {
         <Form.Item label="病区类型">
           {getFieldDecorator('area_type', {
             rules: [{ required: false, message: '请输入区号!' }],
-          })(<Select placeholder="请输入病区类型!" disabled>
-            <Select.Option value="in">住院</Select.Option>
-            <Select.Option value="out">门诊</Select.Option>
-          </Select>)}
+          })(
+            <Select placeholder="请输入病区类型!" disabled>
+              <Select.Option value="in">住院</Select.Option>
+              <Select.Option value="out">门诊</Select.Option>
+            </Select>,
+          )}
         </Form.Item>
         <Form.Item label="病区">
           {getFieldDecorator('areano', {

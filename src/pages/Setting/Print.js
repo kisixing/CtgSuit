@@ -51,9 +51,7 @@ class Network extends Component {
     } = this.props;
     return (
       <Form layout="horizontal" {...formItemLayout} className={styles.form}>
-        <Form.Item>
-          <div className={styles.subTitle}>打印设置</div>
-        </Form.Item>
+        <div className={styles.subTitle}>打印设置</div>
         <Form.Item label="打印时长(分)">
           {getFieldDecorator('print_interval', {
             rules: [{ required: false, message: '请输入打印时长!' }],
@@ -64,7 +62,11 @@ class Network extends Component {
           <Button type="primary" onClick={this.handleSubmit}>
             保存
           </Button>
-          <Button type="default" onClick={this.reset.bind(this)} style={{ marginLeft: 10 }}>
+          <Button
+            type="default"
+            onClick={this.reset.bind(this)}
+            style={{ marginLeft: 10 }}
+          >
             恢复默认
           </Button>
         </Form.Item>

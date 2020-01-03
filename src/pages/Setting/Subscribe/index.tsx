@@ -4,7 +4,7 @@ import { qrcode } from '@lianmed/utils'
 import { connect, DispatchProp } from 'dva';
 import Table from "./Table";
 import useStupidConcat from './useStupidConcat'
-import store from '@/utils/SettingStore'
+import styles from '../style.less';
 
 interface IProps extends DispatchProp {
     subscribeData?: string[]
@@ -37,50 +37,66 @@ const C = (props: IProps) => {
     const { list } = useStupidConcat()
 
     return (
-        <div style={{}} >
-            <div style={{ lineHeight: '30px' }}>已订阅列表</div>
+      <div className={styles.form}>
+        <div className={styles.subTitle}>已订阅列表</div>
 
-            <Row gutter={6}>
-                <Col span={20}>
-                    <div style={{
-                        position: 'relative', background: 'var(--theme-shadow-color)', borderRadius: 4, cursor: editable ? 'auto' : 'not-allowed'
-                    }}>
-                        <div style={{ height: 140, overflow: 'scroll', padding: 4, }}>
-                            {
-                                selected.map(id => {
-                                    const _ = list.find(_ => _.deviceno === id)
-                                    if (!_) return null
-                                    const deviceno = _.deviceno
-                                    return (
-                                        <Button onClick={e => { remove(deviceno) }} disabled={!editable} size="small" style={{ margin: '0 4px 4px 0' }} key={deviceno}>
-                                            {`${_.areano === areano ? '' : `${_.areaname}：`}${_.bedname}`}
-                                            {
-                                                editable && (
-                                                    <Icon type="close">
+        <Row gutter={6}>
+          <Col span={20}>
+            <div
+              style={{
+                position: 'relative',
+                background: 'var(--theme-shadow-color)',
+                borderRadius: 4,
+                cursor: editable ? 'auto' : 'not-allowed',
+              }}
+            >
+              <div style={{ height: 140, overflow: 'scroll', padding: 4 }}>
+                {selected.map(id => {
+                  const _ = list.find(_ => _.deviceno === id);
+                  if (!_) return null;
+                  const deviceno = _.deviceno;
+                  return (
+                    <Button
+                      onClick={e => {
+                        remove(deviceno);
+                      }}
+                      disabled={!editable}
+                      size="small"
+                      style={{ margin: '0 4px 4px 0' }}
+                      key={deviceno}
+                    >
+                      {`${_.areano === areano ? '' : `${_.areaname}：`}${
+                        _.bedname
+                      }`}
+                      {editable && <Icon type="close"></Icon>}
+                    </Button>
+                  );
+                })}
+              </div>
+              {editable && (
+                <Icon
+                  type="close"
+                  onClick={() => setSelected([])}
+                  style={{
+                    position: 'absolute',
+                    right: 10,
+                    bottom: 10,
+                    background: '#999',
+                    color: '#fff',
+                    padding: 6,
+                    borderRadius: '100%',
+                  }}
+                ></Icon>
+              )}
+            </div>
 
-                                                    </Icon>
-                                                )
-                                            }
-                                        </Button>
-                                    )
-                                })
-                            }
-                        </div>
-                        {
-                            editable && (
-                                <Icon type="close" onClick={() => setSelected([])} style={{ position: 'absolute', right: 10, bottom: 10, background: '#999', color: '#fff', padding: 6, borderRadius: '100%' }}>
-
-                                </Icon>
-                            )
-                        }
-                    </div>
-
-                    {
-                        editable && <Table onAdd={data => setSelected([...new Set(selected.concat(data))])} />
-                    }
-
-                </Col>
-                {/* <Col span={4}>
+            {editable && (
+              <Table
+                onAdd={data => setSelected([...new Set(selected.concat(data))])}
+              />
+            )}
+          </Col>
+          {/* <Col span={4}>
                     <Button style={{ marginBottom: 6, width: 74 }} type="primary" onClick={() => editable ? comfirm() : setEditable(!editable)}>{editable ? '确认' : '编辑'}</Button><br />
                     {
                         editable ? (
@@ -93,8 +109,8 @@ const C = (props: IProps) => {
                     }
 
                 </Col> */}
-            </Row>
-        </div >
+        </Row>
+      </div>
     );
 };
 

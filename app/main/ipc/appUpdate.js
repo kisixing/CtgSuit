@@ -1,4 +1,5 @@
 const { dialog, app } = require('electron');
+const is = require('electron-is');
 const { createWriteStream, mkdirSync, existsSync, readFileSync, unlink } = require('fs');
 const { request } = require('http')
 const { resolve } = require('path')
@@ -30,41 +31,51 @@ const { tar, gzip } = compress
 
 let f = false
 function appUpdate(e) {
-    if (f) return
-    f = true
-    log(`version-update 开始`)
+  if (f) return;
+  if (is.dev()) return;
+  f = true;
+  log(`version-update 开始`)
 
-    request(`http://${xhr_url}/api/version-compare/ctg-suit/${version}`, im => {
-        im.on('readable', () => {
-            const res = im.read()
-            log(`version-compare:${version}:${res}`)
+  request(
+    `http://${xhr_url}/api/version-compare/ctg-suit/${version}`,
+    im => {
+      im.on('readable', () => {
+        const res = im.read();
+        log(`version-compare:${version}:${res}`);
 
-            if (res) {
-                const { uri: filename, enable, name: newV } = JSON.parse(res.toString())
-                if (filename && newV) {
-                    const tgzPath = resolve(tmp, filename)
-                    const tarPath = resolve(tmp, `${filename}.tar`)
-                    const writeStream = createWriteStream(tgzPath)
-                        .on('close', () => {
-                            f = false
-                            enable ? run(tgzPath, tarPath) : (
-                                dialog.showMessageBox({
-                                    message: `检测到新版本${newV}，是否后台安装`,
-                                    buttons: ['cancel', 'ok'],
-                                }, _ => {
-                                    _ && run(tgzPath, tarPath)
-                                })
-                            )
-                        })
+        if (res) {
+          const { uri: filename, enable, name: newV } = JSON.parse(
+            res.toString(),
+          );
+          if (filename && newV) {
+            const tgzPath = resolve(tmp, filename);
+            const tarPath = resolve(tmp, `${filename}.tar`);
+            const writeStream = createWriteStream(tgzPath).on(
+              'close',
+              () => {
+                f = false;
+                enable
+                  ? run(tgzPath, tarPath)
+                  : dialog.showMessageBox(
+                      {
+                        message: `检测到新版本${newV}，是否后台安装`,
+                        buttons: ['cancel', 'ok'],
+                      },
+                      _ => {
+                        _ && run(tgzPath, tarPath);
+                      },
+                    );
+              },
+            );
 
-                    request(`http://${xhr_url}/api/version-uri/${filename}`, im => im.pipe(writeStream)).end()
-                }
-            }
-
-        })
-    }).end()
-
-
+            request(`http://${xhr_url}/api/version-uri/${filename}`, im =>
+              im.pipe(writeStream),
+            ).end();
+          }
+        }
+      });
+    },
+  ).end();
 }
 
 

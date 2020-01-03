@@ -52,24 +52,34 @@ class Network extends Component {
     } = this.props;
     return (
       <Form layout="horizontal" {...formItemLayout} className={styles.form}>
-        <Form.Item>
-          <div className={styles.subTitle}>网络设置</div>
-        </Form.Item>
+        <div className={styles.subTitle}>网络设置</div>
         <Form.Item label="web socket">
           {getFieldDecorator('ws_url', {
             rules: [{ required: false, message: '请输入websocket服务地址!' }],
-          })(<Input addonBefore="ws://" placeholder="请输入web socket服务地址!" />)}
+          })(
+            <Input
+              addonBefore="ws://"
+              placeholder="请输入web socket服务地址!"
+            />,
+          )}
         </Form.Item>
         <Form.Item label="web service">
           {getFieldDecorator('xhr_url')(
-            <Input addonBefore="http://" placeholder="请输入web service服务地址!" />,
+            <Input
+              addonBefore="http://"
+              placeholder="请输入web service服务地址!"
+            />,
           )}
         </Form.Item>
         <Form.Item {...tailFormItemLayout}>
           <Button type="primary" onClick={this.handleSubmit}>
             保存
           </Button>
-          <Button type="default" onClick={this.reset} style={{marginLeft:10}}>
+          <Button
+            type="default"
+            onClick={this.reset}
+            style={{ marginLeft: 10 }}
+          >
             恢复默认
           </Button>
         </Form.Item>

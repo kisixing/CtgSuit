@@ -529,11 +529,11 @@ class Account extends PureComponent {
     const { data, loading } = this.state;
     return (
       <>
-        <p
-          style={{ fontWeight: 600 }}
+        <div
+          style={{ fontWeight: 600, marginBottom: '12px' }}
         >
           账户管理
-        </p>
+        </div>
         <Table
           loading={loading}
           size="small"

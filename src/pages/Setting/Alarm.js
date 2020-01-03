@@ -119,7 +119,7 @@ class Network extends Component {
     } = this.props;
     return (
       <Form layout="horizontal" {...formItemLayout} className={styles.form}>
-
+        <div className={styles.subTitle}>CTG曲线设置</div>
         <Row>
           <Col span={8}>
             <Form.Item label="胎心率上限">
@@ -193,7 +193,7 @@ class Network extends Component {
           {Object.keys(colors).map(_ => {
             return (
               <Col span={8} key={_}>
-                <Form.Item label={colors[_]} >
+                <Form.Item label={colors[_]}>
                   {getFieldDecorator(_, {
                     rules: [{ required: false, message: '选择颜色!' }],
                   })(<Input type="color" />)}
@@ -207,7 +207,11 @@ class Network extends Component {
           <Button type="primary" onClick={this.handleSubmit}>
             保存
           </Button>
-          <Button type="default" onClick={this.reset.bind(this)} style={{ marginLeft: 10 }}>
+          <Button
+            type="default"
+            onClick={this.reset.bind(this)}
+            style={{ marginLeft: 10 }}
+          >
             恢复默认
           </Button>
         </Form.Item>
