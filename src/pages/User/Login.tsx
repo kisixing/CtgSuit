@@ -68,8 +68,8 @@ const Login = (props: IProps) => {
       })
       .catch(error => {
         const url = error.url;
-        const pos = url.indexOf("api");
-        const api = url.slice(pos);
+        const pos = url && url.indexOf("api");
+        const api = pos && url.slice(pos);
         notification.warning({
           message: `Network Error 请求错误 ${error.status}`,
           description: `${api}, ${error.errortext}`,
@@ -108,7 +108,6 @@ const Login = (props: IProps) => {
           <FormItem hasFeedback>
             {getFieldDecorator('username', {
               // initialValue: 'admin',
-
               rules: [
                 {
                   required: true,
@@ -117,6 +116,7 @@ const Login = (props: IProps) => {
               ],
             })(
               <Input
+                allowClear
                 autoFocus
                 placeholder="用户名"
                 prefix={
@@ -136,6 +136,7 @@ const Login = (props: IProps) => {
               ],
             })(
               <Input
+                allowClear
                 type="password"
                 placeholder="密码"
                 autoComplete="new-password"
