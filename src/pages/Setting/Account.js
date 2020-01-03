@@ -7,8 +7,17 @@
 
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Table, Divider, Popconfirm, Button, Badge, Input, Select, message } from 'antd';
-import isEqual from 'lodash/isEqual';
+import {
+  Table,
+  Divider,
+  Popconfirm,
+  Button,
+  Badge,
+  Input,
+  Select,
+  message,
+  Tooltip,
+} from 'antd';
 import moment from 'moment';
 import {
   getUsers,
@@ -169,7 +178,7 @@ class Account extends PureComponent {
         title: '病区',
         dataIndex: 'wards',
         key: 'wards',
-        width: 150,
+        width: 200,
         render: (text, record) => {
           if (record.editable) {
             const { wards } = this.state;
@@ -203,8 +212,24 @@ class Account extends PureComponent {
               </Select>
             );
           }
-          const str = record['wards'].map(e => e && e.wardName);
-          return str.join(',');
+          const str = record['wards'].map(e => e && e.wardName).join(',');
+          // const tt = str.join(',');
+          return (
+            <Tooltip title={str}>
+              <div
+                style={{
+                  display: 'inline-block',
+                  width: '200px',
+                  overflow: 'hidden',
+                  whiteSpace: 'nowrap',
+                  textOverflow: 'ellipsis',
+                  wordBreak: 'break-all',
+                }}
+              >
+                {str}
+              </div>
+            </Tooltip>
+          );
         },
       },
       {
