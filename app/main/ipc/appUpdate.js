@@ -95,8 +95,10 @@ function run(tgzPath, tarPath) {
                 if (_) {
                     // e.sender.send('installed')
                     // getMainWindow().reload()
-                    app.relaunch();
-                    app.exit();
+                    setTimeout(() => {
+                        app.relaunch();
+                        app.exit();
+                    }, 0);
                 }
             });
         });

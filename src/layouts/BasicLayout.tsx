@@ -21,7 +21,7 @@ const styles = require('./BasicLayout.less')
 const EWsStatus = WsService.wsStatus
 const settingData = settingStore.cache
 const { Content } = Layout;
-
+const { EWsEvents } = WsService
 const BasicLayout = (props: any) => {
 
   const { dispatch, fashionable, children, wsStatus, listData } = props;
@@ -34,18 +34,17 @@ const BasicLayout = (props: any) => {
         location.reload()
       }, null)
     })
-    const ward = settingStore.getSync('ward') || { id: '' }
-    console.log('wardId', typeof ward, ward)
-
-    request.get(`/wards/${ward.id}`).then(({ note, wardType, wardId }: IWard) => {
-
-      note && wardType && wardId && dispatch({ type: 'subscribe/setData', note, wardType, wardId })
-    })
-    const ws = new WsService(settingData).on('explode', data => {
-      dispatch({
-        type: 'ws/updateData', payload: { data }
+    dispatch({ type: 'subscribe/update' })
+    const ws = new WsService(settingData)
+      .on('explode', data => {
+        dispatch({
+          type: 'ws/updateData', payload: { data }
+        })
       })
-    })
+      .on(EWsEvents.updateSubscriptionIfNecessary, (wardIds: string[]) => {
+        const wardId = settingData.ward.wardId
+        wardIds.includes(wardId) && dispatch({ type: 'subscribe/update' })
+      })
     try {
       ws.connect().catch(err => {
         router.push('/setting')
@@ -63,7 +62,7 @@ const BasicLayout = (props: any) => {
     dispatch({
       type: 'ws/connectWs',
     });
-    store.set();
+
     // send ipcMain
     ipcRenderer.send('clear-all-store', {
       name: 'clear all stroe!!!',

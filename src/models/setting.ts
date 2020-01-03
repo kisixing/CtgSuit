@@ -24,8 +24,8 @@ export default {
   state: {
     listLayout: store.get('listLayout') || [2, 2],
     headCollapsed: store.get('headCollapsed') || false,
-    area_type: SettingStore.getSync('area_type'),
-    areano: SettingStore.getSync('areano'),
+    area_type: SettingStore.cache.area_type,
+    areano: SettingStore.cache.areano,
     listLayoutOptions: [
       [2, 1],
       [2, 2],
