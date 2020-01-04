@@ -57,7 +57,7 @@ class Account extends PureComponent {
                   this.handleFieldChange(e, 'firstName', record.id)
                 }
                 onKeyPress={e => this.handleKeyPress(e, record.id)}
-                placeholder="工号"
+                placeholder="账号名称"
               />
             );
           }
@@ -77,7 +77,7 @@ class Account extends PureComponent {
                 autoFocus
                 onChange={e => this.handleFieldChange(e, 'login', record.id)}
                 onKeyPress={e => this.handleKeyPress(e, record.id)}
-                placeholder="账号名称"
+                placeholder="工号"
               />
             );
           }
@@ -246,7 +246,7 @@ class Account extends PureComponent {
         render: text =>
           text
             ? moment(text).format('YYYY-MM-DD HH:mm:ss')
-            : 'XXXX-XX-XX XX:XX',
+            : 'xxx-xx-xx xx:xx',
       },
       // {
       //   title: '最近更新',

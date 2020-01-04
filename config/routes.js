@@ -83,12 +83,6 @@ export default [
         title: '胎监-孕产妇管理',
         component: './Pregnancy',
       },
-      {
-        path: '/account',
-        name: 'account',
-        title: '账户设置',
-        component: './Account',
-      },
       // 异常处理页面
       {
         name: 'exception',
