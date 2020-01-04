@@ -1,11 +1,11 @@
 {
   "name": "ctgsuit-electron",
-  "version": "1.0.40",
+  "version": "1.0.41",
   "description": "host replace pack",
   "details": [
     "登录页网络设置",
     "登录页病区选择提示",
-    "报告页（选段、工具按钮部分）",
+    "报告重新生成",
     "订阅显示设备名",
     "宫缩调零、音量调节按钮按需隐藏",
     "音量调节即时发送",
