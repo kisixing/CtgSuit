@@ -8,6 +8,7 @@ import PrintPreview from '../Workbench/PrintPreview';
 import Analysis from '../Workbench/Analysis';
 import ReportPreview from "./ReportPreview";
 import styles from './TableList.less';
+import { event } from '@lianmed/utils';
 
 class TableList extends Component {
   constructor(props) {
@@ -84,14 +85,12 @@ class TableList extends Component {
         dataIndex: 'comment',
         key: 'comment',
         width: 180,
-        align: 'center',
         render: (text, record) => record.ctgexam.note,
       },
       {
         title: '操作',
         dataIndex: 'action',
         key: 'action',
-        align: 'center',
         width: 140,
         render: (text, record) => {
           const ctgexam = record.ctgexam
@@ -99,11 +98,18 @@ class TableList extends Component {
           const signable = !!ctgexam.signable
           return (
             <span>
+              <span className="primary-link" onClick={(e) => this.showAnalysis(e, record)}>
+                分析
+              </span>
               {
                 signable && (
-                  <span className="primary-link" onClick={(e) => this.showPrint(e, record)}>
-                    {hasSigned ? '重新生成' : '报告生成'}
-                  </span>
+                  <>
+                    <Divider type="vertical" />
+
+                    <span className="primary-link" onClick={(e) => this.showPrint(e, record)}>
+                      {hasSigned ? '重新生成' : '报告生成'}
+                    </span>
+                  </>
                 )
               }
               {
@@ -116,10 +122,7 @@ class TableList extends Component {
                   </>
                 )
               }
-              <Divider type="vertical" />
-              <span className="primary-link" onClick={(e) => this.showAnalysis(e, record)}>
-                分析
-              </span>
+
               {/* <Divider type="vertical" /> */}
               {/* <span className="delete-link" onClick={() => this.switchFullscreen(record)}>
                 详情
@@ -132,10 +135,17 @@ class TableList extends Component {
           );
         },
       },
-    ];
+
+    ].map(_ => ({ ..._, align: 'center' }));
   }
 
   componentDidMount() {
+    this.init()
+    event.on('signed', id => {
+      this.init()
+    })
+  }
+  init() {
     const { router } = this.props;
     const query = router.location.query;
     // 默认请求近一周的数据
@@ -165,7 +175,6 @@ class TableList extends Component {
       this.fetchRecords(params);
     }
   }
-
   fetchRecords = params => {
     const { dispatch } = this.props;
     dispatch({
