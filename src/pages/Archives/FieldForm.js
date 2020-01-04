@@ -88,21 +88,21 @@ class FieldForm extends Component {
     return (
       <Form layout="inline" className={styles.form} onSubmit={this.handleSubmit}>
         <Row>
-          <Col span={5}>
+          <Col span={4}>
             <Form.Item label="开始日期">
               {getFieldDecorator('startTime')(
                 <DatePicker allowClear format="YYYY-MM-DD" placeholder="请选择开始日期" />,
               )}
             </Form.Item>
           </Col>
-          <Col span={5}>
+          <Col span={4}>
             <Form.Item label="结束日期">
               {getFieldDecorator('endTime')(
                 <DatePicker allowClear format="YYYY-MM-DD" placeholder="请选择结束日期" />,
               )}
             </Form.Item>
           </Col>
-          <Col span={5}>
+          <Col span={4}>
             <Form.Item>
               <Button
                 type="primary"

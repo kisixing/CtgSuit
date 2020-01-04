@@ -1,8 +1,6 @@
 import React from 'react';
 import { Modal } from 'antd';
-
 import moment from 'moment';
-
 
 interface IProps extends React.Props<any> {
     docid: string

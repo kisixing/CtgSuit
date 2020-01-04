@@ -71,7 +71,7 @@ class TableList extends Component {
         title: 'GP',
         dataIndex: 'GP',
         key: 'GP',
-        width: 60,
+        width: 65,
         render: (text, record) => {
           if (record.pregnancy) {
             return `${record.pregnancy.gravidity} / ${record.pregnancy.parity}`;
@@ -435,25 +435,28 @@ class TableList extends Component {
         <Table
           bordered
           size="small"
-          scroll={{ x: 1280, y: 196 }}
+          scroll={{ x: 1280, y: 200 }}
           columns={this.columns}
           dataSource={dataSource}
           onRow={record => {
             // 当存在action时，会触发多个事件
             return {
               onClick: event => this.handleRow(record), // 点击行
-              onDoubleClick: event => { },
+              onDoubleClick: event => {},
             };
           }}
           loading={loading.effects['archives/fetchRecords']}
           rowKey="id"
-          rowClassName={record => (record.id === selected.id ? styles.selectedRow : '')}
+          rowClassName={record =>
+            record.id === selected.id ? styles.selectedRow : ''
+          }
           rowSelection={{
             // columnWidth: '67px',
             columnTitle: '选中',
             type: 'radio',
             selectedRowKeys: [selected.id],
-            onSelect: (record, selected, selectedRows) => this.handleRow(record),
+            onSelect: (record, selected, selectedRows) =>
+              this.handleRow(record),
           }}
           pagination={{
             showSizeChanger: true,
@@ -508,7 +511,7 @@ class TableList extends Component {
           <ReportPreview
             visible={reportVisible}
             onCancel={this.handleCancel}
-            docid={selected.ctgexam && selected.ctgexam.docid}
+            docid={selected.ctgexam && selected.ctgexam.note}
             report={selected.ctgexam && selected.ctgexam.report}
             inpatientNO={selected.pregnancy && selected.pregnancy.inpatientNO}
             name={selected.pregnancy && selected.pregnancy.name}
