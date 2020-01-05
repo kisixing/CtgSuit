@@ -37,7 +37,7 @@ export default {
         store.set(TOKEN, `Bearer ${data.id_token}`);
         // TODO 暂时存储登录账户密码
         store.set('ACCOUNT', {
-          uaername: payload.username,
+          username: compile(payload.username),
           password: compile(payload.password),
         });
         const urlParams = new URL(window.location.href);

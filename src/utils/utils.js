@@ -20,7 +20,7 @@ export function compile(code) {
 // 解密函数
 export function uncompile(code) {
   code = unescape(code);
-  var c = String.fromCharCode(code.charCodeAt(0) - code.length);
+  let c = String.fromCharCode(code.charCodeAt(0) - code.length);
   for(let i = 1; i < code.length; i ++) {
     c += String.fromCharCode(code.charCodeAt(i) - c.charCodeAt(i - 1));
   }

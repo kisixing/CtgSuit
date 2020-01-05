@@ -79,7 +79,7 @@ const BasicLayout = (props: any) => {
       dispatch({
         type: 'login/verification',
         payload: {
-          username: account.username,
+          username: uncompile(account.username),
           password: uncompile(account.password),
         },
       });

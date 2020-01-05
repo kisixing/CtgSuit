@@ -85,7 +85,7 @@ const Login = (props: IProps) => {
       }
       store.set(Object.keys(values), Object.values(values)).then(status => {
         if (status) {
-          message.success('设置成功,2s 后重启', 1).then(() => {
+          message.success('设置成功，2s 后重启！', 1).then(() => {
             // eslint-disable-next-line no-restricted-globals
             location.reload();
           });
@@ -118,7 +118,7 @@ const Login = (props: IProps) => {
               <Input
                 allowClear
                 autoFocus
-                placeholder="用户名"
+                placeholder="工号"
                 prefix={
                   <Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />
                 }

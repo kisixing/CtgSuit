@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
-import { Layout, Menu, Button } from 'antd';
-
+import { Layout, Menu } from 'antd';
+import { connect } from 'dva';
+import store from 'store';
+import { uncompile } from '@/utils/utils';
 // 各个模块
 import BasicSetting from './BasicSetting';
 import ScoreSet from './ScoreSet';
@@ -40,6 +42,8 @@ class Setting extends Component {
 
   menus = () => {
     const { current } = this.state;
+    const account = store.get('ACCOUNT');
+    const username = uncompile(account.username);
     return (
       <Menu
         mode="inline"
@@ -49,7 +53,7 @@ class Setting extends Component {
         <Menu.Item key="5">网络设置</Menu.Item>
         <Menu.Item key="6">医院设置</Menu.Item>
         <Menu.Item key="7">订阅设置</Menu.Item>
-        <Menu.Item key="8">账号管理</Menu.Item>
+        {username === 'admin' ? <Menu.Item key="8">账号管理</Menu.Item> : null}
         {/* <Menu.Item key="10">用户组和病区管理</Menu.Item> */}
         <Menu.Item key="9">CTG设置</Menu.Item>
         <Menu.Item key="3">打印设置</Menu.Item>
@@ -109,7 +113,10 @@ class Setting extends Component {
           <div className={styles.sideMenu}>{this.menus()}</div>
         </Sider>
         <Layout className={styles.main}>
-          {/* <Header className={styles.headerTitle}>{`系统设置/${current.label}`}</Header> */}
+          <Header
+            className={styles.headerTitle}
+            style={{ display: 'none' }}
+          >{`系统设置/${current.label}`}</Header>
           <Layout className={styles.formBox}>{this.switchComponent()}</Layout>
         </Layout>
       </Layout>
@@ -117,4 +124,8 @@ class Setting extends Component {
   }
 }
 
-export default Setting;
+export default connect(
+  ({ global}) => ({
+    account: global.account
+  }),
+)(Setting);

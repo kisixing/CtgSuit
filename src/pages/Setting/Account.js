@@ -74,7 +74,6 @@ class Account extends PureComponent {
             return (
               <Input
                 value={text}
-                autoFocus
                 onChange={e => this.handleFieldChange(e, 'login', record.id)}
                 onKeyPress={e => this.handleKeyPress(e, record.id)}
                 placeholder="工号"
@@ -90,11 +89,12 @@ class Account extends PureComponent {
         key: 'password',
         width: 150,
         render: (text, record) => {
+          const isNew = record.isNew;
           if (record.editable) {
             return (
               <Input.Password
+                disabled={!isNew}
                 value={text}
-                autoFocus
                 onChange={e => this.handleFieldChange(e, 'password', record.id)}
                 onKeyPress={e => this.handleKeyPress(e, record.id)}
                 placeholder="账号密码"
@@ -183,7 +183,6 @@ class Account extends PureComponent {
           if (record.editable) {
             const { wards } = this.state;
             const val = record['wards'].map(e => e && e.id);
-            console.log('TCL666', val);
             return (
               <Select
                 mode="multiple"
@@ -262,7 +261,7 @@ class Account extends PureComponent {
         title: '操作',
         dataIndex: 'actions',
         key: 'actions',
-        width: 150,
+        width: 160,
         render: (text, record) => {
           const { loading } = this.state;
           if (!!record.editable && loading) {
@@ -302,7 +301,12 @@ class Account extends PureComponent {
               <>
                 <span
                   className="primary-link"
-                  onClick={e => this.toggleEditable(e, record.id)}
+                  onClick={e => {
+                    // 获取select options
+                    this.fetchGroups();
+                    this.fetchWards()
+                    this.toggleEditable(e, record.id)}
+                  }
                 >
                   编辑
                 </span>
@@ -363,9 +367,7 @@ class Account extends PureComponent {
     const { data } = this.state;
     const newData = data.map(item => ({ ...item }));
     const target = this.getRowByKey(key, newData);
-    // 获取select options
-    this.fetchGroups();
-    this.fetchWards()
+
     if (target) {
       // 进入编辑状态时保存原始数据
       if (!target.editable) {
@@ -381,6 +383,7 @@ class Account extends PureComponent {
     const { account } = this.props;
     const newData = data.map(item => ({ ...item }));
     const date = moment();
+
     newData.push({
       id: `NEW_TEMP_ID_${this.index}`,
       login: '',
@@ -453,7 +456,17 @@ class Account extends PureComponent {
       return;
     }
     const target = this.getRowByKey(key) || {};
-    if (!target.password || !target.login) {
+
+    // 判断新建还是更像
+    // const ID = target.id.toString();
+    // const isNew = ID.includes('NEW_TEMP_ID');
+
+    if (
+      !target.firstName ||
+      !target.login ||
+      !target.groups.length ||
+      !target.wards.length
+    ) {
       message.error('请填写完整成员信息。');
       e.target.focus();
       this.setState({
@@ -461,16 +474,20 @@ class Account extends PureComponent {
       });
       return;
     }
-    delete target.isNew;
-    console.log('TCL888', target);
-    this.toggleEditable(e, key);
-    const ID = target.id.toString();
-    if (ID.includes('NEW_TEMP_ID')) {
+    if (target.isNew) {
       target.id = '';
+      if (!target.password) {
+        this.setState({
+          loading: false,
+        });
+        return message.error('请设置账户密码！');
+      }
+      delete target.isNew;
       this.create(target);
     } else {
       this.update(target);
     }
+    this.toggleEditable(e, key);
     this.setState({
       loading: false,
     });
@@ -492,6 +509,7 @@ class Account extends PureComponent {
     createUser(params)
       .then(res => {
         message.success(`新增用户${params.login}成功！`);
+        this.fetchUsers();
       })
       .catch(err => {
         message.error(`新增用户${params.login}失败，请稍后再试！`);
@@ -529,14 +547,11 @@ class Account extends PureComponent {
     const { data, loading } = this.state;
     return (
       <>
-        <div
-          style={{ fontWeight: 600, marginBottom: '12px' }}
-        >
-          账户管理
-        </div>
+        <div style={{ fontWeight: 600, marginBottom: '12px' }}>账户管理</div>
         <Table
           loading={loading}
           size="small"
+          scroll={{ x: 1280 }}
           pagination={false}
           columns={this.columns}
           dataSource={data}
@@ -544,7 +559,12 @@ class Account extends PureComponent {
         <Button
           style={{ width: '100%', marginTop: 16, marginBottom: 8 }}
           type="dashed"
-          onClick={this.newAccount}
+          onClick={() => {
+            // 获取select options
+            this.fetchGroups();
+            this.fetchWards();
+            this.newAccount();
+          }}
           icon="plus"
         >
           新增账号

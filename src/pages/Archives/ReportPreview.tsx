@@ -39,7 +39,6 @@ function Analysis(props: IProps) {
     <Shell {...props}>
       <div style={{ height: '100%', textAlign: 'center', display: 'flex' }} ref={inputEl}>
         <PreviewContent pdfBase64={pdfBase64} wh={wh} isFull borderd={false} />
-
       </div>
     </Shell>
   );
