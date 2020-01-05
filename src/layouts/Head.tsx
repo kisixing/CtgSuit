@@ -1,5 +1,6 @@
-import React, { memo, useState } from 'react';
-import { Layout, Button } from 'antd';
+import React, { memo } from 'react';
+import { Layout } from 'antd';
+import cx from 'classnames';
 // import logo from '../assets/logo.png';
 import Beds from './Beds';
 import Tabs from './Tabs';
@@ -10,28 +11,38 @@ const styles = require('./BasicLayout.less')
 const { Header } = Layout;
 const H = ({ headCollapsed }) => {
     return (
-        <Header className={styles.header}>
-            {/* <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <Link to="/workbench" className={styles.logo}>
-                    <span>胎监工作站</span>
-                </Link>
-                <div style={{ display: 'flex', lineHeight: '24px', justifyContent: 'space-around' }}>
-                    <LayoutSetting />
-                </div>
-            </div> */}
-
-            <div style={{ display: 'flex', flexDirection: 'column', flex: 1, position: 'relative' }}>
-                {
-                    !headCollapsed && (
-                        <div style={{ display: 'flex', flex: 1, marginBottom: 10 }}>
-                            <Beds />
-                            <Menus />
-                        </div>
-                    )
-                }
-                <Tabs />
+      <Header className={styles.header}>
+        {/* <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <Link to="/workbench" className={styles.logo}>
+              <span>胎监工作站</span>
+            </Link>
+            <div style={{ display: 'flex', lineHeight: '24px', justifyContent: 'space-around' }}>
+              <LayoutSetting />
             </div>
-        </Header>
+        </div> */}
+
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            flex: 1,
+            position: 'relative',
+          }}
+        >
+          <div
+            style={{
+              display: headCollapsed ? 'none' : 'flex',
+              flex: 1,
+              marginBottom: 10,
+              transition: 'all .2s',
+            }}
+          >
+            <Beds />
+            <Menus />
+          </div>
+          <Tabs />
+        </div>
+      </Header>
     );
 }
 

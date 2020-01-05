@@ -102,7 +102,7 @@ class TableList extends Component {
                 编辑
               </span>
               <Divider type="vertical" />
-              <span className="primary-link" onClick={() => this.handleSearchArchives(record.id)}>
+              <span className="primary-link" onClick={() => this.handleSearchArchives(record)}>
                 档案
               </span>
               {/* <Divider type="vertical" />
@@ -160,8 +160,16 @@ class TableList extends Component {
     );
   };
 
-  handleSearchArchives = id => {
-    router.push(`/archives?pregnancyId=${id}`);
+  handleSearchArchives = record => {
+    router.push({
+      pathname: '/archives',
+      query: {
+        pregnancyId: record.id,
+        name: record.name,
+        inpatientNO: record.inpatientNO,
+        // ...record,
+      },
+    });
   };
 
   handleUpdate = values => {

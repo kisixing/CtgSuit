@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useEffect } from 'react';
+import React, { useLayoutEffect } from 'react';
 import { Layout, message } from 'antd';
 import { connect } from 'dva';
 import { router } from 'umi';
@@ -88,11 +88,6 @@ const BasicLayout = (props: any) => {
 
   useAlarm(listData);
 
-  // useEffect(() => {
-  //   // Specify how to clean up after this effect:
-  //   return () => store.clearAll();
-  // });
-
   return (
     <Layout
       className={styles.container}
@@ -106,18 +101,12 @@ const BasicLayout = (props: any) => {
       }}
     >
       <CheckNetwork visible={wsStatus !== EWsStatus.Success} />
-
       <Layout>
-
-        {
-          fashionable && <Side />
-        }
+        {fashionable && <Side />}
         <Layout>
           <Head />
-
           <Content className={styles.main}>{children}</Content>
         </Layout>
-
       </Layout>
       <Foot />
     </Layout>

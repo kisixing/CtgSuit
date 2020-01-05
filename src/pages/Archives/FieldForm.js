@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
-import { Form, Row, Col, Input, DatePicker, Button } from 'antd';
+import { Form, Row, Col, DatePicker, Input, Button } from 'antd';
 
 import styles from './FieldForm.less';
 
@@ -27,8 +27,13 @@ class FieldForm extends Component {
   // 检索
   handleSubmit = e => {
     e.preventDefault();
-    const { dispatch, form, pagination } = this.props;
-    const { size, page } = pagination;
+    const { dispatch, router, form, pagination } = this.props;
+    const query = router.location.query;
+    let pregnancyId = undefined;
+    if (query) {
+      pregnancyId = query.pregnancyId;
+    }
+    const { size, /* page */ } = pagination;
     form.validateFields((err, values) => {
       if (!err) {
         // let sTime = STARTTIME.format('YYYY-MM-DD');
@@ -46,7 +51,7 @@ class FieldForm extends Component {
         dispatch({
           type: 'archives/fetchRecords',
           payload: {
-            // 'pregnancyId.equals': pregnancyId,
+            'pregnancyId.equals': pregnancyId,
             'visitDate.greaterOrEqualThan': sTime,
             'visitDate.lessOrEqualThan': eTime,
             size,
@@ -56,7 +61,7 @@ class FieldForm extends Component {
         dispatch({
           type: 'archives/fetchCount',
           payload: {
-            // 'pregnancyId.equals': pregnancyId,
+            'pregnancyId.equals': pregnancyId,
             'visitDate.greaterOrEqualThan': sTime,
             'visitDate.lessOrEqualThan': eTime,
           },
@@ -86,22 +91,46 @@ class FieldForm extends Component {
       form: { getFieldDecorator },
     } = this.props;
     return (
-      <Form layout="inline" className={styles.form} onSubmit={this.handleSubmit}>
+      <Form
+        layout="inline"
+        className={styles.form}
+        onSubmit={this.handleSubmit}
+      >
         <Row>
           <Col span={4}>
             <Form.Item label="开始日期">
               {getFieldDecorator('startTime')(
-                <DatePicker allowClear format="YYYY-MM-DD" placeholder="请选择开始日期" />,
+                <DatePicker
+                  allowClear
+                  format="YYYY-MM-DD"
+                  placeholder="请选择开始日期"
+                  style={{ width: 136 }}
+                />,
               )}
             </Form.Item>
           </Col>
           <Col span={4}>
             <Form.Item label="结束日期">
               {getFieldDecorator('endTime')(
-                <DatePicker allowClear format="YYYY-MM-DD" placeholder="请选择结束日期" />,
+                <DatePicker
+                  allowClear
+                  format="YYYY-MM-DD"
+                  placeholder="请选择结束日期"
+                />,
               )}
             </Form.Item>
           </Col>
+          {/* <Col span={4}>
+            <Form.Item label="姓名">
+              {getFieldDecorator('name')(
+                <Input
+                  disabled
+                  allowClear
+                  placeholder="请输入孕妇姓名"
+                />,
+              )}
+            </Form.Item>
+          </Col> */}
           <Col span={4}>
             <Form.Item>
               <Button
@@ -120,7 +149,8 @@ class FieldForm extends Component {
   }
 }
 
-export default connect(({ loading, archives }) => ({
+export default connect(({ loading, archives, router }) => ({
   loading: loading,
   pagination: archives.pagination,
+  router,
 }))(FieldForm);

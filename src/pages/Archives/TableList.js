@@ -84,14 +84,15 @@ class TableList extends Component {
         title: '档案号',
         dataIndex: 'comment',
         key: 'comment',
-        width: 180,
+        width: 150,
         render: (text, record) => record.ctgexam.note,
       },
       {
         title: '操作',
         dataIndex: 'action',
         key: 'action',
-        width: 140,
+        width: 150,
+        align: 'center',
         render: (text, record) => {
           const ctgexam = record.ctgexam
           const hasSigned = !!ctgexam.report
@@ -135,8 +136,7 @@ class TableList extends Component {
           );
         },
       },
-
-    ].map(_ => ({ ..._, align: 'center' }));
+    ] // .map(_ => ({ ..._, align: 'center' }));
   }
 
   componentDidMount() {
@@ -146,7 +146,7 @@ class TableList extends Component {
     })
   }
   init() {
-    const { router } = this.props;
+    const { router, pagination } = this.props;
     const query = router.location.query;
     // 默认请求近一周的数据
     const sTime = moment()
@@ -157,6 +157,8 @@ class TableList extends Component {
       'visitDate.greaterOrEqualThan': sTime,
       'visitDate.lessOrEqualThan': eTime,
     };
+    // 初始化页脚信息，重第一页开始
+    this.savePagination({ size: pagination.size, page: 0 });
     if (query.pregnancyId) {
       // 从孕产妇列表进入时，取得该孕产妇的孕产id，获得ctg档案信息
       this.fetchRecords({
@@ -175,6 +177,7 @@ class TableList extends Component {
       this.fetchRecords(params);
     }
   }
+
   fetchRecords = params => {
     const { dispatch } = this.props;
     dispatch({
@@ -379,12 +382,16 @@ class TableList extends Component {
   // 分页器onchange
   onChange = (page, pageSize) => {
     const values = this.getValues();
+    // 判断是否是孕产妇管理页跳转过来的，query不为空
+    const { router } = this.props;
+    const query = router.location.query;
     // 以是否有pageSize区分触发区域
     if (pageSize) {
       // console.log('onChange --> params', page, pageSize);
       const params = {
         size: pageSize,
         page: page - 1,
+        'pregnancyId.equals': query.pregnancyId,
         ...values,
       };
       this.fetchRecords(params);
