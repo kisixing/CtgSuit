@@ -2,16 +2,17 @@ import { useLayoutEffect, useCallback } from "react";
 import { event } from "@lianmed/utils";
 import { notification } from "antd";
 import { IBed } from '@/types';
+import store from "@/utils/SettingStore";
 declare var __DEV__: boolean;
 
 
 export default (listData: IBed[]) => {
-
+    const isIn = store.cache.area_type === 'in'
     const findName = useCallback((unitId: string) => {
         const target = listData.find(_ => _.unitId === unitId)
-        unitId === '48-48' && target && console.log('gg', target.bedname)
-
-        return target && target.bedname
+        const bedNO = target && target.data && target.data.pregnancy && target.data.pregnancy.bedNO
+        const bedname = target && target.bedname
+        return isIn ? (bedNO || bedname) : bedname
     }, [listData])
     useLayoutEffect(() => {
         const audio: HTMLAudioElement = document.querySelector('#alarm')
