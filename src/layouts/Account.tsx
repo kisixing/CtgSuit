@@ -84,11 +84,11 @@ const A = (props: any) => {
             src={account.imageUrl}
             alt="avatar"
           >
-            {account.firstName &&
-              account.firstName.substr(0, 1).toUpperCase()}
+            {account.login &&
+              account.login.substr(0, 1).toUpperCase()}
           </Avatar>
-          <span title={account.firstName} className={styles.name}>
-            {account.firstName}
+          <span title={account.login} className={styles.name}>
+            {account.login}
           </span>
         </span>
       </HeaderDropdown>

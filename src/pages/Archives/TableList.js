@@ -95,7 +95,7 @@ class TableList extends Component {
         render: (text, record) => {
           const ctgexam = record.ctgexam
           const hasSigned = !!ctgexam.report
-          const signable = !!ctgexam.signable
+          const signable = true || !!ctgexam.signable
           return (
             <span>
               <span className="primary-link" onClick={(e) => this.showAnalysis(e, record)}>
