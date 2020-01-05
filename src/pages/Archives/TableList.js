@@ -72,7 +72,7 @@ class TableList extends Component {
         title: 'GP',
         dataIndex: 'GP',
         key: 'GP',
-        width: 60,
+        width: 65,
         render: (text, record) => {
           if (record.pregnancy) {
             return `${record.pregnancy.gravidity} / ${record.pregnancy.parity}`;
@@ -439,30 +439,46 @@ class TableList extends Component {
     const { selected, dataSource, count, loading, pagination: { size, page } } = this.props;
     const { visible, printVisible, analysisVisible, reportVisible, type, current } = this.state;
 
+    // 档案号
+    const docID = selected.ctgexam && selected.ctgexam.note;
+    // 监护开始时间
+    const startTime = selected.ctgexam && selected.ctgexam.startTime;
+    // 住院号
+    const inpatientNO = selected.pregnancy && selected.pregnancy.inpatientNO;
+    // 姓名
+    const name = selected.pregnancy && selected.pregnancy.name;
+    // 年龄
+    const age = selected.pregnancy && selected.pregnancy.age;
+    // 孕周
+    const gestationalWeek = selected && selected.gestationalWeek;
+
     return (
       <div className={styles.tableList}>
         <Table
           bordered
           size="small"
-          scroll={{ x: 1280, y: 196 }}
+          scroll={{ x: 1280, y: 200 }}
           columns={this.columns}
           dataSource={dataSource}
           onRow={record => {
             // 当存在action时，会触发多个事件
             return {
               onClick: event => this.handleRow(record), // 点击行
-              onDoubleClick: event => { },
+              onDoubleClick: event => {},
             };
           }}
           loading={loading.effects['archives/fetchRecords']}
           rowKey="id"
-          rowClassName={record => (record.id === selected.id ? styles.selectedRow : '')}
+          rowClassName={record =>
+            record.id === selected.id ? styles.selectedRow : ''
+          }
           rowSelection={{
             // columnWidth: '67px',
             columnTitle: '选中',
             type: 'radio',
             selectedRowKeys: [selected.id],
-            onSelect: (record, selected, selectedRows) => this.handleRow(record),
+            onSelect: (record, selected, selectedRows) =>
+              this.handleRow(record),
           }}
           pagination={{
             showSizeChanger: true,
@@ -492,12 +508,12 @@ class TableList extends Component {
             visible={printVisible}
             onCancel={this.handleCancel}
             onCreate={this.handleCreate}
-            docid={selected.ctgexam && selected.ctgexam.note}
-            startTime={selected.ctgexam && selected.ctgexam.startTime}
-            inpatientNO={selected.pregnancy && selected.pregnancy.inpatientNO}
-            name={selected.pregnancy && selected.pregnancy.name}
-            age={selected.pregnancy && selected.pregnancy.age}
-            gestationalWeek={selected && selected.gestationalWeek}
+            docid={docID}
+            startTime={startTime}
+            inpatientNO={inpatientNO}
+            name={name}
+            age={age}
+            gestationalWeek={gestationalWeek}
           />
         ) : null}
         {analysisVisible ? (
@@ -505,25 +521,25 @@ class TableList extends Component {
             visible={analysisVisible}
             onCancel={this.handleCancel}
             onCreate={this.handleCreate}
-            docid={selected.ctgexam && selected.ctgexam.note}
-            startTime={selected.ctgexam && selected.ctgexam.startTime}
-            inpatientNO={selected.pregnancy && selected.pregnancy.inpatientNO}
-            name={selected.pregnancy && selected.pregnancy.name}
-            age={selected.pregnancy && selected.pregnancy.age}
-            gestationalWeek={selected && selected.gestationalWeek}
+            docid={docID}
+            startTime={startTime}
+            inpatientNO={inpatientNO}
+            name={name}
+            age={age}
+            gestationalWeek={gestationalWeek}
           />
         ) : null}
         {reportVisible ? (
           <ReportPreview
             visible={reportVisible}
             onCancel={this.handleCancel}
-            docid={selected.ctgexam && selected.ctgexam.docid}
+            docid={docID}
             report={selected.ctgexam && selected.ctgexam.report}
-            inpatientNO={selected.pregnancy && selected.pregnancy.inpatientNO}
-            name={selected.pregnancy && selected.pregnancy.name}
-            age={selected.pregnancy && selected.pregnancy.age}
-            startTime={selected.ctgexam && selected.ctgexam.startTime}
-            gestationalWeek={selected && selected.gestationalWeek}
+            inpatientNO={inpatientNO}
+            name={name}
+            age={age}
+            startTime={startTime}
+            gestationalWeek={gestationalWeek}
           />
         ) : null}
       </div>
