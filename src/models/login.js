@@ -3,6 +3,7 @@ import { routerRedux } from 'dva';
 import { parse } from 'qs';
 import store from 'store';
 import { TOKEN } from '@/utils/constant';
+import { compile } from '@/utils/utils';
 import { authenticate } from '@/services/api';
 
 export default {
@@ -35,7 +36,10 @@ export default {
         });
         store.set(TOKEN, `Bearer ${data.id_token}`);
         // TODO 暂时存储登录账户密码
-        store.set('ACCOUNT', payload);
+        store.set('ACCOUNT', {
+          uaername: payload.username,
+          password: compile(payload.password),
+        });
         const urlParams = new URL(window.location.href);
         const params = parse(window.location.href.split('?')[1]);
         let { redirect } = params;

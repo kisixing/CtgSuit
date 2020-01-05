@@ -8,6 +8,7 @@ import { ipcRenderer } from 'electron';
 // import logo from '../assets/logo.png';
 
 import settingStore from "@/utils/SettingStore";
+import { uncompile } from '@/utils/utils';
 import { WsService } from "@lianmed/lmg";
 import CheckNetwork from "./CheckNetwork";
 import Foot from "./Foot";
@@ -77,7 +78,10 @@ const BasicLayout = (props: any) => {
       const account = store.get('ACCOUNT');
       dispatch({
         type: 'login/verification',
-        payload: account
+        payload: {
+          username: account.username,
+          password: uncompile(account.password),
+        },
       });
     }, 1000 * 60 * 60 * 2);
     return () => {
