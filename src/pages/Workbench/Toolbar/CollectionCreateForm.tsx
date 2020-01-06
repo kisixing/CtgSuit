@@ -25,11 +25,11 @@ interface IProps {
 }
 const CollectionCreateForm = (props: IProps) => {
 
-  const isIn = SettingStore.getSync('area_type') === 'in'
-
-  const noLabel = isIn ? '住院号' : '门诊号'
-  const noKey = isIn ? 'inpatientNO' : 'outpatientNO'
+  const isIn = SettingStore.getSync('area_type') === 'in';
+  const noLabel = isIn ? '住院号' : '卡号'
+  const noKey = isIn ? 'inpatientNO' : 'cardNo';
   const width = '200px';
+
   const columns = [
     isIn && {
       title: '床号',
@@ -171,26 +171,28 @@ const CollectionCreateForm = (props: IProps) => {
 
   // modal里面的搜索按钮事件、调入
   const handleSearch = () => {
-    setErrorText('')
+    setErrorText('');
+    // 判断门诊，住院
+
     form.validateFields(async (err, values) => {
       if (err) {
         return;
       }
       const res = await request.get(
-        `/pregnanciespage?${stringify({
+        `/pregnancies?${stringify({
           // TODO
           // 默认病区 、默认住院状态
-          'recordstate.equals': '10', // 住院中
+          'recordstate.equals': isIn ? '10' : '30', // 住院中10, 门诊30
           'areaNO.equals': areaNO, // 默认病区
           'bedNO.equals': values.bedNO ? values.bedNO : undefined, // 床号
-          [`${noKey}.equals`]: values[noKey] ? values[noKey] : undefined, // 住院号
+          [`${noKey}.equals`]: values[noKey] ? values[noKey] : undefined, // 住院号or卡号
           'name.equals': values.name ? values.name : undefined,
         })}`,
       );
       // 成功调入孕妇信息后，禁止修改。
       // 重新选择调入、新建孕妇信息 --> '取消'后再重复操作
       if (!res.length) {
-        setErrorText('没有这个孕册，请新建孕册。')
+        setErrorText(`没有${noLabel}为 ${values[noKey]} 的孕册，请新建孕册。`);
       } else if (res.length === 1) {
         // 搜索结果只有一个，默认赋值
         setDisabled(true);
@@ -291,6 +293,7 @@ const CollectionCreateForm = (props: IProps) => {
 
   // 年龄校验
   const validateAge = (value: number) => {
+    setAgeWarning({ status: 'success', help: '' });
     if (value >= 35) {
       setAgeWarning({ status: 'warning', help: '该孕妇年龄偏大...' });
     }
@@ -494,7 +497,7 @@ const CollectionCreateForm = (props: IProps) => {
               textAlign: 'center',
             }}
           >
-            <span
+            {/* <span
               style={{
                 position: 'absolute',
                 left: 18,
@@ -503,8 +506,13 @@ const CollectionCreateForm = (props: IProps) => {
               }}
             >
               {errorText}
-            </span>
-            提示：调入孕产妇信息时，输入床号即可。调入档案后，如需要更改，请先点击'重置'按钮，再进行操作。
+            </span> */}
+            {errorText ? (
+              <div style={{ color: '#f00' }}>{errorText}</div>
+            ) : null}
+            {isIn
+              ? "提示：调入孕产妇信息时，输入床号即可。调入档案后，如需要更改，请先点击'重置'按钮，再进行操作。"
+              : "提示：调入孕产妇信息时，输入卡号即可。调入档案后，如需要更改，请先点击'重置'按钮，再进行操作。"}
           </Col>
         </Row>
       </Form>
