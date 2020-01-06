@@ -146,7 +146,7 @@ class TableList extends Component {
   componentWillUnmount() {
     event.off('signed', this.signed)
   }
-  signed(id) {
+  signed = (id) => {
     const { pagination } = this.props;
     this.onChange(pagination.page + 1, pagination.size)
   }
