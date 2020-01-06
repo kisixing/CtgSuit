@@ -17,7 +17,7 @@ export const VersionModal = (props: IProps) => {
     }, [])
 
 
-    return !!__VERSION_MANIFEST && (
+    return !!__VERSION_MANIFEST && !!__VERSION_MANIFEST.length && (
         <Modal
             maskClosable={false}
             destroyOnClose
