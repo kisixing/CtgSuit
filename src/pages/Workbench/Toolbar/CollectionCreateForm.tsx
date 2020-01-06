@@ -118,7 +118,11 @@ const CollectionCreateForm = (props: IProps) => {
       // 新建孕册
       const res = await request
         .post('/pregnancies', {
-          data: { ...values, areaNO: areaNO, recordstate: '10' },
+          data: {
+            ...values,
+            areaNO: isIn ? areaNO : undefined,
+            recordstate: isIn ? '10' : '30',
+          },
         })
         .catch(({ data }) => {
           data.then(({ title }) => {
