@@ -1,6 +1,6 @@
 {
   "name": "ctgsuit-electron",
-  "version": "1.0.44",
+  "version": "1.0.45",
   "description": "host replace pack",
   "details": [
     "当选定报告打印范围后，拖动标尺，心率及宫缩值不会更新",

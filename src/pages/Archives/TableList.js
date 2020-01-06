@@ -141,9 +141,14 @@ class TableList extends Component {
 
   componentDidMount() {
     this.init()
-    event.on('signed', id => {
-      this.init()
-    })
+    event.on('signed', this.signed)
+  }
+  componentWillUnmount() {
+    event.off('signed', this.signed)
+  }
+  signed(id) {
+    const { pagination } = this.props;
+    this.onChange(pagination.page + 1, pagination.size)
   }
   init() {
     const { router, pagination } = this.props;
@@ -471,7 +476,7 @@ class TableList extends Component {
             // 当存在action时，会触发多个事件
             return {
               onClick: event => this.handleRow(record), // 点击行
-              onDoubleClick: event => {},
+              onDoubleClick: event => { },
             };
           }}
           loading={loading.effects['archives/fetchRecords']}
