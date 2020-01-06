@@ -1,16 +1,8 @@
 {
   "name": "ctgsuit-electron",
-  "version": "1.0.47",
+  "version": "1.0.48",
   "description": "host replace pack",
-  "details": [
-    "当选定报告打印范围后，拖动标尺，心率及宫缩值不会更新",
-    "基线工具的标志和滚动条重叠",
-    "监护时间到提示文字及声音优化",
-    "窗口拖动交互问题",
-    "PC休眠，监护状态不能同步",
-    "客户端--登录，显示的“账号”改为“工号”",
-    "超过一定的时间，历史档案没有生成报告的选项"
-  ],
+  "details": [],
   "main": "main/index.js",
   "author": "Timdan",
   "license": "ISC",
