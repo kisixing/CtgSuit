@@ -27,7 +27,7 @@ const CollectionCreateForm = (props: IProps) => {
 
   const isIn = SettingStore.getSync('area_type') === 'in';
   const noLabel = isIn ? '住院号' : '卡号'
-  const noKey = isIn ? 'inpatientNO' : 'cardNo';
+  const noKey = isIn ? 'inpatientNO' : 'cardNO';
   const width = '200px';
 
   const columns = [
@@ -183,7 +183,7 @@ const CollectionCreateForm = (props: IProps) => {
           // TODO
           // 默认病区 、默认住院状态
           'recordstate.equals': isIn ? '10' : '30', // 住院中10, 门诊30
-          'areaNO.equals': areaNO, // 默认病区
+          'areaNO.equals': isIn ? areaNO : undefined, // 默认病区, 门诊时不需要传病区号
           'bedNO.equals': values.bedNO ? values.bedNO : undefined, // 床号
           [`${noKey}.equals`]: values[noKey] ? values[noKey] : undefined, // 住院号or卡号
           'name.equals': values.name ? values.name : undefined,
