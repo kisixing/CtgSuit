@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useLayoutEffect, useRef } from 'react';
-import { Menu } from 'antd';
+import { Menu, Spin } from 'antd';
+import moment from 'moment';
 import PreviewContent from "@lianmed/pages/lib/Ctg/Report/PreviewContent";
 import Shell from "../Workbench/Analysis/Shell";
 import { request } from "@lianmed/utils";
@@ -35,9 +36,11 @@ function ReportPreview(props: IProps) {
   for (let key in reportObj) {
     const obj = { key, value: reportObj[key] };
     arr.push(obj);
+    arr.sort(compare('value'));
   }
 
   const [currentReport, setCurrentReport] = useState(arr[0]['key']);
+  const [loading, setLoading] = useState(false);
   const [pdfBase64, setPdfBase64] = useState('');
   const inputEl = useRef(null);
   const [wh, setWh] = useState({ w: 0, h: 0 });
@@ -51,6 +54,7 @@ function ReportPreview(props: IProps) {
   }, []);
 
   const fetchpdf = (value: string) => {
+    setLoading(true);
     request
       .get('/ctg-exams-pdf', {
         params: {
@@ -59,6 +63,7 @@ function ReportPreview(props: IProps) {
       })
       .then(({ pdfdata }) => {
         pdfdata && setPdfBase64(`data:application/pdf;base64,${pdfdata}`);
+        setLoading(false);
       });
   };
 
@@ -66,6 +71,16 @@ function ReportPreview(props: IProps) {
     setCurrentReport(key);
     fetchpdf(key);
   };
+
+  function compare(key) {
+    return function(value1, value2) {
+      const val1 = value1[key];
+      const val2 = value2[key];
+      const v1 = moment(val1).valueOf();
+      const v2 = moment(val2).valueOf();
+      return v2 - v1;
+    };
+  }
 
   return (
     <Shell {...props}>
@@ -90,12 +105,14 @@ function ReportPreview(props: IProps) {
             })}
         </Menu>
         <div style={{ flex: 1 }}>
-          <PreviewContent
-            pdfBase64={pdfBase64}
-            wh={wh}
-            isFull
-            borderd={false}
-          />
+          <Spin spinning={loading}>
+            <PreviewContent
+              pdfBase64={pdfBase64}
+              wh={wh}
+              isFull
+              borderd={false}
+            />
+          </Spin>
         </div>
       </div>
     </Shell>
