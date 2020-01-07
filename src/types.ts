@@ -25,7 +25,8 @@ export interface IPrenatalVisit {
 }
 
 export interface IPregnancy {
-    GP: string
+    GP?: string
+    gestationalWeek?: string
     adminDate: any;
     age: number;
     areaNO: string;

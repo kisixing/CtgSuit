@@ -9,7 +9,7 @@ import { event } from "@lianmed/utils";
 const styles = require('./Toolbar/Toolbar.less')
 const WorkbenchItem = (props: FetalItem.IProps) => {
   const { fullScreenId, activeId, itemHeight, itemSpan, outPadding, data, bedname, isTodo, docid, ismulti, status, unitId, isOn, ...others } = props;
-  let { bedNO, GP, name, age, startTime, pregnancyId } = props
+  let { bedNO, GP, gestationalWeek, name, age, startTime, pregnancyId } = props
 
   // const [cache, setCache] = useState<FetalItem.IItemTitle>({})
   const [so, setSo] = useState({ suit: null })
@@ -22,12 +22,13 @@ const WorkbenchItem = (props: FetalItem.IProps) => {
   if ([BedStatus.Stopped, BedStatus.OfflineStopped].includes(status)) {
     bedNO = c.bedNO
     GP = c.GP
+    gestationalWeek = c.gestationalWeek
     name = c.name
     age = c.age
     startTime = c.startTime
     pregnancyId = c.pregnancyId
   } else {
-    Object.assign(c, { bedNO, GP, name, age, startTime, pregnancyId })
+    Object.assign(c, { bedNO, GP, gestationalWeek, name, age, startTime, pregnancyId })
   }
 
 
@@ -50,6 +51,7 @@ const WorkbenchItem = (props: FetalItem.IProps) => {
         loading={spinning}
         bedNO={bedNO}
         GP={GP}
+        gestationalWeek={gestationalWeek}
         onSuitRead={suit => setSo({ suit })}
         onClose={() => { event.emit('bedClose', unitId, status, isTodo, docid) }}
       />
