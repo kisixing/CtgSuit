@@ -10,8 +10,8 @@ export default (listData: IBed[]) => {
     const isIn = store.cache.area_type === 'in'
     const findName = useCallback((unitId: string) => {
         const target = listData.find(_ => _.unitId === unitId)
-        const bedNO = target && target.data && target.data.pregnancy && target.data.pregnancy.bedNO
-        const bedname = target && target.bedname
+        const bedNO = target && target.data && target.data.pregnancy && target.data.pregnancy.bedNO && `${target.data.pregnancy.bedNO}号床位`
+        const bedname = target && target.bedname && `${target.bedname}号机`
         return isIn ? (bedNO || bedname) : bedname
     }, [listData])
     useLayoutEffect(() => {
@@ -26,16 +26,16 @@ export default (listData: IBed[]) => {
             }, 5000);
         }
         const announcerCb = (text, pitch = 4, rate = .6) => {
-            text = findName(text) || ''
+            text = findName(text)
             if (!text) return
             const voices = speechSynthesis.getVoices().find(_ => _.lang === 'zh-CN')
             const speechSU = new SpeechSynthesisUtterance();
-            speechSU.text = `${text}号子机监护时间到`;
+            speechSU.text = `${text}监护时间到`;
             speechSU.pitch = pitch;
             speechSU.voice = voices;
             speechSU.rate = rate;
             speechSynthesis.speak(speechSU);
-            __DEV__ || notification.info({ message: `${text}号子机监护时间到`, duration: 10 })
+            __DEV__ || notification.info({ message: `${text}监护时间到`, duration: 10 })
         }
 
         event

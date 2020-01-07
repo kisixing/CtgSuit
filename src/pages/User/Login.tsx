@@ -17,7 +17,8 @@ import { IWard } from "@/types";
 // import { request } from '@lianmed/utils';
 import request from '@/utils/request';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import store from '@/utils/SettingStore';
+import SettingStore from '@/utils/SettingStore';
+import store from "store";
 
 const styles = require('./Login.less');
 const FormItem = Form.Item;
@@ -32,7 +33,7 @@ const Login = (props: IProps) => {
   const dateRef = useRef();
   // useEffect(() => {
   //   // 病区保存在ward对象
-  //   const old = store.getSync('ward')
+  //   const old = SettingStore.getSync('ward')
   //   if (old) {
   //     setAreaList([old])
   //     form.setFieldsValue({ wardId: old.id + '' })
@@ -42,16 +43,17 @@ const Login = (props: IProps) => {
   const handleSubmit = e => {
     e.preventDefault();
     const { validateFields } = form;
-    validateFields((errors, { id, ...others }) => {
+    validateFields((errors, { id, username, password }) => {
       if (errors) {
         return;
       }
-      dispatch({ type: 'login/login', payload: others })
+      dispatch({ type: 'login/login', payload: { username, password } })
         .then(() => {
           // areano未旧的病区号
-          store.setSync('ward', areaList.find(_ => _.id == id));
-          store.setSync('areano', areaList.find(_ => _.id == id)['wardId']);
+          SettingStore.setSync('ward', areaList.find(_ => _.id == id));
+          SettingStore.setSync('areano', areaList.find(_ => _.id == id)['wardId']);
           form.resetFields();
+          store.set('username', username)
         })
     });
   };
@@ -83,7 +85,7 @@ const Login = (props: IProps) => {
       if (err) {
         return;
       }
-      store.set(Object.keys(values), Object.values(values)).then(status => {
+      SettingStore.set(Object.keys(values), Object.values(values)).then(status => {
         if (status) {
           message.success('设置成功，2s 后重启！', 1).then(() => {
             // eslint-disable-next-line no-restricted-globals
@@ -107,7 +109,7 @@ const Login = (props: IProps) => {
         <Form onSubmit={handleSubmit}>
           <FormItem hasFeedback>
             {getFieldDecorator('username', {
-              // initialValue: 'admin',
+              initialValue: store.get('username'),
               rules: [
                 {
                   required: true,
@@ -213,7 +215,7 @@ const NetWork = Form.create()(
     componentDidMount() {
       const { form } = this.props;
 
-      store.get(['ws_url', 'xhr_url']).then(([ws_url, xhr_url]) => {
+      SettingStore.get(['ws_url', 'xhr_url']).then(([ws_url, xhr_url]) => {
         form.setFieldsValue({ xhr_url, ws_url });
       });
     }

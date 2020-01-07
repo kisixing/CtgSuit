@@ -47,30 +47,32 @@ function appUpdate(e) {
           const { uri: filename, enable, name: newV } = JSON.parse(
             res.toString(),
           );
+          f = false;
           if (filename && newV) {
             const tgzPath = resolve(tmp, filename);
             const tarPath = resolve(tmp, `${filename}.tar`);
             const writeStream = createWriteStream(tgzPath).on(
               'close',
               () => {
-                f = false;
                 enable
                   ? run(tgzPath, tarPath)
                   : dialog.showMessageBox(
-                      {
-                        message: `检测到新版本${newV}，是否后台安装`,
-                        buttons: ['cancel', 'ok'],
-                      },
-                      _ => {
-                        _ && run(tgzPath, tarPath);
-                      },
-                    );
+                    {
+                      message: `检测到新版本${newV}，是否后台安装`,
+                      buttons: ['cancel', 'ok'],
+                    },
+                    _ => {
+                      _ && run(tgzPath, tarPath);
+                    },
+                  );
               },
             );
 
             request(`http://${xhr_url}/api/version-uri/${filename}`, im =>
               im.pipe(writeStream),
             ).end();
+          } else {
+            setTimeout(appUpdate, 1000 * 60 * 60);
           }
         }
       });
@@ -85,23 +87,24 @@ function appUpdate(e) {
 module.exports = ['ready', appUpdate]
 
 function run(tgzPath, tarPath) {
-    return gzip.uncompress(tgzPath, tarPath).then(() => {
-        tar.uncompress(tarPath, isDev ? tmp : resources).then(() => {
-            unlink(tarPath, e => !!e && logErr(e.stack))
-            dialog.showMessageBox({
-                message: '应用更新成功，是否立即重启以生效？',
-                buttons: ['cancel', 'ok'],
-            }, _ => {
-                if (_) {
-                    // e.sender.send('installed')
-                    // getMainWindow().reload()
-                    setTimeout(() => {
-                        app.relaunch();
-                        app.exit();
-                    }, 0);
-                }
-            });
-        });
+  return gzip.uncompress(tgzPath, tarPath).then(() => {
+    unlink(tgzPath, e => !!e && logErr(e.stack))
+    tar.uncompress(tarPath, isDev ? tmp : resources).then(() => {
+      unlink(tarPath, e => !!e && logErr(e.stack))
+      dialog.showMessageBox({
+        message: '应用更新成功，是否立即重启以生效？',
+        buttons: ['cancel', 'ok'],
+      }, _ => {
+        if (_) {
+          // e.sender.send('installed')
+          // getMainWindow().reload()
+          setTimeout(() => {
+            app.relaunch();
+            app.exit();
+          }, 0);
+        }
+      });
     });
+  });
 }
 
