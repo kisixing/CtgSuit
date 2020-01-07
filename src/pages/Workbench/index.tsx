@@ -49,8 +49,8 @@ const Home = (props: IProps) => {
             const { data, bedname, prenatalVisit, bedno } = item;
             const { unitId } = (item as IBed)
             const { isTodo } = (item as IRemain)
-            const safePregnancy = data.pregnancy || { age: null, name: null, inpatientNO: null, bedNO: null, id: null, GP: null }
-            const safePrenatalVisit = prenatalVisit || { gestationalWeek: null, }
+            const safePregnancy = data.pregnancy || { age: null, name: null, inpatientNO: null, bedNO: null, id: null, GP: null, gestationalWeek: null }
+            // const safePrenatalVisit = prenatalVisit || { gestationalWeek: null, }
             return (
               <Item
                 data={data as any}
@@ -64,13 +64,13 @@ const Home = (props: IProps) => {
                 inpatientNO={safePregnancy.inpatientNO}
                 GP={safePregnancy.GP}
                 bedNO={safePregnancy.bedNO}
-               
-                volumeData = {data.volumeData}
-                is_include_tocozero = {data.is_include_tocozero}
-                is_include_volume = {data.is_include_volume}
+                gestationalWeek={safePregnancy.gestationalWeek}
+
+                volumeData={data.volumeData}
+                is_include_tocozero={data.is_include_tocozero}
+                is_include_volume={data.is_include_volume}
                 // startTime={safePrenatalVisit.ctgexam.startTime}
                 startTime={data.starttime}
-                gestationalWeek={safePrenatalVisit.gestationalWeek}
 
                 bedname={bedname}
                 unitId={unitId}

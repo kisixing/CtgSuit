@@ -15,7 +15,6 @@ export namespace FetalItem {
         inpatientNO: string
         name: string
         age: number
-        gestationalWeek: string
         deviceno: string
         bedNO: string
         docid: string
@@ -27,7 +26,8 @@ export namespace FetalItem {
         activeId: string
         itemHeight: number
         itemSpan: number
-        GP: string
+        GP?: string
+        gestationalWeek?: string
         isOn: boolean
 
     }
@@ -35,6 +35,7 @@ export namespace FetalItem {
     export interface IItemTitle {
         bedNO?: string
         GP?: string
+        gestationalWeek?: string
         name?: string
         age?: number
         startTime?: string

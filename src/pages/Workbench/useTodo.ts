@@ -77,7 +77,7 @@ export default function useTodo(showTodo: boolean, subscribeData: string[]): [IR
                         bedno: null,
                         id: _.note,
                         type: '',
-                        data: { docid: _.note, starttime, ismulti: false, GP: '/', status: null, } as any
+                        data: { docid: _.note, starttime, ismulti: false, GP: '/', gestationalWeek: '', status: null, } as any
                     }
                 }).filter(_ => subscribeData.includes(_.deviceno))
 
