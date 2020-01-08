@@ -50,7 +50,7 @@ const setting = {
       store.set('headCollapsed', payload.headCollapsed)
       yield put({ type: 'setState', payload })
     },
-    *autoCompute({ size }: { size: number }, { put, select }) {
+    *computeLayout({ size }: { size: number }, { put, select }) {
 
       const { listLayoutOptions, dirty }: typeof setting.state = yield select(state => state.setting);
       if (dirty) return

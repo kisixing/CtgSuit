@@ -76,7 +76,6 @@ export default {
         return pre + 1
       }, 0)
 
-      yield put({ type: 'setting/autoCompute', size: listData.length })
       yield put({ type: 'setState', payload: { listData } });
       yield put({ type: 'computeLayout' });
     },
@@ -84,8 +83,9 @@ export default {
     *computeLayout(_, { put, select }) {
       const state = yield select();
       let {
-        list: { page },
+        list: { page, listData },
       } = state;
+      // yield put({ type: 'setting/computeLayout', size: listData.length })
       yield put({ type: 'setPageData' });
       yield put({ type: 'setPage', page });
     },
