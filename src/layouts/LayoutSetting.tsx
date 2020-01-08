@@ -11,10 +11,10 @@ const ListLayout = (props: any) => {
     const renderText = _ => _.join(joinSymbol);
 
     const menu = (
-        <Menu style={{ textIndent:6 }} onClick={({ key }) => {
+        <Menu style={{ textIndent: 6 }} onClick={({ key }) => {
             dispatch({
                 type: 'setting/setListLayout',
-                payload: { listLayout: key.split(joinSymbol).map(_ => +_) },
+                payload: { listLayout: key.split(joinSymbol).map(_ => +_), dirty: true },
             });
         }}>
             {

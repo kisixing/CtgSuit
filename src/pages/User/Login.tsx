@@ -19,6 +19,7 @@ import request from '@/utils/request';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import SettingStore from '@/utils/SettingStore';
 import store from "store";
+declare var __DEV__: boolean;
 
 const styles = require('./Login.less');
 const FormItem = Form.Item;
@@ -31,6 +32,13 @@ const Login = (props: IProps) => {
   const { loading, error, form, dispatch } = props;
   const [areaList, setAreaList] = useState<IWard[]>([]);
   const dateRef = useRef();
+
+  useEffect(() => {
+    props.dispatch({type:'list/clean'})
+    return () => {
+
+    };
+  }, [])
   // useEffect(() => {
   //   // 病区保存在ward对象
   //   const old = SettingStore.getSync('ward')
@@ -130,6 +138,8 @@ const Login = (props: IProps) => {
           </FormItem>
           <FormItem hasFeedback>
             {getFieldDecorator('password', {
+              initialValue: __DEV__ ? 'admin' : '',
+
               rules: [
                 {
                   required: true,

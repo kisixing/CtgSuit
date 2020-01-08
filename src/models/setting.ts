@@ -19,7 +19,7 @@ const fakeData = [{
   status: '2',
 },]
 
-export default {
+const setting = {
   namespace: 'setting',
   state: {
     listLayout: store.get('listLayout') || [2, 2],
@@ -37,7 +37,8 @@ export default {
       [4, 4],
     ],
     accounts: fakeData || [], // 所有账户信息列表
-    fashionable: false
+    fashionable: false,
+    dirty: false
   },
   effects: {
     *setListLayout({ payload }, { put }) {
@@ -49,7 +50,20 @@ export default {
       store.set('headCollapsed', payload.headCollapsed)
       yield put({ type: 'setState', payload })
     },
+    *autoCompute({ size }: { size: number }, { put, select }) {
 
+      const { listLayoutOptions, dirty }: typeof setting.state = yield select(state => state.setting);
+      if (dirty) return
+
+      const listLayoutOptionsV = listLayoutOptions.map(_ => _.reduce((s, i) => s * i, 1))
+      const t = listLayoutOptionsV.reduce((r, _, i) => {
+        const oldDiff = (listLayoutOptionsV[r] - size) > 0 ? listLayoutOptionsV[r] - size : Number.MAX_SAFE_INTEGER
+        const diff = _ - size > 0 ? _ - size : Number.MAX_SAFE_INTEGER
+        return (diff - (oldDiff) > 0) ? r : i
+      }, 0)
+      yield put({ type: 'setState', payload: { listLayout: listLayoutOptions[t] } })
+
+    }
   },
   reducers: {
     setState(state, { payload }) {
@@ -60,3 +74,5 @@ export default {
     }
   },
 };
+
+export default setting

@@ -14,7 +14,7 @@ interface IProps {
   name: string
   age: number
   startTime: string
-  gestationalWeek: string
+  gestationalWeek?: string
 }
 export const Context = React.createContext({});
 function ReportPreview(props: IProps) {
