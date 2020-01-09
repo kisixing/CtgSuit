@@ -34,7 +34,7 @@ const Login = (props: IProps) => {
   const dateRef = useRef();
 
   useEffect(() => {
-    props.dispatch({type:'list/clean'})
+    props.dispatch({ type: 'list/clean' })
     return () => {
 
     };
@@ -58,8 +58,8 @@ const Login = (props: IProps) => {
       dispatch({ type: 'login/login', payload: { username, password } })
         .then(() => {
           // areano未旧的病区号
-          SettingStore.setSync('ward', areaList.find(_ => _.id == id));
-          SettingStore.setSync('areano', areaList.find(_ => _.id == id)['wardId']);
+          store.set('ward', areaList.find(_ => _.id == id));
+          store.set('areano', areaList.find(_ => _.id == id)['wardId']);
           form.resetFields();
           store.set('username', username)
         })

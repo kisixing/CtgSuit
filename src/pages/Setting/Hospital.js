@@ -7,10 +7,11 @@
 import React, { PureComponent } from 'react';
 import { Form, Button, Input, message, Select } from 'antd';
 import { formItemLayout, tailFormItemLayout } from './utils';
-import store from '@/utils/SettingStore';
+import SettingStore from '@/utils/SettingStore';
 import { getDisplaySize } from '@/utils/utils';
 import styles from './style.less';
 import { connect } from 'dva';
+import store from 'store'
 
 var config = require("../../../package.json");
 
@@ -20,10 +21,10 @@ class Hospital extends PureComponent {
     const { form } = this.props;
     // 获取显示器尺寸
     const { w, h } = getDisplaySize();
-    store.getObj().then(({ hospital_name, areano, area_type, version_number, build_date }) => {
+    SettingStore.getObj().then(({ hospital_name, areano, area_type, version_number, build_date }) => {
       form.setFieldsValue({
         hospital_name,
-        areano: store.getSync('ward').wardName,
+        areano: store.get('ward') && store.get('ward').wardName,
         area_type
       });
     });
@@ -40,7 +41,7 @@ class Hospital extends PureComponent {
       if (!err) {
         const { area_type, areano, ...o } = values
         this.props.dispatch({ type: 'setting/setState', payload: { area_type, areano } })
-        store.set(Object.keys(o), Object.values(o)).then(status => {
+        SettingStore.set(Object.keys(o), Object.values(o)).then(status => {
           if (status) {
             message.success('设置成功', 2);
             this.props.dispatch({ type: 'list/getlist' })

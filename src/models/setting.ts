@@ -1,23 +1,5 @@
 import SettingStore from '@/utils/SettingStore';
 import store from 'store'
-const fakeData = [{
-  key: '1',
-  name: 'John Brown',
-  password: '123456',
-  status: '0',
-},
-{
-  key: '2',
-  name: 'Jim Green',
-  password: '123456',
-  status: '1',
-},
-{
-  key: '3',
-  name: 'Joe Black',
-  password: '123456',
-  status: '2',
-},]
 
 const setting = {
   namespace: 'setting',
@@ -36,7 +18,7 @@ const setting = {
       [4, 3],
       [4, 4],
     ],
-    accounts: fakeData || [], // 所有账户信息列表
+    accounts: [], // 所有账户信息列表
     fashionable: false,
     dirty: false
   },

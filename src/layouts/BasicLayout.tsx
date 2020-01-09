@@ -29,50 +29,7 @@ const BasicLayout = (props: any) => {
   }
 
   useLayoutEffect(() => {
-    ipcRenderer.send('ready')
-    ipcRenderer.on('installed', () => {
-      message.success('更新成功', 2).then(() => {
-        // eslint-disable-next-line no-restricted-globals
-        location.reload()
-      }, null)
-    })
-    dispatch({ type: 'subscribe/update' })
-    const ws = new WsService(settingData)
-      .on('explode', data => {
-        dispatch({
-          type: 'ws/updateData', payload: { data }
-        })
-      })
-      .on(EWsEvents.updateSubscriptionIfNecessary, (wardIds: string[]) => {
-        const wardId = settingData.ward.wardId
-        wardIds.includes(wardId) && dispatch({ type: 'subscribe/update' })
-      })
-    try {
-      ws.connect().catch(err => {
-        router.push('/setting')
-      })
-    } catch (e) {
-      router.push('/setting')
-    }
-
-    dispatch({
-      type: 'global/fetchAccount',
-    });
-    dispatch({
-      type: 'list/getlist',
-    });
-    dispatch({
-      type: 'ws/connectWs',
-    });
-
-    // send ipcMain
-    ipcRenderer.send('clear-all-store', {
-      name: 'clear all stroe!!!',
-      age: '18',
-      clearAll: () => {
-        localStorage.removeItem('Lian-Med-Access-Token')
-      },
-    });
+    dispatch({ type: 'main/init' })
     // 每2h获取新的token
     const interval = setInterval(() => {
       const account = store.get('ACCOUNT');
@@ -82,12 +39,12 @@ const BasicLayout = (props: any) => {
           username: uncompile(account.username),
           password: uncompile(account.password),
         },
-      });
+      })
     }, 1000 * 60 * 60 * 2);
     return () => {
       clearInterval(interval);
       // store.clearAll();
-    };
+    }
   }, [])
 
   useAlarm(listData);
