@@ -1,5 +1,4 @@
-import { message } from 'antd';
-import { newPregnancies, getPregnancy, getBedIfo } from '@/services/api';
+
 import { getList } from '@/services/list';
 // import { BedStatus } from "@lianmed/lmg/lib/services/WsService";
 // import store from "@/utils/SettingStore";
@@ -27,6 +26,10 @@ export default {
     headData: []
   },
   effects: {
+    *clean({ }, { put, call, select }) {
+      yield put({ type: 'setState', payload: { listData: [], rawData: [], pageItems: [], pageData: [], headData: [] } });
+      yield put({ type: 'ws/setState', payload: { data: new Map() } });
+    },
     *getlist(_, { put, call, select }) {
       const state = yield select();
       let { subscribe } = state;
@@ -72,6 +75,7 @@ export default {
         cur.pageIndex = Math.floor(pre / pageItemsCount)
         return pre + 1
       }, 0)
+
       yield put({ type: 'setState', payload: { listData } });
       yield put({ type: 'computeLayout' });
     },
@@ -79,8 +83,9 @@ export default {
     *computeLayout(_, { put, select }) {
       const state = yield select();
       let {
-        list: { page },
+        list: { page, listData },
       } = state;
+      // yield put({ type: 'setting/computeLayout', size: listData.length })
       yield put({ type: 'setPageData' });
       yield put({ type: 'setPage', page });
     },

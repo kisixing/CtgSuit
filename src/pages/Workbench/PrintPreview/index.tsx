@@ -15,7 +15,7 @@ interface IProps {
   name: string
   age: number
   startTime: string
-  gestationalWeek: string
+  gestationalWeek?: string
 }
 
 const PrintPreview = (props: IProps) => {

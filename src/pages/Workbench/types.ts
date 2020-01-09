@@ -53,7 +53,7 @@ export namespace FetalItem {
         name: string
         age: number
         startTime: string
-        gestationalWeek: string
+        gestationalWeek?: string
         unitId: string
         bedname: string
         deviceno: string

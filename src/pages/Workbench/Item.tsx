@@ -11,7 +11,6 @@ const WorkbenchItem = (props: FetalItem.IProps) => {
   const { fullScreenId, activeId, itemHeight, itemSpan, outPadding, data, bedname, isTodo, docid, ismulti, status, unitId, isOn, ...others } = props;
   let { bedNO, GP, gestationalWeek, name, age, startTime, pregnancyId } = props
 
-  // const [cache, setCache] = useState<FetalItem.IItemTitle>({})
   const [so, setSo] = useState({ suit: null })
   const [ref, fullScreen] = useFullScreen(fullScreenId, unitId, activeId)
   const [spinning, setSpinning] = useState(false);
