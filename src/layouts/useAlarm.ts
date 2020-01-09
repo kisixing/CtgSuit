@@ -2,12 +2,14 @@ import { useLayoutEffect, useCallback } from "react";
 import { event } from "@lianmed/utils";
 import { notification } from "antd";
 import { IBed } from '@/types';
-import store from "@/utils/SettingStore";
+import store from "store";
 declare var __DEV__: boolean;
 
 
 export default (listData: IBed[]) => {
-    const isIn = store.cache.area_type === 'in'
+
+    const ward = store.get('ward') || {}
+    const isIn = ward.wardType === 'in'
     const findName = useCallback((unitId: string) => {
         const target = listData.find(_ => _.unitId === unitId)
         const bedNO = target && target.data && target.data.pregnancy && target.data.pregnancy.bedNO && `${target.data.pregnancy.bedNO}号床位`

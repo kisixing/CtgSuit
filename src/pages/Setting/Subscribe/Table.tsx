@@ -13,7 +13,7 @@ interface IProps {
 const C = (props: IProps) => {
     const { onAdd } = props
     const [selected, setSelected] = useState<string[]>([])
-    const [areano, setAreano] = useState<string>(store.getSync('areano') as string)
+    const [areano, setAreano] = useState<string>(store.getSync('ward').wardId as string)
 
     const { list, fetchList } = useStupidConcat(areano)
 

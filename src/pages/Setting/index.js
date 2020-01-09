@@ -14,6 +14,7 @@ import Account from './Account';
 import Hospital from './Hospital';
 import VersionManager from './VersionManager';
 import GroupAndWard from './GroupAndWard';
+import LayoutSetting from './LayoutSetting';
 
 import styles from './index.less';
 
@@ -57,6 +58,7 @@ class Setting extends Component {
         {/* <Menu.Item key="10">用户组和病区管理</Menu.Item> */}
         <Menu.Item key="9">CTG设置</Menu.Item>
         <Menu.Item key="3">打印设置</Menu.Item>
+        {/* <Menu.Item key="LayoutSetting">布局设置</Menu.Item> */}
         {/* <Menu.Item key="2">评分设置</Menu.Item>
         <Menu.Item key="4">事件设置</Menu.Item> */}
         {/* <Menu.Item key="1">维护设置</Menu.Item> */}
@@ -100,6 +102,8 @@ class Setting extends Component {
         return <GroupAndWard />
       case '0':
         return <VersionManager />;
+      case 'LayoutSetting':
+        return <LayoutSetting />;
       default:
         break;
     }
@@ -125,7 +129,7 @@ class Setting extends Component {
 }
 
 export default connect(
-  ({ global}) => ({
+  ({ global }) => ({
     account: global.account
   }),
 )(Setting);

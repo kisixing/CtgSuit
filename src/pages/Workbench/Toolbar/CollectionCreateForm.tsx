@@ -9,9 +9,10 @@ import moment from 'moment';
 import request from '@/utils/request';
 import { stringify } from 'qs';
 import SettingStore from '@/utils/SettingStore';
+import { IWard } from "@/types";
 
 
-
+import store from "store";
 interface IProps {
   form: WrappedFormUtils
   starttime: string
@@ -25,7 +26,8 @@ interface IProps {
 }
 const CollectionCreateForm = (props: IProps) => {
 
-  const isIn = SettingStore.getSync('area_type') === 'in';
+  const ward: IWard = store.get('ward') || {}
+  const isIn = ward.wardType === 'in'
   const noLabel = isIn ? '住院号' : '卡号'
   const noKey = isIn ? 'inpatientNO' : 'cardNO';
   const width = '200px';
@@ -77,7 +79,7 @@ const CollectionCreateForm = (props: IProps) => {
   const [ageWarning, setAgeWarning] = useState({ status: '', help: '' });
 
   // 获取病区好
-  const areaNO = SettingStore.getSync('areano');
+  const areaNO = ward.wardId;
 
   const reset = () => {
     // 清空form表单数据、输入框状态变为可输入状态

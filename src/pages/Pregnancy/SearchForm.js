@@ -7,6 +7,7 @@ import EditModal from './EditModal';
 import SettingStore from '@/utils/SettingStore';
 
 import styles from './index.less';
+import store from "store";
 
 @Form.create()
 class SearchForm extends Component {
@@ -15,7 +16,12 @@ class SearchForm extends Component {
     this.state = {
       visible: false,
     };
-    this.isIn = SettingStore.getSync('area_type') === 'in'
+
+
+    const ward = store.get('ward') || {}
+    const isIn = ward.wardType === 'in'
+
+    this.isIn = isIn
     this.noKey = this.isIn ? 'inpatientNO' : 'cardNO';
     this.noLabel = this.isIn ? '住院号' : '门诊号'
   }

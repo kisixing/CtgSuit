@@ -6,8 +6,8 @@ const setting = {
   state: {
     listLayout: store.get('listLayout') || [2, 2],
     headCollapsed: store.get('headCollapsed') || false,
-    area_type: SettingStore.cache.area_type,
-    areano: SettingStore.cache.areano,
+    // area_type: SettingStore.cache.area_type,
+    // areano: SettingStore.cache.areano,
     listLayoutOptions: [
       [2, 1],
       [2, 2],
@@ -20,7 +20,7 @@ const setting = {
     ],
     accounts: [], // 所有账户信息列表
     fashionable: false,
-    dirty: false
+    layoutLock: store.get('headCollapsed') || true
   },
   effects: {
     *setListLayout({ payload }, { put }) {
@@ -34,8 +34,8 @@ const setting = {
     },
     *computeLayout({ size }: { size: number }, { put, select }) {
 
-      const { listLayoutOptions, dirty }: typeof setting.state = yield select(state => state.setting);
-      if (dirty) return
+      const { listLayoutOptions, layoutLock }: typeof setting.state = yield select(state => state.setting);
+      if (!layoutLock) return
 
       const listLayoutOptionsV = listLayoutOptions.map(_ => _.reduce((s, i) => s * i, 1))
       const t = listLayoutOptionsV.reduce((r, _, i) => {
@@ -49,7 +49,9 @@ const setting = {
   },
   reducers: {
     setState(state, { payload }) {
-      SettingStore.setSync(Object.keys(payload), Object.values(payload))
+      Object.entries(payload).forEach(([k, v]) => {
+        store.set(k, v)
+      })
       return {
         ...state, ...payload
       }

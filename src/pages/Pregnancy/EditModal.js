@@ -16,10 +16,11 @@ import {
 } from 'antd';
 import SettingStore from '@/utils/SettingStore';
 import styles from './index.less';
+import store from "store";
 
 
 const width = '200px';
-const areaNO = SettingStore.getSync('areano');
+const areaNO = store.get('ward') && store.get('ward').wardId
 
 const EditModal = Form.create({
   name: 'editor_form',
@@ -32,7 +33,12 @@ const EditModal = Form.create({
         required: false,
         searchValues: {},
       };
-      this.isIn = SettingStore.getSync('area_type') === 'in'
+
+
+
+      const ward = store.get('ward') || {}
+      const isIn = ward.wardType === 'in'
+      this.isIn = isIn
 
     }
 

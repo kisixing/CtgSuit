@@ -21,11 +21,11 @@ class Hospital extends PureComponent {
     const { form } = this.props;
     // 获取显示器尺寸
     const { w, h } = getDisplaySize();
-    SettingStore.getObj().then(({ hospital_name, areano, area_type, version_number, build_date }) => {
+    SettingStore.getObj().then(({ hospital_name, }) => {
       form.setFieldsValue({
         hospital_name,
-        areano: store.get('ward') && store.get('ward').wardName,
-        area_type
+        wardName: store.get('ward') && store.get('ward').wardName,
+        wardType: store.get('ward') && store.get('ward').wardType
       });
     });
     // 设置版本信息
@@ -39,8 +39,7 @@ class Hospital extends PureComponent {
   handleSubmit = () => {
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        const { area_type, areano, ...o } = values
-        this.props.dispatch({ type: 'setting/setState', payload: { area_type, areano } })
+        const { ...o } = values
         SettingStore.set(Object.keys(o), Object.values(o)).then(status => {
           if (status) {
             message.success('设置成功', 2);
@@ -63,7 +62,7 @@ class Hospital extends PureComponent {
           })(<Input placeholder="请输入医院名称!" />)}
         </Form.Item>
         <Form.Item label="病区类型">
-          {getFieldDecorator('area_type', {
+          {getFieldDecorator('wardType', {
             rules: [{ required: false, message: '请输入区号!' }],
           })(
             <Select placeholder="请输入病区类型!" disabled>
@@ -73,7 +72,7 @@ class Hospital extends PureComponent {
           )}
         </Form.Item>
         <Form.Item label="病区">
-          {getFieldDecorator('areano', {
+          {getFieldDecorator('wardName', {
             rules: [{ required: false, message: '请输入区号!' }],
           })(<Input placeholder="请输入区号!" disabled />)}
         </Form.Item>

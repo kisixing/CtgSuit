@@ -61,7 +61,7 @@ const Login = (props: IProps) => {
         .then(() => {
           // areano未旧的病区号
           store.set('ward', areaList.find(_ => _.id == id));
-          store.set('areano', areaList.find(_ => _.id == id)['wardId']);
+ 
           form.resetFields();
           store.set('username', username)
         })

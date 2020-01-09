@@ -7,14 +7,14 @@ import { connect } from 'dva';
 const joinSymbol = ' x '
 
 const ListLayout = (props: any) => {
-    const { listLayout, listLayoutOptions, dispatch } = props;
+    const { listLayout, listLayoutOptions, dispatch, layoutLock } = props;
     const renderText = _ => _.join(joinSymbol);
 
     const menu = (
         <Menu style={{ textIndent: 6 }} onClick={({ key }) => {
             dispatch({
                 type: 'setting/setListLayout',
-                payload: { listLayout: key.split(joinSymbol).map(_ => +_), dirty: true },
+                payload: { listLayout: key.split(joinSymbol).map(_ => +_) },
             });
         }}>
             {
@@ -23,7 +23,7 @@ const ListLayout = (props: any) => {
         </Menu>
     );
     return (
-        <Dropdown overlay={menu}>
+        <Dropdown disabled={layoutLock} overlay={menu}>
             <Button type="primary">
                 <span> 窗口：</span>
                 {
@@ -36,5 +36,6 @@ const ListLayout = (props: any) => {
 
 export default connect(({ setting }: any) => ({
     listLayout: setting.listLayout,
+    layoutLock: setting.layoutLock,
     listLayoutOptions: setting.listLayoutOptions,
 }))(ListLayout);

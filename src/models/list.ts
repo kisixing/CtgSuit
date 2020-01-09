@@ -58,7 +58,7 @@ export default {
           return { ..._, data, status: data && data.status };
         })
         .filter(_ => !!_.data)
-
+        .sort((a, b) => a.bedname.localeCompare(b.bedname))
 
       yield put({ type: 'setState', payload: { headData: listData } });
       yield put({ type: 'setListData', listData });
@@ -85,7 +85,7 @@ export default {
       let {
         list: { page, listData },
       } = state;
-      // yield put({ type: 'setting/computeLayout', size: listData.length })
+      yield put({ type: 'setting/computeLayout', size: listData.length })
       yield put({ type: 'setPageData' });
       yield put({ type: 'setPage', page });
     },
