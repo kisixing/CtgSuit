@@ -30,6 +30,26 @@ const BasicLayout = (props: any) => {
 
   useLayoutEffect(() => {
     dispatch({ type: 'main/init' })
+
+    const ws = new WsService(settingData)
+      .on('explode', function (data) {
+        dispatch({
+          type: 'ws/updateData', payload: { data }
+        })
+      })
+      .on(EWsEvents.updateSubscriptionIfNecessary, function (wardIds: string[]) {
+        const ward = store.get('ward')
+        const wardId = ward && ward.wardId
+        wardIds.includes(wardId) && dispatch({ type: 'subscribe/update' })
+      })
+    try {
+      ws.connect().catch(err => {
+        router.push('/setting')
+      })
+    } catch (e) {
+      router.push('/setting')
+    }
+
     // 每2h获取新的token
     const interval = setInterval(() => {
       const account = store.get('ACCOUNT');

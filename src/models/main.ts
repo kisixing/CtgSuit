@@ -29,24 +29,6 @@ const main = {
                 }, null)
             })
             yield put({ type: 'subscribe/update' })
-            const ws = new WsService(settingData)
-                .on('explode', function* (data) {
-                    yield put({
-                        type: 'ws/updateData', payload: { data }
-                    })
-                })
-                .on(EWsEvents.updateSubscriptionIfNecessary, function* (wardIds: string[]) {
-                    const ward = store.get('ward')
-                    const wardId = ward && ward.wardId
-                    yield wardIds.includes(wardId) && put({ type: 'subscribe/update' })
-                })
-            try {
-                ws.connect().catch(err => {
-                    router.push('/setting')
-                })
-            } catch (e) {
-                router.push('/setting')
-            }
 
             yield put({
                 type: 'global/fetchAccount',

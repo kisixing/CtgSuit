@@ -20,7 +20,8 @@ const setting = {
     ],
     accounts: [], // 所有账户信息列表
     fashionable: false,
-    layoutLock: store.get('headCollapsed') || true
+    // layoutLock: store.get('headCollapsed') || true,
+    layoutLock: true
   },
   effects: {
     *setListLayout({ payload }, { put }) {
