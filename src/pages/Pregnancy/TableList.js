@@ -16,15 +16,17 @@ class TableList extends Component {
       current: {}, // 当前编辑孕册
       searchText: '', //
     };
-    this.isIn = SettingStore.getSync('area_type') === 'in'
+    this.isIn = SettingStore.getSync('area_type') === 'in';
+    this.noKey = this.isIn ? 'inpatientNO' : 'cardNO';
+    this.noLabel = this.isIn ? '住院号' : '门诊号';
 
     this.columns = [
       {
-        title: '住院号',
-        dataIndex: 'inpatientNO',
-        key: 'inpatientNO',
-        sorter: (a, b) => a.inpatientNO - b.inpatientNO,
-        ...this.getColumnSearchProps('inpatientNO'),
+        title: this.noLabel,
+        dataIndex: this.noKey,
+        key: this.noKey,
+        sorter: (a, b) => a[this.noKey] - b[this.noKey],
+        ...this.getColumnSearchProps(this.noKey),
       },
       {
         title: '床号',
@@ -34,12 +36,12 @@ class TableList extends Component {
         ...this.getColumnSearchProps('bedNO'),
       },
       this.isIn && {
-        //TODO render 名称
-        // 10 住院中  20 出院
+        // TODO render 名称
+        // 10 住院中  20 出院 30门诊
         title: '入院状态',
         dataIndex: 'recordstate',
         key: 'recordstate',
-        render: text => text === '10' ? '住院中' : '出院'
+        render: text => (text === '10' ? '住院中' : '出院'),
       },
       {
         title: '姓名',
@@ -98,11 +100,17 @@ class TableList extends Component {
         render: (text, record) => {
           return (
             <>
-              <span className="primary-link" onClick={() => this.showEdit(record)}>
+              <span
+                className="primary-link"
+                onClick={() => this.showEdit(record)}
+              >
                 编辑
               </span>
               <Divider type="vertical" />
-              <span className="primary-link" onClick={() => this.handleSearchArchives(record)}>
+              <span
+                className="primary-link"
+                onClick={() => this.handleSearchArchives(record)}
+              >
                 档案
               </span>
               {/* <Divider type="vertical" />

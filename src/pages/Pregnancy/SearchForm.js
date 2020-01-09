@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 import { connect } from 'dva';
-import { Form, Row, Col, Input, Select, DatePicker, Button, message } from 'antd';
+import { Form, Row, Col, Input, Select, DatePicker, Button } from 'antd';
 import EditModal from './EditModal';
 import SettingStore from '@/utils/SettingStore';
 
@@ -16,7 +16,7 @@ class SearchForm extends Component {
       visible: false,
     };
     this.isIn = SettingStore.getSync('area_type') === 'in'
-    this.noKey = this.isIn ? 'inpatientNO' : 'outpatientNO'
+    this.noKey = this.isIn ? 'inpatientNO' : 'cardNO';
     this.noLabel = this.isIn ? '住院号' : '门诊号'
   }
 
