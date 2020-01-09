@@ -14,8 +14,8 @@ import {
 } from 'antd';
 import config from '@/utils/config';
 import { IWard } from "@/types";
-// import { request } from '@lianmed/utils';
 import request from '@/utils/request';
+// import { TOKEN } from '@/utils/constant';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import SettingStore from '@/utils/SettingStore';
 import store from "store";
@@ -29,6 +29,8 @@ interface IProps {
   [x: string]: any
 }
 const Login = (props: IProps) => {
+  // 清除缓存
+  // store.remove(TOKEN);
   const { loading, error, form, dispatch } = props;
   const [areaList, setAreaList] = useState<IWard[]>([]);
   const dateRef = useRef();
@@ -48,7 +50,7 @@ const Login = (props: IProps) => {
   //   }
   // }, []);
 
-  const handleSubmit = e => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
     const { validateFields } = form;
     validateFields((errors, { id, username, password }) => {
