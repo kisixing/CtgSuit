@@ -2,14 +2,23 @@
   "compilerOptions": {
     "outDir": "build/dist",
     "module": "esnext",
+    // "module": "commonjs",
     "target": "es2016",
-    "lib": ["es6", "dom"],
+    "lib": [
+      "es6",
+      "dom"
+    ],
     "sourceMap": true,
     "baseUrl": ".",
     "jsx": "react",
     "allowSyntheticDefaultImports": true,
     "moduleResolution": "node",
-    "rootDirs": ["/src", "/test", "/mock", "./typings"],
+    "rootDirs": [
+      "/src",
+      "/test",
+      "/mock",
+      "./typings"
+    ],
     "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,
     "suppressImplicitAnyIndexErrors": true,
@@ -17,10 +26,14 @@
     "allowJs": true,
     "experimentalDecorators": true,
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": [
+        "src/*"
+      ]
     }
   },
-  "include": ["./"]
+  "include": [
+    "./"
+  ]
   // "exclude": [
   //   "node_modules",
   //   "build",
