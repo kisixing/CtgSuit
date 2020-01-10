@@ -1,5 +1,4 @@
 // const fs = require('fs')
-
 // function FileStorage(path, resetPath, encoding) {
 //     this.path = path
 //     this.encoding = encoding || 'utf-8'
@@ -51,7 +50,6 @@
 //                     reject(err)
 //                 }
 //             })
-
 //         })
 //     },
 //     getStringSync() {
@@ -64,14 +62,12 @@
 //             }).catch(err => {
 //                 reject(err)
 //             })
-
 //         })
 //     },
 //     getObjSync() {
 //         const str = this.getStringSync()
 //         return this.deBox(str)
 //     },
-
 //     _handleReadString(obj, key) {
 //         if (!Array.isArray(key)) {
 //             key = [key]
@@ -94,7 +90,6 @@
 //             const v = value[index] || ''
 //             o[k] = String(v)
 //         })
-
 //         return this.box(o)
 //     },
 //     setSnc(key, value) {
@@ -113,13 +108,11 @@
 //                         resolve(true)
 //                     }
 //                 })
-
 //             }).catch(err => {
 //                 reject(err)
 //             })
 //         })
 //     },
-
 //     get(key) {
 //         return new Promise((resolve, reject) => {
 //             this.getObj().then(obj => {
@@ -127,7 +120,6 @@
 //             }).catch(err => {
 //                 reject(err)
 //             })
-
 //         })
 //     },
 //     getSync(key) {
@@ -139,7 +131,6 @@
 //             (keys) = [keys]
 //         }
 //         const values = [];
-
 //         keys.forEach(k => {
 //             values.push(this.resetObj[k] || '')
 //         });
@@ -155,13 +146,11 @@
 // module.exports = FileStorage
 // // module.exports = class FileStorage {
 // //     path = ''
-
 // //     constructor(path) {
 // //         this.path = path
 // //         this._check(path)
 // //     }
 // //     box() {
-
 // //     }
 // //     deBox(str) {
 // //         if (!str) {
@@ -185,7 +174,6 @@
 // //                     reject(err)
 // //                 }
 // //             })
-
 // //         })
 // //     }
 // //     getStringSync() {
@@ -198,14 +186,12 @@
 // //             }).catch(err => {
 // //                 reject(err)
 // //             })
-
 // //         })
 // //     }
 // //     getEntriesSync() {
 // //         const str = this.getStringSync()
 // //         return this.deBox(str)
 // //     }
-
 // //     _handleReadString(arr, key) {
 // //         if (!Array.isArray(key)) {
 // //             key = [key]
@@ -237,8 +223,6 @@
 // //                 arr.push([k, v])
 // //             }
 // //         })
-
-
 // //         return arr.map(_ => _.join('=')).join('\n').trim()
 // //     }
 // //     setSnc(key, value) {
@@ -257,14 +241,11 @@
 // //                         resolve(true)
 // //                     }
 // //                 })
-
 // //             }).catch(err => {
 // //                 reject(err)
-
 // //             })
 // //         })
 // //     }
-
 // //     get(key) {
 // //         return new Promise((resolve, reject) => {
 // //             this.getEntries().then(arr => {
@@ -272,7 +253,6 @@
 // //             }).catch(err => {
 // //                 reject(err)
 // //             })
-
 // //         })
 // //     }
 // //     getSync(key) {

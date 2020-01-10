@@ -1,46 +1,45 @@
-const fs = require('fs');
-const path = require('path')
-const http = require('http')
-const execFile = require('child_process').execFile;
-const url = require('url')
-const printerPath = require('../config/constant').PRINTER_PATH
-const { tmp } = require('../config/path')
-
-module.exports = targetDir => {
-    const tmpDir = targetDir === void 0 ? tmp : path.resolve(targetDir)
-
-    return fileUrl => {
+"use strict";
+exports.__esModule = true;
+var fs = require('fs');
+var path = require('path');
+var http = require('http');
+var execFile = require('child_process').execFile;
+var url = require('url');
+var printerPath = require('../config/constant').PRINTER_PATH;
+var tmp = require('../config/path').tmp;
+exports.printerFatory = function (targetDir) {
+    var tmpDir = targetDir === void 0 ? tmp : path.resolve(targetDir);
+    return function (fileUrl) {
         if (!fs.existsSync(tmpDir)) {
-            fs.mkdirSync(tmpDir)
+            fs.mkdirSync(tmpDir);
         }
-        const dateTime = new Date().toLocaleDateString().replace(/[\/\s:]/g, (s) => { return '_' })
-        const dateTimeDir = path.resolve(tmpDir, dateTime)
+        var dateTime = new Date().toLocaleDateString().replace(/[\/\s:]/g, function (s) { return '_'; });
+        var dateTimeDir = path.resolve(tmpDir, dateTime);
         if (!fs.existsSync(dateTimeDir)) {
-            fs.mkdirSync(dateTimeDir)
+            fs.mkdirSync(dateTimeDir);
         }
-        const tmpName = url.parse(fileUrl).pathname.slice(1).split('/').join('_')
-        const tmpPath = path.resolve(dateTimeDir, `${tmpName}${tmpName.endsWith('.pdf') ? '' : '.pdf'}`)
-        const writeStream = fs.createWriteStream(tmpPath).on('close', () => {
-            const task = execFile(printerPath, [tmpPath]);
-            task.stdout.on('data', (data) => {
-                console.log(`stdout: ${data}`);
+        var tmpName = url.parse(fileUrl).pathname.slice(1).split('/').join('_');
+        var tmpPath = path.resolve(dateTimeDir, "" + tmpName + (tmpName.endsWith('.pdf') ? '' : '.pdf'));
+        var writeStream = fs.createWriteStream(tmpPath).on('close', function () {
+            var task = execFile(printerPath, [tmpPath]);
+            task.stdout.on('data', function (data) {
+                console.log("stdout: " + data);
             });
-            task.on('close', (code) => {
-                console.log(`write clonse: ${code}`);
-            })
-            task.on('error', (err) => {
-                console.log(`write error: ${err}`);
-            })
-        })
-        console.log('file', fileUrl, '\n')
-        http.get(fileUrl, res => {
+            task.on('close', function (code) {
+                console.log("write clonse: " + code);
+            });
+            task.on('error', function (err) {
+                console.log("write error: " + err);
+            });
+        });
+        console.log('file', fileUrl, '\n');
+        http.get(fileUrl, function (res) {
             if (res) {
-                res.pipe(writeStream)
-                res.on('end', () => {
-                    writeStream.end()
-                })
+                res.pipe(writeStream);
+                res.on('end', function () {
+                    writeStream.end();
+                });
             }
-        })
-    }
-}
-
+        });
+    };
+};

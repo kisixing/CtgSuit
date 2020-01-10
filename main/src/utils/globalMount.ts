@@ -1,6 +1,6 @@
 const constant = require('../config/constant');
 const FileStorage = require('./FileStorage');
 
-export default () => {
+export const globalMount = () => {
     Object.assign(global, { constant, FileStorage })
 }

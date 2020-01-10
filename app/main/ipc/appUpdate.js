@@ -1,110 +1,79 @@
-const { dialog, app } = require('electron');
-const is = require('electron-is');
-const { createWriteStream, mkdirSync, existsSync, readFileSync, unlink } = require('fs');
-const { request } = require('http')
-const { resolve } = require('path')
-const { log, logErr } = require('../utils/log')
-const { resources, config: configPath, pkg, tmp } = require('../config/path')
-const { isDev } = require('../utils/is')
-
-
-
+"use strict";
+exports.__esModule = true;
+var _a = require('electron'), dialog = _a.dialog, app = _a.app;
+var is = require('electron-is');
+var _b = require('fs'), createWriteStream = _b.createWriteStream, mkdirSync = _b.mkdirSync, existsSync = _b.existsSync, readFileSync = _b.readFileSync, unlink = _b.unlink;
+var request = require('http').request;
+var resolve = require('path').resolve;
+var _c = require('../utils/log'), log = _c.log, logErr = _c.logErr;
+var _d = require('../config/path'), resources = _d.resources, configPath = _d.config, pkg = _d.pkg, tmp = _d.tmp;
+var isDev = require('../utils/is').isDev;
 delete require.cache[pkg];
-
-
-const version = require(pkg).version
-
-const config = JSON.parse(readFileSync(configPath, 'utf-8'))
-const xhr_url = config.xhr_url
-
-if (!(xhr_url && version)) return
-
-
-
-const compress = require('compressing')
-const { tar, gzip } = compress
-
-
-
-
-
-
-let f = false
+var version = require(pkg).version;
+var config = JSON.parse(readFileSync(configPath, 'utf-8'));
+var xhr_url = config.xhr_url;
+if (!(xhr_url && version))
+    throw 'eee';
+var compress = require('compressing');
+var tar = compress.tar, gzip = compress.gzip;
+var f = false;
 function appUpdate(e) {
-  if (f) return;
-  if (is.dev()) return;
-  f = true;
-  log(`version-update 开始`)
-
-  request(
-    `http://${xhr_url}/api/version-compare/ctg-suit/${version}`,
-    im => {
-      im.on('readable', () => {
-        const res = im.read();
-        log(`version-compare:${version}:${res}`);
-
-        if (res) {
-          const { uri: filename, enable, name: newV } = JSON.parse(
-            res.toString(),
-          );
-          f = false;
-          if (filename && newV) {
-            const tgzPath = resolve(tmp, filename);
-            const tarPath = resolve(tmp, `${filename}.tar`);
-            const writeStream = createWriteStream(tgzPath).on(
-              'close',
-              () => {
-                enable
-                  ? run(tgzPath, tarPath)
-                  : dialog.showMessageBox(
-                    {
-                      message: `检测到新版本${newV}，是否后台安装`,
-                      buttons: ['cancel', 'ok'],
-                    },
-                    _ => {
-                      _ && run(tgzPath, tarPath);
-                    },
-                  );
-              },
-            );
-
-            request(`http://${xhr_url}/api/version-uri/${filename}`, im =>
-              im.pipe(writeStream),
-            ).end();
-          } else {
-            setTimeout(appUpdate, 1000 * 60 * 60);
-          }
-        }
-      });
-    },
-  ).end();
+    if (f)
+        return;
+    if (is.dev())
+        return;
+    f = true;
+    log("version-update \u5F00\u59CB");
+    request("http://" + xhr_url + "/api/version-compare/ctg-suit/" + version, function (im) {
+        im.on('readable', function () {
+            var res = im.read();
+            log("version-compare:" + version + ":" + res);
+            if (res) {
+                var _a = JSON.parse(res.toString()), filename = _a.uri, enable_1 = _a.enable, newV_1 = _a.name;
+                f = false;
+                if (filename && newV_1) {
+                    var tgzPath_1 = resolve(tmp, filename);
+                    var tarPath_1 = resolve(tmp, filename + ".tar");
+                    var writeStream_1 = createWriteStream(tgzPath_1).on('close', function () {
+                        enable_1
+                            ? run(tgzPath_1, tarPath_1)
+                            : dialog.showMessageBox({
+                                message: "\u68C0\u6D4B\u5230\u65B0\u7248\u672C" + newV_1 + "\uFF0C\u662F\u5426\u540E\u53F0\u5B89\u88C5",
+                                buttons: ['cancel', 'ok']
+                            }, function (_) {
+                                _ && run(tgzPath_1, tarPath_1);
+                            });
+                    });
+                    request("http://" + xhr_url + "/api/version-uri/" + filename, function (im) {
+                        return im.pipe(writeStream_1);
+                    }).end();
+                }
+                else {
+                    setTimeout(appUpdate, 1000 * 60 * 60);
+                }
+            }
+        });
+    }).end();
 }
-
-
-
-
-
-module.exports = ['ready', appUpdate]
-
+exports["default"] = ['ready', appUpdate];
 function run(tgzPath, tarPath) {
-  return gzip.uncompress(tgzPath, tarPath).then(() => {
-    unlink(tgzPath, e => !!e && logErr(e.stack))
-    tar.uncompress(tarPath, isDev ? tmp : resources).then(() => {
-      unlink(tarPath, e => !!e && logErr(e.stack))
-      dialog.showMessageBox({
-        message: '应用更新成功，是否立即重启以生效？',
-        buttons: ['cancel', 'ok'],
-      }, _ => {
-        if (_) {
-          // e.sender.send('installed')
-          // getMainWindow().reload()
-          setTimeout(() => {
-            app.relaunch();
-            app.exit();
-          }, 0);
-        }
-      });
+    return gzip.uncompress(tgzPath, tarPath).then(function () {
+        unlink(tgzPath, function (e) { return !!e && logErr(e.stack); });
+        tar.uncompress(tarPath, isDev ? tmp : resources).then(function () {
+            unlink(tarPath, function (e) { return !!e && logErr(e.stack); });
+            dialog.showMessageBox({
+                message: '应用更新成功，是否立即重启以生效？',
+                buttons: ['cancel', 'ok']
+            }, function (_) {
+                if (_) {
+                    // e.sender.send('installed')
+                    // getMainWindow().reload()
+                    setTimeout(function () {
+                        app.relaunch();
+                        app.exit();
+                    }, 0);
+                }
+            });
+        });
     });
-  });
 }
-

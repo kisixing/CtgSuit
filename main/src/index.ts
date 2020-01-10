@@ -2,10 +2,12 @@
 require('./init')
 const { BrowserWindow, ipcMain, Menu, dialog } = require('electron');
 const { getMainPath, getNewPath } = require('./config/window');
-const menus = require('./config/menu');
-const singleInstanceLock = require('./utils/singleInstanceLock')
-require('./utils/globalMount')()
-require('./ipc')
+
+import { menus } from "./config/menu";
+import { singleInstanceLock } from "./utils/singleInstanceLock";
+import './ipc'
+import { globalMount } from "./utils/globalMount";
+globalMount()
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;

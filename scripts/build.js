@@ -12,13 +12,13 @@ function tsc(cb) {
         .pipe(ts({}))
 
     return tsResult.js
-        .pipe(uglyfly())
-        .pipe(gulp.dest("app/dist"));
+        // .pipe(uglyfly())
+        .pipe(gulp.dest("app/main"));
 
 }
 function staticHandler(cb) {
     cb()
-    return gulp.src("main/**/*", { ignore: "src" }).pipe(gulp.dest("app"));
+    return gulp.src(["main/**/*", "!main/src/**"]).pipe(gulp.dest("app"));
 
 }
 

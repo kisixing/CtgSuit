@@ -1,20 +1,21 @@
-const { app } = require('electron')
-
-module.exports = (myWindow) => new Promise((res, rej) => {
-
-    const gotTheLock = app.requestSingleInstanceLock()
-
+"use strict";
+exports.__esModule = true;
+var electron_1 = require("electron");
+exports.singleInstanceLock = function (myWindow) { return new Promise(function (res, rej) {
+    var gotTheLock = electron_1.app.requestSingleInstanceLock();
     if (!gotTheLock) {
-        app.quit()
-        rej()
-    } else {
-        app.on('second-instance', (event, commandLine, workingDirectory) => {
+        electron_1.app.quit();
+        rej();
+    }
+    else {
+        electron_1.app.on('second-instance', function (event, commandLine, workingDirectory) {
             // Someone tried to run a second instance, we should focus our window.
             if (myWindow) {
-                if (myWindow.isMinimized()) myWindow.restore()
-                myWindow.focus()
+                if (myWindow.isMinimized())
+                    myWindow.restore();
+                myWindow.focus();
             }
-        })
-        res(app)
+        });
+        res(electron_1.app);
     }
-})
+}); };

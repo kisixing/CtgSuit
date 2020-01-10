@@ -1,6 +1,6 @@
-const { app } = require('electron')
+import { app } from "electron";
 
-export default (myWindow) => new Promise((res, rej) => {
+export const singleInstanceLock = (myWindow) => new Promise<typeof app>((res, rej) => {
 
     const gotTheLock = app.requestSingleInstanceLock()
 

@@ -134,4 +134,4 @@ if (process.platform === 'darwin') {
   })
 }
 
-export default hasMenus ? Menu.buildFromTemplate(template) : null;
+export const menus = hasMenus ? Menu.buildFromTemplate(template) : null;

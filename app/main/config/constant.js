@@ -1,7 +1,8 @@
-const path = require('path');
-const { profile } = require('./path')
-module.exports = {
-    SETTING_PATH: path.resolve(profile, 'setting.json'),
-    DEFAULT_SETTING_PATH: path.resolve(__dirname, 'defaultSetting.json'),
-    PRINTER_PATH: path.resolve(__dirname, '../libs/PDFtoPrinterSelect.exe')
-}
+"use strict";
+exports.__esModule = true;
+var path = require('path');
+var profile = require('./path').profile;
+var assetsPath = path.resolve(__dirname, '../../asserts');
+exports.SETTING_PATH = path.resolve(profile, 'setting.json');
+exports.DEFAULT_SETTING_PATH = path.resolve(assetsPath, 'defaultSetting.json');
+exports.PRINTER_PATH = path.resolve(assetsPath, 'PDFtoPrinterSelect.exe');

@@ -12,7 +12,7 @@ const { isDev } = require('../utils/is')
 delete require.cache[pkg];
 
 
-const version = require(pkg).version
+const version = (require(pkg) as any).version
 
 const config = JSON.parse(readFileSync(configPath, 'utf-8'))
 const xhr_url = config.xhr_url

@@ -1,14 +1,12 @@
-const fs = require('fs')
-const configPath = require('../config/path')
-
-const log = (str = '') => {
-    fs.appendFile(configPath.log, `${new Date().toLocaleString()}\r\n${str}\r\n\r\n`, () => { })
-}
-
-const logErr = (str = '') => {
-    fs.appendFile(configPath.errLog, `${new Date().toLocaleString()}\r\n${str}\r\n\r\n`, () => { })
-}
-
-
-exports.log = log
-exports.logErr = logErr
+"use strict";
+exports.__esModule = true;
+var fs = require('fs');
+var configPath = require('../config/path');
+exports.log = function (str) {
+    if (str === void 0) { str = ''; }
+    fs.appendFile(configPath.log, new Date().toLocaleString() + "\r\n" + str + "\r\n\r\n", function () { });
+};
+exports.logErr = function (str) {
+    if (str === void 0) { str = ''; }
+    fs.appendFile(configPath.errLog, new Date().toLocaleString() + "\r\n" + str + "\r\n\r\n", function () { });
+};

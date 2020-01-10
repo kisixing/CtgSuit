@@ -7,7 +7,7 @@ fs.readdir(__dirname, (e, files) => {
             if (f === 'index.js') return
             const args = require(`./${f}`)
             if (Array.isArray(args)) {
-                ipcMain.on(...args)
+                ipcMain.on(args[0], args[1])
             }
 
         })

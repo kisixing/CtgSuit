@@ -6,7 +6,7 @@ const url = require('url')
 const printerPath = require('../config/constant').PRINTER_PATH
 const { tmp } = require('../config/path')
 
-export default targetDir => {
+export const printerFatory = targetDir => {
     const tmpDir = targetDir === void 0 ? tmp : path.resolve(targetDir)
 
     return fileUrl => {
