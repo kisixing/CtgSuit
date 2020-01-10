@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useLayoutEffect, useRef } from 'react';
-import { Menu, Spin } from 'antd';
+import { Menu, Spin, Button } from 'antd';
 import moment from 'moment';
 import PreviewContent from "@lianmed/pages/lib/Ctg/Report/PreviewContent";
 import Shell from "../Workbench/Analysis/Shell";
 import { request } from "@lianmed/utils";
+import PrintPreview from "../Workbench/PrintPreview";
 
 interface IProps {
   report: string
@@ -66,14 +67,18 @@ function ReportPreview(props: IProps) {
         setLoading(false);
       });
   };
+  const onDownload = () => {
+    console.log(currentReport)
 
+    PrintPreview.printPdf(currentReport)
+  }
   const handleClick = ({ key }) => {
     setCurrentReport(key);
     fetchpdf(key);
   };
 
   function compare(key) {
-    return function(value1, value2) {
+    return function (value1, value2) {
       const val1 = value1[key];
       const val2 = value2[key];
       const v1 = moment(val1).valueOf();
@@ -85,7 +90,7 @@ function ReportPreview(props: IProps) {
   return (
     <Shell {...props}>
       <div
-        style={{ height: '100%', textAlign: 'center', display: 'flex' }}
+        style={{ height: '96%', textAlign: 'center', display: 'flex' }}
         ref={inputEl}
       >
         <Menu
@@ -115,6 +120,8 @@ function ReportPreview(props: IProps) {
           </Spin>
         </div>
       </div>
+      <Button style={{float:'right',margin:6}} onClick={onDownload}>打印</Button>
+
     </Shell>
   );
 }

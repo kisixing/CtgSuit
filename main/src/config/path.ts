@@ -2,7 +2,7 @@
 const { isDev } = require('../utils/is')
 const { resolve } = require('path')
 const devBase = resolve('.')
-const source = resolve(__dirname, '../../')
+const source = resolve(__dirname, '../../../main')
 const assetsPath = resolve(__dirname, '../../asserts')
 
 const base = isDev ? devBase : source

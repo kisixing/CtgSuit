@@ -22,8 +22,7 @@ const PrintPreview = (props: IProps) => {
   const { docid, name, age, gestationalWeek, inpatientNO, startTime } = props;
 
   const onDownload = () => {
-    const filePath = `${config.apiPrefix}/ctg-exams-pdfurl/${docid}`
-    ipcRenderer.send('printWindow', filePath)
+    PrintPreview.printPdf(docid)
   }
 
   const getPreviewData = () => {
@@ -49,7 +48,10 @@ const PrintPreview = (props: IProps) => {
     </Context.Provider>
   );
 }
-
+PrintPreview.printPdf = (docid: string) => {
+  const filePath = `${config.apiPrefix}/ctg-exams-pdfurl/${docid}`
+  ipcRenderer.send('printWindow', filePath)
+}
 export default PrintPreview;
 
 
