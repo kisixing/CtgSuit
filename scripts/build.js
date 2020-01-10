@@ -2,23 +2,27 @@
 
 const gulp = require("gulp");
 const ts = require("gulp-typescript")
-var uglyfly = require('gulp-uglyfly');
-
-
+const uglyfly = require('gulp-uglyfly');
+const fs = require('fs')
 
 function tsc(cb) {
     cb()
-    var tsResult = gulp.src("main/src/**/*.ts")
+    const tsResult = gulp.src("main/src/**/*.ts")
         .pipe(ts({}))
 
     return tsResult.js
-        // .pipe(uglyfly())
+        .pipe(uglyfly())
         .pipe(gulp.dest("app/main"));
 
 }
 function staticHandler(cb) {
     cb()
-    return gulp.src(["main/**/*", "!main/src/**"]).pipe(gulp.dest("app"));
+    const deps = ["main/**/*", "!main/src/**"]
+    const isE = fs.existsSync('app/node_modules')
+    if (isE) {
+        deps.push('!main/node_modules/**')
+    }
+    return gulp.src(deps).pipe(gulp.dest("app"));
 
 }
 
