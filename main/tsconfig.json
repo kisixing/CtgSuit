@@ -1,0 +1,21 @@
+{
+    "extends": "../node_modules/@chatie/tsconfig/tsconfig.json",
+    "compilerOptions": {
+      "outDir": "dist",
+      "noImplicitAny": false
+    },
+    "exclude": [
+    //   "node_modules/",
+    //   "dist/",
+    //   "tests/fixtures/",
+    ],
+    "include": [
+    //   "app/**/*.ts",
+    //   "bin/*.ts",
+    //   "bot/**/*.ts",
+    //   "examples/**/*.ts",
+    //   "scripts/**/*.ts",
+    //   "src/**/*.ts",
+    //   "tests/**/*.spec.ts",
+    ],
+  }

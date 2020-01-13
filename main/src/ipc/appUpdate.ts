@@ -1,6 +1,6 @@
 const { dialog, app } = require('electron');
 const is = require('electron-is');
-const { createWriteStream, mkdirSync, existsSync, readFileSync, unlink } = require('fs');
+const { createWriteStream, readFileSync, unlink } = require('fs');
 const { request } = require('http')
 const { resolve } = require('path')
 const { log, logErr } = require('../utils/log')
@@ -61,9 +61,7 @@ function appUpdate(e) {
                       message: `检测到新版本${newV}，是否后台安装`,
                       buttons: ['cancel', 'ok'],
                     },
-                    _ => {
-                      _ && run(tgzPath, tarPath);
-                    },
+                    _ =>  _ && run(tgzPath, tarPath),
                   );
               },
             );

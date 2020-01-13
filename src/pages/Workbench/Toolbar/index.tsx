@@ -180,8 +180,10 @@ function Toolbar(props: FetalItem.IToolbarProps) {
           )}
         {/* 停止状态下不可以建档，监护、离线都是可以建档的 */}
 
-        <B icon="user-add" type="link" disabled={isCreated} onClick={() => setModalName('visible')}>
-          {isCreated ? '已建档' : '建档'}
+        <B icon="user-add" type="link" onClick={() => {
+          isCreated ? alert('调用解绑接口') : setModalName('visible')
+        }}>
+          {isCreated ? '解绑' : '建档'}
         </B>
 
 

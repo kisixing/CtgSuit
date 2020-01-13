@@ -1,11 +1,11 @@
 
 const { isDev } = require('../utils/is')
 const { resolve } = require('path')
-const devBase = resolve('.')
-const source = resolve(__dirname, '../../../main')
+// const devBase = resolve('.')
+const source = resolve(__dirname, `${isDev?'../../../main':'../..'}`)
 const assetsPath = resolve(__dirname, '../../asserts')
 
-const base = isDev ? devBase : source
+// const base = isDev ? devBase : source
 const profile = resolve(process.env.USERPROFILE)
 const desktop = resolve(process.env.USERPROFILE, 'Desktop')
 const tmp = resolve('.tmp')

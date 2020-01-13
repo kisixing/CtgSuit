@@ -3,6 +3,7 @@ import { event } from "@lianmed/utils";
 import { notification } from "antd";
 import { IBed } from '@/types';
 import store from "store";
+import SettingStore from "@/utils/SettingStore";
 declare var __DEV__: boolean;
 
 
@@ -29,7 +30,7 @@ export default (listData: IBed[]) => {
         }
         const announcerCb = (text, pitch = 4, rate = .6) => {
             text = findName(text)
-            if (!text) return
+            if (!text || SettingStore.cache.alarm_finished === '0') return
             const voices = speechSynthesis.getVoices().find(_ => _.lang === 'zh-CN')
             const speechSU = new SpeechSynthesisUtterance();
             speechSU.text = `${text}监护时间到`;

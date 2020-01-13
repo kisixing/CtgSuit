@@ -27,11 +27,12 @@ interface IProps {
 const CollectionCreateForm = (props: IProps) => {
 
   const ward: IWard = store.get('ward') || {}
-  const isIn = ward.wardType === 'in'
-  const noLabel = isIn ? '住院号' : '卡号'
-  const noKey = isIn ? 'inpatientNO' : 'cardNO';
+
   const width = '200px';
 
+  const [isIn, setIsIn] = useState(ward.wardType === 'in')
+  const noLabel = isIn ? '住院号' : '卡号'
+  const noKey = isIn ? 'inpatientNO' : 'cardNO';
   const columns = [
     isIn && {
       title: '床号',
@@ -492,6 +493,13 @@ const CollectionCreateForm = (props: IProps) => {
             </Button>
             <Button type="primary" onClick={handleCreate} loading={loading}>
               确认
+            </Button>
+            <Button type="primary"
+              style={{ margin: '0 20px' }}
+              onClick={() => {
+                setIsIn(!isIn)
+              }}>
+              {`切换到${isIn ? '门诊' : '住院'}调档`}
             </Button>
           </Col>
           <Col

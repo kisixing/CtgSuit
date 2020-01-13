@@ -8,15 +8,16 @@
     "start": "cross-env PORT=1702 BROWSER=none umi dev",
     "start:runtime": "cross-env PORT=1702 TARGET=0 umi dev",
     "start:main": "run-electron .",
-    "dev:main": "gulp --silent && run-electron .",
+    "dev:main": "yarn gulp && run-electron .",
+    "gulp": "gulp --silent",
     "build:main": "tsc --project ./app/tsconfig.json",
-    "build": "ts-node ./scripts/build",
+    "build": "ts-node --project main/tsconfig.json ./scripts/build",
     "build:render": "cross-env BROWSER=none umi build",
     "build:runtime": "umi build",
     "codepush:browser": "node ./scripts/codepush.js --dir=.tmp  --base app --target=browser",
     "codepush:desktop": "node ./scripts/codepush.js --dir=.tmp  --base=app --target=desktop",
-    "deploy:browser": "node ./scripts/versionHandler && yarn build:runtime && yarn codepush:browser",
-    "deploy:desktop": "node ./scripts/versionHandler && yarn build:render && yarn codepush:desktop",
+    "deploy:browser": "yarn vh && yarn gulp && yarn build:runtime && yarn codepush:browser",
+    "deploy:desktop": "yarn vh && yarn gulp  && yarn build:render && yarn codepush:desktop",
     "test": "umi test",
     "lint": "eslint --ext .js src mock tests",
     "rebuild": "electron-rebuild -m ./app",
@@ -29,7 +30,7 @@
     "precommit": "lint-staged",
     "update:lianmed": "yarn upgrade @lianmed/lmg @lianmed/components @lianmed/utils @lianmed/request",
     "link:lianmed": "npm link @lianmed/lmg @lianmed/components @lianmed/utils @lianmed/request @lianmed/pages",
-    "vh": "node ./scripts/versionHandler.js --target pack-ia32"
+    "vh": "ts-node --project ./main/tsconfig.json ./scripts/versionHandler "
   },
   "main": "./app/main/index.js",
   "dependencies": {
@@ -56,6 +57,7 @@
     "umi-request": "^1.2.2"
   },
   "devDependencies": {
+    "@chatie/tsconfig":"^0.6.1",
     "gulp-uglyfly": "^1.4.2",
     "gulp": "^4.0.2",
     "gulp-typescript": "^6.0.0-alpha.1",
