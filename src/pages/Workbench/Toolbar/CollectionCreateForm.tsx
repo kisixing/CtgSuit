@@ -29,8 +29,8 @@ const CollectionCreateForm = (props: IProps) => {
   const ward: IWard = store.get('ward') || {}
 
   const width = '200px';
-
-  const [isIn, setIsIn] = useState(ward.wardType === 'in')
+  const isRealIn = ward.wardType === 'in'
+  const [isIn, setIsIn] = useState(isRealIn)
   const noLabel = isIn ? '住院号' : '卡号'
   const noKey = isIn ? 'inpatientNO' : 'cardNO';
   const columns = [
@@ -494,13 +494,17 @@ const CollectionCreateForm = (props: IProps) => {
             <Button type="primary" onClick={handleCreate} loading={loading}>
               确认
             </Button>
-            <Button type="primary"
-              style={{ margin: '0 20px' }}
-              onClick={() => {
-                setIsIn(!isIn)
-              }}>
-              {`切换到${isIn ? '门诊' : '住院'}调档`}
-            </Button>
+            {
+              isRealIn && (
+                <Button type="primary"
+                  style={{ margin: '0 20px' }}
+                  onClick={() => {
+                    setIsIn(!isIn)
+                  }}>
+                  {isIn ? `急诊` : `返回`}
+                </Button>
+              )
+            }
           </Col>
           <Col
             span={24}
