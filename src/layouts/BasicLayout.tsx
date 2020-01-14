@@ -29,7 +29,6 @@ const BasicLayout = (props: any) => {
   }
 
   useLayoutEffect(() => {
-    dispatch({ type: 'main/init' })
 
     const ws = new WsService(settingData)
       .on('explode', function (data) {
@@ -49,6 +48,7 @@ const BasicLayout = (props: any) => {
     } catch (e) {
       router.push('/setting')
     }
+    dispatch({ type: 'main/init' })
 
     // 每2h获取新的token
     const interval = setInterval(() => {
