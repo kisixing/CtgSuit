@@ -16,7 +16,6 @@ const CreateRecordModal = Form.create({
 
     componentDidMount() {
       const { form, type, dataSource } = this.props;
-      console.log('78787878', dataSource)
       if (type === 'update' && dataSource.pregnancy) {
         const visitTime = dataSource.visitTime;
         dataSource.visitTime = moment(visitTime);

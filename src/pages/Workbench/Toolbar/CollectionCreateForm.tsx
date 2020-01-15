@@ -33,7 +33,7 @@ const CollectionCreateForm = (props: IProps) => {
   const [isIn, setIsIn] = useState(isRealIn)
   const noLabel = isIn ? '住院号' : '卡号'
   const noKey = isIn ? 'inpatientNO' : 'cardNO';
-  const columns = [
+  const columns: any = [
     isIn && {
       title: '床号',
       dataIndex: 'bedNO',
@@ -77,7 +77,7 @@ const CollectionCreateForm = (props: IProps) => {
   const [errorText, setErrorText] = useState('');
   const [loading, setLoading] = useState(false);
   // 低龄产妇、高龄产妇标记
-  const [ageWarning, setAgeWarning] = useState({ status: '', help: '' });
+  const [ageWarning, setAgeWarning] = useState<{ status: any, help: any }>({ status: '', help: '' });
 
   // 获取病区好
   const areaNO = ward.wardId;
