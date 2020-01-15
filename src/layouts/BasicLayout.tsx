@@ -23,13 +23,8 @@ const { Content } = Layout;
 const { EWsEvents } = WsService
 const BasicLayout = (props: any) => {
   const { dispatch, fashionable, children, wsStatus, listData, isLogin } = props;
-  // 判断是否返回登录页
-  if (!isLogin) {
-    return router.replace('/user/login');
-  }
 
   useLayoutEffect(() => {
-
     const ws = new WsService(settingData)
       .on('explode', function (data) {
         dispatch({

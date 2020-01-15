@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import { connect } from 'dva';
+import store from 'store';
 import Redirect from 'umi/redirect';
 import Loader from '@/components/PageLoading';
 
@@ -7,7 +8,11 @@ const AuthComponent = ({ children, isLogin }) => {
   return (
     <Fragment>
       {isLogin ? null : <Loader />}
-      {isLogin ? children : <Redirect to="/user/login" />}
+      {isLogin && !!store.get('ward') ? (
+        children
+      ) : (
+        <Redirect to="/user/login" />
+      )}
     </Fragment>
   );
 };
