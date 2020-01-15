@@ -21,13 +21,14 @@ class TableList extends Component {
 
     this.isIn = isIn;
     this.noKey = this.isIn ? 'inpatientNO' : 'cardNO';
-    this.noLabel = this.isIn ? '住院号' : '门诊号';
+    this.noLabel = this.isIn ? '住院号' : '卡号';
 
     this.columns = [
       {
         title: this.noLabel,
         dataIndex: this.noKey,
         key: this.noKey,
+        width:200,
         sorter: (a, b) => a[this.noKey] - b[this.noKey],
         ...this.getColumnSearchProps(this.noKey),
       },
@@ -99,7 +100,7 @@ class TableList extends Component {
         dataIndex: 'action',
         key: 'action',
         align: 'center',
-        width: 150,
+        width: 100,
         render: (text, record) => {
           return (
             <>
@@ -282,7 +283,7 @@ class TableList extends Component {
       }
     },
     render: text => (
-      <div style={{ width: '84px' }} className={styles.textOver}>
+      <div className={styles.textOver}>
         <Highlighter
           className={styles.textOver}
           highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
