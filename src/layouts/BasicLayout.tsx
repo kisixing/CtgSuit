@@ -1,11 +1,10 @@
 import React, { useLayoutEffect } from 'react';
-import { Layout, message } from 'antd';
+import { Layout } from 'antd';
 import { connect } from 'dva';
 import { router } from 'umi';
 import withRouter from 'umi/withRouter';
 import store from 'store';
-import { ipcRenderer } from 'electron';
-// import logo from '../assets/logo.png';
+
 
 import settingStore from "@/utils/SettingStore";
 import { uncompile } from '@/utils/utils';

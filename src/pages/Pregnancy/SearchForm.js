@@ -23,7 +23,7 @@ class SearchForm extends Component {
 
     this.isIn = isIn
     this.noKey = this.isIn ? 'inpatientNO' : 'cardNO';
-    this.noLabel = this.isIn ? '住院号' : '门诊号'
+    this.noLabel = this.isIn ? '住院号' : '卡号'
   }
 
   componentDidMount() {

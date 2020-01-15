@@ -16,7 +16,6 @@ const CreateRecordModal = Form.create({
 
     componentDidMount() {
       const { form, type, dataSource } = this.props;
-      console.log('78787878', dataSource)
       if (type === 'update' && dataSource.pregnancy) {
         const visitTime = dataSource.visitTime;
         dataSource.visitTime = moment(visitTime);
@@ -106,10 +105,10 @@ const CreateRecordModal = Form.create({
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item label="门诊号">
+                <Form.Item label="卡号">
                   {getFieldDecorator('outpatientNO', {
-                    rules: [{ required: false, message: '请输入门诊号!' }],
-                  })(<Input placeholder="输入门诊号..." />)}
+                    rules: [{ required: false, message: '请输入卡号!' }],
+                  })(<Input placeholder="输入卡号..." />)}
                 </Form.Item>
               </Col>
               <Col span={12}>
