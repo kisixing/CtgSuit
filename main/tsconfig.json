@@ -1,11 +1,16 @@
 {
     "extends": "../node_modules/@chatie/tsconfig/tsconfig.json",
     "compilerOptions": {
-      "outDir": "dist",
-      "noImplicitAny": false
+      "outDir": "../app/main",
+      "noImplicitAny": false,
+      "noUnusedParameters": false,
+      "declarationMap": false,
+      "sourceMap": false,
+      "declaration": false
     },
     "exclude": [
     ],
     "include": [
+      "src/**/*.ts"
     ],
   }

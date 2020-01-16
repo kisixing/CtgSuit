@@ -9,6 +9,7 @@
     "start:runtime": "cross-env PORT=1702 TARGET=0 umi dev",
     "start:main": "run-electron .",
     "dev:main": "yarn gulp && run-electron .",
+    "_dev:main": "wsl make && run-electron .",
     "gulp": "gulp --silent",
     "build:main": "tsc --project ./app/tsconfig.json",
     "build": "ts-node --project main/tsconfig.json ./scripts/build",

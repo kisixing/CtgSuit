@@ -1,10 +1,11 @@
+import { resources, config as configPath, pkg, tmp } from '../config/path';
+
 const { dialog, app } = require('electron');
 const is = require('electron-is');
 const { createWriteStream, readFileSync, unlink } = require('fs');
 const { request } = require('http')
 const { resolve } = require('path')
 const { log, logErr } = require('../utils/log')
-const { resources, config: configPath, pkg, tmp } = require('../config/path')
 const { isDev } = require('../utils/is')
 
 
