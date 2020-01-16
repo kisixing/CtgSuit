@@ -3,8 +3,8 @@ import { useCallback, useState, useEffect } from "react";
 import request from '@/utils/request';
 import { event } from "@lianmed/utils";
 import { Modal } from "antd";
-import { IPregnancy, IPrenatalVisit } from "@/types";
-import { IVolumeData } from "@lianmed/lmg";
+import {  IPrenatalVisit } from "@/types";
+import { IVolumeData, ICacheItemPregnancy } from "@lianmed/lmg";
 
 export default function useTodo(showTodo: boolean, subscribeData: string[]): [IRemain[], boolean] {
     const [todo, setTodo] = useState<IRemain[]>([])
@@ -125,7 +125,7 @@ export interface IRemain {
         fhr3: string;
         fm: string;
         toco: string;
-        pregnancy?: IPregnancy;
+        pregnancy?: ICacheItemPregnancy;
         ismulti: false
         docid: string
         status: any

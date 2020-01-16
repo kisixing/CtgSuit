@@ -14,7 +14,7 @@ import { WsService } from '@lianmed/lmg';
 import { BedStatus } from '@lianmed/lmg/lib/services/WsService';
 import { FetalItem } from "../types";
 import { ButtonProps } from 'antd/lib/button';
-
+import { useJb } from "./useJb";
 const styles = require('./Toolbar.less');
 const socket = WsService._this;
 
@@ -25,6 +25,9 @@ function Toolbar(props: FetalItem.IToolbarProps) {
   const [isStopMonitorWhenCreated, setIsStopMonitorWhenCreated] = useState(false)
   const endCb = useRef(null)
   const [modalName, setModalName] = useState('')
+
+
+
   const onclose = cb => {
     endCb.current = cb;
     setModalName('confirmVisible');
@@ -32,11 +35,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
   const {
     showLoading,
     isTodo,
-    inpatientNO,
-    name,
-    gestationalWeek,
     startTime,
-    age,
     suitObject,
     docid,
     status,
@@ -44,12 +43,20 @@ function Toolbar(props: FetalItem.IToolbarProps) {
     deviceno,
     bedno,
     bedname,
-    pregnancyId,
     is_include_tocozero,
     is_include_volume,
-    volumeData
+    volumeData,
+    pregnancy
   } = props
-
+  const {
+    inpatientNO,
+    name,
+    gestationalWeek,
+    age,
+    id: pregnancyId,
+    pvId
+  } = pregnancy
+  const { jbLoading, jb } = useJb(pregnancyId, pvId)
   const timeout = useRef(null)
   const isWorking = status === BedStatus.Working;
   const isOffline = status === BedStatus.Offline;
@@ -148,6 +155,8 @@ function Toolbar(props: FetalItem.IToolbarProps) {
     setModalName('visible')
   };
 
+
+
   const B = (p: ButtonProps) => <Button style={{ padding: '0 8px' }} {...p} disabled={p.disabled || (isOfflineStopped && !pregnancyId)}>{p.children}</Button>
   const fp = 12
   return (
@@ -180,8 +189,8 @@ function Toolbar(props: FetalItem.IToolbarProps) {
           )}
         {/* 停止状态下不可以建档，监护、离线都是可以建档的 */}
 
-        <B icon="user-add" type="link" onClick={() => {
-          isCreated ? alert('调用解绑接口') : setModalName('visible')
+        <B icon={jbLoading?'loading':'user-add'} type="link" onClick={() => {
+          isCreated ? jb() : setModalName('visible')
         }}>
           {isCreated ? '解绑' : '建档'}
         </B>

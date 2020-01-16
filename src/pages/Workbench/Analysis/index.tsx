@@ -7,7 +7,7 @@ interface IProps {
   onCancel: () => void
   inpatientNO: string
   name: string
-  age: number
+  age: string
   startTime: string
   gestationalWeek?: string
 }

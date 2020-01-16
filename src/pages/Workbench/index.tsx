@@ -49,7 +49,7 @@ const Home = (props: IProps) => {
             const { data, bedname, prenatalVisit, bedno } = item;
             const { unitId } = (item as IBed)
             const { isTodo } = (item as IRemain)
-            const safePregnancy = data.pregnancy || { age: null, name: null, inpatientNO: null, bedNO: null, id: null, GP: null, gestationalWeek: null }
+            const safePregnancy = data.pregnancy || { pvId: null, age: null, name: null, inpatientNO: null, bedNO: null, id: null, GP: null, gestationalWeek: null }
             // const safePrenatalVisit = prenatalVisit || { gestationalWeek: null, }
             return (
               <Item
@@ -58,13 +58,9 @@ const Home = (props: IProps) => {
                 docid={data.docid}
                 status={data.status}
 
-                pregnancyId={safePregnancy.id}
-                name={safePregnancy.name}
-                age={safePregnancy.age}
-                inpatientNO={safePregnancy.inpatientNO}
-                GP={safePregnancy.GP}
-                bedNO={safePregnancy.bedNO}
-                gestationalWeek={safePregnancy.gestationalWeek}
+
+                pregnancy={safePregnancy}
+      
 
                 volumeData={data.volumeData}
                 is_include_tocozero={data.is_include_tocozero}

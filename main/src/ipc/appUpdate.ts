@@ -35,19 +35,18 @@ function appUpdate(e) {
   if (is.dev()) return;
   f = true;
   log(`version-update 开始`)
-
   request(
     `http://${xhr_url}/api/version-compare/ctg-suit/${version}`,
     im => {
       im.on('readable', () => {
         const res = im.read();
         log(`version-compare:${version}:${res}`);
+        f = false;
 
         if (res) {
           const { uri: filename, enable, name: newV } = JSON.parse(
             res.toString(),
           );
-          f = false;
           if (filename && newV) {
             const tgzPath = resolve(tmp, filename);
             const tarPath = resolve(tmp, `${filename}.tar`);
@@ -61,7 +60,7 @@ function appUpdate(e) {
                       message: `检测到新版本${newV}，是否后台安装`,
                       buttons: ['cancel', 'ok'],
                     },
-                    _ =>  _ && run(tgzPath, tarPath),
+                    _ => _ && run(tgzPath, tarPath),
                   );
               },
             );
@@ -69,9 +68,9 @@ function appUpdate(e) {
             request(`http://${xhr_url}/api/version-uri/${filename}`, im =>
               im.pipe(writeStream),
             ).end();
-          } else {
-            setTimeout(appUpdate, 1000 * 60 * 60);
           }
+        } else {
+          setTimeout(appUpdate, 6e5);
         }
       });
     },

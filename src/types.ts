@@ -28,7 +28,7 @@ export interface IPregnancy {
     GP?: string
     gestationalWeek?: string
     adminDate: any;
-    age: number;
+    age: string;
     areaNO: string;
     bedNO: string;
     dob: string;

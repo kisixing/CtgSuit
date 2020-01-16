@@ -21,7 +21,6 @@ const main = {
     },
     effects: {
         *init({ payload }, { put }) {
-            ipcRenderer.send('ready')
             ipcRenderer.on('installed', () => {
                 message.success('更新成功', 2).then(() => {
                     // eslint-disable-next-line no-restricted-globals

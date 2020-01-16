@@ -1,4 +1,4 @@
-import { BedStatus, ICacheItem, IVolumeData } from "@lianmed/lmg/lib/services/WsService";
+import { BedStatus, ICacheItem, IVolumeData, ICacheItemPregnancy } from "@lianmed/lmg/lib/services/WsService";
 import { Suit } from "@lianmed/lmg/lib/Ctg/Suit";
 
 export namespace FetalItem {
@@ -12,25 +12,21 @@ export namespace FetalItem {
         unitId: string
         isTodo: boolean
         ismulti: boolean
-        inpatientNO: string
-        name: string
-        age: number
         deviceno: string
-        bedNO: string
         docid: string
         status: BedStatus
-        pregnancyId: number
+
         startTime: string
         outPadding: number
         fullScreenId: string
         activeId: string
         itemHeight: number
         itemSpan: number
-        GP?: string
-        gestationalWeek?: string
         isOn: boolean
-
+        pregnancy: ICacheItemPregnancy
     }
+
+
 
     export interface IItemTitle {
         bedNO?: string
@@ -49,17 +45,14 @@ export namespace FetalItem {
         suitObject: { suit: Suit }
         showLoading: (s: boolean) => void
         isTodo: boolean
-        inpatientNO: string
-        name: string
-        age: number
         startTime: string
-        gestationalWeek?: string
         unitId: string
         bedname: string
         deviceno: string
         bedno: string
         docid: string
         status: BedStatus
-        pregnancyId: number
+        pregnancy: ICacheItemPregnancy
+
     }
-}
+}  

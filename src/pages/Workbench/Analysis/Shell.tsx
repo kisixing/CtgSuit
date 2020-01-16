@@ -8,12 +8,12 @@ interface IProps extends React.Props<any> {
     onCancel: () => void
     inpatientNO: string
     name: string
-    age: number
+    age: string
     startTime: string
     gestationalWeek?: string
 }
-function Shell({ visible, onCancel, docid = '', name = '', age = 0, startTime = '', inpatientNO = '', gestationalWeek = '', children }: IProps) {
-    const S = props => <span style={{marginRight:6}} {...props}>{props.children}</span>
+function Shell({ visible, onCancel, docid = '', name = '', age = '0', startTime = '', inpatientNO = '', gestationalWeek = '', children }: IProps) {
+    const S = props => <span style={{ marginRight: 6 }} {...props}>{props.children}</span>
     return (
         <Modal
             maskClosable={false}
