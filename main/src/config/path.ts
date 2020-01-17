@@ -10,7 +10,7 @@ const profile = resolve(process.env.USERPROFILE)
 const desktop = resolve(process.env.USERPROFILE, 'Desktop')
 const tmp = resolve('.tmp')
 const resources = resolve('resources')
-const appPath = resolve(resources, 'app')
+const appPath = resolve(resources, 'app.asar')
 
 const config = resolve(profile, 'setting.json')
 const defaultConfig = resolve(assetsPath, './defaultSetting.json')

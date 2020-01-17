@@ -1,5 +1,5 @@
-import { resources, config as configPath, pkg, tmp } from '../config/path';
-
+import { resources, config as configPath, pkg, tmp, appPath } from '../config/path';
+import { renameSync, rename } from "original-fs";
 const { dialog, app } = require('electron');
 const is = require('electron-is');
 const { createWriteStream, readFileSync, unlink } = require('fs');
@@ -89,6 +89,7 @@ function run(tgzPath, tarPath) {
     unlink(tgzPath, e => !!e && logErr(e.stack))
     tar.uncompress(tarPath, isDev ? tmp : resources).then(() => {
       unlink(tarPath, e => !!e && logErr(e.stack))
+      rename(appPath, resolve(appPath, '../app1.asar'), e => !!e && logErr(e.stack))
       dialog.showMessageBox({
         message: '应用更新成功，是否立即重启以生效？',
         buttons: ['cancel', 'ok'],
