@@ -11,7 +11,7 @@ const desktop = resolve(process.env.USERPROFILE, 'Desktop')
 const tmp = resolve('.tmp')
 const resources = resolve('resources')
 const appPath = resolve(resources, 'app.asar')
-
+const execPath = resolve('ctg-suit')
 const config = resolve(profile, 'setting.json')
 const defaultConfig = resolve(assetsPath, './defaultSetting.json')
 const errLog = resolve(tmp, 'errLog.txt')
@@ -29,5 +29,6 @@ export {
     log,
     errLog,
     pkg,
-    appPath
+    appPath,
+    execPath
 }
