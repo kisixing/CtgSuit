@@ -6,8 +6,30 @@ using std::string;
 using std::fstream;
 using std::cout;
 using std::endl;
+
+
+
+void CALLBACK f(HWND hwnd, UINT uMsg, UINT timerId, DWORD dwTime)
+{
+  cout<<"zz"<<endl;
+}
+
+void ST()
+{
+  MSG msg;
+
+  SetTimer(NULL, 0, 1000,(TIMERPROC) &f);
+  while(GetMessage(&msg, NULL, 0, 0)) {
+    TranslateMessage(&msg);
+    DispatchMessage(&msg);
+  }
+}
+
+
+
 int main(int argc, char ** argv)
 {
+	ST();
 	if (argc < 3) {
 		return 0;
 	}
