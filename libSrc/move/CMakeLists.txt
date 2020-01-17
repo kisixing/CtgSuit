@@ -1,0 +1,10 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 3.0)
+
+PROJECT(A)
+
+SET(SRC_LIST main.cpp)
+
+MESSAGE(STATUS "this is binary dir" ${A_BINARY_DIR})
+MESSAGE(STATUS "this is source dir" ${A_SOURCE_DIR})
+
+ADD_EXECUTABLE(move ${SRC_LIST})

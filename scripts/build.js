@@ -11,7 +11,7 @@ function tsc(cb) {
         .pipe(ts({}))
 
     return tsResult.js
-        .pipe(uglyfly())
+        // .pipe(uglyfly())
         .pipe(gulp.dest("app/main"));
 
 }
