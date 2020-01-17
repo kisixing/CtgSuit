@@ -29,8 +29,8 @@ void ST()
 
 int main(int argc, char ** argv)
 {
-	ST();
 	if (argc < 3) {
+		ST();
 		return 0;
 	}
 	char *o_name = argv[1];
