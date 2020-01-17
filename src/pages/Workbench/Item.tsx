@@ -22,7 +22,7 @@ const WorkbenchItem = (props: FetalItem.IProps) => {
     startTime = c.startTime
     pregnancy = c.pregnancy || {}
   } else {
-    Object.assign(c, { pregnancy, startTime })
+    Object.assign(c, { pregnancy: { ...pregnancy, pvId: null }, startTime })
   }
 
 

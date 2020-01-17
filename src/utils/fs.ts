@@ -1,5 +1,5 @@
 import store from "store";
-const defaultSetting = require('../../app/main/config/defaultSetting.json')
+const defaultSetting = require('../../main/asserts/defaultSetting.json')
 
 const fs = {
     stat(path: string, cb) {

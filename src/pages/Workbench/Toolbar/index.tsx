@@ -189,7 +189,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
           )}
         {/* 停止状态下不可以建档，监护、离线都是可以建档的 */}
 
-        <B icon={jbLoading?'loading':'user-add'} type="link" onClick={() => {
+        <B icon={jbLoading?'loading':'user-add'} type="link" disabled={isCreated && !pvId} onClick={() => {
           isCreated ? jb() : setModalName('visible')
         }}>
           {isCreated ? '解绑' : '建档'}
