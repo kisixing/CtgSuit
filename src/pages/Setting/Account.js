@@ -45,7 +45,7 @@ class Account extends PureComponent {
       {
         title: '账号名称',
         dataIndex: 'firstName',
-        key: 'id',
+        key: 'firstName',
         width: 150,
         render: (text, record) => {
           if (record.editable) {
@@ -67,7 +67,7 @@ class Account extends PureComponent {
       {
         title: '工号',
         dataIndex: 'login',
-        key: 'id',
+        key: 'login',
         width: 150,
         render: (text, record) => {
           if (record.editable) {
@@ -243,9 +243,7 @@ class Account extends PureComponent {
         key: 'createdDate',
         width: 150,
         render: text =>
-          text
-            ? moment(text).format('YYYY-MM-DD HH:mm:ss')
-            : 'xxx-xx-xx xx:xx',
+          text ? moment(text).format('YYYY-MM-DD HH:mm:ss') : 'xxx-xx-xx xx:xx',
       },
       // {
       //   title: '最近更新',
@@ -304,9 +302,9 @@ class Account extends PureComponent {
                   onClick={e => {
                     // 获取select options
                     this.fetchGroups();
-                    this.fetchWards()
-                    this.toggleEditable(e, record.id)}
-                  }
+                    this.fetchWards();
+                    this.toggleEditable(e, record.id);
+                  }}
                 >
                   编辑
                 </span>
@@ -555,6 +553,7 @@ class Account extends PureComponent {
           pagination={false}
           columns={this.columns}
           dataSource={data}
+          rowKey="id"
         />
         <Button
           style={{ width: '100%', marginTop: 16, marginBottom: 8 }}

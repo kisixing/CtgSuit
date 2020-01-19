@@ -36,12 +36,12 @@ class Network extends Component {
       .getObj()
       .then(
         ({
-          normalarea,
-          selectarea,
-          rule,
-          scale,
-          primarygrid,
-          secondarygrid,
+          // normalarea,
+          // selectarea,
+          // rule,
+          // scale,
+          // primarygrid,
+          // secondarygrid,
           fhrcolor1,
           fhrcolor2,
           fhrcolor3,
@@ -55,12 +55,12 @@ class Network extends Component {
           alarm_on_sound,
         }) => {
           form.setFieldsValue({
-            normalarea,
-            selectarea,
-            rule,
-            scale,
-            primarygrid,
-            secondarygrid,
+            // normalarea,
+            // selectarea,
+            // rule,
+            // scale,
+            // primarygrid,
+            // secondarygrid,
             fhrcolor1,
             fhrcolor2,
             fhrcolor3,

@@ -30,8 +30,8 @@ class Hospital extends PureComponent {
     });
     // 设置版本信息
     form.setFieldsValue({
-      version_number: config.version,
-      build_date: config.author.date,
+      // version_number: config.version,
+      // build_date: config.author.date,
       display_size: `${w.toFixed(2)} * ${h.toFixed(2)} cm`
     })
   }
@@ -81,11 +81,11 @@ class Hospital extends PureComponent {
             rules: [{ required: false, message: '请输入系统信息!' }],
           })(<Input disabled placeholder="请输入系统信息!" />)}
         </Form.Item> */}
-        <Form.Item label="版本时间">
+        {/* <Form.Item label="版本时间">
           {getFieldDecorator('build_date', {
             rules: [{ required: false, message: '请输入版本时间!' }],
           })(<Input disabled placeholder="请输入请输入版本时间!" />)}
-        </Form.Item>
+        </Form.Item> */}
         <Form.Item label="设备尺寸">
           {getFieldDecorator('display_size')(<Input disabled />)}
         </Form.Item>
