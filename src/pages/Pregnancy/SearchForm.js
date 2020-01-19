@@ -148,7 +148,7 @@ class SearchForm extends Component {
                     {getFieldDecorator('recordstate')(
                       <Select allowClear style={{ width: 174 }}>
                         <Select.Option value="10">住院中</Select.Option>
-                        <Select.Option value="11">已出院</Select.Option>
+                        <Select.Option value="20">已出院</Select.Option>
                       </Select>,
                     )}
                   </Form.Item>
