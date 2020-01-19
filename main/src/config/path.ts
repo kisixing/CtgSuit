@@ -17,7 +17,7 @@ const defaultConfig = resolve(assetsPath, './defaultSetting.json')
 const errLog = resolve(tmp, 'errLog.txt')
 const log = resolve(tmp, 'log.txt')
 const pkg = resolve(source, 'package.json')
-
+const unpackPath = isDev ? tmp : resources
 export {
     profile,
     desktop,
@@ -30,5 +30,6 @@ export {
     errLog,
     pkg,
     appPath,
-    execPath
+    execPath,
+    unpackPath
 }

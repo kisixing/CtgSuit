@@ -1,0 +1,11 @@
+# ninja log v5
+1	825	600947240	CMakeFiles/move.dir/main.cpp.obj	4decce097d2793d3
+826	1363	600947240	move.exe	3e5c781e88d91099
+0	815	600950122	CMakeFiles/move.dir/main.cpp.obj	4decce097d2793d3
+815	1148	600950122	move.exe	3e5c781e88d91099
+1	892	600950146	CMakeFiles/move.dir/main.cpp.obj	4decce097d2793d3
+892	1193	600950146	move.exe	3e5c781e88d91099
+1	863	600950374	CMakeFiles/move.dir/main.cpp.obj	4decce097d2793d3
+863	1106	600950374	move.exe	3e5c781e88d91099
+0	1002	600960811	CMakeFiles/move.dir/main.cpp.obj	4decce097d2793d3
+1002	1582	600960812	move.exe	3e5c781e88d91099

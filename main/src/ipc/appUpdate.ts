@@ -1,12 +1,12 @@
-import { resources, config as configPath, pkg, tmp, appPath } from '../config/path';
-import { renameSync, rename } from "original-fs";
+import { resources, unpackPath, config as configPath, pkg, tmp, appPath, execPath } from '../config/path';
+import { createWriteStream, readFileSync, unlink, existsSync, unlinkSync } from "fs";
+import { spawnSync, spawn } from "child_process";
 const { dialog, app } = require('electron');
 const is = require('electron-is');
-const { createWriteStream, readFileSync, unlink } = require('fs');
 const { request } = require('http')
 const { resolve } = require('path')
 const { log, logErr } = require('../utils/log')
-const { isDev } = require('../utils/is')
+// const { isDev } = require('../utils/is')
 
 
 
@@ -42,7 +42,6 @@ function appUpdate(e) {
       im.on('readable', () => {
         const res = im.read();
         log(`version-compare:${version}:${res}`);
-        f = false;
 
         if (res) {
           const { uri: filename, enable, name: newV } = JSON.parse(
@@ -58,10 +57,13 @@ function appUpdate(e) {
                   ? run(tgzPath, tarPath)
                   : dialog.showMessageBox(
                     {
-                      message: `检测到新版本${newV}，是否后台安装`,
+                      message: `检测到胎心监护新版${newV}，请点击〔确定〕完成升级`,
                       buttons: ['cancel', 'ok'],
                     },
-                    _ => _ && run(tgzPath, tarPath),
+                    _ => {
+                      f = false;
+                      _ && run(tgzPath, tarPath)
+                    },
                   );
               },
             );
@@ -69,9 +71,10 @@ function appUpdate(e) {
             request(`http://${xhr_url}/api/version-uri/${filename}`, im =>
               im.pipe(writeStream),
             ).end();
+          } else {
+            f = false;
+            setTimeout(appUpdate, 6e4);
           }
-        } else {
-          setTimeout(appUpdate, 6e5);
         }
       });
     },
@@ -87,19 +90,21 @@ export default ['ready', appUpdate]
 function run(tgzPath, tarPath) {
   return gzip.uncompress(tgzPath, tarPath).then(() => {
     unlink(tgzPath, e => !!e && logErr(e.stack))
-    tar.uncompress(tarPath, isDev ? tmp : resources).then(() => {
+    tar.uncompress(tarPath, unpackPath).then(() => {
       unlink(tarPath, e => !!e && logErr(e.stack))
-      rename(appPath, resolve(appPath, '../app1.asar'), e => !!e && logErr(e.stack))
+      // rename(appPath, resolve(appPath, '../app1.asar'), e => !!e && logErr(e.stack))
+
       dialog.showMessageBox({
-        message: '应用更新成功，是否立即重启以生效？',
+        message: '应用更新成功，是否立即重启以生效?',
         buttons: ['cancel', 'ok'],
       }, _ => {
         if (_) {
           // e.sender.send('installed')
           // getMainWindow().reload()
           setTimeout(() => {
-            app.relaunch();
-            app.exit();
+            // app.relaunch();
+            // app.exit();
+            checkAsar()
           }, 0);
         }
       });
@@ -107,3 +112,21 @@ function run(tgzPath, tarPath) {
   });
 }
 
+function checkAsar() {
+  const firePath = resolve(resources, 'fired')
+  const asarPkgPath = resolve(firePath, 'app.asar.tmp')
+  const movePath = resolve(firePath, 'move.exe')
+  if (existsSync(firePath) && existsSync(asarPkgPath) && existsSync(movePath)) {
+    spawn(movePath, [appPath, asarPkgPath], {
+      detached: true
+    })
+    unlinkSync(resolve(resources, 'app'))
+  }
+  spawn(execPath, {
+    detached: true
+  })
+  app.exit(0)
+  spawnSync('killtask', ['/F', '/PID', process.pid + ''])
+  console.log(process.pid)
+
+}
