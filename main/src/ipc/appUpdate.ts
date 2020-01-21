@@ -1,5 +1,5 @@
 import { resources, unpackPath, config as configPath, pkg, tmp, appPath, execPath } from '../config/path';
-import { createWriteStream, readFileSync, unlink, existsSync, unlinkSync } from "fs";
+import { createWriteStream, readFileSync, unlink, existsSync, unlinkSync, rmdirSync, rmdir } from "fs";
 import { spawnSync, spawn } from "child_process";
 const { dialog, app } = require('electron');
 const is = require('electron-is');
@@ -8,7 +8,7 @@ const { resolve } = require('path')
 const { log, logErr } = require('../utils/log')
 // const { isDev } = require('../utils/is')
 
-
+const rm = require('rimraf')
 
 delete require.cache[pkg];
 
@@ -26,6 +26,7 @@ const compress = require('compressing')
 const { tar, gzip } = compress
 
 
+const firePath = resolve(resources, 'fired')
 
 
 
@@ -57,7 +58,7 @@ function appUpdate(e) {
                   ? run(tgzPath, tarPath)
                   : dialog.showMessageBox(
                     {
-                      message: `检测到胎心监护新版${newV}，请点击〔确定〕完成升级`,
+                      message: `检测到胎心监护新版${newV}，请点击〔确定〕完成升级?`,
                       buttons: ['cancel', 'ok'],
                     },
                     _ => {
@@ -88,6 +89,8 @@ function appUpdate(e) {
 export default ['ready', appUpdate]
 
 function run(tgzPath, tarPath) {
+  // existsSync(firePath) && rm(firePath, e => !!e && logErr(e))
+
   return gzip.uncompress(tgzPath, tarPath).then(() => {
     unlink(tgzPath, e => !!e && logErr(e.stack))
     tar.uncompress(tarPath, unpackPath).then(() => {
@@ -111,22 +114,37 @@ function run(tgzPath, tarPath) {
     });
   });
 }
-
+console.log(process.pid)
 function checkAsar() {
-  const firePath = resolve(resources, 'fired')
+  log(`checkAsar`)
+
   const asarPkgPath = resolve(firePath, 'app.asar.tmp')
   const movePath = resolve(firePath, 'move.exe')
-  if (existsSync(firePath) && existsSync(asarPkgPath) && existsSync(movePath)) {
-    spawn(movePath, [appPath, asarPkgPath], {
+  const appDir = resolve(resources, 'app')
+  if (existsSync(asarPkgPath) && existsSync(movePath)) {
+    log('gggggggggggg')
+    log(`${appPath}, ${asarPkgPath}, ${execPath}`)
+    existsSync(appDir) && rm(appDir, e => {
+      !!e && logErr(e)
+      spawnSync('taskkill', ['/F', '/PID', process.pid + ''])
+    })
+    spawn(movePath, [appPath, asarPkgPath, execPath], {
       detached: true
     })
-    unlinkSync(resolve(resources, 'app'))
+  } else {
+    spawn(execPath, {
+      detached: true
+    })
+    spawnSync('taskkill', ['/F', '/PID', process.pid + ''])
   }
-  spawn(execPath, {
-    detached: true
-  })
-  app.exit(0)
-  spawnSync('killtask', ['/F', '/PID', process.pid + ''])
-  console.log(process.pid)
+
+  // app.exit(0)
+  // spawn('taskkill', ['/F', '/PID', process.ppid + ''])
+ 
+  // process.kill(0)
+  // console.log(process.pid)
+  // setInterval(() => {
+  //   console.log(process.pid)
+  // }, 1000);
 
 }

@@ -50,32 +50,32 @@ The CXX compiler identification is MSVC, found in "D:/work/CtgSuit/libSrc/move/b
 Determining if the C compiler works passed with the following output:
 Change Dir: D:/work/CtgSuit/libSrc/move/build/CMakeFiles/CMakeTmp
 
-Run Build Command(s):C:/PROGRA~2/MICROS~1/2019/ENTERP~1/Common7/IDE/COMMON~1/MICROS~1/CMake/Ninja/ninja.exe cmTC_dbbba && [1/2] Building C object CMakeFiles\cmTC_dbbba.dir\testCCompiler.c.obj
-[2/2] Linking C executable cmTC_dbbba.exe
+Run Build Command(s):C:/PROGRA~2/MICROS~1/2019/ENTERP~1/Common7/IDE/COMMON~1/MICROS~1/CMake/Ninja/ninja.exe cmTC_b2a6b && [1/2] Building C object CMakeFiles\cmTC_b2a6b.dir\testCCompiler.c.obj
+[2/2] Linking C executable cmTC_b2a6b.exe
 
 
 
 Detecting C compiler ABI info compiled with the following output:
 Change Dir: D:/work/CtgSuit/libSrc/move/build/CMakeFiles/CMakeTmp
 
-Run Build Command(s):C:/PROGRA~2/MICROS~1/2019/ENTERP~1/Common7/IDE/COMMON~1/MICROS~1/CMake/Ninja/ninja.exe cmTC_f054b && [1/2] Building C object CMakeFiles\cmTC_f054b.dir\CMakeCCompilerABI.c.obj
-[2/2] Linking C executable cmTC_f054b.exe
+Run Build Command(s):C:/PROGRA~2/MICROS~1/2019/ENTERP~1/Common7/IDE/COMMON~1/MICROS~1/CMake/Ninja/ninja.exe cmTC_1830d && [1/2] Building C object CMakeFiles\cmTC_1830d.dir\CMakeCCompilerABI.c.obj
+[2/2] Linking C executable cmTC_1830d.exe
 
 
 
 Determining if the CXX compiler works passed with the following output:
 Change Dir: D:/work/CtgSuit/libSrc/move/build/CMakeFiles/CMakeTmp
 
-Run Build Command(s):C:/PROGRA~2/MICROS~1/2019/ENTERP~1/Common7/IDE/COMMON~1/MICROS~1/CMake/Ninja/ninja.exe cmTC_baae5 && [1/2] Building CXX object CMakeFiles\cmTC_baae5.dir\testCXXCompiler.cxx.obj
-[2/2] Linking CXX executable cmTC_baae5.exe
+Run Build Command(s):C:/PROGRA~2/MICROS~1/2019/ENTERP~1/Common7/IDE/COMMON~1/MICROS~1/CMake/Ninja/ninja.exe cmTC_39d9e && [1/2] Building CXX object CMakeFiles\cmTC_39d9e.dir\testCXXCompiler.cxx.obj
+[2/2] Linking CXX executable cmTC_39d9e.exe
 
 
 
 Detecting CXX compiler ABI info compiled with the following output:
 Change Dir: D:/work/CtgSuit/libSrc/move/build/CMakeFiles/CMakeTmp
 
-Run Build Command(s):C:/PROGRA~2/MICROS~1/2019/ENTERP~1/Common7/IDE/COMMON~1/MICROS~1/CMake/Ninja/ninja.exe cmTC_95938 && [1/2] Building CXX object CMakeFiles\cmTC_95938.dir\CMakeCXXCompilerABI.cpp.obj
-[2/2] Linking CXX executable cmTC_95938.exe
+Run Build Command(s):C:/PROGRA~2/MICROS~1/2019/ENTERP~1/Common7/IDE/COMMON~1/MICROS~1/CMake/Ninja/ninja.exe cmTC_390dd && [1/2] Building CXX object CMakeFiles\cmTC_390dd.dir\CMakeCXXCompilerABI.cpp.obj
+[2/2] Linking CXX executable cmTC_390dd.exe
 
 
 

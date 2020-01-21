@@ -1,15 +1,20 @@
-const { existsSync, mkdirSync, unlinkSync, createReadStream, readFileSync, statSync } = require('fs')
+const { existsSync, mkdirSync, unlinkSync, createReadStream, readFileSync, statSync, mkdirSyc } = require('fs')
 const path = require('path')
 const yp = require('yargs-parser')
 const request = require("request");
 var progress = require('progress');
 const compress = require('compressing')
-const { config: configPath, pkg: pkgPath } = require('../app/main/config/path')
+const { config: configPath, pkg: pkgPath, assetsPath } = require('../app/main/config/path')
 
 const { tar: { compressDir }, gzip: { compressFile } } = compress
 const { target, dir, base } = yp(process.argv.slice(2))
 
 const config = JSON.parse(readFileSync(configPath, 'utf-8'))
+const asar = require('asar')
+
+
+const firedPath = path.resolve('fired')
+existsSync(firedPath) || mkdirSyc(firedPath, e => { })
 
 
 
@@ -20,7 +25,7 @@ const { version, description } = pkg
 const { USERNAME: username } = process.env
 
 
-if (!target) return
+if (!target || !base) return
 existsSync(dir) || mkdirSync(dir)
 
 const dateTime = new Date().toLocaleString().replace(/[:]/g, '-')
@@ -28,12 +33,17 @@ const rPath = path.resolve(base)
 const tarName = path.resolve(dir, `${target}`)
 const tgzName = path.resolve(dir, `${target} ${version} ${dateTime} ${username}`)
 
-compressDir(rPath, tarName).then(v => {
-    compressFile(tarName, tgzName).then(() => {
-        unlinkSync(tarName)
-        flash(tgzName)
+const asarPkgPath = path.resolve(firedPath, `${base.split('/').filter(_ => !!_).reverse()[0]}.asar.tmp`)
+asar.createPackage(rPath, asarPkgPath).then(() => {
+    compressDir(firedPath, tarName).then(v => {
+        compressFile(tarName, tgzName).then(() => {
+            unlinkSync(tarName)
+            flash(tgzName)
+        })
     })
 })
+
+
 
 
 

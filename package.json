@@ -19,6 +19,7 @@
     "codepush:desktop": "node ./scripts/codepush.js --dir=.tmp  --base=app --target=desktop",
     "deploy:browser": "yarn vh && yarn gulp && yarn build:runtime && yarn codepush:browser",
     "deploy:desktop": "yarn vh && yarn gulp  && yarn build:render && yarn codepush:desktop",
+    "_deploy:desktop": "yarn vh && yarn gulp  && yarn codepush:desktop",
     "test": "umi test",
     "lint": "eslint --ext .js src mock tests",
     "rebuild": "electron-rebuild -m ./app",

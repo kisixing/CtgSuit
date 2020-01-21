@@ -1,6 +1,8 @@
 {
     "files.associations": {
         "*.py": "python",
-        "ostream": "cpp"
-    }
+        "ostream": "cpp",
+        "fstream": "cpp"
+    },
+    "C_Cpp.default.configurationProvider": "go2sh.cmake-integration"
 }
