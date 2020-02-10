@@ -1,2 +1,8 @@
 {
+    "files.associations": {
+        "*.py": "python",
+        "list": "cpp",
+        "algorithm": "cpp",
+        "limits": "cpp"
+    }
 }

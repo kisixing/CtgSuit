@@ -124,10 +124,14 @@ function checkAsar() {
   if (existsSync(asarPkgPath) && existsSync(movePath)) {
     log('gggggggggggg')
     log(`${appPath}, ${asarPkgPath}, ${execPath}`)
-    existsSync(appDir) && rm(appDir, e => {
-      !!e && logErr(e)
-      spawnSync('taskkill', ['/F', '/PID', process.pid + ''])
-    })
+    if (existsSync(appDir)) {
+      rm(appDir, e => {
+        !!e && logErr(e)
+        spawn('taskkill', ['/F', '/PID', process.pid + ''])
+      })
+    } else {
+      spawn('taskkill', ['/F', '/PID', process.pid + ''])
+    }
     spawn(movePath, [appPath, asarPkgPath, execPath], {
       detached: true
     })
@@ -135,12 +139,12 @@ function checkAsar() {
     spawn(execPath, {
       detached: true
     })
-    spawnSync('taskkill', ['/F', '/PID', process.pid + ''])
+    spawn('taskkill', ['/F', '/PID', process.pid + ''])
   }
 
   // app.exit(0)
   // spawn('taskkill', ['/F', '/PID', process.ppid + ''])
- 
+
   // process.kill(0)
   // console.log(process.pid)
   // setInterval(() => {

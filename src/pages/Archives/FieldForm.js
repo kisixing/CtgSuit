@@ -19,7 +19,8 @@ class FieldForm extends Component {
   componentDidMount() {
     const { form } = this.props;
     form.setFieldsValue({
-      startTime: STARTTIME,
+      // eslint-disable-next-line no-undef
+      startTime: __DEV__ ? moment('2019-1-1') : STARTTIME,
       endTime: ENDTIME,
     });
   }
