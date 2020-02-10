@@ -123,6 +123,16 @@ class TableList extends Component {
                   </>
                 )
               }
+              {
+                (
+                  <>
+                    <Divider type="vertical" />
+                    <span className="primary-link" onClick={(e) => this.showReport(e, record)}>
+                      归档
+                    </span>
+                  </>
+                )
+              }
 
               {/* <Divider type="vertical" /> */}
               {/* <span className="delete-link" onClick={() => this.switchFullscreen(record)}>
@@ -154,8 +164,8 @@ class TableList extends Component {
     const { router, pagination } = this.props;
     const query = router.location.query;
     // 默认请求近一周的数据
-    const sTime = moment()
-      .subtract(7, 'd')
+    // eslint-disable-next-line no-undef
+    const sTime = (__DEV__ ? moment('2019-1-1') : moment().subtract(7, 'd'))
       .format('YYYY-MM-DD');
     const eTime = moment().format('YYYY-MM-DD');
     const params = {
