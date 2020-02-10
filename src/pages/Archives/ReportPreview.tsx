@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useLayoutEffect, useRef } from 'react';
-import { Menu, Spin, Button } from 'antd';
+import { Menu, Spin, Button, Popconfirm } from 'antd';
 import moment from 'moment';
 import PreviewContent from "@lianmed/pages/lib/Ctg/Report/PreviewContent";
 import Shell from "../Workbench/Analysis/Shell";
@@ -7,7 +7,7 @@ import { request } from "@lianmed/utils";
 import PrintPreview from "../Workbench/PrintPreview";
 
 interface IProps {
-  report: string
+  report: any
   docid: string
   visible: boolean
   onCancel: () => void
@@ -17,30 +17,44 @@ interface IProps {
   startTime: string
   gestationalWeek?: string
 }
+
 export const Context = React.createContext({});
+
 function ReportPreview(props: IProps) {
-  const { report = '' } = props;
-  let reportObj = {};
+  const { report } = props;
+  // console.log('8888888888999999', report)
+  let newReport = [];
   try {
-    reportObj = JSON.parse(report);
+    if (Object.prototype.toString.call(report) === '[object Array]') {
+      // Array
+      newReport = report.sort(compare('time'));
+    } else {
+      newReport = JSON.parse(report);
+    }
   } catch (error) {
     console.log('report格式不正确', error);
     return null;
   }
 
   // 是否为对象
-  const isObj = Object.prototype.toString.call(reportObj);
-  if (!isObj) {
-    return null;
-  }
-  const arr = [];
-  for (let key in reportObj) {
-    const obj = { key, value: reportObj[key] };
-    arr.push(obj);
-    arr.sort(compare('value'));
-  }
+  // const isObj = Object.prototype.toString.call(reportObj);
+  // if (!isObj) {
+  //   return null;
+  // }
+  // const arr = [];
+  // for (let key in reportObj) {
+  //   const obj = { key, value: reportObj[key] };
+  //   arr.push(obj);
+  //   arr.sort(compare('value'));
+  // }
+  // const arr = [];
+  // for (var j = 0, len = newReport.length; j < len; j++) {
+  //   const obj = newReport[j];
+  //   arr.push(obj);
+  //   arr.sort(compare('time'));
+  // }
 
-  const [currentReport, setCurrentReport] = useState(arr[0]['key']);
+  const [currentReport, setCurrentReport] = useState(newReport[0]['bizSn']);
   const [loading, setLoading] = useState(false);
   const [pdfBase64, setPdfBase64] = useState('');
   const inputEl = useRef(null);
@@ -69,9 +83,17 @@ function ReportPreview(props: IProps) {
   };
   const onDownload = () => {
     console.log(currentReport)
-
     PrintPreview.printPdf(currentReport)
   }
+
+  const confirm = () => {
+    // 当前档案id --> currentReport
+  };
+
+  const archiving = e => {
+    // 当前档案id --> currentReport
+  };
+
   const handleClick = ({ key }) => {
     setCurrentReport(key);
     fetchpdf(key);
@@ -99,12 +121,12 @@ function ReportPreview(props: IProps) {
           theme="light"
           onClick={handleClick}
         >
-          {arr &&
-            arr.map(e => {
+          {newReport &&
+            newReport.map(e => {
               return (
-                <Menu.Item key={e.key}>
-                  <div>{e.key}</div>
-                  <div>{e.value}</div>
+                <Menu.Item key={e.bizSn}>
+                  <div>{e.bizSn}</div>
+                  <div>{e.time}</div>
                 </Menu.Item>
               );
             })}
@@ -120,8 +142,20 @@ function ReportPreview(props: IProps) {
           </Spin>
         </div>
       </div>
-      <Button style={{float:'right',margin:6}} onClick={onDownload}>打印</Button>
-
+      <div style={{ float: 'right', margin: 6 }}>
+        <Button onClick={archiving}>归档</Button>
+        <Popconfirm
+          title="确认删除该报告？"
+          onConfirm={confirm}
+          okText="是"
+          cancelText="否"
+        >
+          <Button style={{ margin: 6 }}>删除</Button>
+        </Popconfirm>
+        <Button type="primary" onClick={onDownload}>
+          打印
+        </Button>
+      </div>
     </Shell>
   );
 }

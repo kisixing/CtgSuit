@@ -35,6 +35,7 @@ class TableList extends Component {
         key: 'age',
         width: 70,
         render: (text, record) => record.pregnancy && record.pregnancy.age,
+        sorter: (a, b) => parseInt(a.age) - parseInt(b.age),
       },
       {
         title: '孕周',
@@ -62,20 +63,26 @@ class TableList extends Component {
       },
       {
         title: '日期',
-        dataIndex: 'visitTime',
-        key: 'visitTime',
+        dataIndex: 'startTime',
+        key: 'startTime',
         width: 150,
-        sorter: (a, b) => moment(a.visitTime) - moment(b.visitTime),
-        render: text => text && moment(text).format('YYYY-MM-DD HH:mm:ss'),
+        render: (text, record) => {
+          const startTime = record.ctgexam && record.ctgexam.startTime;
+          const timeStr = moment(startTime).format('YYYY-MM-DD HH:mm:ss');
+          return timeStr;
+        },
+        sorter: (a, b) => moment(a.startTime) - moment(b.startTime),
       },
       {
         title: 'GP',
         dataIndex: 'GP',
         key: 'GP',
         width: 65,
+        align: 'center',
         render: (text, record) => {
           if (record.pregnancy) {
-            return `${record.pregnancy.gravidity} / ${record.pregnancy.parity}`;
+            const { gravidity, parity } = record.pregnancy;
+            return `${gravidity ? gravidity : 1} / ${parity ? parity : 0}`;
           }
           return;
         },
@@ -94,35 +101,40 @@ class TableList extends Component {
         width: 150,
         align: 'center',
         render: (text, record) => {
-          const ctgexam = record.ctgexam
-          const hasSigned = !!ctgexam.report
-          const signable = true || !!ctgexam.signable
+          const ctgexam = record.ctgexam;
+          const hasSigned = !!ctgexam.report;
+          const signable = true || !!ctgexam.signable;
           return (
             <span>
-              <span className="primary-link" onClick={(e) => this.showAnalysis(e, record)}>
+              <span
+                className="primary-link"
+                onClick={e => this.showAnalysis(e, record)}
+              >
                 分析
               </span>
-              {
-                signable && (
-                  <>
-                    <Divider type="vertical" />
+              {signable && (
+                <>
+                  <Divider type="vertical" />
 
-                    <span className="primary-link" onClick={(e) => this.showPrint(e, record)}>
-                      {hasSigned ? '重新生成' : '报告生成'}
-                    </span>
-                  </>
-                )
-              }
-              {
-                hasSigned && (
-                  <>
-                    <Divider type="vertical" />
-                    <span className="primary-link" onClick={(e) => this.showReport(e, record)}>
-                      查看
-                    </span>
-                  </>
-                )
-              }
+                  <span
+                    className="primary-link"
+                    onClick={e => this.showPrint(e, record)}
+                  >
+                    {hasSigned ? '重新生成' : '报告生成'}
+                  </span>
+                </>
+              )}
+              {hasSigned && (
+                <>
+                  <Divider type="vertical" />
+                  <span
+                    className="primary-link"
+                    onClick={e => this.showReport(e, record)}
+                  >
+                    查看
+                  </span>
+                </>
+              )}
 
               {/* <Divider type="vertical" /> */}
               {/* <span className="delete-link" onClick={() => this.switchFullscreen(record)}>
@@ -136,7 +148,7 @@ class TableList extends Component {
           );
         },
       },
-    ] // .map(_ => ({ ..._, align: 'center' }));
+    ]; // .map(_ => ({ ..._, align: 'center' }));
   }
 
   componentDidMount() {
@@ -449,7 +461,7 @@ class TableList extends Component {
 
   render() {
     const { selected, dataSource, count, loading, pagination: { size, page } } = this.props;
-    const { visible, printVisible, analysisVisible, reportVisible, type, current } = this.state;
+    const { visible, printVisible, analysisVisible, reportVisible, type, /* current */ } = this.state;
 
     // 档案号
     const docID = selected.ctgexam && selected.ctgexam.note;
