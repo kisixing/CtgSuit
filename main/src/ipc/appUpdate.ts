@@ -139,7 +139,7 @@ function checkAsar() {
     spawn(execPath, {
       detached: true
     })
-    spawn('taskkill', ['/F', '/PID', process.pid + ''])
+    spawnSync('taskkill', ['/F', '/PID', process.pid + ''])
   }
 
   // app.exit(0)
