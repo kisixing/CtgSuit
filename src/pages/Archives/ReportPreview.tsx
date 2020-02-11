@@ -5,9 +5,15 @@ import PreviewContent from "@lianmed/pages/lib/Ctg/Report/PreviewContent";
 import Shell from "../Workbench/Analysis/Shell";
 import { request } from "@lianmed/utils";
 import PrintPreview from "../Workbench/PrintPreview";
+import { event } from '@lianmed/utils';
 
+interface IReport {
+  valid?: boolean
+  archived?: boolean
+  bizSn?: string
+}
 interface IProps {
-  report: any
+  report: IReport[]
   docid: string
   visible: boolean
   onCancel: () => void
@@ -17,44 +23,15 @@ interface IProps {
   startTime: string
   gestationalWeek?: string
 }
-
 export const Context = React.createContext({});
 
 function ReportPreview(props: IProps) {
-  const { report } = props;
-  // console.log('8888888888999999', report)
-  let newReport = [];
-  try {
-    if (Object.prototype.toString.call(report) === '[object Array]') {
-      // Array
-      newReport = report.sort(compare('time'));
-    } else {
-      newReport = JSON.parse(report);
-    }
-  } catch (error) {
-    console.log('report格式不正确', error);
-    return null;
-  }
+  let { report = [] } = props;
+  report = report.sort(compare('time'))
 
-  // 是否为对象
-  // const isObj = Object.prototype.toString.call(reportObj);
-  // if (!isObj) {
-  //   return null;
-  // }
-  // const arr = [];
-  // for (let key in reportObj) {
-  //   const obj = { key, value: reportObj[key] };
-  //   arr.push(obj);
-  //   arr.sort(compare('value'));
-  // }
-  // const arr = [];
-  // for (var j = 0, len = newReport.length; j < len; j++) {
-  //   const obj = newReport[j];
-  //   arr.push(obj);
-  //   arr.sort(compare('time'));
-  // }
+  const [_report, set_report] = useState(report)
 
-  const [currentReport, setCurrentReport] = useState(newReport[0]['bizSn']);
+  const [currentReport, setCurrentReport] = useState(_report[0] && _report[0]['bizSn']);
   const [loading, setLoading] = useState(false);
   const [pdfBase64, setPdfBase64] = useState('');
   const inputEl = useRef(null);
@@ -65,7 +42,7 @@ function ReportPreview(props: IProps) {
   }, []);
 
   useEffect(() => {
-    fetchpdf(currentReport);
+    currentReport && fetchpdf(currentReport);
   }, []);
 
   const fetchpdf = (value: string) => {
@@ -85,13 +62,24 @@ function ReportPreview(props: IProps) {
     console.log(currentReport)
     PrintPreview.printPdf(currentReport)
   }
-
-  const confirm = () => {
-    // 当前档案id --> currentReport
+  const cb = (data: { report: IReport[] } = { report: [] }) => {
+    set_report(data.report)
+    event.emit('signed')
+  }
+  const confirm = async () => {
+    let res = await request.delete(`/obsolete-report/${currentReport}`)
+    res && cb(res)
   };
 
-  const archiving = e => {
-    // 当前档案id --> currentReport
+  const archiving = async (e) => {
+    let res = await request.put('/doc/archive', { data: { bizSn: currentReport } })
+    res && cb(res)
+
+  };
+  const undoArchiving = async (e) => {
+    let res = await request.put('/doc/undo-archive', { data: { bizSn: currentReport } })
+    res && cb(res)
+
   };
 
   const handleClick = ({ key }) => {
@@ -108,7 +96,7 @@ function ReportPreview(props: IProps) {
       return v2 - v1;
     };
   }
-
+  const target: IReport = _report.find(_ => _.bizSn === currentReport) || {}
   return (
     <Shell {...props}>
       <div
@@ -121,12 +109,11 @@ function ReportPreview(props: IProps) {
           theme="light"
           onClick={handleClick}
         >
-          {newReport &&
-            newReport.map(e => {
+          {_report &&
+            _report.map(e => {
               return (
                 <Menu.Item key={e.bizSn}>
                   <div>{e.bizSn}</div>
-                  <div>{e.time}</div>
                 </Menu.Item>
               );
             })}
@@ -143,20 +130,25 @@ function ReportPreview(props: IProps) {
         </div>
       </div>
       <div style={{ float: 'right', margin: 6 }}>
-        <Button onClick={archiving}>归档</Button>
+        {
+          target.archived
+            ? < Button onClick={undoArchiving}>取消归档</Button>
+            : <Button disabled={!currentReport} onClick={archiving}>归档</Button>
+        }
         <Popconfirm
+          
           title="确认删除该报告？"
           onConfirm={confirm}
           okText="是"
           cancelText="否"
         >
-          <Button style={{ margin: 6 }}>删除</Button>
+          <Button disabled={!currentReport} style={{ margin: 6 }}>删除</Button>
         </Popconfirm>
-        <Button type="primary" onClick={onDownload}>
+        <Button disabled={!currentReport} type="primary" onClick={onDownload}>
           打印
         </Button>
       </div>
-    </Shell>
+    </Shell >
   );
 }
 

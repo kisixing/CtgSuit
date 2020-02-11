@@ -116,11 +116,11 @@ class TableList extends Component {
                 <>
                   <Divider type="vertical" />
 
-                    <span className="primary-link" onClick={(e) => this.showPrint(e, record)}>
-                      {hasSigned ? '重新生成' : '报告生成'}
-                    </span>
-                  </>
-                )
+                  <span className="primary-link" onClick={(e) => this.showPrint(e, record)}>
+                    {hasSigned ? '重新生成' : '报告生成'}
+                  </span>
+                </>
+              )
               }
               {
                 hasSigned && (
@@ -133,7 +133,7 @@ class TableList extends Component {
                 )
               }
               {
-                (
+                hasSigned && (
                   <>
                     <Divider type="vertical" />
                     <span className="primary-link" onClick={(e) => this.showReport(e, record)}>
