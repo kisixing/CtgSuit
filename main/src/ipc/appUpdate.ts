@@ -1,12 +1,12 @@
 import { resources, unpackPath, config as configPath, pkg, tmp, appPath, execPath } from '../config/path';
-import { createWriteStream, readFileSync, unlink, existsSync, unlinkSync, rmdirSync, rmdir } from "fs";
-import { spawnSync, spawn } from "child_process";
+import { createWriteStream, readFileSync, unlink, existsSync } from "fs";
+import { spawn } from "child_process";
+import { isDev } from "../utils/is";
+
 const { dialog, app } = require('electron');
-const is = require('electron-is');
 const { request } = require('http')
 const { resolve } = require('path')
 const { log, logErr } = require('../utils/log')
-// const { isDev } = require('../utils/is')
 
 const rm = require('rimraf')
 
@@ -34,7 +34,7 @@ const firePath = resolve(resources, 'fired')
 let f = false
 function appUpdate(e) {
   if (f) return;
-  if (is.dev()) return;
+  if (isDev()) return;
   f = true;
   log(`version-update 开始`)
   request(
@@ -114,15 +114,12 @@ function run(tgzPath, tarPath) {
     });
   });
 }
-console.log(process.pid)
 function checkAsar() {
   log(`checkAsar`)
-
   const asarPkgPath = resolve(firePath, 'app.asar.tmp')
   const movePath = resolve(firePath, 'move.exe')
   const appDir = resolve(resources, 'app')
   if (existsSync(asarPkgPath) && existsSync(movePath)) {
-    log('gggggggggggg')
     log(`${appPath}, ${asarPkgPath}, ${execPath}`)
     if (existsSync(appDir)) {
       rm(appDir, e => {
@@ -139,16 +136,6 @@ function checkAsar() {
     spawn(execPath, {
       detached: true
     })
-    spawnSync('taskkill', ['/F', '/PID', process.pid + ''])
+    app.exit(0);
   }
-
-  // app.exit(0)
-  // spawn('taskkill', ['/F', '/PID', process.ppid + ''])
-
-  // process.kill(0)
-  // console.log(process.pid)
-  // setInterval(() => {
-  //   console.log(process.pid)
-  // }, 1000);
-
 }
