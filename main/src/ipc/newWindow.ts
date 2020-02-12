@@ -4,8 +4,7 @@ const { getNewPath } = require('../config/window');
 
 export default (event, file) => {
     const mainWindow = getMainWindow();
-    console.log('mian', mainWindow)
-    console.log('mian22', getNewPath())
+
     let newWindow = new BrowserWindow({
         title: '操作手册',
         width: 1280,
