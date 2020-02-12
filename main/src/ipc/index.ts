@@ -1,15 +1,13 @@
-const fs = require('fs')
+import fs from 'fs';
 const { ipcMain } = require('electron');
 
 fs.readdir(__dirname, (e, files) => {
     !e && (
         files.forEach(f => {
-            if (f === 'index.js') return
-            const args = require(`./${f}`).default
-            if (Array.isArray(args)) {
-                ipcMain.on(args[0], args[1])
-            }
-
+            const name = f.slice(0, f.lastIndexOf('.'))
+            if (name === 'index') return
+            const fn = require(`./${name}`).default
+            ipcMain.on(name, fn)
         })
     )
 })

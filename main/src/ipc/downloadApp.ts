@@ -1,12 +1,15 @@
-const { ipcMain, dialog } = require('electron');
+const { dialog } = require('electron');
 const { createWriteStream, mkdirSync, existsSync } = require('fs');
 const { request } = require('http')
 const { resolve } = require('path')
 const { parse } = require('url')
 const { exec } = require('child_process')
-export default () => {
-    ipcMain.on('\u0064\u006f\u0077\u006e\u006c\u006f\u0061\u0064\u0041\u0070\u0070', appDownload)
-}
+// export default () => {
+//     ipcMain.on('downloadApp', appDownload)
+// }
+
+export default appDownload
+
 function appDownload(e, url = '') {
     const { pathname } = parse(url)
     const filename = pathname.slice(pathname.lastIndexOf('/') + 1)

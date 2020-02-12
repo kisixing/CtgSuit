@@ -34,7 +34,7 @@ const firePath = resolve(resources, 'fired')
 let f = false
 function appUpdate(e) {
   if (f) return;
-  if (isDev()) return;
+  if (isDev) return;
   f = true;
   log(`version-update 开始`)
   request(
@@ -86,7 +86,7 @@ function appUpdate(e) {
 
 
 
-export default ['ready', appUpdate]
+export default appUpdate
 
 function run(tgzPath, tarPath) {
   // existsSync(firePath) && rm(firePath, e => !!e && logErr(e))
