@@ -132,16 +132,6 @@ class TableList extends Component {
                   </>
                 )
               }
-              {
-                hasSigned && (
-                  <>
-                    <Divider type="vertical" />
-                    <span className="primary-link" onClick={(e) => this.showReport(e, record)}>
-                      归档
-                    </span>
-                  </>
-                )
-              }
 
               {/* <Divider type="vertical" /> */}
               {/* <span className="delete-link" onClick={() => this.switchFullscreen(record)}>

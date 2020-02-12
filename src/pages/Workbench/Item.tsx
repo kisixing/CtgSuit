@@ -51,13 +51,9 @@ const WorkbenchItem = (props: FetalItem.IProps) => {
       />
       <Toolbar
         {...others}
-
         startTime={startTime}
-
-
         status={status}
         bedname={bedname}
-
         isTodo={isTodo}
         suitObject={so}
         showLoading={setSpinning}
