@@ -6,7 +6,7 @@
   "scripts": {
     "start:dev": "concurrently  'yarn start' 'yarn run dev:main'",
     "start": "cross-env PORT=1702 BROWSER=none umi dev",
-    "start:runtime": "cross-env PORT=1702 TARGET=0 umi dev",
+    "start:render": "cross-env PORT=1702 TARGET=0 umi dev",
     "start:main": "run-electron .",
     "dev:main": "yarn gulp && run-electron .",
     "_dev:main": "wsl make && run-electron .",

@@ -1,7 +1,7 @@
-import fs from 'fs';
+import { readdir } from 'fs';
 const { ipcMain } = require('electron');
 
-fs.readdir(__dirname, (e, files) => {
+readdir(__dirname, (e, files) => {
     !e && (
         files.forEach(f => {
             const name = f.slice(0, f.lastIndexOf('.'))

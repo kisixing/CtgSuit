@@ -58,7 +58,7 @@ function appUpdate(e) {
                   ? run(tgzPath, tarPath)
                   : dialog.showMessageBox(
                     {
-                      message: `检测到胎心监护新版${newV}，请点击〔确定〕完成升级?`,
+                      message: `检测到胎心监护新版${newV}，请点击〔确定〕完成升级`,
                       buttons: ['cancel', 'ok'],
                     },
                     _ => {
@@ -89,38 +89,28 @@ function appUpdate(e) {
 export default appUpdate
 
 function run(tgzPath, tarPath) {
-  // existsSync(firePath) && rm(firePath, e => !!e && logErr(e))
-
   return gzip.uncompress(tgzPath, tarPath).then(() => {
     unlink(tgzPath, e => !!e && logErr(e.stack))
     tar.uncompress(tarPath, unpackPath).then(() => {
       unlink(tarPath, e => !!e && logErr(e.stack))
-      // rename(appPath, resolve(appPath, '../app1.asar'), e => !!e && logErr(e.stack))
-
       dialog.showMessageBox({
         message: '应用更新成功，是否立即重启以生效?',
         buttons: ['cancel', 'ok'],
       }, _ => {
         if (_) {
-          // e.sender.send('installed')
-          // getMainWindow().reload()
           setTimeout(() => {
-            // app.relaunch();
-            // app.exit();
             checkAsar()
           }, 0);
         }
-      });
-    });
-  });
+      })
+    })
+  })
 }
 function checkAsar() {
-  log(`checkAsar`)
   const asarPkgPath = resolve(firePath, 'app.asar.tmp')
   const movePath = resolve(firePath, 'move.exe')
   const appDir = resolve(resources, 'app')
   if (existsSync(asarPkgPath) && existsSync(movePath)) {
-    log(`${appPath}, ${asarPkgPath}, ${execPath}`)
     if (existsSync(appDir)) {
       rm(appDir, e => {
         !!e && logErr(e)
@@ -129,13 +119,9 @@ function checkAsar() {
     } else {
       spawn('taskkill', ['/F', '/PID', process.pid + ''])
     }
-    spawn(movePath, [appPath, asarPkgPath, execPath], {
-      detached: true
-    })
+    spawn(movePath, [appPath, asarPkgPath, execPath], { detached: true })
   } else {
-    spawn(execPath, {
-      detached: true
-    })
+    spawn(execPath, { detached: true })
     app.exit(0);
   }
 }

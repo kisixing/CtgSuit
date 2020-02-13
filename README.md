@@ -47,7 +47,7 @@ Electron example with [umi](https://github.com/umijs/umi/)
   npm run dev:main
 
   #脱离electron单独运行
-  npm start:runtime
+  npm start:render
 
   # 打包(不打 dmg、exe 包，本地验证时用) --win-unpacked
   npm run pack
