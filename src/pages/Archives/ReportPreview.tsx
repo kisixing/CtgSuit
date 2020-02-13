@@ -68,6 +68,7 @@ function ReportPreview(props: IProps) {
   }
   const confirm = async () => {
     let res = await request.delete(`/obsolete-report/${currentReport}`)
+    setPdfBase64(null)
     res && cb(res)
   };
 
