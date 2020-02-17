@@ -2,11 +2,11 @@ import { resources, unpackPath, config as configPath, pkg, tmp, appPath, execPat
 import { createWriteStream, readFileSync, unlink, existsSync } from "fs";
 import { spawn } from "child_process";
 import { isDev } from "../utils/is";
+import { log, logErr } from '../utils/log'
+import { request } from "http";
 
 const { dialog, app } = require('electron');
-const { request } = require('http')
 const { resolve } = require('path')
-const { log, logErr } = require('../utils/log')
 
 const rm = require('rimraf')
 
@@ -32,11 +32,16 @@ const firePath = resolve(resources, 'fired')
 
 
 let f = false
+
+setInterval(() => {
+  log(`flg-----------${f}`)
+}, 6e4 / 2);
+
 function appUpdate(e) {
+  log(`--------------version-update 开始-------------------${isDev}`)
   if (f) return;
   if (isDev) return;
   f = true;
-  log(`version-update 开始`)
   request(
     `http://${xhr_url}/api/version-compare/ctg-suit/${version}`,
     im => {
@@ -73,16 +78,21 @@ function appUpdate(e) {
               im.pipe(writeStream),
             ).end();
           } else {
-            f = false;
-            setTimeout(appUpdate, 6e4);
+            reCall()
           }
         }
       });
+      im.on('error', reCall)
     },
-  ).end();
+  )
+    .on('error', reCall)
+    .end();
 }
 
-
+function reCall() {
+  f = false;
+  setTimeout(appUpdate, 6e4);
+}
 
 
 

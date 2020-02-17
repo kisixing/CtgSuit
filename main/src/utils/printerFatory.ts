@@ -1,3 +1,4 @@
+import { log } from "./log";
 const fs = require('fs');
 const path = require('path')
 const http = require('http')
@@ -13,6 +14,7 @@ export const printerFatory = targetDir => {
         if (!fs.existsSync(tmpDir)) {
             fs.mkdirSync(tmpDir)
         }
+        log(`pdf:file ${fileUrl}`)
         const dateTime = new Date().toLocaleDateString().replace(/[\/\s:]/g, (s) => { return '_' })
         const dateTimeDir = path.resolve(tmpDir, dateTime)
         if (!fs.existsSync(dateTimeDir)) {
@@ -32,7 +34,6 @@ export const printerFatory = targetDir => {
                 console.log(`write error: ${err}`);
             })
         })
-        console.log('file', fileUrl, '\n')
         http.get(fileUrl, res => {
             if (res) {
                 res.pipe(writeStream)

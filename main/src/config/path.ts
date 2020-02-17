@@ -14,8 +14,8 @@ const appPath = resolve(resources, 'app.asar')
 const execPath = resolve('ctg-suit.exe')
 const config = resolve(profile, 'setting.json')
 const defaultConfig = resolve(assetsPath, './defaultSetting.json')
-const errLog = resolve(tmp, 'errLog.txt')
-const log = resolve(tmp, 'log.txt')
+const errLogPath = resolve(tmp, 'errLog.txt')
+const logPath = resolve(tmp, 'log.txt')
 const pkg = resolve(source, 'package.json')
 const unpackPath = isDev ? tmp : resources
 export {
@@ -26,8 +26,8 @@ export {
     resources,
     config,
     defaultConfig,
-    log,
-    errLog,
+    logPath,
+    errLogPath,
     pkg,
     appPath,
     execPath,
