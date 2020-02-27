@@ -6,7 +6,9 @@
 
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Form, Input, Button } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Input, Button } from 'antd';
 
 import { formItemLayout, tailFormItemLayout } from './utils';
 import styles from './style.less';

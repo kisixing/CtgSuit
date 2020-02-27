@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Modal, Form, Input, Button, message, Icon } from 'antd';
+import { Form, Icon as LegacyIcon } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Modal, Input, Button, message } from 'antd';
 import store from 'store';
 import { router } from 'umi';
 import { updatePassword } from '../services/api';
@@ -73,7 +75,7 @@ function PasswordForm({
     >
       {success ? (
         <div style={{ textAlign: 'center ' }}>
-          <Icon
+          <LegacyIcon
             style={{
               marginBottom: '24px',
               fontSize: '72px',

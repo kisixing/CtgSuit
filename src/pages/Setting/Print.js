@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { Form, InputNumber, Button, message, Radio } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { InputNumber, Button, message, Radio } from 'antd';
 import store from '@/utils/SettingStore';
 
 import { formItemLayout, tailFormItemLayout } from './utils';

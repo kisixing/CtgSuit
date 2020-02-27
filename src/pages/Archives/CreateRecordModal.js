@@ -3,7 +3,9 @@
  */
 import React from 'react';
 import moment from 'moment';
-import { Modal, Form, Input, Row, Col, DatePicker, InputNumber } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Modal, Input, Row, Col, DatePicker, InputNumber } from 'antd';
 
 const CreateRecordModal = Form.create({
   name: 'create_form',

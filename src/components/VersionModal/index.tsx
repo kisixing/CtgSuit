@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Form, Checkbox } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Modal, Checkbox } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 
 declare var __VERSION: string;

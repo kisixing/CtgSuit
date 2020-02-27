@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { router } from 'umi';
-import { Table, Divider, /* Popconfirm, */ Input, Button, Icon } from 'antd';
+import { Icon as LegacyIcon } from '@ant-design/compatible';
+import { Table, Divider, /* Popconfirm, */ Input, Button } from 'antd';
 import Highlighter from 'react-highlight-words';
 import EditModal from './EditModal';
 import styles from './TableList.less';
@@ -252,7 +253,7 @@ class TableList extends Component {
         <Button
           type="primary"
           onClick={() => this.handleSearch(selectedKeys, confirm)}
-          icon="search"
+          icon={<LegacyIcon type="search" />}
           size="small"
           style={{ width: 90, marginRight: 8 }}
         >
@@ -265,7 +266,7 @@ class TableList extends Component {
     ),
 
     filterIcon: filtered => (
-      <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />
+      <LegacyIcon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />
     ),
 
     onFilter: (value, record) => {

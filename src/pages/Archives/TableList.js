@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Table, Divider, Button, Popconfirm, Icon, Input } from 'antd';
+import { Icon as LegacyIcon } from '@ant-design/compatible';
+import { Table, Divider, Button, Popconfirm, Input } from 'antd';
 import moment from 'moment';
 import Highlighter from 'react-highlight-words';
 import CreateRecordModal from './CreateRecordModal';
@@ -335,7 +336,7 @@ class TableList extends Component {
         <Button
           type="primary"
           onClick={() => this.handleSearch(selectedKeys, confirm)}
-          icon="search"
+          icon={<LegacyIcon type="search" />}
           size="small"
           style={{ width: 90, marginRight: 8 }}
         >
@@ -347,7 +348,7 @@ class TableList extends Component {
       </div>
     ),
     filterIcon: filtered => (
-      <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />
+      <LegacyIcon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />
     ),
     onFilter: (value, record) => {
       let attributeValue = record[dataIndex];

@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import { Form, Upload, message, Button, Icon, Input } from 'antd';
+import { Form, Icon as LegacyIcon } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Upload, message, Button, Input } from 'antd';
 import { WrappedFormUtils } from "antd/lib/form/Form";
 // import { request } from "@lianmed/utils";
 import request from '@/utils/request';
@@ -58,7 +60,7 @@ const AliyunOSSUpload = (props: { [x: string]: any }) => {
     return (
         <Upload  {...p} beforeUpload={e => { console.log(22, e); return false }} >
             <Button>
-                <Icon type="upload" /> <span>Click to Upload </span>
+                <LegacyIcon type="upload" /> <span>Click to Upload </span>
             </Button>
 
         </Upload>

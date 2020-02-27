@@ -5,7 +5,9 @@
  */
 
 import React, { PureComponent } from 'react';
-import { Form, Button, Input, message, Select } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Button, Input, message, Select } from 'antd';
 import { formItemLayout, tailFormItemLayout } from './utils';
 import SettingStore from '@/utils/SettingStore';
 import { getDisplaySize } from '@/utils/utils';

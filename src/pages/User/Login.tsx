@@ -1,17 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { connect } from 'dva';
-import {
-  Button,
-  Row,
-  Form,
-  Input,
-  Icon,
-  Alert,
-  Select,
-  message,
-  notification,
-  Popconfirm
-} from 'antd';
+import { Form, Icon as LegacyIcon } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Button, Row, Input, Alert, Select, message, notification, Popconfirm } from 'antd';
 import config from '@/utils/config';
 import { IWard } from "@/types";
 import request from '@/utils/request';
@@ -109,117 +100,115 @@ const Login = (props: IProps) => {
 
   const { getFieldDecorator } = form;
 
-  return (
-    <>
-      <div className={styles.container}>
-        <div className={styles.logo}>
-          <img alt="logo" src={config.logoPath} />
-          <h1>{config.siteName}</h1>
-        </div>
-        <Form onSubmit={handleSubmit}>
-          <FormItem hasFeedback>
-            {getFieldDecorator('username', {
-              initialValue: store.get('username'),
-              rules: [
-                {
-                  required: true,
-                  message: '请输入用户名！',
-                },
-              ],
-            })(
-              <Input
-                allowClear
-                autoFocus
-                placeholder="工号"
-                prefix={
-                  <Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />
-                }
-                onPressEnter={handleSubmit}
-              />,
-            )}
-          </FormItem>
-          <FormItem hasFeedback>
-            {getFieldDecorator('password', {
-              initialValue: __DEV__ ? 'admin' : '',
+  return <>
+    <div className={styles.container}>
+      <div className={styles.logo}>
+        <img alt="logo" src={config.logoPath} />
+        <h1>{config.siteName}</h1>
+      </div>
+      <Form onSubmit={handleSubmit}>
+        <FormItem hasFeedback>
+          {getFieldDecorator('username', {
+            initialValue: store.get('username'),
+            rules: [
+              {
+                required: true,
+                message: '请输入用户名！',
+              },
+            ],
+          })(
+            <Input
+              allowClear
+              autoFocus
+              placeholder="工号"
+              prefix={
+                <LegacyIcon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />
+              }
+              onPressEnter={handleSubmit}
+            />,
+          )}
+        </FormItem>
+        <FormItem hasFeedback>
+          {getFieldDecorator('password', {
+            initialValue: __DEV__ ? 'admin' : '',
 
-              rules: [
-                {
-                  required: true,
-                  message: '请输入用户密码！',
-                },
-              ],
-            })(
-              <Input
-                allowClear
-                type="password"
-                placeholder="密码"
-                autoComplete="new-password"
-                prefix={
-                  <Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />
-                }
-                onPressEnter={handleSubmit}
-              />,
-            )}
-          </FormItem>
-          <FormItem hasFeedback>
-            {getFieldDecorator('id', {
-              rules: [
-                {
-                  required: true,
-                  message: '请选择病区！',
-                },
-              ],
-            })(
-              <Select
-                placeholder="选择病区"
-                className={styles.select}
-                onDropdownVisibleChange={_ => _ && onDropdownVisible()}
-              >
-                {areaList.map(({ id, wardName }) => {
-                  return (
-                    <Select.Option key={id} value={id}>
-                      {wardName}
-                    </Select.Option>
-                  );
-                })}
-              </Select>,
-            )}
-          </FormItem>
-          <Row>
-            <Button
-              type="primary"
-              htmlType="submit"
-              loading={loading.effects['login/login']}
+            rules: [
+              {
+                required: true,
+                message: '请输入用户密码！',
+              },
+            ],
+          })(
+            <Input
+              allowClear
+              type="password"
+              placeholder="密码"
+              autoComplete="new-password"
+              prefix={
+                <LegacyIcon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />
+              }
+              onPressEnter={handleSubmit}
+            />,
+          )}
+        </FormItem>
+        <FormItem hasFeedback>
+          {getFieldDecorator('id', {
+            rules: [
+              {
+                required: true,
+                message: '请选择病区！',
+              },
+            ],
+          })(
+            <Select
+              placeholder="选择病区"
+              className={styles.select}
+              onDropdownVisibleChange={_ => _ && onDropdownVisible()}
             >
-              <span>登陆</span>
-            </Button>
-          </Row>
-          {error && error.status === '401' ? (
-            <Alert message={error.message} type="error" closable />
-          ) : null}
-        </Form>
-      </div>
-      {/* footer */}
-      <div className={styles.footer}>
-        <>
-          <span>{config.copyright}</span>
-          <Popconfirm
-            placement="topRight"
-            trigger="click"
-            title={<NetWork wrappedComponentRef={dateRef} />}
-            onConfirm={onConfirm}
-            okText="确定"
-            cancelText="取消"
+              {areaList.map(({ id, wardName }) => {
+                return (
+                  <Select.Option key={id} value={id}>
+                    {wardName}
+                  </Select.Option>
+                );
+              })}
+            </Select>,
+          )}
+        </FormItem>
+        <Row>
+          <Button
+            type="primary"
+            htmlType="submit"
+            loading={loading.effects['login/login']}
           >
-            <Icon
-              type="setting"
-              style={{ float: 'right', margin: '6px 12px' }}
-            />
-          </Popconfirm>
-        </>
-      </div>
-    </>
-  );
+            <span>登陆</span>
+          </Button>
+        </Row>
+        {error && error.status === '401' ? (
+          <Alert message={error.message} type="error" closable />
+        ) : null}
+      </Form>
+    </div>
+    {/* footer */}
+    <div className={styles.footer}>
+      <>
+        <span>{config.copyright}</span>
+        <Popconfirm
+          placement="topRight"
+          trigger="click"
+          title={<NetWork wrappedComponentRef={dateRef} />}
+          onConfirm={onConfirm}
+          okText="确定"
+          cancelText="取消"
+        >
+          <LegacyIcon
+            type="setting"
+            style={{ float: 'right', margin: '6px 12px' }}
+          />
+        </Popconfirm>
+      </>
+    </div>
+  </>;
 }
 
 const NetWork = Form.create()(

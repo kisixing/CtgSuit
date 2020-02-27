@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
-import { Form, Row, Col, DatePicker, Input, Button } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Row, Col, DatePicker, Input, Button } from 'antd';
 
 import styles from './FieldForm.less';
 

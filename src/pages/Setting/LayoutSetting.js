@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { Form, Button, Switch } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Button, Switch } from 'antd';
 
 
 import { formItemLayout, tailFormItemLayout } from './utils';

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Layout, Menu, Icon, Button } from 'antd';
+import { Icon as LegacyIcon } from '@ant-design/compatible';
+import { Layout, Menu, Button } from 'antd';
 import { connect } from 'dva';
 import withRouter from 'umi/withRouter';
 const styles = require('./BasicLayout.less')
@@ -11,8 +12,6 @@ const Side = (props: any) => {
 
 
     return (
-
-
         <Layout.Sider trigger={null} collapsible collapsed={true}>
             <Link to="/workbench" className={styles.logo}>
                 {/* <img alt="logo" src={logo} /> */}
@@ -41,15 +40,13 @@ const Side = (props: any) => {
                             }}
                             // type={props.location.pathname === path ? 'default' : 'primary'}
                         >
-                            <Icon type={icon} />
+                            <LegacyIcon type={icon} />
                             <span>{title}</span>
                         </Menu.Item>
-                    )
+                    );
                 })}
             </Menu>
         </Layout.Sider>
-
-
     );
 }
 

@@ -1,7 +1,8 @@
 import React from 'react';
-import { Spin, Icon } from 'antd';
+import { Icon as LegacyIcon } from '@ant-design/compatible';
+import { Spin } from 'antd';
 
-const antIcon = <Icon type="loading" style={{ fontSize: 48, fontWeight: 'blod' }} spin />;
+const antIcon = <LegacyIcon type="loading" style={{ fontSize: 48, fontWeight: 'blod' }} spin />;
 
 export default function Loading() {
   return (

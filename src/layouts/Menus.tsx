@@ -1,5 +1,7 @@
 import React, { useCallback } from 'react';
 
+import { Icon as LegacyIcon } from '@ant-design/compatible';
+
 import { Button } from 'antd';
 import { router } from 'umi';
 import withRouter from 'umi/withRouter';
@@ -48,7 +50,7 @@ const M = (props: any) => {
                         onClick={e => {
                             handleMenuClick(title);
                         }}
-                        icon={icon}
+                        icon={<LegacyIcon type={icon} />}
                         type={props.location.pathname === path ? 'default' : 'primary'}
                     >
                         {title}

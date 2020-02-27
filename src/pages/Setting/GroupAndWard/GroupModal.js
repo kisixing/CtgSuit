@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { Form, Modal, Input, Select, Button } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Modal, Input, Select, Button } from 'antd';
 
 class GroupModal extends Component {
   render() {

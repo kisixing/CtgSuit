@@ -2,7 +2,9 @@
  * 胎监主页PDA建档/绑定弹窗
  */
 import React, { useState } from 'react';
-import { Button, Modal, Form, Input, Row, Col, InputNumber, message, Table } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Button, Modal, Input, Row, Col, InputNumber, message, Table } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import moment from 'moment';
 // import { request } from '@lianmed/utils';

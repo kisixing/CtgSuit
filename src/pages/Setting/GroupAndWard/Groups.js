@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from 'react';
+import { Icon as LegacyIcon } from '@ant-design/compatible';
 import { Table, Card, Button, Divider, Tooltip, Popconfirm, message } from 'antd';
 import request from '@/utils/request';
 import GroupModal from './GroupModal';
@@ -229,7 +230,7 @@ export default class Groups extends Component {
         extra={
           <Button
             type="primary"
-            icon="plus"
+            icon={<LegacyIcon type="plus" />}
             size="small"
             loading={false}
             onClick={this.showNewGroup}

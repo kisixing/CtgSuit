@@ -4,7 +4,8 @@ import { Ctg as L } from '@lianmed/lmg';
 const A = () => {
   return <L data={null}></L>;
 };
-import { Skeleton, Switch, Card, Icon, Avatar, Row, Col } from 'antd';
+import { Icon as LegacyIcon } from '@ant-design/compatible';
+import { Skeleton, Switch, Card, Avatar, Row, Col } from 'antd';
 const R = 2;
 const C = 2;
 const list = [1, 2, 3, 4, 5, 6];
@@ -36,12 +37,12 @@ export default () => {
                 loading={loading}
                 bodyStyle={{ width: '100%', height: '100%' }}
                 actions={[
-                  <Icon type="setting" key="setting" />,
-                  <Icon type="edit" key="edit" />,
-                  <Icon type="ellipsis" key="ellipsis" />,
-                  <Icon type="setting" key="setting" />,
-                  <Icon type="edit" key="edit" />,
-                  <Icon type="ellipsis" key="ellipsis" />,
+                  <LegacyIcon type="setting" key="setting" />,
+                  <LegacyIcon type="edit" key="edit" />,
+                  <LegacyIcon type="ellipsis" key="ellipsis" />,
+                  <LegacyIcon type="setting" key="setting" />,
+                  <LegacyIcon type="edit" key="edit" />,
+                  <LegacyIcon type="ellipsis" key="ellipsis" />,
                 ]}
               >
                 <Skeleton loading={loading} avatar active>

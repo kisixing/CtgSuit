@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import { Form, Upload, message, Button, Icon, Input } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Upload, message, Button, Input } from 'antd';
 import { WrappedFormUtils } from "antd/lib/form/Form";
 // import { request } from "@lianmed/utils";
 import request from '@/utils/request';

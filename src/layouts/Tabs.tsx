@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react';
+import { Icon as LegacyIcon } from '@ant-design/compatible';
 import { Button } from 'antd';
 import { router, withRouter } from 'umi';
 import { connect } from 'dva';
@@ -55,7 +56,7 @@ function Tabs({ pageData, page, dispatch, showTodo, location, headCollapsed }: I
       >
         待处理
       </Button>
-      <Button title={`${headCollapsed ? '显示' : '隐藏'}子机列表`} size="small" icon={`vertical-align-${headCollapsed ? 'bottom' : 'top'}`} style={{ position: 'absolute', bottom: 0, right: 6 }} onClick={e => {
+      <Button title={`${headCollapsed ? '显示' : '隐藏'}子机列表`} size="small" icon={<LegacyIcon type={`vertical-align-${headCollapsed ? 'bottom' : 'top'}`} />} style={{ position: 'absolute', bottom: 0, right: 6 }} onClick={e => {
         dispatch({ type: 'setting/setHeadCollapsed', payload: { headCollapsed: !headCollapsed } })
 
       }} />

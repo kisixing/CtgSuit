@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Form, Input, Button, message } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Input, Button, message } from 'antd';
 import { ipcRenderer } from 'electron';
 // import { request } from '@lianmed/utils';
 import request from '@/utils/request';

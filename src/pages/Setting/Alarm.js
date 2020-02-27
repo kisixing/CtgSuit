@@ -6,7 +6,9 @@
 
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Form, InputNumber, Button, message, Radio, Input, Row, Col } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { InputNumber, Button, message, Radio, Input, Row, Col } from 'antd';
 import store from '@/utils/SettingStore';
 
 import { formItemLayout, tailFormItemLayout } from './utils';

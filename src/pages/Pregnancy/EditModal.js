@@ -2,18 +2,9 @@
  * 建档
  */
 import React from 'react';
-import {
-  Button,
-  Modal,
-  Form,
-  Input,
-  Row,
-  Col,
-  Select,
-  DatePicker,
-  InputNumber,
-  message,
-} from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Button, Modal, Input, Row, Col, Select, DatePicker, InputNumber, message } from 'antd';
 import SettingStore from '@/utils/SettingStore';
 import styles from './index.less';
 import store from "store";

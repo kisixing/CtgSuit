@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Icon as LegacyIcon } from '@ant-design/compatible';
 import { Button, message } from 'antd';
 import moment from 'moment';
 import { event } from "@lianmed/utils";
@@ -159,212 +160,211 @@ function Toolbar(props: FetalItem.IToolbarProps) {
 
   const B = (p: ButtonProps) => <Button style={{ padding: '0 8px' }} {...p} disabled={p.disabled || (isOfflineStopped && !pregnancyId)}>{p.children}</Button>
   const fp = 12
-  return (
-    <>
-      <div
-        style={{
-          position: 'absolute',
-          left: 5 * fp,
-          bottom: 2 * fp,
-          // right: 3 * @float-padding + 60px,
-          zIndex: 9,
-          height: 32,
-          width: showSetting ? `calc(100% - ${4 * fp}px - 36px)` : 0,
-          background: '#fff',
-          overflow: 'hidden',
-          borderRadius: 3,
-          boxShadow: '#aaa 3px 3px 5px 1px',
-          opacity: showSetting ? 1 : 0,
-          transition: 'all 0.2s ease-out',
-        }}
+  return <>
+    <div
+      style={{
+        position: 'absolute',
+        left: 5 * fp,
+        bottom: 2 * fp,
+        // right: 3 * @float-padding + 60px,
+        zIndex: 9,
+        height: 32,
+        width: showSetting ? `calc(100% - ${4 * fp}px - 36px)` : 0,
+        background: '#fff',
+        overflow: 'hidden',
+        borderRadius: 3,
+        boxShadow: '#aaa 3px 3px 5px 1px',
+        opacity: showSetting ? 1 : 0,
+        transition: 'all 0.2s ease-out',
+      }}
+    >
+      {isWorking || isOffline ? (
+        <B icon={<LegacyIcon type="pause-circle" />} type="link" onClick={() => setModalName('confirmVisible')}>
+          停止监护
+        </B>
+      ) : (
+          <B disabled={!isStopped} icon={<LegacyIcon type="play-circle" />} type="link" onClick={start}>
+            开始监护
+        </B>
+        )}
+      {/* 停止状态下不可以建档，监护、离线都是可以建档的 */}
+
+      <B icon={<LegacyIcon type={jbLoading ? 'loading' : 'user-add'} />} type="link" disabled={(isCreated && !pvId) || isStopped} onClick={() => {
+        isCreated ? jb() : setModalName('visible')
+      }}>
+        {isCreated ? '解绑' : '建档'}
+      </B>
+
+
+      <B
+        disabled={!isCreated}
+        icon={<LegacyIcon type="pushpin" />}
+        type="link"
+        onClick={() => setModalName('signVisible')}
       >
-        {isWorking || isOffline ? (
-          <B icon="pause-circle" type="link" onClick={() => setModalName('confirmVisible')}>
-            停止监护
-          </B>
-        ) : (
-            <B disabled={!isStopped} icon="play-circle" type="link" onClick={start}>
-              开始监护
-          </B>
-          )}
-        {/* 停止状态下不可以建档，监护、离线都是可以建档的 */}
-
-        <B icon={jbLoading ? 'loading' : 'user-add'} type="link" disabled={(isCreated && !pvId) || isStopped} onClick={() => {
-          isCreated ? jb() : setModalName('visible')
-        }}>
-          {isCreated ? '解绑' : '建档'}
-        </B>
-
-
-        <B
-          disabled={!isCreated}
-          icon="pushpin"
-          type="link"
-          onClick={() => setModalName('signVisible')}
-        >
-          胎位标记
-        </B>
-        {/* <B
-          disabled={!isCreated}
-          icon="pie-chart"
-          type="link"
-          onClick={() => setModalName('analysisVisible')}
-        >
-          电脑分析
-        </B> */}
-
-        {/* O */}
-        <B
-          disabled={!isCreated}
-          icon="printer"
-          type="link"
-          onClick={() => setModalName('printVisible')}
-        >
-          报告
-        </B>
-        {
-          !!is_include_tocozero && <B
-            disabled={!is_include_tocozero}
-            icon={tocozeroLoading ? 'loading' : 'control'}
-            type="link"
-            onClick={setTocozero}
-          >
-            宫缩调零
-        </B>
-        }
-        {
-          !!is_include_volume && <B
-            // disabled={!isCreated}
-            icon={volumeDataLoading ? 'loading' : 'sound'}
-            type="link"
-            onClick={() => {
-              socket.getVolume(+deviceno, +bedno)
-              setVolumeDataLoading(true)
-              setTimeout(() => {
-                setVolumeDataLoading(false)
-                setModalName('soundVisible')
-              }, 1200);
-            }}
-            disabled={!is_include_volume}
-          >
-            音量调节
-        </B>
-        }
-        {/* <Button
-            disabled={!isCreated}
-            icon="line-chart"
-            type="link"
-            onClick={() => showModal('partogramVisible')}
-          >
-            产程图
-          </Button> */}
-        {/* <Link to="">
-            <Button icon="reconciliation" type="link">
-              事件记录
-            </Button>
-          </Link> */}
-      </div>
-      <div
-        style={{
-          position: 'absolute',
-          bottom: 2 * fp,
-          left: 2 * fp,
-          zIndex: 99,
-        }}
+        胎位标记
+      </B>
+      {/* <B
+        disabled={!isCreated}
+        icon="pie-chart"
+        type="link"
+        onClick={() => setModalName('analysisVisible')}
       >
-        <Button
-          icon={showSetting ? 'left' : 'right'}
-          shape={showSetting ? 'circle' : null}
-          style={{ boxShadow: '#aaa 3px 3px 5px 1px' }}
-          className={styles.btn}
-          type="primary"
-          onClick={toggleTool}
-        />
-      </div>
-      <CollectionCreateForm
-        visible={modalName === 'visible'}
-        onCancel={() => {
-          handleCancel();
+        电脑分析
+      </B> */}
+
+      {/* O */}
+      <B
+        disabled={!isCreated}
+        icon={<LegacyIcon type="printer" />}
+        type="link"
+        onClick={() => setModalName('printVisible')}
+      >
+        报告
+      </B>
+      {
+        !!is_include_tocozero && <B
+          disabled={!is_include_tocozero}
+          icon={<LegacyIcon type={tocozeroLoading ? 'loading' : 'control'} />}
+          type="link"
+          onClick={setTocozero}
+        >
+          宫缩调零
+      </B>
+      }
+      {
+        !!is_include_volume && <B
+          // disabled={!isCreated}
+
+          icon={<LegacyIcon type={volumeDataLoading ? 'loading' : 'sound'} />}
+          type="link"
+          onClick={() => {
+            socket.getVolume(+deviceno, +bedno)
+            setVolumeDataLoading(true)
+            setTimeout(() => {
+              setVolumeDataLoading(false)
+              setModalName('soundVisible')
+            }, 1200);
+          }}
+          disabled={!is_include_volume}
+        >
+          音量调节
+      </B>
+      }
+      {/* <Button
+          disabled={!isCreated}
+          icon="line-chart"
+          type="link"
+          onClick={() => showModal('partogramVisible')}
+        >
+          产程图
+        </Button> */}
+      {/* <Link to="">
+          <Button icon="reconciliation" type="link">
+            事件记录
+          </Button>
+        </Link> */}
+    </div>
+    <div
+      style={{
+        position: 'absolute',
+        bottom: 2 * fp,
+        left: 2 * fp,
+        zIndex: 99,
+      }}
+    >
+      <Button
+        icon={<LegacyIcon type={showSetting ? 'left' : 'right'} />}
+        shape={showSetting ? 'circle' : null}
+        style={{ boxShadow: '#aaa 3px 3px 5px 1px' }}
+        className={styles.btn}
+        type="primary"
+        onClick={toggleTool}
+      />
+    </div>
+    <CollectionCreateForm
+      visible={modalName === 'visible'}
+      onCancel={() => {
+        handleCancel();
+        setIsStopMonitorWhenCreated(false);
+      }}
+      isTodo={isTodo}
+      docid={docid}
+      starttime={startTime}
+      bedname={bedname}
+      isStopMonitorWhenCreated={isStopMonitorWhenCreated}
+      onCreated={res => {
+        // setState({ isCreated: true });
+        event.emit('newArchive', res);
+        // 完成绑定后判断是否停止监护工作（未建档停止监护时补充建档内容）
+        if (isStopMonitorWhenCreated) {
+          end();
           setIsStopMonitorWhenCreated(false);
-        }}
-        isTodo={isTodo}
-        docid={docid}
-        starttime={startTime}
-        bedname={bedname}
-        isStopMonitorWhenCreated={isStopMonitorWhenCreated}
-        onCreated={res => {
-          // setState({ isCreated: true });
-          event.emit('newArchive', res);
-          // 完成绑定后判断是否停止监护工作（未建档停止监护时补充建档内容）
-          if (isStopMonitorWhenCreated) {
-            end();
-            setIsStopMonitorWhenCreated(false);
-          }
-        }}
-      />
-      <Analysis
-        visible={modalName === 'analysisVisible'}
-        onCancel={handleCancel}
-        docid={docid}
-        inpatientNO={inpatientNO}
-        name={name}
-        age={age}
-        gestationalWeek={gestationalWeek}
-        startTime={startTime}
-      // inpatientNO={pregnancy.inpatientNO}
-      // name={}
-      />
-      <PrintPreview
-        visible={modalName === 'printVisible'}
-        onCancel={handleCancel}
-        docid={docid}
-        inpatientNO={inpatientNO}
-        name={name}
-        age={age}
-        gestationalWeek={gestationalWeek}
-        startTime={startTime}
-      />
-      <Partogram
-        visible={modalName === 'partogramVisible'}
-        onCancel={handleCancel}
-        bedname={bedname}
-        pregnancyId={pregnancyId}
-      />
-      <ModalConfirm
-        visible={modalName === 'confirmVisible'}
-        bedname={bedname}
-        isOffine={isOffline}
-        isCreated={isCreated}
-        isMonitor={isWorking}
-        onCancel={handleCancel}
-        onOk={end}
-        onCreate={redirectCreate}
-      />
-      <SignModal
-        visible={modalName === 'signVisible'}
-        isCreated={isCreated}
-        isMonitor={isWorking}
-        onCancel={handleCancel}
-        startTime={startTime}
-        bedname={bedname}
-        docid={docid}
-        suit={suitObject.suit}
-      />
-      <SoundModal
-        deviceno={+deviceno}
-        bedno={+bedno}
-        volumeData={volumeData}
-        visible={modalName === 'soundVisible'}
-        isCreated={isCreated}
-        isMonitor={isWorking}
-        onCancel={handleCancel}
-        startTime={startTime}
-        bedname={bedname}
-        docid={docid}
-        suit={suitObject.suit}
-      />
-    </>
-  );
+        }
+      }}
+    />
+    <Analysis
+      visible={modalName === 'analysisVisible'}
+      onCancel={handleCancel}
+      docid={docid}
+      inpatientNO={inpatientNO}
+      name={name}
+      age={age}
+      gestationalWeek={gestationalWeek}
+      startTime={startTime}
+    // inpatientNO={pregnancy.inpatientNO}
+    // name={}
+    />
+    <PrintPreview
+      visible={modalName === 'printVisible'}
+      onCancel={handleCancel}
+      docid={docid}
+      inpatientNO={inpatientNO}
+      name={name}
+      age={age}
+      gestationalWeek={gestationalWeek}
+      startTime={startTime}
+    />
+    <Partogram
+      visible={modalName === 'partogramVisible'}
+      onCancel={handleCancel}
+      bedname={bedname}
+      pregnancyId={pregnancyId}
+    />
+    <ModalConfirm
+      visible={modalName === 'confirmVisible'}
+      bedname={bedname}
+      isOffine={isOffline}
+      isCreated={isCreated}
+      isMonitor={isWorking}
+      onCancel={handleCancel}
+      onOk={end}
+      onCreate={redirectCreate}
+    />
+    <SignModal
+      visible={modalName === 'signVisible'}
+      isCreated={isCreated}
+      isMonitor={isWorking}
+      onCancel={handleCancel}
+      startTime={startTime}
+      bedname={bedname}
+      docid={docid}
+      suit={suitObject.suit}
+    />
+    <SoundModal
+      deviceno={+deviceno}
+      bedno={+bedno}
+      volumeData={volumeData}
+      visible={modalName === 'soundVisible'}
+      isCreated={isCreated}
+      isMonitor={isWorking}
+      onCancel={handleCancel}
+      startTime={startTime}
+      bedname={bedname}
+      docid={docid}
+      suit={suitObject.suit}
+    />
+  </>;
 }
 
 export default Toolbar

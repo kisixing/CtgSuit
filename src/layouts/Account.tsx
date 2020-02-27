@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 
-import { Menu, Icon, Modal, Avatar, Spin } from 'antd';
+import { Icon as LegacyIcon } from '@ant-design/compatible';
+
+import { Menu, Modal, Avatar, Spin } from 'antd';
 import { connect } from 'dva';
 import { router } from 'umi';
 import store from 'store';
@@ -56,16 +58,16 @@ const A = (props: any) => {
   const menu = (
     <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
       <Menu.Item key="signout">
-        <Icon type="user" />
+        <LegacyIcon type="user" />
         <span>重新登录</span>
       </Menu.Item>
       <Menu.Divider />
       <Menu.Item key="logout">
-        <Icon type="logout" />
+        <LegacyIcon type="logout" />
         <span>退出系统</span>
       </Menu.Item>
       <Menu.Item onClick={() => setChangPassWordVisible(true)}>
-        <Icon type="form" />
+        <LegacyIcon type="form" />
         <span>修改密码</span>
       </Menu.Item>
     </Menu>

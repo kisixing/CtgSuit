@@ -1,5 +1,6 @@
 import React, { memo, useRef } from 'react';
-import { Layout, Button, Popover, Icon } from 'antd';
+import { Icon as LegacyIcon } from '@ant-design/compatible';
+import { Layout, Button, Popover } from 'antd';
 import { ipcRenderer } from 'electron';
 
 import { AntdThemeManipulator } from '@lianmed/components';
@@ -39,7 +40,7 @@ const Foot = (props: any) => {
               e && theme.current.click && theme.current.click()
             }
           >
-            <Button icon="bg-colors" type="primary" />
+            <Button icon={<LegacyIcon type="bg-colors" />} type="primary" />
           </Popover>
           <AntdThemeManipulator
             ref={theme}
@@ -55,7 +56,7 @@ const Foot = (props: any) => {
                     </Button>
                 </QR> */}
           <Button
-            icon="question-circle"
+            icon={<LegacyIcon type="question-circle" />}
             type="primary"
             onClick={() => ipcRenderer.send('newWindow', '操作说明')}
           />

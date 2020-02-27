@@ -83,7 +83,7 @@ const Home = (props: IProps) => {
               />
             );
           }) : (
-              <div ref={empty} style={{ marginTop: 200, display: 'flex', justifyContent: 'center' }}>
+              <div ref={empty} style={{ marginTop: 200, display: 'flex', justifyContent: 'center',width:'100%' }}>
                 <Empty description="胎监工作站" />
               </div>
             )

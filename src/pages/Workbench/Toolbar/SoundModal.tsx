@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Modal, Form, Radio, Slider, Switch, Input, message } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Button, Modal, Radio, Slider, Switch, Input, message } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { Suit } from '@lianmed/lmg/lib/Ctg/Suit';
 // import { request } from '@lianmed/utils';

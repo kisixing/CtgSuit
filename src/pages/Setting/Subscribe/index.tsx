@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Row, Col, Icon, Popover } from "antd";
+import { Icon as LegacyIcon } from '@ant-design/compatible';
+import { Button, Row, Col, Popover } from "antd";
 import { qrcode } from '@lianmed/utils'
 import { connect, DispatchProp } from 'dva';
 import Table from "./Table";
@@ -68,13 +69,13 @@ const C = (props: IProps) => {
                     {`${_.areano === ward.wardId ? '' : `${_.areaname}：`}${
                       _.bedname
                       }`}
-                    {editable && <Icon type="close"></Icon>}
+                    {editable && <LegacyIcon type="close"></LegacyIcon>}
                   </Button>
                 );
               })}
             </div>
             {editable && (
-              <Icon
+              <LegacyIcon
                 type="close"
                 onClick={() => setSelected([])}
                 style={{
@@ -86,7 +87,7 @@ const C = (props: IProps) => {
                   padding: 6,
                   borderRadius: '100%',
                 }}
-              ></Icon>
+              ></LegacyIcon>
             )}
           </div>
 

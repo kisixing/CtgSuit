@@ -7,6 +7,7 @@
 
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
+import { Icon as LegacyIcon } from '@ant-design/compatible';
 import {
   Table,
   Divider,
@@ -543,33 +544,31 @@ class Account extends PureComponent {
 
   render() {
     const { data, loading } = this.state;
-    return (
-      <>
-        <div style={{ fontWeight: 600, marginBottom: '12px' }}>账户管理</div>
-        <Table
-          loading={loading}
-          size="small"
-          scroll={{ x: 1280 }}
-          pagination={false}
-          columns={this.columns}
-          dataSource={data}
-          rowKey="id"
-        />
-        <Button
-          style={{ width: '100%', marginTop: 16, marginBottom: 8 }}
-          type="dashed"
-          onClick={() => {
-            // 获取select options
-            this.fetchGroups();
-            this.fetchWards();
-            this.newAccount();
-          }}
-          icon="plus"
-        >
-          新增账号
-        </Button>
-      </>
-    );
+    return <>
+      <div style={{ fontWeight: 600, marginBottom: '12px' }}>账户管理</div>
+      <Table
+        loading={loading}
+        size="small"
+        scroll={{ x: 1280 }}
+        pagination={false}
+        columns={this.columns}
+        dataSource={data}
+        rowKey="id"
+      />
+      <Button
+        style={{ width: '100%', marginTop: 16, marginBottom: 8 }}
+        type="dashed"
+        onClick={() => {
+          // 获取select options
+          this.fetchGroups();
+          this.fetchWards();
+          this.newAccount();
+        }}
+        icon={<LegacyIcon type="plus" />}
+      >
+        新增账号
+      </Button>
+    </>;
   }
 }
 
