@@ -33,17 +33,9 @@
   },
   "include": [
     "./"
+  ],
+  "exclude": [
+    "node_modules"
   ]
-  // "exclude": [
-  //   "node_modules",
-  //   "build",
-  //   "scripts",
-  //   "acceptance-tests",
-  //   "webpack",
-  //   "jest",
-  //   "src/setupTests.ts",
-  //   "tslint:latest",
-  //   "tslint-config-prettier"
-  // ]
   // "files": ["./pages/workbench/CustomForm1/test.tsx"]
 }
