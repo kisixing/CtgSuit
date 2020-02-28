@@ -23,6 +23,7 @@ class TableList extends Component {
     this.isIn = isIn;
     this.noKey = this.isIn ? 'inpatientNO' : 'cardNO';
     this.noLabel = this.isIn ? '住院号' : '卡号';
+    this.wardId = ward.wardId;
 
     this.columns = [
       {
@@ -142,13 +143,16 @@ class TableList extends Component {
       payload: {
         // 住院状态
         'recordstate.equals': this.isIn ? '10' : undefined,
-        ...params
+        // 默认进来只显示本病区,条件查询就不限制本病区
+        'areaNO.equals': this.wardId,
+        ...params,
       },
     });
   };
 
   fetchCount = params => {
     const { dispatch } = this.props;
+    // const ward = store.get('ward') || {};
     dispatch({
       type: 'pregnancy/fetchCount',
       payload: {

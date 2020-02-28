@@ -19,7 +19,6 @@ class SearchForm extends Component {
       visible: false,
     };
 
-
     const ward = store.get('ward') || {}
     const isIn = ward.wardType === 'in'
 

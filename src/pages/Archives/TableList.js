@@ -3,6 +3,7 @@ import { connect } from 'dva';
 import { Icon as LegacyIcon } from '@ant-design/compatible';
 import { Table, Divider, Button, Popconfirm, Input } from 'antd';
 import moment from 'moment';
+import store from 'store';
 import Highlighter from 'react-highlight-words';
 import CreateRecordModal from './CreateRecordModal';
 import PrintPreview from '../Workbench/PrintPreview';
@@ -168,9 +169,11 @@ class TableList extends Component {
     const sTime = (__DEV__ ? moment('2019-1-1') : moment().subtract(7, 'd'))
       .format('YYYY-MM-DD');
     const eTime = moment().format('YYYY-MM-DD');
+    const ward = store.get('ward') || {};
     const params = {
       'visitDate.greaterOrEqualThan': sTime,
       'visitDate.lessOrEqualThan': eTime,
+      'areaNO.equals': ward.wardId, // 病区
     };
     // 初始化页脚信息，重第一页开始
     this.savePagination({ size: pagination.size, page: 0 });
@@ -178,7 +181,7 @@ class TableList extends Component {
       // 从孕产妇列表进入时，取得该孕产妇的孕产id，获得ctg档案信息
       this.fetchRecords({
         ...params,
-        'pregnancyId.equals': query.pregnancyId
+        'pregnancyId.equals': query.pregnancyId,
       });
       // 获取列表count
       this.fetchCount({

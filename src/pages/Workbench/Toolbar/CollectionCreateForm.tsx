@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import { Button, Modal, Input, Row, Col, InputNumber, message, Table } from 'antd';
+import _ from 'lodash';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import moment from 'moment';
 // import { request } from '@lianmed/utils';
@@ -74,6 +75,7 @@ const CollectionCreateForm = (props: IProps) => {
   const { getFieldDecorator } = form;
 
   // 搜索值
+  const [selectedPregnancy, setSelectedPregnancy] = useState({});
   const [pregnancyList, setPregnancyList] = useState([]);
   const [disabled, setDisabled] = useState(false);
   const [errorText, setErrorText] = useState('');
@@ -90,7 +92,7 @@ const CollectionCreateForm = (props: IProps) => {
     setDisabled(false)
   };
 
-  const onCreate = async (values) => {
+  const onCreate = async (values, oldValues) => {
     // 新建孕册 后台会自动检验孕册是否已经存在
     // ture -> 提示孕册已经存在
     const pregnancyId = values.id;
@@ -115,8 +117,27 @@ const CollectionCreateForm = (props: IProps) => {
       },
     };
     if (pregnancyId) {
+      // 如果更改了调入的孕产数据，静默提交保存(比较两个对象) age,gravidity,parity,gestationalWeek
+      const old = {
+        id: oldValues.id,
+        bedNO: oldValues.bedNO,
+        name: oldValues.name,
+        [noKey]: oldValues.bedNO,
+        age: oldValues.age,
+        gravidity: oldValues.gravidity,
+        parity: oldValues.parity,
+        gestationalWeek: oldValues.gestationalWeek,
+      };
+      const isEqual = _.isEqual(values, old);
+      if (!isEqual) {
+        request.put(`/pregnancies`, {
+          data: { ...values },
+        });
+      }
+
       // 调入孕册信息后获取的 有孕册pregnancyId
       const data = { ...d, pregnancy: { id: pregnancyId } };
+      // ctg建档
       newArchive(data);
     } else {
       // 无孕册pregnancyId 新建孕册获并获取到pregnancyId
@@ -182,7 +203,6 @@ const CollectionCreateForm = (props: IProps) => {
   const handleSearch = () => {
     setErrorText('');
     // 判断门诊，住院
-
     form.validateFields(async (err, values) => {
       if (err) {
         return;
@@ -206,6 +226,7 @@ const CollectionCreateForm = (props: IProps) => {
         // 搜索结果只有一个，默认赋值
         setDisabled(true);
         const current = res[0];
+        setSelectedPregnancy(current);
         form.setFieldsValue(current);
         // 年龄检验判断
         const age = current.age;
@@ -218,13 +239,14 @@ const CollectionCreateForm = (props: IProps) => {
     });
   };
 
-  const selectRow = record => {
+  const selectRow = (record: object) => {
     form.setFieldsValue(record);
+    setSelectedPregnancy(record);
     setDisabled(true);
   };
 
   const handleCreate = () => {
-    form.validateFields((err, values) => {
+    form.validateFields((err: any, values: any) => {
       if (err) {
         return null;
       } else {
@@ -237,7 +259,9 @@ const CollectionCreateForm = (props: IProps) => {
         if (!values[noKey]) {
           return message.error(`请输入患${noLabel}！`);
         }
-        return onCreate(values);
+        const old = selectedPregnancy;
+        console.log('7777777777', values);
+        // return onCreate(values, old);
       }
     })
   };
@@ -303,6 +327,9 @@ const CollectionCreateForm = (props: IProps) => {
   // 年龄校验
   const validateAge = (value: number) => {
     setAgeWarning({ status: 'success', help: '' });
+    if (!value) {
+      setAgeWarning({ status: 'warning', help: '请输入孕妇年龄...' });
+    }
     if (value >= 35) {
       setAgeWarning({ status: 'warning', help: '该孕妇年龄偏大...' });
     }
@@ -426,7 +453,7 @@ const CollectionCreateForm = (props: IProps) => {
                 <InputNumber
                   min={1}
                   max={99}
-                  disabled={disabled}
+                  // disabled={disabled}
                   placeholder="输入孕妇年龄..."
                   style={{ width }}
                   onChange={validateAge}
@@ -445,7 +472,7 @@ const CollectionCreateForm = (props: IProps) => {
                 <InputNumber
                   min={1}
                   max={99}
-                  disabled={disabled}
+                  // disabled={disabled}
                   placeholder="请输入孕次..."
                   style={{ width }}
                 />,
@@ -463,23 +490,20 @@ const CollectionCreateForm = (props: IProps) => {
                 <InputNumber
                   min={0}
                   max={99}
-                  disabled={disabled}
+                  // disabled={disabled}
                   placeholder="请输入产次..."
                   style={{ width }}
                 />,
               )}
             </Form.Item>
           </Col>
-          {/* <Col span={12}>
-              <Form.Item label="联系电话">
-                {getFieldDecorator('telephone', {
-                  rules: [
-                    { required: false, message: '请填写孕妇联系电话!' },
-                    { validator: validateTel },
-                  ],
-                })(<Input placeholder="请输入联系电话..." />)}
-              </Form.Item>
-            </Col> */}
+          <Col span={12}>
+            <Form.Item label="孕周">
+              {getFieldDecorator('gestationalWeek', {
+                rules: [{ required: false, message: '请填写孕妇的孕周!' }],
+              })(<Input style={{ width }} placeholder="请输入孕周..." />)}
+            </Form.Item>
+          </Col>
         </Row>
         <Row>
           <Col span={24} style={{ marginBottom: 12, textAlign: 'center' }}>
@@ -496,17 +520,17 @@ const CollectionCreateForm = (props: IProps) => {
             <Button type="primary" onClick={handleCreate} loading={loading}>
               确认
             </Button>
-            {
-              isRealIn && (
-                <Button type="primary"
-                  style={{ margin: '0 20px' }}
-                  onClick={() => {
-                    setIsIn(!isIn)
-                  }}>
-                  {isIn ? `急诊` : `返回`}
-                </Button>
-              )
-            }
+            {isRealIn && (
+              <Button
+                type="primary"
+                style={{ margin: '0 20px' }}
+                onClick={() => {
+                  setIsIn(!isIn);
+                }}
+              >
+                {isIn ? `急诊` : `返回`}
+              </Button>
+            )}
           </Col>
           <Col
             span={24}
@@ -530,9 +554,7 @@ const CollectionCreateForm = (props: IProps) => {
             {errorText ? (
               <div style={{ color: '#f00' }}>{errorText}</div>
             ) : null}
-            {isIn
-              ? "提示：调入孕产妇信息时，输入床号即可。调入档案后，如需要更改，请先点击'重置'按钮，再进行操作。"
-              : "提示：调入孕产妇信息时，输入卡号即可。调入档案后，如需要更改，请先点击'重置'按钮，再进行操作。"}
+            {`提示：调入孕产妇信息时，输入${isIn ? '床号' : '卡号'}即可。调入档案后，如需要更改，请先点击'重置'按钮，再进行操作。`}
           </Col>
         </Row>
       </Form>
