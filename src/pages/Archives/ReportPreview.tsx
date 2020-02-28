@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useLayoutEffect, useRef } from 'react';
 import { Menu, Spin, Button, Popconfirm } from 'antd';
 import moment from 'moment';
-import PreviewContent from "@lianmed/pages/lib/Ctg/Report/PreviewContent";
+import PreviewContent from "@lianmed/pages/lib/Ctg/Report/Panel/PreviewContent";
 import Shell from "../Workbench/Analysis/Shell";
 import { request } from "@lianmed/utils";
 import PrintPreview from "../Workbench/PrintPreview";
