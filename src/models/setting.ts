@@ -40,8 +40,8 @@ const setting = {
 
       const listLayoutOptionsV = listLayoutOptions.map(_ => _.reduce((s, i) => s * i, 1))
       const t = listLayoutOptionsV.reduce((r, _, i) => {
-        const oldDiff = (listLayoutOptionsV[r] - size) > 0 ? listLayoutOptionsV[r] - size : Number.MAX_SAFE_INTEGER
-        const diff = _ - size > 0 ? _ - size : Number.MAX_SAFE_INTEGER
+        const oldDiff = (listLayoutOptionsV[r] - size) >= 0 ? listLayoutOptionsV[r] - size : Number.MAX_SAFE_INTEGER
+        const diff = _ - size >= 0 ? _ - size : Number.MAX_SAFE_INTEGER
         return (diff - (oldDiff) > 0) ? r : i
       }, 0)
       yield put({ type: 'setState', payload: { listLayout: listLayoutOptions[t] } })
