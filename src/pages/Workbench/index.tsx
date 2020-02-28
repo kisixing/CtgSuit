@@ -44,7 +44,7 @@ const Home = (props: IProps) => {
   return (
     <div style={{ height: '100%' }} ref={wrap}>
       {
-        <Row style={{ padding: outPadding, height: contentHeight }} >
+        <Row justify="start" align="top" style={{ padding: outPadding, maxHeight: contentHeight }} >
           {items.length ? items.map((item: IBed | IRemain) => {
             const { data, bedname, prenatalVisit, bedno } = item;
             const { unitId } = (item as IBed)
