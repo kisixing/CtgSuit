@@ -55,7 +55,8 @@ export default {
             redirect = null;
           }
         }
-        yield put(routerRedux.replace(redirect || '/'));
+        const u = routerRedux.replace(redirect || '/')
+        yield put(u);
       } else {
         // 登录验证失败
         yield put({

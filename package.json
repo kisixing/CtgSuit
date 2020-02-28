@@ -37,6 +37,7 @@
   "main": "./app/main/index.js",
   "dependencies": {
     "@ant-design/compatible": "^0.0.1-rc.1",
+    "@ant-design/icons": "^4.0.0",
     "antd": "^4.0.0-rc.5",
     "bezier-easing": "^2.1.0",
     "braft-editor": "^2.3.8",

@@ -1,13 +1,11 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, forwardRef } from 'react';
 import { connect } from 'dva';
-import { Form, Icon as LegacyIcon } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
-import { Button, Row, Input, Alert, Select, message, notification, Popconfirm } from 'antd';
+import { UserOutlined, SettingOutlined, LockOutlined } from '@ant-design/icons';
+import { Form, Button, Row, Input, Alert, Select, message, notification, Popconfirm } from 'antd';
 import config from '@/utils/config';
 import { IWard } from "@/types";
 import request from '@/utils/request';
 // import { TOKEN } from '@/utils/constant';
-import { WrappedFormUtils } from 'antd/lib/form/Form';
 import SettingStore from '@/utils/SettingStore';
 import store from "store";
 declare var __DEV__: boolean;
@@ -16,16 +14,15 @@ const styles = require('./Login.less');
 const FormItem = Form.Item;
 
 interface IProps {
-  form: WrappedFormUtils
   [x: string]: any
 }
 const Login = (props: IProps) => {
   // 清除缓存
   // store.remove(TOKEN);
-  const { loading, error, form, dispatch } = props;
+  const { loading, error, dispatch } = props;
   const [areaList, setAreaList] = useState<IWard[]>([]);
-  const dateRef = useRef();
-
+  const [form] = Form.useForm()
+  const dateRef = useRef<typeof form>();
   useEffect(() => {
     props.dispatch({ type: 'list/clean' })
     return () => {
@@ -41,18 +38,13 @@ const Login = (props: IProps) => {
   //   }
   // }, []);
 
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     const { validateFields } = form;
-    validateFields((errors, { id, username, password }) => {
-      if (errors) {
-        return;
-      }
+    validateFields().then(({ id, username, password }) => {
       dispatch({ type: 'login/login', payload: { username, password } })
         .then(() => {
           // areano未旧的病区号
           store.set('ward', areaList.find(_ => _.id == id));
- 
           form.resetFields();
           store.set('username', username)
         })
@@ -82,23 +74,20 @@ const Login = (props: IProps) => {
 
   function onConfirm() {
     message.info('Clicked on Yes.');
-    dateRef.current.props.form.validateFields((err, values) => {
-      if (err) {
-        return;
-      }
+    dateRef.current.validateFields().then((values) => {
+
       SettingStore.set(Object.keys(values), Object.values(values)).then(status => {
         if (status) {
           message.success('设置成功，2s 后重启！', 1).then(() => {
             // eslint-disable-next-line no-restricted-globals
             location.reload();
-          });
+          }, () => { });
         }
       });
       // console.log('Received values of form: ', values);
     });;
   }
 
-  const { getFieldDecorator } = form;
 
   return <>
     <div className={styles.container}>
@@ -106,74 +95,60 @@ const Login = (props: IProps) => {
         <img alt="logo" src={config.logoPath} />
         <h1>{config.siteName}</h1>
       </div>
-      <Form onSubmit={handleSubmit}>
-        <FormItem hasFeedback>
-          {getFieldDecorator('username', {
-            initialValue: store.get('username'),
-            rules: [
-              {
-                required: true,
-                message: '请输入用户名！',
-              },
-            ],
-          })(
-            <Input
-              allowClear
-              autoFocus
-              placeholder="工号"
-              prefix={
-                <LegacyIcon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />
-              }
-              onPressEnter={handleSubmit}
-            />,
-          )}
-        </FormItem>
-        <FormItem hasFeedback>
-          {getFieldDecorator('password', {
-            initialValue: __DEV__ ? 'admin' : '',
+      <Form form={form} onFinish={handleSubmit} initialValues={{
+        password:__DEV__ ? 'admin':'',
+        username:store.get('username')
+      }} >
+        <FormItem hasFeedback name="username" >
 
-            rules: [
-              {
-                required: true,
-                message: '请输入用户密码！',
-              },
-            ],
-          })(
-            <Input
-              allowClear
-              type="password"
-              placeholder="密码"
-              autoComplete="new-password"
-              prefix={
-                <LegacyIcon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />
-              }
-              onPressEnter={handleSubmit}
-            />,
-          )}
+          <Input
+            allowClear
+            autoFocus
+            placeholder="工号"
+            prefix={
+              <UserOutlined style={{ color: 'rgba(0,0,0,.25)' }} />
+            }
+            onPressEnter={handleSubmit}
+          />
         </FormItem>
-        <FormItem hasFeedback>
-          {getFieldDecorator('id', {
-            rules: [
-              {
-                required: true,
-                message: '请选择病区！',
-              },
-            ],
-          })(
-            <Select
-              placeholder="选择病区"
-              className={styles.select}
-              onDropdownVisibleChange={_ => _ && onDropdownVisible()}
-            >
-              {areaList.map(({ id, wardName }) => {
-                return (
-                  <Select.Option key={id} value={id}>
-                    {wardName}
-                  </Select.Option>
-                );
-              })}
-            </Select>,
-          )}
+        <FormItem hasFeedback name="password" rules={[
+          {
+            required: true,
+            message: '请输入用户密码！',
+          }
+        ]}>
+
+          <Input
+            allowClear
+            type="password"
+            placeholder="密码"
+            autoComplete="new-password"
+            prefix={
+              <LockOutlined style={{ color: 'rgba(0,0,0,.25)' }} />
+            }
+            onPressEnter={handleSubmit}
+          />
+        </FormItem>
+        <FormItem hasFeedback name="id" rules={[
+          {
+            required: true,
+            message: '请选择病区！',
+          }
+        ]}>
+
+          <Select
+            placeholder="选择病区"
+            className={styles.select}
+            onDropdownVisibleChange={_ => _ && onDropdownVisible()}
+          >
+            {areaList.map(({ id, wardName }) => {
+              return (
+                <Select.Option key={id} value={id}>
+                  {wardName}
+                </Select.Option>
+              );
+            })}
+          </Select>
         </FormItem>
         <Row>
           <Button
@@ -196,13 +171,12 @@ const Login = (props: IProps) => {
         <Popconfirm
           placement="topRight"
           trigger="click"
-          title={<NetWork wrappedComponentRef={dateRef} />}
+          title={<NetWork ref={dateRef} />}
           onConfirm={onConfirm}
           okText="确定"
           cancelText="取消"
         >
-          <LegacyIcon
-            type="setting"
+          <SettingOutlined
             style={{ float: 'right', margin: '6px 12px' }}
           />
         </Popconfirm>
@@ -211,44 +185,36 @@ const Login = (props: IProps) => {
   </>;
 }
 
-const NetWork = Form.create()(
-  class extends React.Component {
-    componentDidMount() {
-      const { form } = this.props;
-
+const NetWork = forwardRef(
+  (props, ref: any) => {
+    const [form] = Form.useForm()
+    useEffect(() => {
       SettingStore.get(['ws_url', 'xhr_url']).then(([ws_url, xhr_url]) => {
         form.setFieldsValue({ xhr_url, ws_url });
       });
-    }
-    render() {
-      const { form } = this.props;
-      const { getFieldDecorator } = form;
-      return (
-        <Form layout="inline" className={styles.netWork}>
-          <div style={{ marginBottom: '12px' }}>网络设置</div>
-          <Form.Item label="web socket">
-            {getFieldDecorator('ws_url')(
-              <Input
-                addonBefore="ws://"
-                placeholder="请输入web socket服务地址!"
-              />,
-            )}
-          </Form.Item>
-          <Form.Item label="web service">
-            {getFieldDecorator('xhr_url')(
-              <Input
-                addonBefore="http://"
-                placeholder="请输入web service服务地址!"
-              />,
-            )}
-          </Form.Item>
-        </Form>
-      );
-    }
-  },
+    }, [form])
+    return (
+      <Form ref={ref} form={form} layout="inline" className={styles.netWork}>
+        <div style={{ marginBottom: '12px' }}>网络设置</div>
+        <Form.Item label="web socket" name="ws_url">
+
+          <Input
+            addonBefore="ws://"
+            placeholder="请输入web socket服务地址!"
+          />
+        </Form.Item>
+        <Form.Item label="web service" name="xhr_url">
+          <Input
+            addonBefore="http://"
+            placeholder="请输入web service服务地址!"
+          />
+        </Form.Item>
+      </Form>
+    );
+  }
 );
 
 export default connect(({ loading, login }: any) => ({
   loading,
   error: login.error,
-}))(Form.create()(Login))
+}))(Login)
