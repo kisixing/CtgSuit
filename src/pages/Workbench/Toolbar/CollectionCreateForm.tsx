@@ -136,7 +136,7 @@ const CollectionCreateForm = (props: IProps) => {
       }
 
       // 调入孕册信息后获取的 有孕册pregnancyId
-      const data = { ...d, pregnancy: { id: pregnancyId } };
+      const data = { ...d, pregnancy: { id: pregnancyId, gestationalWeek: values.gestationalWeek } };
       // ctg建档
       newArchive(data);
     } else {
@@ -261,7 +261,7 @@ const CollectionCreateForm = (props: IProps) => {
         }
         const old = selectedPregnancy;
         console.log('7777777777', values);
-        // return onCreate(values, old);
+        return onCreate(values, old);
       }
     })
   };
