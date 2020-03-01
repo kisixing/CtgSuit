@@ -117,6 +117,8 @@ const CollectionCreateForm = (props: IProps) => {
       },
     };
     if (pregnancyId) {
+      // 调入孕册信息后获取的 有孕册pregnancyId
+      const data = { ...d, pregnancy: { id: pregnancyId } };
       // 如果更改了调入的孕产数据，静默提交保存(比较两个对象) age,gravidity,parity,gestationalWeek
       const old = {
         id: oldValues.id,
@@ -130,13 +132,18 @@ const CollectionCreateForm = (props: IProps) => {
       };
       const isEqual = _.isEqual(values, old);
       if (!isEqual) {
-        request.put(`/pregnancies`, {
+        return request.put(`/pregnancies`, {
           data: { ...values },
+        }).then(res => {
+          if (res && res.id) {
+            // 孕册信息修改成功
+            // ctg建档
+            newArchive(data);
+          } else {
+            message.error('建档异常，请稍后再试...');
+          }
         });
       }
-
-      // 调入孕册信息后获取的 有孕册pregnancyId
-      const data = { ...d, pregnancy: { id: pregnancyId, gestationalWeek: values.gestationalWeek } };
       // ctg建档
       newArchive(data);
     } else {
@@ -156,16 +163,13 @@ const CollectionCreateForm = (props: IProps) => {
           });
         });
       if (res && res.id) {
-        // message.success('孕册创建成功！');
-        if (res && res.id) {
-          // 新建孕册成功
-          const data = { ...d, pregnancy: { id: res.id } };
-          // 新建（绑定）档案
-          newArchive(data);
-        } else {
-          // 孕册存在，取到孕册信息
-          message.info('该患者信息已存在！');
-        }
+        // 新建孕册成功
+        const data = { ...d, pregnancy: { id: res.id } };
+        // 新建（绑定）档案
+        newArchive(data);
+      } else {
+        // 孕册存在，取到孕册信息
+        message.info('该患者信息已存在！');
       }
     }
   };
@@ -260,7 +264,6 @@ const CollectionCreateForm = (props: IProps) => {
           return message.error(`请输入患${noLabel}！`);
         }
         const old = selectedPregnancy;
-        console.log('7777777777', values);
         return onCreate(values, old);
       }
     })

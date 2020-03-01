@@ -6,6 +6,7 @@ import Shell from "../Workbench/Analysis/Shell";
 import { request } from "@lianmed/utils";
 import PrintPreview from "../Workbench/PrintPreview";
 import { event } from '@lianmed/utils';
+import config from '@/utils/config';
 
 interface IReport {
   valid?: boolean
@@ -46,6 +47,7 @@ function ReportPreview(props: IProps) {
   }, []);
 
   const fetchpdf = (value: string) => {
+    // setPdfBase64(null);
     setLoading(true);
     request
       .get('/ctg-exams-pdf', {
@@ -84,6 +86,7 @@ function ReportPreview(props: IProps) {
   };
 
   const handleClick = ({ key }) => {
+    if (key === currentReport) return;
     setCurrentReport(key);
     fetchpdf(key);
   };
@@ -123,6 +126,7 @@ function ReportPreview(props: IProps) {
           <Spin spinning={loading}>
             <PreviewContent
               pdfBase64={pdfBase64}
+              // pdfBase64={`${config.apiPrefix}/ctg-exams-pdfurl/${currentReport}`}
               wh={wh}
               isFull
               borderd={false}
@@ -131,25 +135,28 @@ function ReportPreview(props: IProps) {
         </div>
       </div>
       <div style={{ float: 'right', margin: 6 }}>
-        {
-          target.archived
-            ? < Button onClick={undoArchiving}>取消归档</Button>
-            : <Button disabled={!currentReport} onClick={archiving}>归档</Button>
-        }
+        {target.archived ? (
+          <Button onClick={undoArchiving}>取消归档</Button>
+        ) : (
+          <Button disabled={!currentReport} onClick={archiving}>
+            归档
+          </Button>
+        )}
         <Popconfirm
-          
           title="确认删除该报告？"
           onConfirm={confirm}
           okText="是"
           cancelText="否"
         >
-          <Button disabled={!currentReport} style={{ margin: 6 }}>删除</Button>
+          <Button disabled={!currentReport} style={{ margin: 6 }}>
+            删除
+          </Button>
         </Popconfirm>
         <Button disabled={!currentReport} type="primary" onClick={onDownload}>
           打印
         </Button>
       </div>
-    </Shell >
+    </Shell>
   );
 }
 
