@@ -157,7 +157,8 @@ class TableList extends Component {
       type: 'pregnancy/fetchCount',
       payload: {
         'recordstate.equals': this.isIn ? '10' : undefined,
-        ...params
+        'areaNO.equals': this.wardId,
+        ...params,
       },
     });
   };

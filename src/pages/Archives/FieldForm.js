@@ -100,52 +100,46 @@ class FieldForm extends Component {
         onSubmit={this.handleSubmit}
       >
         <Row>
-          <Col span={4}>
-            <Form.Item label="开始日期">
-              {getFieldDecorator('startTime')(
-                <DatePicker
-                  allowClear
-                  format="YYYY-MM-DD"
-                  placeholder="请选择开始日期"
-                  style={{ width: 136 }}
-                />,
-              )}
-            </Form.Item>
-          </Col>
-          <Col span={4}>
-            <Form.Item label="结束日期">
-              {getFieldDecorator('endTime')(
-                <DatePicker
-                  allowClear
-                  format="YYYY-MM-DD"
-                  placeholder="请选择结束日期"
-                />,
-              )}
-            </Form.Item>
-          </Col>
-          {/* <Col span={4}>
-            <Form.Item label="姓名">
-              {getFieldDecorator('name')(
-                <Input
-                  disabled
-                  allowClear
-                  placeholder="请输入孕妇姓名"
-                />,
-              )}
-            </Form.Item>
-          </Col> */}
-          <Col span={4}>
-            <Form.Item>
-              <Button
-                type="primary"
-                htmlType="submit"
-                loading={loading.effects['archives/fetchRecords']}
-              >
-                搜索
-              </Button>
-              <Button onClick={this.handleReset}>重置</Button>
-            </Form.Item>
-          </Col>
+          <Form.Item label="开始日期">
+            {getFieldDecorator('startTime')(
+              <DatePicker
+                allowClear
+                format="YYYY-MM-DD"
+                placeholder="请选择开始日期"
+                style={{ width: 136 }}
+              />,
+            )}
+          </Form.Item>
+          <Form.Item label="结束日期">
+            {getFieldDecorator('endTime')(
+              <DatePicker
+                allowClear
+                format="YYYY-MM-DD"
+                placeholder="请选择结束日期"
+              />,
+            )}
+          </Form.Item>
+        {/* <Col span={4}>
+          <Form.Item label="姓名">
+            {getFieldDecorator('name')(
+              <Input
+                disabled
+                allowClear
+                placeholder="请输入孕妇姓名"
+              />,
+            )}
+          </Form.Item>
+        </Col> */}
+          <Form.Item>
+            <Button
+              type="primary"
+              htmlType="submit"
+              loading={loading.effects['archives/fetchRecords']}
+            >
+              搜索
+            </Button>
+            <Button onClick={this.handleReset}>重置</Button>
+          </Form.Item>
         </Row>
       </Form>
     );

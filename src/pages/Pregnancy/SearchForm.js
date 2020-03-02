@@ -130,58 +130,48 @@ class SearchForm extends Component {
         onSubmit={this.handleSubmit}
       >
         <Row>
-          <Col span={4}>
-            <Form.Item label={this.noLabel}>
-              {getFieldDecorator(this.noKey, {
-                rules: [
-                  { required: false, message: `请输入${this.noLabel}!` },
-                ],
-                getValueFromEvent: event =>
-                  event.target.value.replace(/\s+/g, ''),
-              })(<Input allowClear type="text" />)}
-            </Form.Item>
-          </Col>
-          <Col span={4}>
-            <Form.Item label="姓名">
-              {getFieldDecorator('name', {
-                getValueFromEvent: event => event.target.value.trim(),
-              })(<Input allowClear type="text" />)}
-            </Form.Item>
-          </Col>
+          <Form.Item label={this.noLabel}>
+            {getFieldDecorator(this.noKey, {
+              rules: [
+                { required: false, message: `请输入${this.noLabel}!` },
+              ],
+              getValueFromEvent: event =>
+                event.target.value.replace(/\s+/g, ''),
+            })(<Input allowClear type="text" />)}
+          </Form.Item>
+          <Form.Item label="姓名">
+            {getFieldDecorator('name', {
+              getValueFromEvent: event => event.target.value.trim(),
+            })(<Input allowClear type="text" />)}
+          </Form.Item>
           {this.isIn && (
-            <Col span={4}>
-              <Form.Item label="住院状态">
-                {getFieldDecorator('recordstate')(
-                  <Select allowClear style={{ width: 174 }}>
-                    <Select.Option value="10">住院中</Select.Option>
-                    <Select.Option value="20">已出院</Select.Option>
-                    <Select.Option value="30">门诊</Select.Option>
-                  </Select>,
-                )}
-              </Form.Item>
-            </Col>
-          )}
-          <Col span={4}>
-            <Form.Item label="预产期">
-              {getFieldDecorator('edd')(
-                <DatePicker
-                  allowClear
-                  style={{ minWidth: '168px' }}
-                  format="YYYY-MM-DD"
-                  placeholder="请选择日期"
-                />,
+            <Form.Item label="住院状态">
+              {getFieldDecorator('recordstate')(
+                <Select allowClear style={{ width: 174 }}>
+                  <Select.Option value="10">住院中</Select.Option>
+                  <Select.Option value="20">已出院</Select.Option>
+                  <Select.Option value="30">门诊</Select.Option>
+                </Select>,
               )}
             </Form.Item>
-          </Col>
-          <Col span={5}>
-            <Form.Item label="">
-              <Button type="primary" htmlType="submit">
-                搜索
-              </Button>
-              <Button onClick={this.handleReset}>重置</Button>
-              <Button onClick={this.show}>ADT</Button>
-            </Form.Item>
-          </Col>
+          )}
+          <Form.Item label="预产期">
+            {getFieldDecorator('edd')(
+              <DatePicker
+                allowClear
+                style={{ minWidth: '168px' }}
+                format="YYYY-MM-DD"
+                placeholder="请选择日期"
+              />,
+            )}
+          </Form.Item>
+          <Form.Item label="">
+            <Button type="primary" htmlType="submit">
+              搜索
+            </Button>
+            <Button onClick={this.handleReset}>重置</Button>
+            <Button onClick={this.show}>ADT</Button>
+          </Form.Item>
         </Row>
       </Form>
       {visible ? (
