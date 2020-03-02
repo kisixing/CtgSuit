@@ -14,7 +14,7 @@ class TableList extends Component {
     this.state = {
       visible: false,
       current: {}, // 当前编辑孕册
-      searchText: '', //
+      searchText: '',
     };
 
     const ward = store.get('ward') || {}
@@ -137,29 +137,31 @@ class TableList extends Component {
   }
 
   fetchData = params => {
-    const { dispatch } = this.props;
+    const { dispatch, wardId } = this.props;
     dispatch({
       type: 'pregnancy/fetchPregnancies',
       payload: {
         // 住院状态
         'recordstate.equals': this.isIn ? '10' : undefined,
         // 默认进来只显示本病区,条件查询就不限制本病区
-        'areaNO.equals': this.wardId,
+        'areaNO.equals': wardId,
         ...params,
       },
     });
   };
 
   fetchCount = params => {
-    const { dispatch } = this.props;
-    // const ward = store.get('ward') || {};
+    const { dispatch, wardId } = this.props;
+    let data = {
+      'recordstate.equals': this.isIn ? '10' : undefined,
+      ...params,
+    };
+    if (wardId) {
+      data['areaNO.equals'] = wardId;
+    }
     dispatch({
       type: 'pregnancy/fetchCount',
-      payload: {
-        'recordstate.equals': this.isIn ? '10' : undefined,
-        'areaNO.equals': this.wardId,
-        ...params,
-      },
+      payload: data,
     });
   };
 
@@ -203,15 +205,19 @@ class TableList extends Component {
 
   // 分页器onchange
   onChange = (page, pageSize) => {
+    const { wardId } = this.props;
     const values = this.getValues();
     // 以是否有pageSize区分触发区域
     if (pageSize) {
       // console.log('onChange --> params', page, pageSize);
-      const params = {
+      let params = {
         size: pageSize,
         page: page - 1,
-        ...values
+        ...values,
       };
+      if (wardId) {
+        params['areaNO.equals'] = wardId;
+      }
       this.fetchData(params);
       this.fetchCount(params);
     }
@@ -219,12 +225,16 @@ class TableList extends Component {
 
   onShowSizeChange = (current, size) => {
     // console.log('TCL: TableList -> onShowSizeChange -> current, size', current, size);
+    const { wardId } = this.props;
     const values = this.getValues();
-    const params = {
+    let params = {
       size,
       page: current - 1,
-      ...values
+      ...values,
     };
+    if (wardId) {
+      params['areaNO.equals'] = wardId;
+    }
     this.fetchData(params);
     this.fetchCount(params);
   };

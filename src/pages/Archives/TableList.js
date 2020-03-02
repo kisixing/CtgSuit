@@ -23,6 +23,7 @@ class TableList extends Component {
       type: 'edit',
       current: {}, // 当前行
     };
+    this.ward = store.get('ward') || {};
     this.columns = [
       {
         title: '姓名',
@@ -162,18 +163,17 @@ class TableList extends Component {
     this.onChange(pagination.page + 1, pagination.size)
   }
   init() {
-    const { router, pagination } = this.props;
+    const { router, pagination, wardId } = this.props;
     const query = router.location.query;
     // 默认请求近一周的数据
     // eslint-disable-next-line no-undef
     const sTime = (__DEV__ ? moment('2019-1-1') : moment().subtract(7, 'd'))
       .format('YYYY-MM-DD');
     const eTime = moment().format('YYYY-MM-DD');
-    const ward = store.get('ward') || {};
     const params = {
       'visitDate.greaterOrEqualThan': sTime,
       'visitDate.lessOrEqualThan': eTime,
-      'areaNO.equals': ward.wardId, // 病区
+      'areaNO.equals': wardId, // 病区
     };
     // 初始化页脚信息，重第一页开始
     this.savePagination({ size: pagination.size, page: 0 });
@@ -401,17 +401,20 @@ class TableList extends Component {
   onChange = (page, pageSize) => {
     const values = this.getValues();
     // 判断是否是孕产妇管理页跳转过来的，query不为空
-    const { router } = this.props;
+    const { router, wardId } = this.props;
     const query = router.location.query;
     // 以是否有pageSize区分触发区域
     if (pageSize) {
       // console.log('onChange --> params', page, pageSize);
-      const params = {
+      let params = {
         size: pageSize,
         page: page - 1,
         'pregnancyId.equals': query.pregnancyId,
         ...values,
       };
+      if (wardId) {
+        params['areaNO.equals'] = wardId;
+      }
       this.fetchRecords(params);
       this.fetchCount(params);
       this.savePagination({ size: pageSize, page: page - 1 });
@@ -422,11 +425,15 @@ class TableList extends Component {
   onShowSizeChange = (current, size) => {
     // console.log('TCL: TableList -> onShowSizeChange -> current, size', current, size);
     const values = this.getValues();
-    const params = {
+    const { wardId } = this.props;
+    let params = {
       size,
       page: current - 1,
       ...values,
     };
+    if (wardId) {
+      params['areaNO.equals'] = wardId;
+    }
     this.fetchRecords(params);
     this.fetchCount(params);
     this.savePagination({ size, page: current - 1 });

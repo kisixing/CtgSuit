@@ -42,7 +42,9 @@ class SearchForm extends Component {
   // 检索
   handleSubmit = e => {
     e.preventDefault();
-    const { size, page } = this.props;
+    const { size, page, clearWard } = this.props;
+    // 高级检索置空病区
+    clearWard();
     this.props.form.validateFields((err, values) => {
       if (!err) {
         // console.log('Received values of form: ', values);

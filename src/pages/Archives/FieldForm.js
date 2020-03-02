@@ -30,7 +30,8 @@ class FieldForm extends Component {
   // 检索
   handleSubmit = e => {
     e.preventDefault();
-    const { dispatch, router, form, pagination } = this.props;
+    const { dispatch, router, form, pagination, clearWard } = this.props;
+    clearWard();
     const query = router.location.query;
     let pregnancyId = undefined;
     if (query) {
