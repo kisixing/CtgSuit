@@ -15,15 +15,7 @@ export async function login(params) {
   });
 }
 
-/**
- * 账户验证登录
- * @param {object} params {username, password}
- */
-export async function authenticate(params) {
-  return request.post(`/authenticate`, {
-    data: params,
-  })
-}
+
 
 /**
  * 获取账户信息

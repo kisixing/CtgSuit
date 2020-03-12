@@ -1,23 +1,25 @@
 
+import { resolve } from "path";
 const { isDev } = require('../utils/is')
-const { resolve } = require('path')
 // const devBase = resolve('.')
 const source = resolve(__dirname, `${isDev ? '../../../main' : '../..'}`)
 const assetsPath = resolve(__dirname, '../../asserts')
 
-// const base = isDev ? devBase : source
-const profile = resolve(process.env.USERPROFILE)
-const desktop = resolve(process.env.USERPROFILE, 'Desktop')
-const tmp = resolve('.tmp')
 const resources = resolve('resources')
-const appPath = resolve(resources, 'app.asar')
 const execPath = resolve('ctg-suit.exe')
+const tmp = resolve('.tmp')
+const basePath = resolve(isDev ? '' : resources, 'app', 'main')
+const profile = resolve(process.env.USERPROFILE || '/')
+const desktop = resolve(process.env.USERPROFILE || '/', 'Desktop')
+const appPath = resolve(resources, 'app.asar')
 const config = resolve(profile, 'setting.json')
 const defaultConfig = resolve(assetsPath, './defaultSetting.json')
 const errLogPath = resolve(tmp, 'errLog.txt')
 const logPath = resolve(tmp, 'log.txt')
 const pkg = resolve(source, 'package.json')
 const unpackPath = isDev ? tmp : resources
+const runtimeJsPath = resolve(basePath, 'runtime/index.js')
+const publicPath = resolve(resources, 'app')
 export {
     profile,
     desktop,
@@ -31,5 +33,8 @@ export {
     pkg,
     appPath,
     execPath,
-    unpackPath
+    unpackPath,
+    basePath,
+    runtimeJsPath,
+    publicPath
 }

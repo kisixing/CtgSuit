@@ -1,11 +1,12 @@
-import React, { useLayoutEffect } from 'react';
-import { Layout } from 'antd';
+import React, { useLayoutEffect, useEffect } from 'react';
+import { Layout, Button } from 'antd';
+import { AlertOutlined } from "@ant-design/icons";
 import { connect } from 'dva';
 import { router } from 'umi';
 import withRouter from 'umi/withRouter';
 import store from 'store';
 
-
+import qs from "qs";
 import settingStore from "@/utils/SettingStore";
 import { uncompile } from '@/utils/utils';
 import { WsService } from "@lianmed/lmg";
@@ -14,7 +15,8 @@ import Foot from "./Foot";
 import Head from "./Head";
 import Side from "./Side";
 import useAlarm from "./useAlarm";
-
+import { ipcRenderer, remote } from 'electron';
+import request from "@lianmed/request";
 const styles = require('./BasicLayout.less')
 const EWsStatus = WsService.wsStatus
 const settingData = settingStore.cache
@@ -22,7 +24,13 @@ const { Content } = Layout;
 const { EWsEvents } = WsService
 const BasicLayout = (props: any) => {
   const { dispatch, fashionable, children, wsStatus, listData, isLogin } = props;
+  useEffect(() => {
 
+    ipcRenderer.on('getToken', e => {
+      const r = remote.getGlobal('windows').remote
+      r.send('token', request.configure)
+    })
+  }, [])
   useLayoutEffect(() => {
     const ws = new WsService(settingData)
       .on('explode', function (data) {
@@ -84,6 +92,7 @@ const BasicLayout = (props: any) => {
         </Layout>
       </Layout>
       <Foot />
+      <Button onClick={() => { ipcRenderer.send('newWindow', 'remote', { search: qs.stringify({ 'token': 123 }) }) }} type="primary" icon={<AlertOutlined />} shape="circle" size="large" style={{ position: 'fixed', bottom: 40, right: 10 }}></Button>
     </Layout>
   );
 }

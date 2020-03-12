@@ -8,7 +8,7 @@ function getMainPath() {
   return filePath;
 }
 
-function getNewPath(params) {
+function getNewPath() {
   let filePath = `file://${path.join(__dirname, '..', '..', 'render/handbook/index.html')}`;
   if (is.dev()) {
     filePath = 'http://127.0.0.1:1702/handbook/index.html';
@@ -16,12 +16,6 @@ function getNewPath(params) {
   return filePath;
 }
 
-function getPDFviewPath(params) {
-  let filePath = `file://${path.join(__dirname, '..', '..', 'render/pdfjs/web/viewer.html')}`;
-  if (is.dev()) {
-    filePath = 'http://127.0.0.1:1702/pdfjs/web/viewer.html';
-  }
-  return filePath;
-}
 
-export { getMainPath, getNewPath, getPDFviewPath };
+
+export { getMainPath, getNewPath };

@@ -5,7 +5,10 @@ const { getMainPath } = require('./config/window');
 import { menus } from "./config/menu";
 import { singleInstanceLock } from "./utils/singleInstanceLock";
 import './ipc'
-import { globalMount } from "./utils/globalMount";
+import { globalMount, collecWebContentsId } from "./utils/globalMount";
+import { logErr } from "./utils/log";
+import { readFile } from 'fs';
+import { runtimeJsPath } from "./config/path";
 globalMount()
 let mainWindow;
 
@@ -21,7 +24,7 @@ singleInstanceLock(mainWindow).then(app => {
   });
 
   function createWindow() {
-    mainWindow = new BrowserWindow({
+    let m = mainWindow = new BrowserWindow({
       width: 1440,
       height: 900,
       show: false,
@@ -35,7 +38,7 @@ singleInstanceLock(mainWindow).then(app => {
       },
       icon: require.resolve('../asserts/icons/64x64.ico'),
     })
-
+    collecWebContentsId('main', m)
     Menu.setApplicationMenu(menus);
 
     mainWindow.loadURL(getMainPath());
@@ -70,6 +73,15 @@ singleInstanceLock(mainWindow).then(app => {
       e.preventDefault();
     });
 
+    m.webContents.on('did-finish-load', () => {
+      readFile(runtimeJsPath, (e, d) => {
+        if (!e) {
+          m.webContents.executeJavaScript(d.toString())
+        } else {
+          logErr(e.stack)
+        }
+      })
+    })
 
   }
 

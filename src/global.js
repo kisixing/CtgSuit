@@ -12,7 +12,6 @@ notification.config({
 });
 
 
-
 // window.console.log = () => { }
 // var os = require('os')
 // var p = require('process')

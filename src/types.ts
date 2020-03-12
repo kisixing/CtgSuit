@@ -22,6 +22,12 @@ export interface IPrenatalVisit {
     visitTime: string;
     visitType: any;
     pregnancy: IPregnancy
+
+    appointmentDate: any
+    diagnosis: any
+    diagnosisCode: any
+    ecgexam: any
+    gynecologicalExam: any
 }
 
 export interface IPregnancy {

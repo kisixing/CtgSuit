@@ -17,7 +17,7 @@ const M = (props: any) => {
             request.get('/account')
             // let timestamp = Date.parse(new Date());
             if (key === '操作说明') {
-                ipcRenderer.send('newWindow', '操作说明');
+                ipcRenderer.send('newWindow', 'help');
             }
             if (key === '档案管理') {
                 router.push('/archives');

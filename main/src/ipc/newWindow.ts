@@ -1,12 +1,13 @@
 import { BrowserWindow } from 'electron';
 import { getMainWindow } from "../index";
-const { getNewPath } = require('../config/window');
-
-export default (event, file) => {
+import { mapKeyToWindow } from "../config/mapKeyToWindow";
+import { collecWebContentsId } from '../utils/globalMount';
+export default (event, key, options: any = {}) => {
+    const [title, url] = mapKeyToWindow[key] || []
     const mainWindow = getMainWindow();
-
+    const { search } = options
     let newWindow = new BrowserWindow({
-        title: '操作手册',
+        title,
         width: 1280,
         height: 720,
         resizable: true, // 窗口大小是否可变
@@ -20,7 +21,10 @@ export default (event, file) => {
             webSecurity: false,
         },
     });
-    newWindow.loadURL(getNewPath()); // new.html是新开窗口的渲染进程
+
+    newWindow.loadURL(url); // new.html是新开窗口的渲染进程
+    collecWebContentsId(key, newWindow)
+
     // newWindow.on('closed', () => {
     //     newWindow = null;
     // });

@@ -6,7 +6,8 @@
       "noUnusedParameters": false,
       "declarationMap": false,
       "sourceMap": false,
-      "declaration": false
+      "declaration": false,
+      "lib": ["DOM"]
     },
     "exclude": [
       "node_modules"

@@ -58,7 +58,7 @@ const Foot = (props: any) => {
           <Button
             icon={<LegacyIcon type="question-circle" />}
             type="primary"
-            onClick={() => ipcRenderer.send('newWindow', '操作说明')}
+            onClick={() => ipcRenderer.send('newWindow', 'help')}
           />
         </span>
         <span>
