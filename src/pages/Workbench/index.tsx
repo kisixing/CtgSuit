@@ -1,96 +1,60 @@
-import React, { useRef, useEffect } from 'react';
-import Empty from '@/components/Empty'
-import { Row } from 'antd';
+import React, { useRef, useEffect, useState } from 'react';
+
 import { connect } from 'react-redux';
-import Item from './Item';
 import { IBed } from '@/types';
 import useTodo, { IRemain } from "./useTodo";
 import { event } from '@lianmed/utils';
 import { BedStatus } from '@lianmed/lmg/lib/services/types';
-import { useItemHeight } from "./useItemHeight";
+import { Ctg_Layout } from "@lianmed/pages";
+import Toolbar from './Toolbar/index';
+
 interface IProps {
   pageItems: IBed[],
   [x: string]: any
 }
 const Home = (props: IProps) => {
-  const { listLayout = [], pageItems, fullScreenId, activeId, dispatch, showTodo, subscribeData, isOn, headCollapsed } = props;
-  const wrap = useRef(null);
-  const empty = useRef(null)
+  const { listLayout = [], pageItems, fullScreenId, dispatch, showTodo, subscribeData, isOn, headCollapsed } = props;
+
   const [todo] = useTodo(showTodo, subscribeData)
 
-  const itemSpan = 24 / listLayout[1];
-  const { itemHeight, contentHeight, outPadding } = useItemHeight(headCollapsed, listLayout)
-  const items: any[] = (showTodo ? todo : pageItems);
+  const [contentHeight, setcontentHeight] = useState(document.querySelector('main').clientHeight)
+
+  useEffect(() => {
+    setcontentHeight(document.querySelector('main').clientHeight)
+  }, [headCollapsed])
+
+  const items: any[] = (showTodo ? todo : pageItems).map(_ => ({ ..._, data: { ..._.data, status: isOn ? _.data.status : null } }));
+
+
 
   useEffect(() => {
     const endCb = (unitId, status, isCreated) => status === BedStatus.Offline && dispatch({ type: 'list/appendOffline', unitId, })
-    const closeCb = (unitId, status, isTodo, docid) => {
-      console.log('close', unitId, status, isTodo, docid)
-      if (isTodo) {
-        event.emit('todo:discard', docid)
-      } else {
-        const cb = () => {
-          dispatch({ type: `list/appendDirty`, unitId })
-        }
-        [BedStatus.Stopped, BedStatus.OfflineStopped].includes(status) ? cb() : event.emit(`bedClose:${unitId}`, cb)
-      }
-    }
+
     const fullScreenCb = () => dispatch({ type: 'list/setState', payload: { fullScreenId: null } })
-    const activeCb = () => dispatch({ type: 'list/setState', payload: { activeId: null } })
-    event.on('bedEnd', endCb).on('bedClose', closeCb).on('bedFullScreen', fullScreenCb).on('bedActive', activeCb)
-    return () => event.off('bedEnd', endCb).off('bedClose', closeCb).off('bedFullScreen', fullScreenCb).off('bedActive', activeCb)
+    event.on('bedEnd', endCb).on('bedFullScreen', fullScreenCb)
+    return () => event.off('bedEnd', endCb).off('bedFullScreen', fullScreenCb)
   }, [])
-
-  return (
-    <div style={{ height: '100%' }} ref={wrap}>
-      {
-        <Row justify="start" align="top" style={{ padding: outPadding, maxHeight: contentHeight }} >
-          {items.length ? items.map((item: IBed | IRemain) => {
-            const { data, bedname, prenatalVisit, bedno } = item;
-            const { unitId } = (item as IBed)
-            const { isTodo } = (item as IRemain)
-            const safePregnancy = data.pregnancy || { pvId: null, age: null, name: null, inpatientNO: null, bedNO: null, id: null, GP: null, gestationalWeek: null }
-            // const safePrenatalVisit = prenatalVisit || { gestationalWeek: null, }
-            return (
-              <Item
-                data={data as any}
-                ismulti={data.ismulti}
-                docid={data.docid}
-                status={data.status}
-
-
-                pregnancy={safePregnancy}
-      
-
-                volumeData={data.volumeData}
-                is_include_tocozero={data.is_include_tocozero}
-                is_include_volume={data.is_include_volume}
-                // startTime={safePrenatalVisit.ctgexam.startTime}
-                startTime={data.starttime}
-
-                bedname={bedname}
-                unitId={unitId}
-                isTodo={isTodo}
-                key={item.id}
-                itemHeight={itemHeight}
-                itemSpan={itemSpan}
-                outPadding={outPadding}
-                fullScreenId={fullScreenId}
-                activeId={activeId}
-                deviceno={(item as IBed).deviceno}
-                bedno={bedno}
-                isOn={isOn}
-              />
-            );
-          }) : (
-              <div ref={empty} style={{ marginTop: 200, display: 'flex', justifyContent: 'center',width:'100%' }}>
-                <Empty description="胎监工作站" />
-              </div>
-            )
-          }
-        </Row>
+  const onClose = ({ unitId, status, isTodo, docid }: any) => {
+    console.log('ddddddd', unitId, status, isTodo, docid)
+    if (isTodo) {
+      event.emit('todo:discard', docid)
+    } else {
+      const cb = () => {
+        dispatch({ type: `list/appendDirty`, unitId })
       }
-    </div>
+      [BedStatus.Stopped, BedStatus.OfflineStopped].includes(status) ? cb() : event.emit(`bedClose:${unitId}`, cb)
+    }
+  }
+  return (
+    <Ctg_Layout
+      themeColor='var(--theme-color)'
+      onClose={onClose}
+      RenderIn={Toolbar}
+      items={items}
+      listLayout={listLayout}
+      fullScreenId={fullScreenId}
+      contentHeight={contentHeight}
+    />
   );
 };
 
@@ -99,7 +63,6 @@ export default connect(({ ws, setting, list, subscribe }: any) => {
     listLayout: setting.listLayout,
     pageItems: list.pageItems,
     fullScreenId: list.fullScreenId,
-    activeId: list.activeId,
     showTodo: list.showTodo,
     subscribeData: subscribe.data,
     isOn: ws.isOn,

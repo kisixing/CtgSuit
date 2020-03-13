@@ -3,7 +3,6 @@ import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import { Button, Modal, Radio, Slider, Switch, Input, message } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import { Suit } from '@lianmed/lmg/lib/Ctg/Suit';
 // import { request } from '@lianmed/utils';
 import { WsService, IVolumeData } from '@lianmed/lmg/lib/services/WsService';
 const socket = WsService._this;
@@ -15,7 +14,6 @@ interface IProps {
   docid: string
   visible: boolean
   onCancel: () => void
-  suit: Suit
   volumeData: IVolumeData
   deviceno: number
   bedno: number

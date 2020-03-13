@@ -26,6 +26,7 @@
     "allowJs": true,
     "experimentalDecorators": true,
     "paths": {
+      "exclude": ["./node_modules/*"],
       "@/*": [
         "src/*"
       ]

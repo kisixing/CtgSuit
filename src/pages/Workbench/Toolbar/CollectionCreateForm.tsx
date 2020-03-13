@@ -11,7 +11,6 @@ import moment from 'moment';
 // import { request } from '@lianmed/utils';
 import request from '@/utils/request';
 import { stringify } from 'qs';
-import SettingStore from '@/utils/SettingStore';
 import { IWard } from "@/types";
 
 

@@ -1,19 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
+import ReactDOM from 'react-dom';
+import { BedStatus, ICacheItem, ICacheItemPregnancy } from "@lianmed/lmg/lib/services/WsService";
+
 import { Col } from 'antd';
-import Toolbar from './Toolbar/index';
-import { BedStatus } from "@lianmed/lmg/lib/services/WsService";
-import useFullScreen from "./useFullScreen";
-import { FetalItem } from "./types";
 import { Ctg_Item } from "@lianmed/pages";
 import { event } from "@lianmed/utils";
-const styles = require('./Toolbar/Toolbar.less')
-const WorkbenchItem = (props: FetalItem.IProps) => {
-  const { fullScreenId, activeId, itemHeight, itemSpan, outPadding, data, bedname, isTodo, docid, ismulti, status, unitId, isOn, ...others } = props;
+
+type clickCb = ((event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void)
+
+interface IProps {
+  loading: boolean
+  onClose: (data: any) => void
+  itemData: any
+  children: React.ReactNode
+  startTime: string
+  pregnancy: ICacheItemPregnancy
+
+  data: ICacheItem
+  bedname: string
+  unitId: string
+  isTodo: boolean
+  ismulti: boolean
+  docid: string
+  status: BedStatus
+
+  outPadding: number
+  fullScreenId: string
+  itemHeight: number
+  itemSpan: number
+}
+
+
+const WorkbenchItem = (props: IProps) => {
+  const { itemData, onClose, loading = false, fullScreenId, itemHeight, itemSpan, outPadding, data, bedname, isTodo, docid, ismulti, status, unitId, ...others } = props;
   let { startTime, pregnancy } = props
 
-  const [so, setSo] = useState({ suit: null })
-  const [ref, fullScreen] = useFullScreen(fullScreenId, unitId, activeId)
-  const [spinning, setSpinning] = useState(false);
 
   let w: any = window
   const k = `spinfo_${unitId}`
@@ -25,10 +46,26 @@ const WorkbenchItem = (props: FetalItem.IProps) => {
     Object.assign(c, { pregnancy: { ...pregnancy, pvId: null }, startTime })
   }
 
-
+  // -------------------
+  const ref = useRef(null)
+  const fullScreen: clickCb = useCallback(
+    (e) => {
+      const el = ReactDOM.findDOMNode(ref.current);
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      } else {
+        el.requestFullscreen();
+      }
+    }, []
+  )
+  useEffect(() => {
+    if (fullScreenId === unitId) {
+      fullScreen(null);
+      event.emit('bedFullScreen', unitId)
+    }
+  }, [fullScreenId])
   return (
     <Col
-      className={styles.col}
       span={itemSpan}
       ref={ref}
       style={{ padding: outPadding, height: itemHeight, background: `var(--theme-light-color)`, position: 'relative' }}
@@ -39,28 +76,21 @@ const WorkbenchItem = (props: FetalItem.IProps) => {
         name={pregnancy.name}
         age={pregnancy.age as any}
         bedname={bedname}
-        status={isOn ? status : null}
+        status={status}
         data={data}
         onDoubleClick={fullScreen}
-        loading={spinning}
+        loading={loading}
         bedNO={pregnancy.bedNO}
         GP={pregnancy.GP}
         gestationalWeek={pregnancy.gestationalWeek}
-        onSuitRead={suit => setSo({ suit })}
-        onClose={() => { event.emit('bedClose', unitId, status, isTodo, docid) }}
-      />
-      <Toolbar
-        {...others}
-        startTime={startTime}
-        status={status}
-        bedname={bedname}
-        isTodo={isTodo}
-        suitObject={so}
-        showLoading={setSpinning}
-        unitId={unitId}
-        docid={docid}
-        pregnancy={pregnancy}
-      />
+        // onClose={() => { event.emit('bedClose', unitId, status, isTodo, docid) }}
+        onClose={() => onClose(itemData)}
+      >
+        {
+          props.children
+        }
+      </Ctg_Item>
+
     </Col >
   );
 }

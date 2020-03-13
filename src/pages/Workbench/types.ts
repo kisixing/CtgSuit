@@ -2,28 +2,33 @@ import { BedStatus, ICacheItem, IVolumeData, ICacheItemPregnancy } from "@lianme
 import { Suit } from "@lianmed/lmg/lib/Ctg/Suit";
 
 export namespace FetalItem {
+
+
+
     export interface IProps {
-        is_include_tocozero: boolean
-        is_include_volume: boolean
-        volumeData?: IVolumeData
+        loading: boolean
+        // is_include_tocozero: boolean
+        // is_include_volume: boolean
+        // volumeData?: IVolumeData
+        // bedno: string
+        // deviceno: string
+        children: React.ReactNode
+        startTime: string
+        pregnancy: ICacheItemPregnancy
+
         data: ICacheItem
         bedname: string
-        bedno: string
         unitId: string
         isTodo: boolean
         ismulti: boolean
-        deviceno: string
         docid: string
         status: BedStatus
 
-        startTime: string
         outPadding: number
         fullScreenId: string
-        activeId: string
         itemHeight: number
         itemSpan: number
         isOn: boolean
-        pregnancy: ICacheItemPregnancy
     }
 
 
@@ -39,11 +44,10 @@ export namespace FetalItem {
 
     }
     export interface IToolbarProps {
+        itemData:any
         is_include_tocozero: boolean
         is_include_volume: boolean
         volumeData?: IVolumeData
-        suitObject: { suit: Suit }
-        showLoading: (s: boolean) => void
         isTodo: boolean
         startTime: string
         unitId: string
@@ -53,6 +57,8 @@ export namespace FetalItem {
         docid: string
         status: BedStatus
         pregnancy: ICacheItemPregnancy
-
+        mutableSuit?: any
+        showBar?: boolean
+        menusStyle?: React.CSSProperties
     }
 }  

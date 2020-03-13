@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, memo } from 'react';
 import { Icon as LegacyIcon } from '@ant-design/compatible';
 import { Button, message } from 'antd';
 import moment from 'moment';
@@ -7,7 +7,6 @@ import request from '@/utils/request';
 import CollectionCreateForm from './CollectionCreateForm';
 import Analysis from '../Analysis';
 import PrintPreview from '../PrintPreview';
-import Partogram from './Partogram';
 import ModalConfirm from './ModalConfirm';
 import SignModal from './SignModal';
 import SoundModal from './SoundModal';
@@ -16,11 +15,11 @@ import { BedStatus } from '@lianmed/lmg/lib/services/WsService';
 import { FetalItem } from "../types";
 import { ButtonProps } from 'antd/lib/button';
 import { useJb } from "./useJb";
-const styles = require('./Toolbar.less');
+
 const socket = WsService._this;
 
 function Toolbar(props: FetalItem.IToolbarProps) {
-  const [showSetting, setShowSetting] = useState(false)
+
   const [tocozeroLoading, setTocozeroLoading] = useState(false)
   const [volumeDataLoading, setVolumeDataLoading] = useState(false)
   const [isStopMonitorWhenCreated, setIsStopMonitorWhenCreated] = useState(false)
@@ -34,21 +33,30 @@ function Toolbar(props: FetalItem.IToolbarProps) {
     setModalName('confirmVisible');
   };
   const {
-    showLoading,
-    isTodo,
-    startTime,
-    suitObject,
-    docid,
-    status,
-    unitId,
-    deviceno,
-    bedno,
-    bedname,
-    is_include_tocozero,
-    is_include_volume,
-    volumeData,
-    pregnancy
+
+
+    mutableSuit,
+    itemData,
   } = props
+
+
+
+
+
+  const { data, bedname, prenatalVisit, bedno, isTodo,unitId } = itemData;
+
+  const safePregnancy = data.pregnancy || { pvId: null, age: null, name: null, inpatientNO: null, bedNO: null, id: null, GP: null, gestationalWeek: null }
+  // const safePrenatalVisit = prenatalVisit || { gestationalWeek: null, }
+  const docid = data.docid
+  const startTime = data.starttime
+  const status = data.status
+
+  const volumeData = data.volumeData
+  const is_include_tocozero = data.is_include_tocozero
+  const is_include_volume = data.is_include_volume
+  const deviceno = itemData.deviceno
+  const pregnancy = safePregnancy
+
   const {
     inpatientNO,
     name,
@@ -57,8 +65,17 @@ function Toolbar(props: FetalItem.IToolbarProps) {
     id: pregnancyId,
     pvId
   } = pregnancy
+
+
+
+
+
+
+
+
+
+
   const { jbLoading, jb } = useJb(pregnancyId, pvId)
-  const timeout = useRef(null)
   const isWorking = status === BedStatus.Working;
   const isOffline = status === BedStatus.Offline;
   const isStopped = status === BedStatus.Stopped;
@@ -83,25 +100,18 @@ function Toolbar(props: FetalItem.IToolbarProps) {
 
 
 
-  const autoHide = () => {
-    clearTimeout(timeout.current);
-    timeout.current = setTimeout(() => {
-      setShowSetting(false)
-    }, 15000);
-  };
-  const toggleTool = () => {
-    setShowSetting(!showSetting);
-    autoHide();
-  };
+
 
   const handleCancel = () => setModalName('');
 
-
+  const showLoading = (id) => {
+    event.emit(`showLoading`, id)
+  }
   const start = () => {
-    showLoading(true);
+    showLoading(docid);
     socket.startwork(deviceno, bedno);
     setTimeout(() => {
-      showLoading(false);
+      showLoading(null);
     }, 1500);
   };
 
@@ -159,52 +169,34 @@ function Toolbar(props: FetalItem.IToolbarProps) {
 
 
   const B = (p: ButtonProps) => <Button style={{ padding: '0 8px' }} {...p} disabled={p.disabled || (isOfflineStopped && !pregnancyId)}>{p.children}</Button>
-  const fp = 12
   return <>
-    <div
-      style={{
-        position: 'absolute',
-        left: 5 * fp,
-        bottom: 2 * fp,
-        // right: 3 * @float-padding + 60px,
-        zIndex: 9,
-        height: 32,
-        width: showSetting ? `calc(100% - ${4 * fp}px - 36px)` : 0,
-        background: '#fff',
-        overflow: 'hidden',
-        borderRadius: 3,
-        boxShadow: '#aaa 3px 3px 5px 1px',
-        opacity: showSetting ? 1 : 0,
-        transition: 'all 0.2s ease-out',
-      }}
+    {isWorking || isOffline ? (
+      <B icon={<LegacyIcon type="pause-circle" />} type="link" onClick={() => setModalName('confirmVisible')}>
+        停止监护
+        </B>
+    ) : (
+        <B disabled={!isStopped} icon={<LegacyIcon type="play-circle" />} type="link" onClick={start}>
+          开始监护
+        </B>
+      )}
+    {/* 停止状态下不可以建档，监护、离线都是可以建档的 */}
+
+    <B icon={<LegacyIcon type={jbLoading ? 'loading' : 'user-add'} />} type="link" disabled={(isCreated && !pvId) || isStopped} onClick={() => {
+      isCreated ? jb() : setModalName('visible')
+    }}>
+      {isCreated ? '解绑' : '建档'}
+    </B>
+
+
+    <B
+      disabled={!isCreated}
+      icon={<LegacyIcon type="pushpin" />}
+      type="link"
+      onClick={() => setModalName('signVisible')}
     >
-      {isWorking || isOffline ? (
-        <B icon={<LegacyIcon type="pause-circle" />} type="link" onClick={() => setModalName('confirmVisible')}>
-          停止监护
-        </B>
-      ) : (
-          <B disabled={!isStopped} icon={<LegacyIcon type="play-circle" />} type="link" onClick={start}>
-            开始监护
-        </B>
-        )}
-      {/* 停止状态下不可以建档，监护、离线都是可以建档的 */}
-
-      <B icon={<LegacyIcon type={jbLoading ? 'loading' : 'user-add'} />} type="link" disabled={(isCreated && !pvId) || isStopped} onClick={() => {
-        isCreated ? jb() : setModalName('visible')
-      }}>
-        {isCreated ? '解绑' : '建档'}
+      胎位标记
       </B>
-
-
-      <B
-        disabled={!isCreated}
-        icon={<LegacyIcon type="pushpin" />}
-        type="link"
-        onClick={() => setModalName('signVisible')}
-      >
-        胎位标记
-      </B>
-      {/* <B
+    {/* <B
         disabled={!isCreated}
         icon="pie-chart"
         type="link"
@@ -213,75 +205,46 @@ function Toolbar(props: FetalItem.IToolbarProps) {
         电脑分析
       </B> */}
 
-      {/* O */}
-      <B
-        disabled={!isCreated}
-        icon={<LegacyIcon type="printer" />}
-        type="link"
-        onClick={() => setModalName('printVisible')}
-      >
-        报告
-      </B>
-      {
-        !!is_include_tocozero && <B
-          disabled={!is_include_tocozero}
-          icon={<LegacyIcon type={tocozeroLoading ? 'loading' : 'control'} />}
-          type="link"
-          onClick={setTocozero}
-        >
-          宫缩调零
-      </B>
-      }
-      {
-        !!is_include_volume && <B
-          // disabled={!isCreated}
-
-          icon={<LegacyIcon type={volumeDataLoading ? 'loading' : 'sound'} />}
-          type="link"
-          onClick={() => {
-            socket.getVolume(+deviceno, +bedno)
-            setVolumeDataLoading(true)
-            setTimeout(() => {
-              setVolumeDataLoading(false)
-              setModalName('soundVisible')
-            }, 1200);
-          }}
-          disabled={!is_include_volume}
-        >
-          音量调节
-      </B>
-      }
-      {/* <Button
-          disabled={!isCreated}
-          icon="line-chart"
-          type="link"
-          onClick={() => showModal('partogramVisible')}
-        >
-          产程图
-        </Button> */}
-      {/* <Link to="">
-          <Button icon="reconciliation" type="link">
-            事件记录
-          </Button>
-        </Link> */}
-    </div>
-    <div
-      style={{
-        position: 'absolute',
-        bottom: 2 * fp,
-        left: 2 * fp,
-        zIndex: 99,
-      }}
+    {/* O */}
+    <B
+      disabled={!isCreated}
+      icon={<LegacyIcon type="printer" />}
+      type="link"
+      onClick={() => setModalName('printVisible')}
     >
-      <Button
-        icon={<LegacyIcon type={showSetting ? 'left' : 'right'} />}
-        shape={showSetting ? 'circle' : null}
-        style={{ boxShadow: '#aaa 3px 3px 5px 1px' }}
-        className={styles.btn}
-        type="primary"
-        onClick={toggleTool}
-      />
-    </div>
+      报告
+      </B>
+    {
+      !!is_include_tocozero && <B
+        disabled={!is_include_tocozero}
+        icon={<LegacyIcon type={tocozeroLoading ? 'loading' : 'control'} />}
+        type="link"
+        onClick={setTocozero}
+      >
+        宫缩调零
+      </B>
+    }
+    {
+      !!is_include_volume && <B
+        // disabled={!isCreated}
+
+        icon={<LegacyIcon type={volumeDataLoading ? 'loading' : 'sound'} />}
+        type="link"
+        onClick={() => {
+          socket.getVolume(+deviceno, +bedno)
+          setVolumeDataLoading(true)
+          setTimeout(() => {
+            setVolumeDataLoading(false)
+            setModalName('soundVisible')
+          }, 1200);
+        }}
+        disabled={!is_include_volume}
+      >
+        音量调节
+      </B>
+    }
+
+
     <CollectionCreateForm
       visible={modalName === 'visible'}
       onCancel={() => {
@@ -325,12 +288,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
       gestationalWeek={gestationalWeek}
       startTime={startTime}
     />
-    <Partogram
-      visible={modalName === 'partogramVisible'}
-      onCancel={handleCancel}
-      bedname={bedname}
-      pregnancyId={pregnancyId}
-    />
+
     <ModalConfirm
       visible={modalName === 'confirmVisible'}
       bedname={bedname}
@@ -349,7 +307,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
       startTime={startTime}
       bedname={bedname}
       docid={docid}
-      suit={suitObject.suit}
+      suit={mutableSuit}
     />
     <SoundModal
       deviceno={+deviceno}
@@ -362,9 +320,8 @@ function Toolbar(props: FetalItem.IToolbarProps) {
       startTime={startTime}
       bedname={bedname}
       docid={docid}
-      suit={suitObject.suit}
     />
   </>;
 }
 
-export default Toolbar
+export default memo(Toolbar)

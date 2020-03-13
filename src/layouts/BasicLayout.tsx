@@ -28,7 +28,7 @@ const BasicLayout = (props: any) => {
 
     ipcRenderer.on('getToken', e => {
       const r = remote.getGlobal('windows').remote
-      r.send('token', request.configure)
+      r.send('token', {...request.configure,prefix:`${settingData['remote_url']}/api`})
     })
   }, [])
   useLayoutEffect(() => {

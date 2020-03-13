@@ -15,10 +15,11 @@ interface IProps {
   docid: string
   visible: boolean
   onCancel: () => void
-  suit: Suit
+  suit: React.MutableRefObject<Suit>
 }
 
 export const SignModal = (props: IProps) => {
+  console.log('ggg', props.suit, (props as any).mutableSuit)
   const { form, startTime, bedname, docid, visible, onCancel, suit } = props;
   const handleCreate = () => {
     form.validateFields(async (err, values) => {
@@ -31,7 +32,7 @@ export const SignModal = (props: IProps) => {
         }
       });
       const position = { ...values }; // JSON.parse(values.fetalposition);
-      suit.setfetalposition(position.fhr1, position.fhr2, position.fhr3);
+      suit.current.setfetalposition(position.fhr1, position.fhr2, position.fhr3);
     });
   };
 

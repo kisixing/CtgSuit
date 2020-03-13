@@ -65,7 +65,6 @@ export default function ModalConfirm({
       closable
       width={416}
       visible={visible}
-      maskClosable={false}
       footer={null}
       okText="创建"
       cancelText="取消"
