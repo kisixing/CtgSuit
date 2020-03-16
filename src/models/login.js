@@ -65,7 +65,7 @@ export default {
       }
     },
     *logout(_, { put }) {
-      localStorage.removeItem('Lian-Med-Access-Token')
+      localStorage.removeItem(require('@lianmed/utils').TOKEN_KEY)
       yield put({
         type: 'global/updateState',
         payload: {

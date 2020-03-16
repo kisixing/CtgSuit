@@ -5,7 +5,7 @@ import { Icon as LegacyIcon } from '@ant-design/compatible';
 import { Menu, Modal, Avatar, Spin } from 'antd';
 import { connect } from 'dva';
 import { router } from 'umi';
-import store from 'store';
+
 import { ipcRenderer } from 'electron';
 import HeaderDropdown from '@/components/HeaderDropdown';
 // import logo from '../assets/logo.png';
@@ -29,7 +29,7 @@ const A = (props: any) => {
         cancelText: '取消',
         onOk: function () {
           // 清除sessionStorage
-          localStorage.removeItem('Lian-Med-Access-Token')
+          localStorage.removeItem(require('@lianmed/utils').TOKEN_KEY)
           // 退出登录，关闭应用
           ipcRenderer.send('closeMainWindow');
         },
@@ -46,7 +46,7 @@ const A = (props: any) => {
         onOk: function () {
           // 清除sessionStorage
           // store.clearAll();
-          localStorage.removeItem('Lian-Med-Access-Token')
+          localStorage.removeItem(require('@lianmed/utils').TOKEN_KEY)
           // 退出登录，回到登录页面
           router.push('/user/login');
         },

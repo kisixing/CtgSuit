@@ -8,7 +8,7 @@ import settingStore from "@/utils/SettingStore";
 import VersionModal from "@/components/VersionModal";
 import config from '@/utils/config';
 import LayoutSetting from './LayoutSetting';
-
+import request from "@lianmed/request";
 const styles = require('./BasicLayout.less')
 
 const settingData = settingStore.cache
@@ -59,6 +59,16 @@ const Foot = (props: any) => {
             icon={<LegacyIcon type="question-circle" />}
             type="primary"
             onClick={() => ipcRenderer.send('newWindow', 'help')}
+          />
+          <Button
+            icon={<LegacyIcon type="question-circle" />}
+            type="primary"
+            onClick={() => request.post('/serviceorders/ctg-apply',{data:{
+              pregnancyid:4194,
+              packageorderid:3,
+              visitid:10781,
+
+            }})}
           />
         </span>
         <span>

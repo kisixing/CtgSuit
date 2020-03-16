@@ -1,22 +1,22 @@
-import React, { useLayoutEffect, useEffect } from 'react';
-import { Layout, Button } from 'antd';
-import { AlertOutlined } from "@ant-design/icons";
-import { connect } from 'dva';
-import { router } from 'umi';
-import withRouter from 'umi/withRouter';
-import store from 'store';
-
-import qs from "qs";
 import settingStore from "@/utils/SettingStore";
 import { uncompile } from '@/utils/utils';
+import { AlertOutlined } from "@ant-design/icons";
 import { WsService } from "@lianmed/lmg";
+import request from "@lianmed/request";
+import { Button, Layout } from 'antd';
+import { connect } from 'dva';
+import { ipcRenderer, remote } from 'electron';
+import qs from "qs";
+import React, { useEffect, useLayoutEffect } from 'react';
+import store from 'store';
+import { router } from 'umi';
+import withRouter from 'umi/withRouter';
 import CheckNetwork from "./CheckNetwork";
 import Foot from "./Foot";
 import Head from "./Head";
 import Side from "./Side";
 import useAlarm from "./useAlarm";
-import { ipcRenderer, remote } from 'electron';
-import request from "@lianmed/request";
+import RightFixed from "./RightFixed";
 const styles = require('./BasicLayout.less')
 const EWsStatus = WsService.wsStatus
 const settingData = settingStore.cache
@@ -88,7 +88,9 @@ const BasicLayout = (props: any) => {
         {fashionable && <Side />}
         <Layout>
           <Head />
-          <Content className={styles.main}>{children}</Content>
+          {/* <Content className={styles.main}>{children}</Content> */}
+          <RightFixed />
+          {/* <div style={{position:'fixed',right:0,bottom:60,width:10,height:40,background:'var(--theme-color)',lineHeight:'40px',color:'#fff',textAlign:'center',cursor:'pointer'}}>||</div> */}
         </Layout>
       </Layout>
       <Foot />

@@ -8,11 +8,14 @@ const AuthComponent = ({ children, isLogin }) => {
   return (
     <Fragment>
       {isLogin ? null : <Loader />}
-      {isLogin && !!store.get('ward') ? (
-        children
-      ) : (
-        <Redirect to="/user/login" />
-      )}
+
+      {
+        // eslint-disable-next-line
+        isLogin && (!!store.get('ward') || __DEV__) ? (
+          children
+        ) : (
+            <Redirect to="/user/login" />
+          )}
     </Fragment>
   );
 };

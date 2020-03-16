@@ -131,7 +131,7 @@ const Login = (props: IProps) => {
         </FormItem>
         <FormItem hasFeedback name="id" rules={[
           {
-            required: true,
+            required: !__DEV__,
             message: '请选择病区！',
           }
         ]}>
