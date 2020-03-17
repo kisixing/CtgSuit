@@ -53,6 +53,7 @@
     "react-pdf": "^4.1.0",
     "run-electron": "^1.0.0",
     "store": "^2.0.12",
+    "styled-components": "^5.0.1",
     "umi-request": "^1.2.2"
   },
   "devDependencies": {

@@ -1,7 +1,7 @@
 import settingStore from "@/utils/SettingStore";
 import { WsService } from "@lianmed/lmg";
 import { IWard } from "@/types";
-import { request } from "@lianmed/utils";
+import request from "@lianmed/request";
 import store from 'store'
 export default {
     namespace: 'subscribe',

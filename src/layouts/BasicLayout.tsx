@@ -14,9 +14,11 @@ import withRouter from 'umi/withRouter';
 import CheckNetwork from "./CheckNetwork";
 import Foot from "./Foot";
 import Head from "./Head";
+import RightFixed from "./RightFixed";
 import Side from "./Side";
 import useAlarm from "./useAlarm";
-import RightFixed from "./RightFixed";
+import { useStomp } from "./useStomp";
+import { useContextValue, context } from "../contexts";
 const styles = require('./BasicLayout.less')
 const EWsStatus = WsService.wsStatus
 const settingData = settingStore.cache
@@ -24,11 +26,13 @@ const { Content } = Layout;
 const { EWsEvents } = WsService
 const BasicLayout = (props: any) => {
   const { dispatch, fashionable, children, wsStatus, listData, isLogin } = props;
-  useEffect(() => {
+  const v = useContextValue()
+  useStomp(v.visitedData)
 
+  useEffect(() => {
     ipcRenderer.on('getToken', e => {
       const r = remote.getGlobal('windows').remote
-      r.send('token', {...request.configure,prefix:`${settingData['remote_url']}/api`})
+      r.send('token', { ...request.configure, prefix: `${settingData['remote_url']}/api` })
     })
   }, [])
   useLayoutEffect(() => {
@@ -72,30 +76,32 @@ const BasicLayout = (props: any) => {
   useAlarm(listData);
 
   return (
-    <Layout
-      className={styles.container}
-      onClickCapture={e => {
-        // if (wsStatus !== EWsStatus.Success) {
-        //   // e.stopPropagation()
-        //   notification.warning({
-        //     message: '未建立链接, 请联系支持人员',
-        //   });
-        // }
-      }}
-    >
-      <CheckNetwork visible={wsStatus !== EWsStatus.Success} />
-      <Layout>
-        {fashionable && <Side />}
+    <context.Provider value={v} >
+      <Layout
+        className={styles.container}
+        onClickCapture={e => {
+          // if (wsStatus !== EWsStatus.Success) {
+          //   // e.stopPropagation()
+          //   notification.warning({
+          //     message: '未建立链接, 请联系支持人员',
+          //   });
+          // }
+        }}
+      >
+        <CheckNetwork visible={wsStatus !== EWsStatus.Success} />
         <Layout>
-          <Head />
-          {/* <Content className={styles.main}>{children}</Content> */}
-          <RightFixed />
-          {/* <div style={{position:'fixed',right:0,bottom:60,width:10,height:40,background:'var(--theme-color)',lineHeight:'40px',color:'#fff',textAlign:'center',cursor:'pointer'}}>||</div> */}
+          {fashionable && <Side />}
+          <Layout>
+            <Head />
+            <Content className={styles.main}>{children}</Content>
+            <RightFixed />
+            {/* <div style={{position:'fixed',right:0,bottom:60,width:10,height:40,background:'var(--theme-color)',lineHeight:'40px',color:'#fff',textAlign:'center',cursor:'pointer'}}>||</div> */}
+          </Layout>
         </Layout>
+        <Foot />
+        {/* <Button onClick={() => { ipcRenderer.send('newWindow', 'remote', { search: qs.stringify({ 'token': 123 }) }) }} type="primary" icon={<AlertOutlined />} shape="circle" size="large" style={{ position: 'fixed', bottom: 40, right: 10 }}></Button> */}
       </Layout>
-      <Foot />
-      <Button onClick={() => { ipcRenderer.send('newWindow', 'remote', { search: qs.stringify({ 'token': 123 }) }) }} type="primary" icon={<AlertOutlined />} shape="circle" size="large" style={{ position: 'fixed', bottom: 40, right: 10 }}></Button>
-    </Layout>
+    </context.Provider>
   );
 }
 

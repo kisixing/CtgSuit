@@ -1,10 +1,10 @@
-import React, { memo, useRef, useState, useCallback, useEffect } from 'react';
-import { Popconfirm, Button, Modal, Form, Input, Tooltip } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
+import { Form, Input, Modal, Tooltip } from "antd";
+import React, { memo, useCallback, useContext, useState } from 'react';
 import styled from "styled-components";
-import request from '@lianmed/request';
+import { context } from "../contexts";
 // import { Icon as LegacyIcon } from '@ant-design/compatible';
-// import { ipcRenderer } from 'electron';
+import { ipcRenderer } from 'electron';
 
 // import settingStore from "@/utils/SettingStore";
 
@@ -54,73 +54,22 @@ img {
     display:none;
 }
 `
-const data = [
-    {
-        url: 'http://www.baidu.com',
-        name: 'baidu'
-    },
-    // {
-    //     url: 'http://localhost:3000/remote/index.html',
-    //     name: 'remote'
-    // },
-    {
-        url: 'http://ccs.lian-med.com/zentaopms/www/user-login-L3plbnRhb3Btcy93d3cv.html',
-        name: 'ccs'
-    },
-
-]
 
 const Foot = (props: any) => {
     const [visible, setVisible] = useState(false)
     const toggleVisible = useCallback(() => setVisible(!visible), [visible])
 
-    const [metaData, setMetaData] = useState<{ title?: string, iconUrl?: string, url?: string, name?: string }[]>([])
-
-
-    useEffect(() => {
-        const d = []
-        Promise.all(
-            data.map(_ => {
-                return request.get('', { prefix: _.url }).then(raw => {
-                    if (raw) {
-                        let iconUrl = ''
-                        const origin = new URL(_.url).origin
-                        const el = document.createElement('html')
-                        el.innerHTML = raw
-                        const l: HTMLLinkElement = el.querySelector('link[rel=icon]')
-                        if (l) {
-                            let href = l.getAttribute('href')
-                            if (href.includes('//')) {
-                                iconUrl = href
-                            } else {
-                                iconUrl = `${origin}${l.getAttribute('href')}`
-                            }
-                        }
-                        const t: HTMLTitleElement = el.querySelector('title')
-                        const title = t && t.innerText
-                        return ({
-                            ..._, title, iconUrl
-                        })
-                    } else {
-                        return _
-                    }
-                })
-            })
-        ).then(d => {
-            setMetaData(d)
-        })
-
-
-    }, [])
+    const { visitedData } = useContext(context)
 
 
 
 
 
 
-    const B = ({ iconUrl = '', title = '' }) => {
+
+    const B = ({ iconUrl = '', title = '', name = '', url = '' }) => {
         return (
-            <div className="b" onClick={() => alert('')}>
+            <div title={title} className="b" onClick={() => ipcRenderer.send('open', { url, title, name })}>
                 <div style={{ display: 'flex', alignItems: 'center', flexFlow: 'column nowrap' }}>
                     <img src={iconUrl} />
                     <div className="title">
@@ -140,8 +89,8 @@ const Foot = (props: any) => {
         return (
             <Wrapper style={{ display: 'flex', width: 340, flexWrap: 'wrap' }}>
                 {
-                    metaData.map(_ => (
-                        <B title={_.title} iconUrl={_.iconUrl} key={_.name} />
+                    visitedData.map(_ => (
+                        <B {..._} key={_.name} />
                     ))
                 }
             </Wrapper>

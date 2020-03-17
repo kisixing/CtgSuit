@@ -23,8 +23,12 @@ const data = [
     name: 'remote_url',
     addonBefore: 'http://',
     label: '远程地址',
-
-  }
+  },
+  {
+    name: 'stomp_url',
+    addonBefore: 'http://',
+    label: 'stomp地址',
+  },
 ]
 const Network: FunctionComponent = (props) => {
   const [form] = Form.useForm()
