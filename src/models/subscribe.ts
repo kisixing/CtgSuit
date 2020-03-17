@@ -3,6 +3,9 @@ import { WsService } from "@lianmed/lmg";
 import { IWard } from "@/types";
 import request from "@lianmed/request";
 import store from 'store'
+import { router } from 'umi';
+declare var __DEV__: boolean;
+
 export default {
     namespace: 'subscribe',
     state: {
@@ -28,7 +31,11 @@ export default {
         },
         *update(payload, { put }) {
             const ward = store.get('ward') || { id: '' }
-            const data: IWard = yield request.get(`/wards/${ward.id}`)
+            const data: IWard = yield request.get(`/wards/${ward.id}`).catch(() => {
+                if (__DEV__) return
+                localStorage.removeItem(require('@lianmed/utils').TOKEN_KEY)
+                router.push('/user/login');
+            })
             const { note, wardType, wardId } = data
             yield put({ type: 'setData', note })
         }

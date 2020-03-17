@@ -1,6 +1,6 @@
 {
   "name": "ctgsuit-electron",
-  "version": "1.6.2",
+  "version": "1.6.9",
   "description": "host replace pack",
   "details": [],
   "main": "main/index.js",

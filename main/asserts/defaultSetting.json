@@ -1,6 +1,7 @@
 {
     "ws_url": "192.168.123.10:9986",
     "xhr_url": "192.168.123.10:9987",
+    "stomp_url": "transfer.lian-med.com:9987",
     "remote_url":"transfer.lian-med.com:9987",
     "print_interval": "20",
     "theme": "#4a148c",

@@ -59,7 +59,7 @@ const A = (props: any) => {
     <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
       <Menu.Item key="signout">
         <LegacyIcon type="user" />
-        <span>重新登录</span>
+        <span>重新登陆</span>
       </Menu.Item>
       <Menu.Divider />
       <Menu.Item key="logout">

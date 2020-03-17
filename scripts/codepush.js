@@ -48,7 +48,7 @@ function flash(target) {
     });
     const options = {
         method: "POST",
-        url: `http://${config.xhr_url}/api/upload`,
+        url: `http://${'192.168.123.10:9987'||config.xhr_url}/api/upload`,
         headers: {
             "Content-Type": "multipart/form-data"
         },
