@@ -3,10 +3,9 @@ import { Menu, Spin, Button, Popconfirm } from 'antd';
 import moment from 'moment';
 import PreviewContent from "@lianmed/pages/lib/Ctg/Report/Panel/PreviewContent";
 import Shell from "../Workbench/Analysis/Shell";
-import { request } from "@lianmed/utils";
+import request from "@lianmed/request";
 import PrintPreview from "../Workbench/PrintPreview";
 import { event } from '@lianmed/utils';
-import config from '@/utils/config';
 
 interface IReport {
   valid?: boolean
