@@ -1,7 +1,7 @@
 /**
  * 胎监主页PDA建档/绑定弹窗
  */
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import { Button, Modal, Input, Row, Col, InputNumber, message, Table } from 'antd';
@@ -582,4 +582,4 @@ const CollectionCreateForm = (props: IProps) => {
   );
 }
 
-export default Form.create<IProps>()(CollectionCreateForm);
+export default memo(Form.create<IProps>()(CollectionCreateForm))

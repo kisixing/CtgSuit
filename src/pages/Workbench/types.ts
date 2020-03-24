@@ -58,7 +58,5 @@ export namespace FetalItem {
         status: BedStatus
         pregnancy: ICacheItemPregnancy
         mutableSuit?: any
-        showBar?: boolean
-        menusStyle?: React.CSSProperties
     }
 }  

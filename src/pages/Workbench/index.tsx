@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useMemo, useCallback } from 'react';
 
 import { connect } from 'react-redux';
 import { IBed } from '@/types';
@@ -23,9 +23,11 @@ const Home = (props: IProps) => {
     setcontentHeight(document.querySelector('main').clientHeight)
   }, [headCollapsed])
 
-  const items: any[] = (showTodo ? todo : pageItems).map(_ => ({ ..._, data: { ..._.data, status: isOn ? _.data.status : null } }));
+  const items: any[] = useMemo(() => (showTodo ? todo : pageItems), [pageItems, todo, isOn]);
 
-
+useEffect(() => {
+  console.log('jjj','-------')
+}, [pageItems])
 
   useEffect(() => {
     const endCb = (unitId, status, isCreated) => status === BedStatus.Offline && dispatch({ type: 'list/appendOffline', unitId, })
@@ -34,8 +36,7 @@ const Home = (props: IProps) => {
     event.on('bedEnd', endCb).on('bedFullScreen', fullScreenCb)
     return () => event.off('bedEnd', endCb).off('bedFullScreen', fullScreenCb)
   }, [])
-  const onClose = ({ unitId, status, isTodo, docid }: any) => {
-    console.log('ddddddd', unitId, status, isTodo, docid)
+  const onClose = useCallback(({ unitId, status, isTodo, docid }: any) => {
     if (isTodo) {
       event.emit('todo:discard', docid)
     } else {
@@ -44,7 +45,7 @@ const Home = (props: IProps) => {
       }
       [BedStatus.Stopped, BedStatus.OfflineStopped].includes(status) ? cb() : event.emit(`bedClose:${unitId}`, cb)
     }
-  }
+  }, [])
   return (
     <Ctg_Layout
       themeColor='var(--theme-color)'

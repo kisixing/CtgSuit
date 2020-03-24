@@ -1,11 +1,11 @@
 import { log } from "./log";
+import { get } from "http";
+import { tmp, config } from "../config/path";
 const fs = require('fs');
 const path = require('path')
-const http = require('http')
 const execFile = require('child_process').execFile;
 const url = require('url')
 const printerPath = require('../config/constant').PRINTER_PATH
-const { tmp } = require('../config/path')
 
 export const printerFatory = targetDir => {
     const tmpDir = targetDir === void 0 ? tmp : path.resolve(targetDir)
@@ -34,14 +34,14 @@ export const printerFatory = targetDir => {
                 console.log(`write error: ${err}`);
             })
         })
-        http.get(fileUrl, res => {
+        get(fileUrl, { headers: { Authorization: require(config).Authorization } }, res => {
             if (res) {
                 res.pipe(writeStream)
                 res.on('end', () => {
                     writeStream.end()
                 })
             }
-        })
+        }).on('error', e => console.log('eee', e))
     }
 }
 

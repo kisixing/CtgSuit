@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React,{memo} from 'react';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import { Button, Modal, Radio } from 'antd';
@@ -97,7 +97,7 @@ export const SignModal = (props: IProps) => {
   );
 }
 
-export default Form.create<any>()(SignModal);
+export default memo(Form.create<any>()(SignModal));
 
 const RadioGroup = ({ value = "", onChange = () => { } }) => {
   const itemStyle = {

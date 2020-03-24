@@ -6,6 +6,7 @@ import { TOKEN } from '@/utils/constant';
 import { compile } from '@/utils/utils';
 import { authenticate } from '@/services/api';
 import request from "@lianmed/request";
+import settingStore from "@/utils/SettingStore";
 export default {
   namespace: 'login',
   state: {
@@ -19,6 +20,7 @@ export default {
     *login({ payload }, { put, call }) {
       const auth = yield call(request.authenticate, payload);
       if (auth) {
+        settingStore.set('Authorization',auth)
         // 登录验证成功
         yield put({
           type: 'updateState',

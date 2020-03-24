@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, memo } from 'react';
+import React, { useState, useEffect, useRef, memo, useCallback } from 'react';
 import { Icon as LegacyIcon } from '@ant-design/compatible';
 import { Button, message } from 'antd';
 import moment from 'moment';
@@ -19,6 +19,7 @@ import { useJb } from "./useJb";
 const socket = WsService._this;
 
 function Toolbar(props: FetalItem.IToolbarProps) {
+  console.log('zzz 2')
 
   const [tocozeroLoading, setTocozeroLoading] = useState(false)
   const [volumeDataLoading, setVolumeDataLoading] = useState(false)
@@ -28,10 +29,13 @@ function Toolbar(props: FetalItem.IToolbarProps) {
 
 
 
-  const onclose = cb => {
-    endCb.current = cb;
-    setModalName('confirmVisible');
-  };
+  const onclose = useCallback(
+    cb => {
+      endCb.current = cb;
+      setModalName('confirmVisible');
+    },
+    [],
+  );
   const {
 
 
@@ -43,7 +47,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
 
 
 
-  const { data, bedname, prenatalVisit, bedno, isTodo,unitId } = itemData;
+  const { data, bedname, prenatalVisit, bedno, isTodo, unitId } = itemData;
 
   const safePregnancy = data.pregnancy || { pvId: null, age: null, name: null, inpatientNO: null, bedNO: null, id: null, GP: null, gestationalWeek: null }
   // const safePrenatalVisit = prenatalVisit || { gestationalWeek: null, }
@@ -102,7 +106,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
 
 
 
-  const handleCancel = () => setModalName('');
+  const handleCancel = useCallback(() => setModalName(''), []);
 
   const showLoading = (id) => {
     event.emit(`showLoading`, id)
