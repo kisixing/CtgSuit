@@ -43,11 +43,13 @@ const Foot = (props: any) => {
   const [startTime, setStartTime] = useState<string>(null)
   const [endTime, setEndTime] = useState<string>(null)
   const printCb = () => {
-    const ward = store.get('ward') || { id: '' };
-    if(!(endTime && startTime)){
+    const ward = store.get('ward') || { wardId: '' };
+    if (!(endTime && startTime)) {
       return message.info('请输入时间')
     }
-     printPdf(`/prenatal-visits-report?startTime=${startTime}&endTime=${endTime}&areaNo=${ward.id}`)
+    const url = `/prenatal-visits-report?startTime=${startTime}&endTime=${endTime}&areaNo=${ward.wardId}`
+    console.log('print',url)
+    printPdf(url)
   }
 
   return (

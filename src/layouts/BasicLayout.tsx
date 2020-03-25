@@ -27,7 +27,7 @@ const { EWsEvents } = WsService
 const BasicLayout = (props: any) => {
   const { dispatch, fashionable, children, wsStatus, listData, isLogin } = props;
   const v = useContextValue()
-  // useStomp(v.visitedData)
+  useStomp(v.visitedData)
 
   useEffect(() => {
     ipcRenderer.on('getToken', e => {

@@ -61,7 +61,7 @@ singleInstanceLock(mainWindow).then(app => {
             e.preventDefault();
           } else {
             mainWindow.webContents.executeJavaScript(`
-              localStorage.removeItem('Lian-Med-Access-Token');
+              localStorage.removeItem('Σ(っ °Д °;)っ');
           `)
             setTimeout(() => {
               mainWindow = null;

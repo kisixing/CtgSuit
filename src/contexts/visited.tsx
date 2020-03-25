@@ -40,36 +40,36 @@ export const useVisited = () => {
 
 
     useEffect(() => {
-        // Promise.all(
-        //     data.map(_ => {
-        //         return request.get('', { prefix: _.url, headers: { Origin: _.url, a: '123',Accept:'text/html' } }).then(raw => {
-        //             if (raw) {
-        //                 let iconUrl = ''
-        //                 const origin = new URL(_.url).origin
-        //                 const el = document.createElement('html')
-        //                 el.innerHTML = raw
-        //                 const l: HTMLLinkElement = el.querySelector('link[rel*=icon]')
-        //                 if (l) {
-        //                     let href = l.getAttribute('href')
-        //                     if (href.includes('//')) {
-        //                         iconUrl = href
-        //                     } else {
-        //                         iconUrl = `${origin}${l.getAttribute('href')}`
-        //                     }
-        //                 }
-        //                 const t: HTMLTitleElement = el.querySelector('title')
-        //                 const title = t && t.innerText
-        //                 return ({
-        //                     ..._, title, iconUrl
-        //                 })
-        //             } else {
-        //                 return _
-        //             }
-        //         }).catch(() => null)
-        //     })
-        // ).then(d => {
-        //     setVisitedData(d.filter(_ => !!_))
-        // })
+        Promise.all(
+            data.map(_ => {
+                return request.get('', { prefix: _.url, hideErr: true, headers: { Origin: _.url, a: '123', Accept: 'text/html' } }).then(raw => {
+                    if (raw) {
+                        let iconUrl = ''
+                        const origin = new URL(_.url).origin
+                        const el = document.createElement('html')
+                        el.innerHTML = raw
+                        const l: HTMLLinkElement = el.querySelector('link[rel*=icon]')
+                        if (l) {
+                            let href = l.getAttribute('href')
+                            if (href.includes('//')) {
+                                iconUrl = href
+                            } else {
+                                iconUrl = `${origin}${l.getAttribute('href')}`
+                            }
+                        }
+                        const t: HTMLTitleElement = el.querySelector('title')
+                        const title = t && t.innerText
+                        return ({
+                            ..._, title, iconUrl
+                        })
+                    } else {
+                        return _
+                    }
+                }).catch(() => null)
+            })
+        ).then(d => {
+            setVisitedData(d.filter(_ => !!_))
+        })
 
 
     }, [])

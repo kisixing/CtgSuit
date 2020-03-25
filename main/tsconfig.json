@@ -3,11 +3,12 @@
     "compilerOptions": {
       "outDir": "../app/main",
       "noImplicitAny": false,
+      "noUnusedLocals": false,
       "noUnusedParameters": false,
       "declarationMap": false,
       "sourceMap": false,
       "declaration": false,
-      "lib": ["DOM"]
+      "lib": ["DOM"],
     },
     "exclude": [
       "node_modules"
