@@ -1,32 +1,16 @@
 import request from "@lianmed/request";
 import React, { useEffect, useState } from "react";
 export type VisitedData = { title?: string, iconUrl?: string, url?: string, name?: string }[]
-
+import settingStore from "@/utils/SettingStore";
 const data = [
     {
-        url: 'http://yapi.lian-med.com:8080/project/16/interface/api/498',
-        name: 'github'
-    },
-    {
-        url: 'https://www.qq.com/?fromdefault',
-        name: 'ts'
-    },
-    {
-        url: 'http://192.168.123.48:3000/remote/index.html',
+        url: '/remote/index.html',
         name: 'remote'
     },
     {
-        url: 'http://192.168.123.48:3000/im/index.html',
+        url: '/im/index.html',
         name: 'im'
-    },
-    {
-        url: 'http://ccs.lian-med.com/zentaopms/www/user-login-L3plbnRhb3Btcy93d3cv.html',
-        name: 'ccs'
-    },
-    {
-        url: 'https://www.w3school.com.cn/index.html',
-        name: 'ttt'
-    },
+    }
 
 ]
 export const visitedContext = React.createContext<{ visitedData: VisitedData, setVisitedData: Function }>({
@@ -36,16 +20,24 @@ export const visitedContext = React.createContext<{ visitedData: VisitedData, se
 
 
 export const useVisited = () => {
+    const { stomp_url, public_url, remote_url } = settingStore.cache
     const [visitedData, setVisitedData] = useState<VisitedData>([])
 
 
     useEffect(() => {
         Promise.all(
             data.map(_ => {
-                return request.get('', { prefix: _.url, hideErr: true, headers: { Origin: _.url, a: '123', Accept: 'text/html' } }).then(raw => {
+                let url = _.url
+                const isAbs = url.startsWith('http')
+
+                if (!isAbs) {
+                    const absUrl = `http://${public_url}${url}`
+                    url = request.configToLocation(absUrl, { stomp_url, prefix: remote_url })
+                }
+                return request.get('', { prefix: url, hideErr: true, headers: { Origin: url, a: '123', Accept: 'text/html' } }).then(raw => {
                     if (raw) {
                         let iconUrl = ''
-                        const origin = new URL(_.url).origin
+                        const origin = new URL(url).origin
                         const el = document.createElement('html')
                         el.innerHTML = raw
                         const l: HTMLLinkElement = el.querySelector('link[rel*=icon]')
@@ -60,7 +52,7 @@ export const useVisited = () => {
                         const t: HTMLTitleElement = el.querySelector('title')
                         const title = t && t.innerText
                         return ({
-                            ..._, title, iconUrl
+                            ..._, url, title, iconUrl
                         })
                     } else {
                         return _

@@ -29,6 +29,11 @@ const data = [
     addonBefore: 'http://',
     label: 'stomp地址',
   },
+  {
+    name: 'public_url',
+    addonBefore: 'http://',
+    label: 'public_url地址',
+  },
 ]
 const Network: FunctionComponent = (props) => {
   const [form] = Form.useForm()

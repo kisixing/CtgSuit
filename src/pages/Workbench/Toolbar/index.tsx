@@ -57,6 +57,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
 
   const volumeData = data.volumeData
   const is_include_tocozero = data.is_include_tocozero
+  const disableStartWork = data.disableStartWork
   const is_include_volume = data.is_include_volume
   const deviceno = itemData.deviceno
   const pregnancy = safePregnancy
@@ -177,9 +178,9 @@ function Toolbar(props: FetalItem.IToolbarProps) {
     {isWorking || isOffline ? (
       <B icon={<LegacyIcon type="pause-circle" />} type="link" onClick={() => setModalName('confirmVisible')}>
         停止监护
-        </B>
+      </B>
     ) : (
-        <B disabled={!isStopped} icon={<LegacyIcon type="play-circle" />} type="link" onClick={start}>
+        <B disabled={!isStopped || !!disableStartWork} icon={<LegacyIcon type="play-circle" />} type="link" onClick={start}>
           开始监护
         </B>
       )}

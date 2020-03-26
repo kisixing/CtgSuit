@@ -94,7 +94,7 @@ const BasicLayout = (props: any) => {
           <Layout>
             <Head />
             <Content className={styles.main}>{children}</Content>
-            {/* <RightFixed /> */}
+            <RightFixed />
             {/* <div style={{position:'fixed',right:0,bottom:60,width:10,height:40,background:'var(--theme-color)',lineHeight:'40px',color:'#fff',textAlign:'center',cursor:'pointer'}}>||</div> */}
           </Layout>
         </Layout>

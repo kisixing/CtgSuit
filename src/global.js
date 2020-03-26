@@ -2,6 +2,7 @@ import { message,notification } from 'antd';
 import "antd/dist/antd.css";
 import { Suit } from "@lianmed/lmg/lib/Ctg/Suit";
 import store from "@/utils/SettingStore";
+import request from '@lianmed/request'
 Suit.option = store.cache
 message.config({
     top: 150,
@@ -10,7 +11,7 @@ message.config({
 notification.config({
     top: 136,
 });
-
+console.log('request11',request)
 
 // window.console.log = () => { }
 // var os = require('os')
