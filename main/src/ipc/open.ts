@@ -2,11 +2,14 @@ import { BrowserWindow } from 'electron';
 import { getMainWindow } from "../index";
 import { collecWebContentsId } from '../utils/globalMount';
 const cache: { [x: string]: BrowserWindow } = {}
-export default (event, { title, url, name }) => {
+export default (event, { title, url, name, reload = false }) => {
+    console.log(name, reload);
+
     const old = cache[name]
     if (old) {
         old.focus()
         old.restore()
+        reload && old.reload()
     } else {
         const mainWindow = getMainWindow();
         let newWindow = new BrowserWindow({

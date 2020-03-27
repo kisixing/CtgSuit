@@ -1,11 +1,15 @@
 import request from "@lianmed/request";
 import React, { useEffect, useState } from "react";
-export type VisitedData = { title?: string, iconUrl?: string, url?: string, name?: string }[]
 import settingStore from "@/utils/SettingStore";
+
+interface IVisit { title: string, iconUrl: string, url: string, name: string, reload: boolean }
+export type VisitedData = IVisit[]
+
 const data = [
     {
         url: '/remote/index.html',
-        name: 'remote'
+        name: 'remote',
+        reload: true
     },
     {
         url: '/im/index.html',
@@ -25,19 +29,18 @@ export const useVisited = () => {
 
 
     useEffect(() => {
-        Promise.all(
+        Promise.all<IVisit>(
             data.map(_ => {
                 let url = _.url
                 const isAbs = url.startsWith('http')
-
+                const absUrl = isAbs ? url : `http://${public_url}${url}`
                 if (!isAbs) {
-                    const absUrl = `http://${public_url}${url}`
                     url = request.configToLocation(absUrl, { stomp_url, prefix: remote_url })
                 }
-                return request.get('', { prefix: url, hideErr: true, headers: { Origin: url, a: '123', Accept: 'text/html' } }).then(raw => {
+                return request.get('', { prefix: absUrl, hideErr: true, headers: { Origin: url, a: '123', Accept: 'text/html' } }).then(raw => {
                     if (raw) {
                         let iconUrl = ''
-                        const origin = new URL(url).origin
+                        const origin = new URL(absUrl).origin
                         const el = document.createElement('html')
                         el.innerHTML = raw
                         const l: HTMLLinkElement = el.querySelector('link[rel*=icon]')

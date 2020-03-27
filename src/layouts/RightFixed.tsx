@@ -67,9 +67,9 @@ const Foot = (props: any) => {
 
 
 
-    const B = ({ iconUrl = '', title = '', name = '', url = '' }) => {
+    const B = ({ iconUrl = '', title = '', name = '', url = '', ...o }) => {
         return (
-            <div title={title} className="b" onClick={() => ipcRenderer.send('open', { url, title, name })}>
+            <div title={title} className="b" onClick={() => ipcRenderer.send('open', { ...o, url, title, name })}>
                 <div style={{ display: 'flex', alignItems: 'center', flexFlow: 'column nowrap' }}>
                     <img src={iconUrl} />
                     <div className="title">

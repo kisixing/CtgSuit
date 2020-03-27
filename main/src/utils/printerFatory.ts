@@ -10,7 +10,8 @@ const printerPath = require('../config/constant').PRINTER_PATH
 export const printerFatory = targetDir => {
     const tmpDir = targetDir === void 0 ? tmp : path.resolve(targetDir)
 
-    return fileUrl => {
+    return (fileUrl: string) => {
+        fileUrl = fileUrl.includes('http:') ? fileUrl : `http://${fileUrl}`
         if (!fs.existsSync(tmpDir)) {
             fs.mkdirSync(tmpDir)
         }
@@ -34,7 +35,8 @@ export const printerFatory = targetDir => {
                 console.log(`write error: ${err}`);
             })
         })
-        get(fileUrl, { headers: { Authorization: require(config).Authorization } }, res => {
+        console.log('print', fileUrl)
+        get(fileUrl, res => {
             if (res) {
                 res.pipe(writeStream)
                 res.on('end', () => {
