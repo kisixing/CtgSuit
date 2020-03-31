@@ -4,5 +4,6 @@
         "list": "cpp",
         "algorithm": "cpp",
         "limits": "cpp"
-    }
+    },
+    "cmake.configureOnOpen": false
 }
