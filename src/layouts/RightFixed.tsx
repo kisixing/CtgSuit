@@ -79,7 +79,7 @@ const Foot = (props: any) => {
                 <MoreOutlined className="more" onClick={e => {
                     e.stopPropagation();
                     toggleVisible()
-                }}></MoreOutlined>
+                }} />
             </div>
         )
     }

@@ -24,7 +24,7 @@ export const visitedContext = React.createContext<{ visitedData: VisitedData, se
 
 
 export const useVisited = () => {
-    const { stomp_url, public_url, remote_url } = settingStore.cache
+    const { public_url, remote_url } = settingStore.cache
     const [visitedData, setVisitedData] = useState<VisitedData>([])
 
 
@@ -35,7 +35,7 @@ export const useVisited = () => {
                 const isAbs = url.startsWith('http')
                 const absUrl = isAbs ? url : `http://${public_url}${url}`
                 if (!isAbs) {
-                    url = request.configToLocation(absUrl, { stomp_url, prefix: remote_url })
+                    url = request.configToLocation(absUrl, { prefix: remote_url })
                 }
                 return request.get('', { prefix: absUrl, hideErr: true, headers: { Origin: url, a: '123', Accept: 'text/html' } }).then(raw => {
                     if (raw) {
