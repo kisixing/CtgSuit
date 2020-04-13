@@ -59,6 +59,14 @@ export default {
       },
     ],
   ],
+  uglifyJSOptions: {
+    uglifyOptions: {
+      compress: {
+        drop_console: true,
+      }
+    }
+
+  },
   // copy: [
   //   {
   //     // build时才会copy

@@ -1,24 +1,21 @@
 import settingStore from "@/utils/SettingStore";
 import { uncompile } from '@/utils/utils';
-import { AlertOutlined } from "@ant-design/icons";
 import { WsService } from "@lianmed/lmg";
+import VisitedPanel from "@lianmed/pages/lib/Remote/VisitedPanel";
 import request from "@lianmed/request";
-import { Button, Layout } from 'antd';
+import { Layout } from 'antd';
 import { connect } from 'dva';
 import { ipcRenderer, remote } from 'electron';
-import qs from "qs";
 import React, { useEffect, useLayoutEffect } from 'react';
 import store from 'store';
 import { router } from 'umi';
 import withRouter from 'umi/withRouter';
+import { context, useContextValue } from "../contexts";
 import CheckNetwork from "./CheckNetwork";
 import Foot from "./Foot";
 import Head from "./Head";
-import RightFixed from "./RightFixed";
 import Side from "./Side";
 import useAlarm from "./useAlarm";
-import { useStomp } from "./useStomp";
-import { useContextValue, context } from "../contexts";
 const styles = require('./BasicLayout.less')
 const EWsStatus = WsService.wsStatus
 const settingData = settingStore.cache
@@ -27,7 +24,7 @@ const { EWsEvents } = WsService
 const BasicLayout = (props: any) => {
   const { dispatch, fashionable, children, wsStatus, listData, isLogin } = props;
   const v = useContextValue()
-  useStomp(v.visitedData)
+  // useStomp(v.visitedData)
 
   useEffect(() => {
     ipcRenderer.on('getToken', e => {
@@ -94,7 +91,8 @@ const BasicLayout = (props: any) => {
           <Layout>
             <Head />
             <Content className={styles.main}>{children}</Content>
-            <RightFixed />
+            {/* <RightFixed /> */}
+            <VisitedPanel remote_url="http://transfer.lian-med.com"/>
             {/* <div style={{position:'fixed',right:0,bottom:60,width:10,height:40,background:'var(--theme-color)',lineHeight:'40px',color:'#fff',textAlign:'center',cursor:'pointer'}}>||</div> */}
           </Layout>
         </Layout>
