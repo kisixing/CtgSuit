@@ -44,7 +44,7 @@ function Beds({ dispatch, headData, wsData }: IProps) {
       // dispatch({ type: 'list/appendDirty', unitId });
       // dispatch({ type: 'list/processListData' });
       dispatch({ type: 'list/removeDirty', unitId })
-      dispatch({ type: 'list/setState', payload: { showTodo: false } })
+      dispatch({ type: 'list/setState', payload: { showTodo: false, borderedId: unitId } })
       dispatch({ type: 'list/setPageByUnitId', unitId });
 
       router.replace('/workbench');

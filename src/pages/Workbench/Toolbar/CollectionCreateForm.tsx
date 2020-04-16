@@ -175,12 +175,13 @@ const CollectionCreateForm = (props: IProps) => {
 
   const newArchive = async params => {
     setLoading(true);
-    const res = await request
-      .post(`/prenatal-visits`, {
-        data: params,
-      })
+    const res = await request.post(`/prenatal-visits`, {
+      data: params,
+    })
       .catch(({ data }) =>
+
         data.then(e => {
+          setLoading(false);
           message.error(e.title);
         }),
       );

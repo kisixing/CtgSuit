@@ -13,7 +13,7 @@ interface IProps {
   [x: string]: any
 }
 const Home = (props: IProps) => {
-  const { listLayout = [], pageItems, fullScreenId, dispatch, showTodo, subscribeData, isOn, headCollapsed } = props;
+  const { borderedId, listLayout = [], pageItems, fullScreenId, dispatch, showTodo, subscribeData, isOn, headCollapsed } = props;
 
   const [todo] = useTodo(showTodo, subscribeData)
 
@@ -25,9 +25,9 @@ const Home = (props: IProps) => {
 
   const items: any[] = useMemo(() => (showTodo ? todo : pageItems), [pageItems, todo, isOn]);
 
-useEffect(() => {
-  console.log('jjj','-------')
-}, [pageItems])
+  useEffect(() => {
+    console.log('jjj', '-------')
+  }, [pageItems])
 
   useEffect(() => {
     const endCb = (unitId, status, isCreated) => status === BedStatus.Offline && dispatch({ type: 'list/appendOffline', unitId, })
@@ -55,6 +55,7 @@ useEffect(() => {
       listLayout={listLayout}
       fullScreenId={fullScreenId}
       contentHeight={contentHeight}
+      borderedId={borderedId}
     />
   );
 };
@@ -64,6 +65,7 @@ export default connect(({ ws, setting, list, subscribe }: any) => {
     listLayout: setting.listLayout,
     pageItems: list.pageItems,
     fullScreenId: list.fullScreenId,
+    borderedId: list.borderedId,
     showTodo: list.showTodo,
     subscribeData: subscribe.data,
     isOn: ws.isOn,
