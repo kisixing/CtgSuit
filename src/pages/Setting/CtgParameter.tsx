@@ -117,13 +117,13 @@ const Network = () => {
             <div className={styles.subTitle}>CTG曲线设置</div>
             <Row>
                 <Col span={8}>
-                    <Form.Item label="胎心率上限" name="alarm_high" rules={[{ required: false, message: '请输入胎心率上限!' }]} >
-                        <InputNumber placeholder="请输入胎心率上限!" />
+                    <Form.Item label="胎心率上限" name="alarm_high" rules={[{ required: false, message: '请输入胎心率上限!' }]}>
+                        <InputNumber min={30} max={240} placeholder="请输入!" />
                     </Form.Item>
                 </Col>
                 <Col span={8}>
                     <Form.Item label="胎心率下限" name="alarm_low" rules={[{ required: false, message: '请输入胎心率下限!' }]}>
-                        <InputNumber placeholder="请输入胎心率下限!" />
+                        <InputNumber min={30} max={240} placeholder="请输入!" />
                     </Form.Item>
                 </Col>
             </Row>

@@ -5,7 +5,7 @@
  */
 
 import React, { Component, useEffect } from 'react';
-import { Form } from 'antd';
+import { Form, Slider, Switch } from 'antd';
 import '@ant-design/compatible/assets/index.css';
 import { InputNumber, Button, message, Radio, Input, Row, Col } from 'antd';
 import store from '@/utils/SettingStore';
@@ -114,47 +114,38 @@ const Alarm = () => {
 
   return (
     <Form form={form} layout="horizontal" {...formItemLayout} className={styles.form}>
-      <div className={styles.subTitle}>CTG曲线设置</div>
-      <Row>
+      <div className={styles.subTitle}>报警设置</div>
+      <Row gutter={10}>
         <Col span={8}>
-          <Form.Item label="胎心率上限" name="alarm_high" rules={[{ required: false, message: '请输入胎心率上限!' }]}>
-            <InputNumber placeholder="请输入胎心率上限!" />
+          <Form.Item label="报警音量" name="alarm_on_volumn" rules={[{ required: false, message: '请输入报警音量!' }]}>
+            <Slider max={10} />
           </Form.Item>
         </Col>
         <Col span={8}>
-          <Form.Item label="胎心率下限" name="alarm_low" rules={[{ required: false, message: '请输入胎心率下限!' }]}>
-            <InputNumber placeholder="请输入胎心率下限!" />
+          <Form.Item label="报警声音" name="alarm_on_sound" rules={[{ required: false, message: '请输入胎心率下限!' }]}>
+            <Switch />
           </Form.Item>
         </Col>
       </Row>
+
       <Row>
-        <Col span={8}>
-          <Form.Item label="报警高亮" name="alarm_on_window" rules={[{ required: false, message: '请输入报警高亮!' }]}>
 
-            <Radio.Group>
-              <Radio value={'1'}>打开</Radio>
-              <Radio value={'0'}>关闭</Radio>
-            </Radio.Group>
-          </Form.Item>
-        </Col>
-        <Col span={8}>
-          <Form.Item label="报警声音" name="alarm_on_sound" rules={[{ required: false, message: '请输入报警声音!' }]}>
 
-            <Radio.Group>
-              <Radio value={'1'}>打开</Radio>
-              <Radio value={'0'}>关闭</Radio>
-            </Radio.Group>
-          </Form.Item>
-        </Col>
       </Row>
       <Row>
         <Col span={8}>
           <Form.Item label="监护结束提示" name="alarm_finished" rules={[{ required: false, message: '请选择!' }]}>
 
-            <Radio.Group>
-              <Radio value={'1'}>打开</Radio>
-              <Radio value={'0'}>关闭</Radio>
-            </Radio.Group>
+            <Switch />
+
+          </Form.Item>
+
+        </Col>
+        <Col span={8}>
+          <Form.Item label="报警高亮" name="alarm_on_window" rules={[{ required: false, message: '请输入报警高亮!' }]}>
+
+            <Switch />
+
           </Form.Item>
         </Col>
         {/* <Col span={8}>

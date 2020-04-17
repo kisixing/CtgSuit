@@ -32,7 +32,6 @@ const settingMap = {
   // Parameter,
   Print,
 }
-console.log('settingMap', settingMap)
 class Setting extends Component {
   constructor(props) {
     super(props);
