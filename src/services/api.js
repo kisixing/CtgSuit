@@ -116,7 +116,7 @@ export async function getCTGrecordData(params) {
 }
 
 /**
- * 更新胎监状态接口 - 可选择调用 根据档案的自增id直接更新档案信息，如停止时间、诊断结果等
+ * 更新ObVue状态接口 - 可选择调用 根据档案的自增id直接更新档案信息，如停止时间、诊断结果等
  * @export
  * @param {*} params
  * @returns
@@ -181,7 +181,7 @@ export async function nosaveCTG(params) {
 }
 
 /**
- * 胎监标记，同时更新ctg组件
+ * ObVue标记，同时更新ctg组件
  *
  */
 export async function updateCTGNote(params) {

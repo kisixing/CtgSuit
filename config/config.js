@@ -45,7 +45,7 @@ export default {
           webpackChunkName: true,
           level: 3,
         },
-        title: '胎监工作站',
+        title: 'ObVue',
         dll: false,
         routes: {
           exclude: [

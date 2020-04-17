@@ -4,27 +4,40 @@ import { connect } from 'dva';
 import store from 'store';
 import { uncompile } from '@/utils/utils';
 // 各个模块
-import BasicSetting from './BasicSetting';
-import ScoreSet from './ScoreSet';
-import Network from './Network';
+// import BasicSetting from './BasicSetting';
+// import ScoreSet from './ScoreSet';
 import Alarm from './Alarm';
+// import VersionManager from './VersionManager';
+// import GroupAndWard from './GroupAndWard';
+// import LayoutSetting from './LayoutSetting';
+import Network from './Network';
 import Print from './Print';
 import Subscribe from './Subscribe/index';
 import Account from './Account';
 import Hospital from './Hospital';
-import VersionManager from './VersionManager';
-import GroupAndWard from './GroupAndWard';
-import LayoutSetting from './LayoutSetting';
+import Parameter from './Parameter';
+import CtgParameter from './CtgParameter';
 
 import styles from './index.less';
+const account = store.get('ACCOUNT');
+const username = uncompile(account.username);
 
 const { Header, Sider } = Layout;
-
+const settingMap = {
+  Network,
+  Hospital,
+  Subscribe,
+  Account: username === 'admin' ? Account : null,
+  CtgParameter,
+  // Parameter,
+  Print,
+}
+console.log('settingMap', settingMap)
 class Setting extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      current: { label: '账号管理', value: '7' },
+      current: 'alarm' || Object.keys(settingMap)[0],
       results: {},
     };
   }
@@ -32,37 +45,33 @@ class Setting extends Component {
   handleMenuClick = e => {
     const {
       key,
-      item: { props },
     } = e;
-    const current = {
-      label: props.children,
-      value: key,
-    };
-    this.setState({ current });
+
+    this.setState({ current: key });
   };
 
   menus = () => {
     const { current } = this.state;
-    const account = store.get('ACCOUNT');
-    const username = uncompile(account.username);
+
     return (
       <Menu
         mode="inline"
-        selectedKeys={[current.value]}
+        selectedKeys={[current]}
         onClick={this.handleMenuClick}
       >
-        <Menu.Item key="5">网络设置</Menu.Item>
-        <Menu.Item key="6">医院设置</Menu.Item>
-        <Menu.Item key="7">订阅设置</Menu.Item>
-        {username === 'admin' ? <Menu.Item key="8">账号管理</Menu.Item> : null}
-        {/* <Menu.Item key="10">用户组和病区管理</Menu.Item> */}
-        <Menu.Item key="9">CTG设置</Menu.Item>
-        <Menu.Item key="3">打印设置</Menu.Item>
-        {/* <Menu.Item key="LayoutSetting">布局设置</Menu.Item> */}
-        {/* <Menu.Item key="2">评分设置</Menu.Item>
-        <Menu.Item key="4">事件设置</Menu.Item> */}
-        {/* <Menu.Item key="1">维护设置</Menu.Item> */}
-        {/* <Menu.Item key="0">版本管理</Menu.Item> */}
+        <Menu.ItemGroup key="g1" title="报警">
+          <Menu.Item key="alarm">设置</Menu.Item>
+
+        </Menu.ItemGroup>
+        <Menu.ItemGroup key="g2" title="常规">
+          {
+            Object.entries(settingMap).map(([k, v]) => {
+              return v ? <Menu.Item key={k}>{v.displayName}</Menu.Item> : null
+            })
+          }
+
+        </Menu.ItemGroup>
+
       </Menu>
     );
   };
@@ -81,33 +90,10 @@ class Setting extends Component {
 
   switchComponent = () => {
     const { current } = this.state;
-    switch (current.value) {
-      case '1':
-        return <BasicSetting />;
-      case '2':
-        return <ScoreSet />;
-      case '3':
-        return <Print />;
-      case '5':
-        return <Network />;
-      case '6':
-        return <Hospital />
-      case '7':
-        return <Subscribe />
-      case '8':
-        return <Account />
-      case '9':
-        return <Alarm />;
-      case '10':
-        return <GroupAndWard />
-      case '0':
-        return <VersionManager />;
-      case 'LayoutSetting':
-        return <LayoutSetting />;
-      default:
-        break;
-    }
-  };
+    const T = settingMap[current] || (current === 'alarm' ? Alarm : () => null)
+    return <T />
+  }
+
 
   render() {
     const { current } = this.state;
@@ -128,8 +114,11 @@ class Setting extends Component {
   }
 }
 
-export default connect(
+const P = connect(
   ({ global }) => ({
     account: global.account
   }),
 )(Setting);
+
+
+export default P

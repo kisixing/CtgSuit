@@ -1,5 +1,4 @@
 import React, { Component, FunctionComponent, useEffect } from 'react';
-import { connect } from 'dva';
 
 import '@ant-design/compatible/assets/index.css';
 import { Input, Button, message, Form } from 'antd';
@@ -102,5 +101,5 @@ const Network: FunctionComponent = (props) => {
     </Form>
   );
 }
-
+Network.displayName = '服务器设置'
 export default Network

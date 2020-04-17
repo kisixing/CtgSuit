@@ -293,8 +293,6 @@ class Account extends PureComponent {
             let dom = null;
             if (!activated) {
               dom = <a onClick={() => this.start(id)}>启用</a>;
-            } else {
-              dom = <a>停用</a>;
             }
             return (
               <>
@@ -572,6 +570,10 @@ class Account extends PureComponent {
   }
 }
 
-export default connect(({ global, setting }) => ({
+const A = connect(({ global, setting }) => ({
   account: global.account,
 }))(Account);
+
+A.displayName = '账号设置'
+
+export default A

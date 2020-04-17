@@ -99,7 +99,7 @@
     "yargs-parser": "^16.1.0"
   },
   "build": {
-    "productName": "ctg-suit",
+    "productName": "ObVue",
     "appId": "lian-med-ctgsuit",
     "copyright": "Copyright © 2019 lian-med",
     "compression": "maximum",

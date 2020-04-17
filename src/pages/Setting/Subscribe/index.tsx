@@ -5,7 +5,7 @@ import { qrcode } from '@lianmed/utils'
 import { connect, DispatchProp } from 'dva';
 import Table from "./Table";
 import useStupidConcat from './useStupidConcat'
-import styles from '../style.less';
+const styles = require('../style.less');
 import { IWard } from "@/types";
 interface IProps extends DispatchProp {
   subscribeData?: string[]
@@ -135,5 +135,5 @@ export const QR = connect(({ subscribe, setting }: any) => ({ subscribeData: sub
     );
   }
 )
-
+S.displayName = '订阅设置'
 export default S

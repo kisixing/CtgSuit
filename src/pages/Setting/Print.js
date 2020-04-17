@@ -76,5 +76,6 @@ class Network extends Component {
     );
   }
 }
+Network.displayName = '打印设置'
 
 export default Network

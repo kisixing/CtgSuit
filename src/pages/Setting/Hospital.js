@@ -88,9 +88,9 @@ class Hospital extends PureComponent {
             rules: [{ required: false, message: '请输入版本时间!' }],
           })(<Input disabled placeholder="请输入请输入版本时间!" />)}
         </Form.Item> */}
-        <Form.Item label="设备尺寸">
+        {/* <Form.Item label="设备尺寸">
           {getFieldDecorator('display_size')(<Input disabled />)}
-        </Form.Item>
+        </Form.Item> */}
         <Form.Item {...tailFormItemLayout}>
           <Button type="primary" onClick={this.handleSubmit}>
             保存
@@ -101,4 +101,7 @@ class Hospital extends PureComponent {
   }
 }
 
-export default connect()(Hospital);
+const H = connect()(Hospital);
+
+H.displayName = '医院设置'
+export default H
