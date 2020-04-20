@@ -26,7 +26,7 @@ const Side = (props: any) => {
                 {[
                     ['档案管理', 'ordered-list', '/archives'],
                     ['系统设置', 'setting', '/setting'],
-                    ['孕产妇管理', 'usergroup-add', '/pregnancy'],
+                    ['病人管理', 'usergroup-add', '/pregnancy'],
                     ['用户信息', 'user'],
                 ].map(([title, icon, path]) => {
                     // if (title === '用户信息') {

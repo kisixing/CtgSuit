@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Layout, Menu } from 'antd';
 import { connect } from 'dva';
 import store from 'store';
@@ -15,10 +15,11 @@ import Print from './Print';
 import Subscribe from './Subscribe/index';
 import Account from './Account';
 import Hospital from './Hospital';
-import Parameter from './Parameter';
+// import Parameter from './Parameter';
 import CtgParameter from './CtgParameter';
 
-import styles from './index.less';
+const styles = require('./index.less');
+
 const account = store.get('ACCOUNT');
 const username = uncompile(account.username);
 
@@ -32,31 +33,23 @@ const settingMap = {
   // Parameter,
   Print,
 }
-class Setting extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      current: 'alarm' || Object.keys(settingMap)[0],
-      results: {},
-    };
-  }
+const Setting = () => {
 
-  handleMenuClick = e => {
+  const [current, setCurrent] = useState('alarm' || Object.keys(settingMap)[0])
+  const handleMenuClick = e => {
     const {
       key,
     } = e;
-
-    this.setState({ current: key });
+    setCurrent(key)
   };
 
-  menus = () => {
-    const { current } = this.state;
+  const menus = () => {
 
     return (
       <Menu
         mode="inline"
         selectedKeys={[current]}
-        onClick={this.handleMenuClick}
+        onClick={handleMenuClick}
       >
         <Menu.ItemGroup key="g1" title="报警">
           <Menu.Item key="alarm">设置</Menu.Item>
@@ -87,34 +80,30 @@ class Setting extends Component {
   //   }
   // };
 
-  switchComponent = () => {
-    const { current } = this.state;
+  const switchComponent = () => {
     const T = settingMap[current] || (current === 'alarm' ? Alarm : () => null)
     return <T />
   }
 
 
-  render() {
-    const { current } = this.state;
-    return (
-      <Layout className={styles.wrapper}>
-        <Sider theme="light" width="256" className={styles.aside}>
-          <div className={styles.sideMenu}>{this.menus()}</div>
-        </Sider>
-        <Layout className={styles.main}>
-          <Header
-            className={styles.headerTitle}
-            style={{ display: 'none' }}
-          >{`系统设置/${current.label}`}</Header>
-          <Layout className={styles.formBox}>{this.switchComponent()}</Layout>
-        </Layout>
+  return (
+    <Layout className={styles.wrapper}>
+      <Sider theme="light" width="256" className={styles.aside}>
+        <div className={styles.sideMenu}>{menus()}</div>
+      </Sider>
+      <Layout className={styles.main}>
+        <Header
+          className={styles.headerTitle}
+          style={{ display: 'none' }}
+        >{`系统设置/${current}`}</Header>
+        <Layout className={styles.formBox}>{switchComponent()}</Layout>
       </Layout>
-    );
-  }
+    </Layout>
+  );
 }
 
 const P = connect(
-  ({ global }) => ({
+  ({ global }: any) => ({
     account: global.account
   }),
 )(Setting);

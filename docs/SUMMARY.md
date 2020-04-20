@@ -16,7 +16,7 @@
     * [曲线面板](chapter-3/curve-panel.md)
     * [功能按钮](chapter-3/function-button.md)
     * [流程逻辑](chapter-3/process-logic.md)
-* [孕产妇管理](chapter-4/README.md)
+* [病人管理](chapter-4/README.md)
     * [查询孕妇](chapter-4/search.md)
     * [修改孕妇](chapter-4/modification.md)
 * [档案管理](chapter-5/README.md)

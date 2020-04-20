@@ -80,7 +80,7 @@ export default [
         path: '/pregnancy',
         name: 'Pregnancy',
         exact: true,
-        title: 'ObVue-孕产妇管理',
+        title: 'ObVue-病人管理',
         component: './Pregnancy',
       },
       // 异常处理页面

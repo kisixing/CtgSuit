@@ -156,7 +156,7 @@ const Login = (props: IProps) => {
             htmlType="submit"
             loading={loading.effects['login/login']}
           >
-            <span>登陆</span>
+            <span>登录</span>
           </Button>
         </Row>
         {error && error.status === '401' ? (

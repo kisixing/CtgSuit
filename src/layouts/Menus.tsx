@@ -25,7 +25,7 @@ const M = (props: any) => {
             if (key === '系统设置') {
                 router.push('/setting');
             }
-            if (key === '孕产妇管理') {
+            if (key === '病人管理') {
                 router.push('/pregnancy');
             }
         },
@@ -38,7 +38,7 @@ const M = (props: any) => {
             {[
                 ['档案管理', 'ordered-list', '/archives'],
                 ['系统设置', 'setting', '/setting'],
-                ['孕产妇管理', 'usergroup-add', '/pregnancy'],
+                ['病人管理', 'usergroup-add', '/pregnancy'],
                 ['用户信息', 'user'],
             ].map(([title, icon, path]) => {
                 if (title === '用户信息') {

@@ -400,7 +400,7 @@ class TableList extends Component {
   // 分页器onchange
   onChange = (page, pageSize) => {
     const values = this.getValues();
-    // 判断是否是孕产妇管理页跳转过来的，query不为空
+    // 判断是否是病人管理页跳转过来的，query不为空
     const { router, wardId } = this.props;
     const query = router.location.query;
     // 以是否有pageSize区分触发区域
