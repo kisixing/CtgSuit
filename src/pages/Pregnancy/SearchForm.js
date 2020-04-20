@@ -6,7 +6,6 @@ import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import { Row, Col, Input, Select, DatePicker, Button } from 'antd';
 import EditModal from './EditModal';
-import SettingStore from '@/utils/SettingStore';
 
 import styles from './index.less';
 import store from "store";

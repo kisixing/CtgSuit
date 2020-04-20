@@ -20,7 +20,7 @@ export default {
     *login({ payload }, { put, call }) {
       const auth = yield call(request.authenticate, payload);
       if (auth) {
-        settingStore.set('Authorization',auth)
+        settingStore.setSync('Authorization',auth)
         // 登录验证成功
         yield put({
           type: 'updateState',

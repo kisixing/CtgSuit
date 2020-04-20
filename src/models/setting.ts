@@ -1,4 +1,3 @@
-import SettingStore from '@/utils/SettingStore';
 import store from 'store'
 
 const setting = {

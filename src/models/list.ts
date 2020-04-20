@@ -1,7 +1,6 @@
 
 import { getList } from '@/services/list';
 // import { BedStatus } from "@lianmed/lmg/lib/services/WsService";
-// import store from "@/utils/SettingStore";
 // const downStatus = [BedStatus.Working, BedStatus.Offline];
 import { IBed } from "@/types";
 function checkVisible(_: IBed, dirty: Set<string>, offline: Set<string>): boolean {

@@ -5,7 +5,6 @@ import {
   newPregnancies
 } from '@/services/api';
 import { message } from 'antd';
-// import SettingStore from '@/utils/SettingStore';
 
 export default {
   namespace: 'pregnancy',
