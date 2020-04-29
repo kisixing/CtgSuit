@@ -4,12 +4,11 @@ const yp = require('yargs-parser')
 const request = require("request");
 var progress = require('progress');
 const compress = require('compressing')
-const { config: configPath, pkg: pkgPath } = require('../app/main/config/path')
+const { pkg: pkgPath } = require('../app/main/config/path')
 
 const { tar: { compressDir }, gzip: { compressFile } } = compress
 const { target, dir, base } = yp(process.argv.slice(2))
 
-const config = JSON.parse(readFileSync(configPath, 'utf-8'))
 
 
 
@@ -48,7 +47,7 @@ function flash(target) {
     });
     const options = {
         method: "POST",
-        url: `http://${'192.168.123.10:9987'||config.xhr_url}/api/upload`,
+        url: `http://${'192.168.123.10:9987'}/api/upload`,
         headers: {
             "Content-Type": "multipart/form-data"
         },

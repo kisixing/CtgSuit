@@ -1,4 +1,4 @@
-import { useLayoutEffect, useCallback } from "react";
+import { useLayoutEffect, useCallback, useRef, useEffect } from "react";
 import { event } from "@lianmed/utils";
 import { notification } from "antd";
 import { IBed } from '@/types';
@@ -8,7 +8,9 @@ declare var __DEV__: boolean;
 
 
 export default (listData: IBed[]) => {
-
+    const alarm1_ref = useRef<any>()
+    const alarm2_ref = useRef<any>()
+    const alarm3_ref = useRef<any>()
     const ward = store.get('ward') || {}
     const isIn = ward.wardType === 'in'
     const findName = useCallback((unitId: string) => {
@@ -17,6 +19,11 @@ export default (listData: IBed[]) => {
         const bedname = target && target.bedname && `${target.bedname}号机`
         return isIn ? (bedNO || bedname) : bedname
     }, [listData])
+    useEffect(() => {
+        alarm1_ref.current = ''
+        alarm2_ref.current = ''
+        alarm3_ref.current = ''
+    }, [])
     useLayoutEffect(() => {
         const audio: HTMLAudioElement = document.querySelector('#alarm')
         let timeout: NodeJS.Timeout

@@ -17,7 +17,7 @@ function Analysis(props: IProps) {
   const { docid = '' } = props
   return (
     <Shell {...props}>
-      <Ctg_Analyse docid={docid} {...props} onDownload={() => printPdf(`/ctg-exams-pdfurl/${docid}`)} />
+      <Ctg_Analyse docid={docid} {...props} onDownload={printPdf} />
     </Shell>
   );
 }

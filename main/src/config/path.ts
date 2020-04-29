@@ -12,8 +12,9 @@ const basePath = resolve(isDev ? '' : resources, 'app', 'main')
 const profile = resolve(process.env.USERPROFILE || '/')
 const desktop = resolve(process.env.USERPROFILE || '/', 'Desktop')
 const appPath = resolve(resources, 'app.asar')
-const config = resolve(profile, 'setting.json')
+const oldConfig = resolve(profile, 'setting.json')
 const defaultConfig = resolve(assetsPath, './defaultSetting.json')
+const config = resolve(tmp, 'setting.json')
 const errLogPath = resolve(tmp, 'errLog.txt')
 const logPath = resolve(tmp, 'log.txt')
 const pkg = resolve(source, 'package.json')
@@ -36,5 +37,6 @@ export {
     unpackPath,
     basePath,
     runtimeJsPath,
-    publicPath
+    publicPath,
+    oldConfig
 }

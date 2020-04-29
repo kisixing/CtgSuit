@@ -1,6 +1,6 @@
-const path = require('path');
-const { profile } = require('./path')
-const assetsPath = path.resolve(__dirname, '../../asserts')
-export const SETTING_PATH = path.resolve(profile, 'setting.json')
-export const DEFAULT_SETTING_PATH = path.resolve(assetsPath, 'defaultSetting.json')
-export const PRINTER_PATH = path.resolve(assetsPath, 'PDFtoPrinterSelect.exe')
+import { resolve } from 'path'
+import { defaultConfig, config } from './path'
+const assetsPath = resolve(__dirname, '../../asserts')
+export const SETTING_PATH = config
+export const DEFAULT_SETTING_PATH = defaultConfig
+export const PRINTER_PATH = resolve(assetsPath, 'PDFtoPrinterSelect.exe')
