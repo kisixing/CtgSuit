@@ -8,9 +8,11 @@ declare var __DEV__: boolean;
 
 
 export default (listData: IBed[]) => {
-    const alarm1_ref = useRef<any>()
-    const alarm2_ref = useRef<any>()
-    const alarm3_ref = useRef<any>()
+    const alarm0_ref = useRef<HTMLAudioElement>()
+    const alarm1_ref = useRef<HTMLAudioElement>()
+    const alarm2_ref = useRef<HTMLAudioElement>()
+    const alarm_msg = useRef(new Set())
+
     const ward = store.get('ward') || {}
     const isIn = ward.wardType === 'in'
     const findName = useCallback((unitId: string) => {
@@ -20,20 +22,38 @@ export default (listData: IBed[]) => {
         return isIn ? (bedNO || bedname) : bedname
     }, [listData])
     useEffect(() => {
-        alarm1_ref.current = ''
-        alarm2_ref.current = ''
-        alarm3_ref.current = ''
+        const alarm_volumn = SettingStore.cache.alarm_volumn || 1
+        alarm0_ref.current = document.querySelector('#alarm0')
+        alarm1_ref.current = document.querySelector('#alarm1')
+        alarm2_ref.current = document.querySelector('#alarm2')
+        alarm0_ref.current.volume = alarm_volumn
+        alarm1_ref.current.volume = alarm_volumn
+        alarm2_ref.current.volume = alarm_volumn
+    }, [])
+    useEffect(() => {
+        let id = setInterval(() => {
+            alarm0_ref.current.pause()
+            alarm1_ref.current.pause()
+            alarm2_ref.current.pause()
+
+            const m = alarm_msg.current
+            if (m.has(2)) {
+                alarm2_ref.current.play()
+            } else if (m.has(1)) {
+                alarm1_ref.current.play()
+            } else if (m.has(0)) {
+                alarm0_ref.current.play()
+            }
+            alarm_msg.current = new Set()
+        }, 5000)
+        return () => clearInterval(id)
     }, [])
     useLayoutEffect(() => {
-        const audio: HTMLAudioElement = document.querySelector('#alarm')
-        let timeout: NodeJS.Timeout
+
 
         const onCb = alarmType => {
             // audio.play()
-            clearTimeout(timeout)
-            timeout = setTimeout(() => {
-                audio.pause()
-            }, 5000);
+            alarm_msg.current.add(alarmType)
         }
         const announcerCb = (text, pitch = 4, rate = .6) => {
             text = findName(text)
