@@ -72,10 +72,10 @@ const CreateRecordModal = Form.create({
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item label="孕妇姓名">
+                <Form.Item label="姓名">
                   {getFieldDecorator('name', {
-                    rules: [{ required: true, message: '请填写孕妇姓名!visitTime' }],
-                  })(<Input placeholder="输入孕妇姓名..." />)}
+                    rules: [{ required: true, message: '请填写姓名!' }],
+                  })(<Input placeholder="输入姓名..." />)}
                 </Form.Item>
               </Col>
               <Col span={12}>
@@ -86,23 +86,23 @@ const CreateRecordModal = Form.create({
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item label="孕妇年龄">
+                <Form.Item label="年龄">
                   {getFieldDecorator('age', {
-                    rules: [{ required: true, message: '请填写孕妇住年龄!' }],
-                  })(<InputNumber placeholder="输入孕妇年龄..." />)}
+                    rules: [{ required: true, message: '请填写年龄!' }],
+                  })(<InputNumber placeholder="输入年龄..." />)}
                 </Form.Item>
               </Col>
               <Col span={12}>
                 <Form.Item label="孕周">
                   {getFieldDecorator('gestationalWeek', {
-                    rules: [{ required: true, message: '请填写孕妇联系电话!' }],
+                    rules: [{ required: true, message: '请填写孕周!' }],
                   })(<Input placeholder="输入孕周..." />)}
                 </Form.Item>
               </Col>
               <Col span={12}>
                 <Form.Item label="联系电话">
                   {getFieldDecorator('telephone', {
-                    rules: [{ required: true, message: '请填写孕妇联系电话!' }],
+                    rules: [{ required: true, message: '请填写联系电话!' }],
                   })(<Input placeholder="输入联系电话..." />)}
                 </Form.Item>
               </Col>

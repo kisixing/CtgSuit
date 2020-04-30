@@ -177,7 +177,7 @@ const EditModal = Form.create({
                 >
                   {getFieldDecorator('inpatientNO', {
                     rules: [
-                      { required: required, message: '请填写孕妇住院号!' },
+                      { required: required, message: '请填写住院号!' },
                       { max: 10, message: '住院号的最大长度为10' },
                     ],
                     getValueFromEvent: event => event.target.value.trim(),
@@ -187,16 +187,16 @@ const EditModal = Form.create({
               <Col span={12}>
                 <Form.Item
                   label={
-                    required ? <span>孕妇姓名</span> : <span className="required">孕妇姓名</span>
+                    required ? <span>姓名</span> : <span className="required">姓名</span>
                   }
                 >
                   {getFieldDecorator('name', {
                     rules: [
-                      { required: required, message: '请填写孕妇姓名!' },
+                      { required: required, message: '请填写姓名!' },
                       { max: 12, message: '姓名的最大长度为12' },
                     ],
                     getValueFromEvent: event => event.target.value.trim(),
-                  })(<Input placeholder="输入孕妇姓名" style={{ width }} />)}
+                  })(<Input placeholder="输入姓名" style={{ width }} />)}
                 </Form.Item>
               </Col>
               <Col span={12}>
@@ -205,7 +205,7 @@ const EditModal = Form.create({
                 >
                   {getFieldDecorator('bedNO', {
                     rules: [
-                      { required: required, message: '请填写孕妇床号!' },
+                      { required: required, message: '请填写床号!' },
                       { max: 6, message: '姓名的最大长度为6' },
                     ],
                     getValueFromEvent: event => event.target.value.trim(),
@@ -215,19 +215,19 @@ const EditModal = Form.create({
               <Col span={12}>
                 <Form.Item label="出生年月">
                   {getFieldDecorator('birth', {
-                    rules: [{ required: false, message: '请填写孕妇出生日期!' }],
-                  })(<DatePicker placeholder="输入孕妇出生日期..." style={{ width }} />)}
+                    rules: [{ required: false, message: '请填写出生日期!' }],
+                  })(<DatePicker placeholder="输入出生日期..." style={{ width }} />)}
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item label="孕妇年龄">
+                <Form.Item label="年龄">
                   {getFieldDecorator('age', {
-                    rules: [{ required: false, message: '请填写孕妇年龄!' }],
+                    rules: [{ required: false, message: '请填写年龄!' }],
                   })(
                     <InputNumber
                       min={1}
                       max={99}
-                      placeholder="输入孕妇年龄..."
+                      placeholder="输入年龄..."
                       style={{ width }}
                     />,
                   )}
@@ -272,7 +272,7 @@ const EditModal = Form.create({
                 <Form.Item label="联系电话">
                   {getFieldDecorator('telephone', {
                     rules: [
-                      { required: false, message: '请填写孕妇联系电话!' },
+                      { required: false, message: '请填写联系电话!' },
                       { validator: this.validateTel },
                     ],
                     getValueFromEvent: event => event.target.value.replace(/\s+/g, ''),

@@ -126,7 +126,7 @@ class FieldForm extends Component {
               <Input
                 disabled
                 allowClear
-                placeholder="请输入孕妇姓名"
+                placeholder="请输入姓名"
               />,
             )}
           </Form.Item>

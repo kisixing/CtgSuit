@@ -331,13 +331,13 @@ const CollectionCreateForm = (props: IProps) => {
   const validateAge = (value: number) => {
     setAgeWarning({ status: 'success', help: '' });
     if (!value) {
-      setAgeWarning({ status: 'warning', help: '请输入孕妇年龄...' });
+      setAgeWarning({ status: 'warning', help: '请输入年龄...' });
     }
     if (value >= 35) {
-      setAgeWarning({ status: 'warning', help: '该孕妇年龄偏大...' });
+      setAgeWarning({ status: 'warning', help: '年龄偏大...' });
     }
     if (value < 18) {
-      setAgeWarning({ status: 'warning', help: '该孕妇年龄偏小...' });
+      setAgeWarning({ status: 'warning', help: '年龄偏小...' });
     }
   };
 
@@ -390,7 +390,7 @@ const CollectionCreateForm = (props: IProps) => {
               <Form.Item label={<span className="required">床号</span>}>
                 {getFieldDecorator('bedNO', {
                   rules: [
-                    { required: false, message: '请填写孕妇床号!' },
+                    { required: false, message: '请填写床号!' },
                     { max: 15, message: '床号的最大长度为15个字节' },
                     // { validator: validateBedNo },
                   ],
@@ -411,14 +411,14 @@ const CollectionCreateForm = (props: IProps) => {
             <Form.Item label={<span className="required">姓名</span>}>
               {getFieldDecorator('name', {
                 rules: [
-                  { required: false, message: '请填写孕妇姓名!' },
+                  { required: false, message: '请填写姓名!' },
                   { max: 32, message: '姓名的最大长度为32' },
                 ],
                 getValueFromEvent: event => event.target.value.trim(),
               })(
                 <Input
                   disabled={disabled}
-                  placeholder="输入孕妇姓名..."
+                  placeholder="输入姓名..."
                   style={{ width }}
                 />,
               )}
@@ -428,7 +428,7 @@ const CollectionCreateForm = (props: IProps) => {
             <Form.Item label={<span className="required">{noLabel}</span>}>
               {getFieldDecorator(noKey, {
                 rules: [
-                  { required: false, message: `请填写孕妇${noLabel}!` },
+                  { required: false, message: `请填写${noLabel}!` },
                   { max: 15, message: `${noLabel}的最大长度为15` },
                   { validator: validateNoChinese },
                 ],
@@ -446,18 +446,18 @@ const CollectionCreateForm = (props: IProps) => {
           <Col span={12}>
             <Form.Item
               hasFeedback
-              label="孕妇年龄"
+              label="年龄"
               validateStatus={ageWarning.status} // "warning"
-              help={ageWarning.help} // "该孕妇年龄偏小..."
+              help={ageWarning.help} // "年龄偏小..."
             >
               {getFieldDecorator('age', {
-                rules: [{ required: false, message: '请填写孕妇住年龄!' }],
+                rules: [{ required: false, message: '请填写年龄!' }],
               })(
                 <InputNumber
                   min={1}
                   max={99}
                   // disabled={disabled}
-                  placeholder="输入孕妇年龄..."
+                  placeholder="输入年龄..."
                   style={{ width }}
                   onChange={validateAge}
                 />,
@@ -503,7 +503,7 @@ const CollectionCreateForm = (props: IProps) => {
           <Col span={12}>
             <Form.Item label="孕周">
               {getFieldDecorator('gestationalWeek', {
-                rules: [{ required: false, message: '请填写孕妇的孕周!' }],
+                rules: [{ required: false, message: '请填写孕周!' }],
               })(<Input style={{ width }} placeholder="请输入孕周..." />)}
             </Form.Item>
           </Col>
