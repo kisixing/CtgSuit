@@ -14,8 +14,7 @@ import { WsService } from '@lianmed/lmg';
 import { BedStatus } from '@lianmed/lmg/lib/services/WsService';
 import { FetalItem } from "../types";
 import { ButtonProps } from 'antd/lib/button';
-import { useJb } from "./useJb";
-
+import Jb from "./Jb";
 const socket = WsService._this;
 
 function Toolbar(props: FetalItem.IToolbarProps) {
@@ -80,7 +79,6 @@ function Toolbar(props: FetalItem.IToolbarProps) {
 
 
 
-  const { jbLoading, jb } = useJb(pregnancyId, pvId)
   const isWorking = status === BedStatus.Working;
   const isOffline = status === BedStatus.Offline;
   const isStopped = status === BedStatus.Stopped;
@@ -186,8 +184,8 @@ function Toolbar(props: FetalItem.IToolbarProps) {
       )}
     {/* 停止状态下不可以建档，监护、离线都是可以建档的 */}
 
-    <B icon={<LegacyIcon type={jbLoading ? 'loading' : 'user-add'} />} type="link" disabled={(isCreated && !pvId) || isStopped} onClick={() => {
-      isCreated ? jb() : setModalName('visible')
+    <B icon={<LegacyIcon type={'user-add'} />} type="link" disabled={(isCreated && !pvId) || isStopped} onClick={() => {
+      isCreated ? setModalName('jbVisible') : setModalName('visible')
     }}>
       {isCreated ? '解绑' : '建档'}
     </B>
@@ -326,6 +324,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
       bedname={bedname}
       docid={docid}
     />
+    <Jb pregnancyId={pregnancyId} pvId={pvId} onCancel={handleCancel} visible={modalName === 'jbVisible'} />
   </>;
 }
 
