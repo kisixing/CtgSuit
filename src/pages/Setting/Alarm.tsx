@@ -53,6 +53,8 @@ const Alarm = () => {
           alarm_low,
           alarm_on_window,
           alarm_on_sound,
+          alarm_deploy,
+          alarm_on_volumn
         }) => {
           form.setFieldsValue({
             // normalarea,
@@ -72,6 +74,8 @@ const Alarm = () => {
             alarm_low,
             alarm_on_window,
             alarm_on_sound,
+            alarm_deploy,
+            alarm_on_volumn
           });
         },
       );
@@ -94,6 +98,7 @@ const Alarm = () => {
         'alarm_on_sound',
         'alarm_enable',
         'alarm_finished',
+        'alarm_deploy',
         ...Object.keys(colors),
       ])
       .then(status => {
@@ -122,8 +127,13 @@ const Alarm = () => {
           </Form.Item>
         </Col>
         <Col span={8}>
-          <Form.Item label="报警声音" name="alarm_on_sound" rules={[{ required: false, message: '请输入胎心率下限!' }]}>
+          <Form.Item label="报警声音" name="alarm_on_sound" rules={[{ required: false, message: '请输入报警声音!' }]}>
             <Switch />
+          </Form.Item>
+        </Col>
+        <Col span={8}>
+          <Form.Item label="报警延时" name="alarm_deploy" rules={[{ required: false, message: '请输入报警延时!' }]}>
+            <Slider max={10} />
           </Form.Item>
         </Col>
       </Row>

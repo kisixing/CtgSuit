@@ -69,11 +69,11 @@ export default (listData: IBed[]) => {
         }
 
         event
-            .on('suit:alarmOn', onCb)
+            .on('audio:alarm', onCb)
             .on('bed:announcer', announcerCb)
         return () => {
             event
-                .off('suit:alarmOn', onCb)
+                .off('audio:alarm', onCb)
                 .off('bed:announcer', announcerCb)
         };
     }, [findName])

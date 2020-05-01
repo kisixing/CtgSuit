@@ -109,12 +109,12 @@ class TableList extends Component {
           const signable = true || !!ctgexam.signable;
           return (
             <span>
-              <span
+              {/* <span
                 className="primary-link"
                 onClick={e => this.showAnalysis(e, record)}
               >
                 分析
-              </span>
+              </span> */}
               {signable && (
                 <>
                   <Divider type="vertical" />

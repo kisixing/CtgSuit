@@ -15,6 +15,7 @@ import { BedStatus } from '@lianmed/lmg/lib/services/WsService';
 import { FetalItem } from "../types";
 import { ButtonProps } from 'antd/lib/button';
 import Jb from "./Jb";
+import Event from "./Event";
 const socket = WsService._this;
 
 function Toolbar(props: FetalItem.IToolbarProps) {
@@ -217,6 +218,14 @@ function Toolbar(props: FetalItem.IToolbarProps) {
     >
       报告
       </B>
+    <Button
+      icon={<LegacyIcon type="printer" />}
+      type="link"
+      onClick={() => setModalName('eventVisible')}
+    >
+      事件记录
+      </Button>
+
     {
       !!is_include_tocozero && <B
         disabled={!is_include_tocozero}
@@ -325,6 +334,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
       docid={docid}
     />
     <Jb pregnancyId={pregnancyId} pvId={pvId} onCancel={handleCancel} visible={modalName === 'jbVisible'} />
+    <Event visible={modalName === 'eventVisible'} onCancel={handleCancel} />
   </>;
 }
 
