@@ -11,6 +11,11 @@ export default (listData: IBed[]) => {
     const alarm0_ref = useRef<HTMLAudioElement>()
     const alarm1_ref = useRef<HTMLAudioElement>()
     const alarm2_ref = useRef<HTMLAudioElement>()
+    const m = {
+        alarm0_ref,
+        alarm1_ref,
+        alarm2_ref,
+    }
     const alarm_msg = useRef(new Set())
 
     const ward = store.get('ward') || {}
@@ -22,13 +27,22 @@ export default (listData: IBed[]) => {
         return isIn ? (bedNO || bedname) : bedname
     }, [listData])
     useEffect(() => {
-        const alarm_volumn = SettingStore.cache.alarm_volumn || 1
-        alarm0_ref.current = document.querySelector('#alarm0')
-        alarm1_ref.current = document.querySelector('#alarm1')
-        alarm2_ref.current = document.querySelector('#alarm2')
-        alarm0_ref.current.volume = alarm_volumn
-        alarm1_ref.current.volume = alarm_volumn
-        alarm2_ref.current.volume = alarm_volumn
+        const alarm_volumn = (SettingStore.cache.alarm_volumn || 5) / 10
+        const alarm_muted = (SettingStore.cache.alarm_muted || false)
+ 
+        Array(3).fill(0).forEach((_, i) => {
+            const t: HTMLAudioElement = document.querySelector(`#alarm${i}`)
+            m[`alarm${i}_ref`].current = t
+            try {
+                if (t) {
+                    t.volume = alarm_volumn
+                    t.muted = alarm_muted
+                }
+            } catch (e) {
+
+            }
+        })
+
     }, [])
     useEffect(() => {
         let id = setInterval(() => {
@@ -45,7 +59,7 @@ export default (listData: IBed[]) => {
                 alarm0_ref.current.play()
             }
             alarm_msg.current = new Set()
-        }, 5000)
+        }, 2000)
         return () => clearInterval(id)
     }, [])
     useLayoutEffect(() => {
@@ -53,6 +67,8 @@ export default (listData: IBed[]) => {
 
         const onCb = alarmType => {
             // audio.play()
+            console.log('alarm alarmType', alarmType)
+
             alarm_msg.current.add(alarmType)
         }
         const announcerCb = (text, pitch = 4, rate = .6) => {

@@ -18,7 +18,7 @@ interface IDataItem {
   recorder: string
 }
 export const SignModal = (props: IProps) => {
-  const { visible, onCancel, docid = '26_1_200424141911' } = props;
+  const { visible, onCancel, docid } = props;
   const [data, setData] = useState<IDataItem[]>([])
   const [note, setNote] = useState('')
   useEffect(() => {

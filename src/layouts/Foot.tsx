@@ -10,7 +10,8 @@ import config from '@/utils/config';
 import LayoutSetting from './LayoutSetting';
 import { printPdf } from "@/utils";
 import store from 'store'
-
+import muted from "../assets/muted.png";
+import { connect } from "dva";
 const styles = require('./BasicLayout.less')
 
 const settingData = settingStore.cache
@@ -21,21 +22,19 @@ declare var __VERSION: string;
 
 const PrintModal = ({ printCb, printVisible, setPrintVisible, setStartTime, setEndTime }) => {
   return (
-    <div>
-      <Modal maskClosable={false} footer={null} visible={printVisible} onCancel={() => setPrintVisible(false)} >
-        <span>开始日期</span> <DatePicker onChange={e => setStartTime(e.format('YYYY-MM-DD'))} />
-        <span style={{ marginLeft: 10 }}>结束日期</span> <DatePicker onChange={e => setEndTime(e.format('YYYY-MM-DD'))} />
-        <div style={{ overflow: 'hidden', marginTop: 20, clear: 'both' }}>
-          <Button onClick={printCb} style={{ float: 'right', }}>打印</Button>
-        </div>
-      </Modal>
-    </div>
+    <Modal maskClosable={false} footer={null} visible={printVisible} onCancel={() => setPrintVisible(false)} >
+      <span>开始日期</span> <DatePicker onChange={e => setStartTime(e.format('YYYY-MM-DD'))} />
+      <span style={{ marginLeft: 10 }}>结束日期</span> <DatePicker onChange={e => setEndTime(e.format('YYYY-MM-DD'))} />
+      <div style={{ overflow: 'hidden', marginTop: 20, clear: 'both' }}>
+        <Button onClick={printCb} style={{ float: 'right', }}>打印</Button>
+      </div>
+    </Modal>
   )
 }
 
 
 const Foot = (props: any) => {
-
+  const { alarm_muted } = props.setting
   const theme = useRef(null)
   const colorIndex = ~~(Math.random() * colors.length) >> 5;
   const primaryColor = settingData.theme || colors[colorIndex];
@@ -48,7 +47,7 @@ const Foot = (props: any) => {
       return message.info('请输入时间')
     }
     const url = `/prenatal-visits-report?startTime=${startTime}&endTime=${endTime}&areaNo=${ward.wardId}`
-    console.log('print',url)
+    console.log('print', url)
     printPdf(url)
   }
 
@@ -108,8 +107,14 @@ const Foot = (props: any) => {
       <span>
         <span>{config.copyright}</span>
         <span style={{ padding: '0 4px 0 8px' }} title="当前版本">
-          v{__VERSION}
+          {/* v{__VERSION} */}
+          V1.0.0.0
         </span>
+      </span>
+      <span style={{ marginRight: 4 }}>
+        {
+          alarm_muted && <img src={muted} width="14" />
+        }
       </span>
       <VersionModal />
       <PrintModal setPrintVisible={setPrintVisible} printCb={printCb} printVisible={printVisible} setEndTime={setEndTime} setStartTime={setStartTime} />
@@ -117,4 +122,8 @@ const Foot = (props: any) => {
   );
 }
 
-export default memo(Foot)
+export default memo(connect(
+  ({ setting }: any) => ({
+    setting
+  })
+)(Foot))

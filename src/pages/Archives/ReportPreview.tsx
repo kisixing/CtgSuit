@@ -134,13 +134,15 @@ function ReportPreview(props: IProps) {
         </div>
       </div>
       <div style={{ float: 'right', margin: 6 }}>
-        {target.archived ? (
-          <Button onClick={undoArchiving}>取消归档</Button>
-        ) : (
-          <Button disabled={!currentReport} onClick={archiving}>
-            归档
-          </Button>
-        )}
+        {/* {
+          target.archived ? (
+            <Button onClick={undoArchiving}>取消归档</Button>
+          ) : (
+              <Button disabled={!currentReport} onClick={archiving}>
+                归档
+              </Button>
+            )
+        } */}
         <Popconfirm
           title="确认删除该报告？"
           onConfirm={confirm}

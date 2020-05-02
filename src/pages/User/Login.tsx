@@ -167,7 +167,7 @@ const Login = (props: IProps) => {
     {/* footer */}
     <div className={styles.footer}>
       <>
-        <span>{config.copyright}</span>
+        <span>{config.copyright} V1.0.0.0</span>
         <Popconfirm
           placement="topRight"
           trigger="click"

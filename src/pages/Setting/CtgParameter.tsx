@@ -1,17 +1,11 @@
-/*
- * @Description: 网络设置
- * @Author: Zhong Jun
- * @Date: 2019-10-06 14:51:23
- */
 
-import React, { useEffect } from 'react';
-import { connect } from 'dva';
-import { Form } from 'antd';
-import '@ant-design/compatible/assets/index.css';
-import { InputNumber, Button, message, Radio, Input, Row, Col } from 'antd';
 import store from '@/utils/SettingStore';
-
+import '@ant-design/compatible/assets/index.css';
+import { Button, Col, Form, InputNumber, message, Radio, Row } from 'antd';
+import { connect } from 'dva';
+import React, { useEffect } from 'react';
 import { formItemLayout, tailFormItemLayout } from './utils';
+
 const styles = require('./style.less');
 
 const colors = {
@@ -53,7 +47,6 @@ const Network = () => {
                     alarm_high,
                     alarm_low,
                     alarm_on_window,
-                    alarm_on_sound,
                 }) => {
                     form.setFieldsValue({
                         // normalarea,
@@ -72,7 +65,6 @@ const Network = () => {
                         alarm_high,
                         alarm_low,
                         alarm_on_window,
-                        alarm_on_sound,
                     });
                 },
             );
@@ -92,7 +84,6 @@ const Network = () => {
                 'alarm_high',
                 'alarm_low',
                 'alarm_on_window',
-                'alarm_on_sound',
                 'alarm_enable',
                 'alarm_finished',
                 ...Object.keys(colors),
@@ -113,7 +104,7 @@ const Network = () => {
     );
 
     return (
-        <Form layout="horizontal" {...formItemLayout} className={styles.form}>
+        <Form form={form} layout="horizontal" {...formItemLayout} className={styles.form}>
             <div className={styles.subTitle}>CTG曲线设置</div>
             <Row>
                 <Col span={8}>

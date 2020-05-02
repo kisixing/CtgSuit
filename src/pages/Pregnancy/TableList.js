@@ -89,6 +89,8 @@ class TableList extends Component {
         title: '手机号码',
         dataIndex: 'telephone',
         key: 'telephone',
+        render: text => (text ? [...text].map((_,i)=>(i>2&&i<7)?'*':_).join('') : null),
+
       },
       // {
       //   title: '住址',

@@ -1,4 +1,5 @@
 import store from 'store'
+import settingStore from '@/utils/SettingStore';
 
 const setting = {
   namespace: 'setting',
@@ -20,7 +21,8 @@ const setting = {
     accounts: [], // 所有账户信息列表
     fashionable: false,
     // layoutLock: store.get('headCollapsed') || true,
-    layoutLock: true
+    layoutLock: true,
+    alarm_muted:settingStore.cache.alarm_muted
   },
   effects: {
     *setListLayout({ payload }, { put }) {
@@ -30,6 +32,19 @@ const setting = {
     },
     *setHeadCollapsed({ payload }, { put }) {
       store.set('headCollapsed', payload.headCollapsed)
+      yield put({ type: 'setState', payload })
+    },
+    *setMuted({ payload }, { put }) {
+      payload.pure = true
+      settingStore.setSync('alarm_muted', payload.alarm_muted)
+      Array(3).fill(0).forEach((_, i) => {
+        const t: HTMLAudioElement = document.querySelector(`#alarm${i}`)
+        try {
+          t && (t.muted = payload.alarm_muted)
+        } catch (e) {
+
+        }
+      })
       yield put({ type: 'setState', payload })
     },
     *computeLayout({ size }: { size: number }, { put, select }) {
@@ -49,7 +64,7 @@ const setting = {
   },
   reducers: {
     setState(state, { payload }) {
-      Object.entries(payload).forEach(([k, v]) => {
+      payload.pure || Object.entries(payload).forEach(([k, v]) => {
         store.set(k, v)
       })
       return {

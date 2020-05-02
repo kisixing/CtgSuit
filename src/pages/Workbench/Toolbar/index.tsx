@@ -221,6 +221,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
     <Button
       icon={<LegacyIcon type="printer" />}
       type="link"
+      disabled={!docid}
       onClick={() => setModalName('eventVisible')}
     >
       事件记录
@@ -334,7 +335,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
       docid={docid}
     />
     <Jb pregnancyId={pregnancyId} pvId={pvId} onCancel={handleCancel} visible={modalName === 'jbVisible'} />
-    <Event visible={modalName === 'eventVisible'} onCancel={handleCancel} />
+    <Event docid={docid} visible={modalName === 'eventVisible'} onCancel={handleCancel} />
   </>;
 }
 

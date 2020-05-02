@@ -4,13 +4,13 @@
  * @Date: 2019-10-06 14:51:23
  */
 
-import React, { Component, useEffect } from 'react';
-import { Form, Slider, Switch } from 'antd';
-import '@ant-design/compatible/assets/index.css';
-import { InputNumber, Button, message, Radio, Input, Row, Col } from 'antd';
 import store from '@/utils/SettingStore';
-
+import '@ant-design/compatible/assets/index.css';
+import { Button, Col, Form, Input, message, Radio, Row, Slider, Switch } from 'antd';
+import React, { useEffect } from 'react';
 import { formItemLayout, tailFormItemLayout } from './utils';
+import { connect } from "dva";
+
 const styles = require('./style.less');
 
 const colors = {
@@ -26,7 +26,7 @@ const colors = {
   tococolor: 'TOCO',
   // alarmcolor: '报警',
 };
-const Alarm = () => {
+const Alarm = (props) => {
   const [form] = Form.useForm()
   useEffect(() => {
     fetchData();
@@ -52,9 +52,9 @@ const Alarm = () => {
           alarm_high,
           alarm_low,
           alarm_on_window,
-          alarm_on_sound,
-          alarm_deploy,
-          alarm_on_volumn
+          alarm_muted,
+          alarm_delay,
+          alarm_volumn
         }) => {
           form.setFieldsValue({
             // normalarea,
@@ -73,9 +73,9 @@ const Alarm = () => {
             alarm_high,
             alarm_low,
             alarm_on_window,
-            alarm_on_sound,
-            alarm_deploy,
-            alarm_on_volumn
+            alarm_muted,
+            alarm_delay,
+            alarm_volumn
           });
         },
       );
@@ -85,6 +85,17 @@ const Alarm = () => {
       store.set(Object.keys(values), Object.values(values)).then(status => {
         if (status) {
           message.success('设置成功', 2);
+          const { alarm_muted, alarm_volumn } = values
+          props.dispatch({ type: 'setting/setMuted', payload: { alarm_muted } })
+
+          Array(3).fill(0).forEach((_, i) => {
+            const t: HTMLAudioElement = document.querySelector(`#alarm${i}`)
+            try {
+              t && (t.volume = alarm_volumn / 10)
+            } catch (e) {
+
+            }
+          })
         }
       });
     });
@@ -95,10 +106,10 @@ const Alarm = () => {
         'alarm_high',
         'alarm_low',
         'alarm_on_window',
-        'alarm_on_sound',
+        'alarm_muted',
         'alarm_enable',
         'alarm_finished',
-        'alarm_deploy',
+        'alarm_delay',
         ...Object.keys(colors),
       ])
       .then(status => {
@@ -122,17 +133,17 @@ const Alarm = () => {
       <div className={styles.subTitle}>报警设置</div>
       <Row gutter={10}>
         <Col span={8}>
-          <Form.Item label="报警音量" name="alarm_on_volumn" rules={[{ required: false, message: '请输入报警音量!' }]}>
+          <Form.Item label="报警音量" name="alarm_volumn" rules={[{ required: false, message: '请输入报警音量!' }]}>
             <Slider max={10} />
           </Form.Item>
         </Col>
         <Col span={8}>
-          <Form.Item label="报警声音" name="alarm_on_sound" rules={[{ required: false, message: '请输入报警声音!' }]}>
+          <Form.Item label="报警静音" name="alarm_muted" rules={[{ required: false, message: '请输入报警声音!' }]}>
             <Switch />
           </Form.Item>
         </Col>
         <Col span={8}>
-          <Form.Item label="报警延时" name="alarm_deploy" rules={[{ required: false, message: '请输入报警延时!' }]}>
+          <Form.Item label="报警延时" name="alarm_delay" rules={[{ required: false, message: '请输入报警延时!' }]}>
             <Slider max={10} />
           </Form.Item>
         </Col>
@@ -188,16 +199,16 @@ const Alarm = () => {
         <Button type="primary" onClick={handleSubmit}>
           保存
           </Button>
-        <Button
+        {/* <Button
           type="default"
           onClick={reset.bind(this)}
           style={{ marginLeft: 10 }}
         >
           恢复默认
-          </Button>
+          </Button> */}
       </Form.Item>
     </Form>
   );
 }
 
-export default Alarm
+export default connect()(Alarm)
