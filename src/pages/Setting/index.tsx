@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Layout, Menu } from 'antd';
 import { connect } from 'dva';
 import store from 'store';
@@ -67,18 +67,6 @@ const Setting = () => {
       </Menu>
     );
   };
-
-  //函数定义
-  // scrollToAnchor = anchorName => {
-  //   if (anchorName) {
-  //     // 找到锚点
-  //     let anchorElement = document.getElementById(anchorName);
-  //     // 如果对应id的锚点存在，就跳转到锚点
-  //     if (anchorElement) {
-  //       anchorElement.scrollIntoView({ block: 'start', behavior: 'smooth' });
-  //     }
-  //   }
-  // };
 
   const switchComponent = () => {
     const T = settingMap[current] || (current === 'alarm' ? Alarm : () => null)

@@ -103,5 +103,5 @@ class Hospital extends PureComponent {
 
 const H = connect()(Hospital);
 
-H.displayName = '医院设置'
+H.displayName = '医院信息'
 export default H

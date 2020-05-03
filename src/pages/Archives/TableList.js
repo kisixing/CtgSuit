@@ -489,7 +489,7 @@ class TableList extends Component {
         <Table
           bordered
           size="small"
-          scroll={{ x: 1280, y: 200 }}
+          scroll={{ x: 1280, y: 204 }}
           columns={this.columns}
           dataSource={dataSource}
           onRow={record => {
@@ -523,6 +523,12 @@ class TableList extends Component {
             showTotal: (total, range) => `共 ${total} 条`,
             onChange: this.onChange,
             onShowSizeChange: this.onShowSizeChange,
+            className: '',
+            style: {
+              float: 'right',
+              paddingTop: '4px'
+
+            }
           }}
         />
         {visible ? (

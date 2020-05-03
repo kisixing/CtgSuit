@@ -292,7 +292,12 @@ class Account extends PureComponent {
             const { activated, id } = record;
             let dom = null;
             if (!activated) {
-              dom = <a onClick={() => this.start(id)}>启用</a>;
+              dom = (
+                <>
+                  <Divider type="vertical" />
+                  <a onClick={() => this.start(id)}>启用</a>
+                </>
+              );
             }
             return (
               <>
@@ -307,7 +312,6 @@ class Account extends PureComponent {
                 >
                   编辑
                 </span>
-                <Divider type="vertical" />
                 {dom}
                 <Divider type="vertical" />
                 <Popconfirm
@@ -574,6 +578,6 @@ const A = connect(({ global, setting }) => ({
   account: global.account,
 }))(Account);
 
-A.displayName = '账号设置'
+A.displayName = '账号管理'
 
 export default A

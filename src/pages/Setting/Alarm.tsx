@@ -56,6 +56,14 @@ const Alarm = (props) => {
           alarm_delay,
           alarm_volumn
         }) => {
+          console.log(
+            '8888888888888888888',
+            alarm_volumn,
+            alarm_delay,
+            alarm_muted,
+            alarm_on_window,
+            alarm_finished,
+          );
           form.setFieldsValue({
             // normalarea,
             // selectarea,
@@ -127,46 +135,72 @@ const Alarm = (props) => {
     </Radio.Group>
   );
 
-
   return (
-    <Form form={form} layout="horizontal" {...formItemLayout} className={styles.form}>
+    <Form
+      form={form}
+      layout="horizontal"
+      {...formItemLayout}
+      className={styles.form}
+    >
       <div className={styles.subTitle}>报警设置</div>
-      <Row gutter={10}>
+      <Row gutter={24}>
         <Col span={8}>
-          <Form.Item label="报警音量" name="alarm_volumn" rules={[{ required: false, message: '请输入报警音量!' }]}>
-            <Slider max={10} />
+          <Form.Item
+            label="报警音量"
+            name="alarm_volumn"
+            rules={[{ required: false, message: '请输入报警音量!' }]}
+          >
+            <Slider
+              max={10}
+              marks={{ 0: '0%', 5: '50%', 10: '100%' }}
+              tipFormatter={val => `${val * 10} %`}
+            />
           </Form.Item>
         </Col>
+
         <Col span={8}>
-          <Form.Item label="报警静音" name="alarm_muted" rules={[{ required: false, message: '请输入报警声音!' }]}>
-            <Switch />
-          </Form.Item>
-        </Col>
-        <Col span={8}>
-          <Form.Item label="报警延时" name="alarm_delay" rules={[{ required: false, message: '请输入报警延时!' }]}>
-            <Slider max={10} />
+          <Form.Item
+            label="报警延时"
+            name="alarm_delay"
+            rules={[{ required: false, message: '请输入报警延时!' }]}
+          >
+            <Slider
+              max={10}
+              marks={{ 0: '0s', 5: '5s', 10: '10s' }}
+              tipFormatter={val => `${val} s`}
+            />
           </Form.Item>
         </Col>
       </Row>
-
-      <Row>
-
-
-      </Row>
       <Row>
         <Col span={8}>
-          <Form.Item label="监护结束提示" name="alarm_finished" rules={[{ required: false, message: '请选择!' }]}>
-
+          <Form.Item
+            label="报警静音"
+            name="alarm_muted"
+            valuePropName="checked"
+            rules={[{ required: false, message: '请输入报警声音!' }]}
+          >
             <Switch />
-
           </Form.Item>
-
         </Col>
         <Col span={8}>
-          <Form.Item label="报警高亮" name="alarm_on_window" rules={[{ required: false, message: '请输入报警高亮!' }]}>
-
+          <Form.Item
+            label="报警高亮"
+            name="alarm_on_window"
+            valuePropName="checked"
+            rules={[{ required: false, message: '请输入报警高亮!' }]}
+          >
             <Switch />
-
+          </Form.Item>
+        </Col>
+        <Col span={8}>
+          <Form.Item
+            label="监护结束提示"
+            name="alarm_finished"
+            valuePropName="checked"
+            rules={[{ required: false, message: '请选择!' }]}
+          >
+            <Switch />
           </Form.Item>
         </Col>
         {/* <Col span={8}>
@@ -182,12 +216,15 @@ const Alarm = (props) => {
             </Form.Item>
           </Col> */}
       </Row>
-
       <Row>
         {Object.keys(colors).map(_ => {
           return (
             <Col span={8} key={_}>
-              <Form.Item label={colors[_]} name={_} rules={[{ required: false, message: '选择颜色!' }]}>
+              <Form.Item
+                label={colors[_]}
+                name={_}
+                rules={[{ required: false, message: '选择颜色!' }]}
+              >
                 <Input type="color" />
               </Form.Item>
             </Col>
@@ -198,14 +235,14 @@ const Alarm = (props) => {
       <Form.Item {...tailFormItemLayout}>
         <Button type="primary" onClick={handleSubmit}>
           保存
-          </Button>
+        </Button>
         {/* <Button
           type="default"
           onClick={reset.bind(this)}
           style={{ marginLeft: 10 }}
         >
           恢复默认
-          </Button> */}
+        </Button> */}
       </Form.Item>
     </Form>
   );
