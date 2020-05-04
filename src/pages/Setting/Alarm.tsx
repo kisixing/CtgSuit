@@ -56,14 +56,6 @@ const Alarm = (props) => {
           alarm_delay,
           alarm_volumn
         }) => {
-          console.log(
-            '8888888888888888888',
-            alarm_volumn,
-            alarm_delay,
-            alarm_muted,
-            alarm_on_window,
-            alarm_finished,
-          );
           form.setFieldsValue({
             // normalarea,
             // selectarea,
