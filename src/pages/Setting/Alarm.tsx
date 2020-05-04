@@ -183,7 +183,7 @@ const Alarm = (props) => {
             <Switch />
           </Form.Item>
         </Col>
-        <Col span={8}>
+        {/* <Col span={8}>
           <Form.Item
             label="报警高亮"
             name="alarm_on_window"
@@ -202,7 +202,7 @@ const Alarm = (props) => {
           >
             <Switch />
           </Form.Item>
-        </Col>
+        </Col> */}
         {/* <Col span={8}>
             <Form.Item label="开启报警">
               {getFieldDecorator('alarm_enable', {
@@ -216,21 +216,7 @@ const Alarm = (props) => {
             </Form.Item>
           </Col> */}
       </Row>
-      <Row>
-        {Object.keys(colors).map(_ => {
-          return (
-            <Col span={8} key={_}>
-              <Form.Item
-                label={colors[_]}
-                name={_}
-                rules={[{ required: false, message: '选择颜色!' }]}
-              >
-                <Input type="color" />
-              </Form.Item>
-            </Col>
-          );
-        })}
-      </Row>
+
 
       <Form.Item {...tailFormItemLayout}>
         <Button type="primary" onClick={handleSubmit}>

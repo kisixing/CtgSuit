@@ -1,7 +1,7 @@
 
 import store from '@/utils/SettingStore';
 import '@ant-design/compatible/assets/index.css';
-import { Button, Col, Form, InputNumber, message, Radio, Row } from 'antd';
+import { Button, Col, Form, InputNumber, message, Radio, Row, Input } from 'antd';
 import { connect } from 'dva';
 import React, { useEffect } from 'react';
 import { formItemLayout, tailFormItemLayout } from './utils';
@@ -169,7 +169,21 @@ const Network = () => {
             </Form.Item>
           </Col>
         </Row>
-
+        <Row>
+        {Object.keys(colors).map(_ => {
+          return (
+            <Col span={8} key={_}>
+              <Form.Item
+                label={colors[_]}
+                name={_}
+                rules={[{ required: false, message: '选择颜色!' }]}
+              >
+                <Input type="color" />
+              </Form.Item>
+            </Col>
+          );
+        })}
+      </Row>
         <Form.Item {...tailFormItemLayout}>
           <Button type="primary" onClick={handleSubmit}>
             保存
