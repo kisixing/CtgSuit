@@ -107,8 +107,7 @@ const Foot = (props: any) => {
       <span>
         <span>{config.copyright}</span>
         <span style={{ padding: '0 4px 0 8px' }} title="当前版本">
-          {/* v{__VERSION} */}
-          V1.0.0.0
+          v{__VERSION}
         </span>
       </span>
       <span style={{ marginRight: 4 }}>

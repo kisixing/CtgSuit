@@ -9,6 +9,7 @@ import request from '@/utils/request';
 import SettingStore from '@/utils/SettingStore';
 import store from "store";
 declare var __DEV__: boolean;
+declare var __VERSION: string;
 
 const styles = require('./Login.less');
 const FormItem = Form.Item;
@@ -96,8 +97,8 @@ const Login = (props: IProps) => {
         <h1>{config.siteName}</h1>
       </div>
       <Form form={form} onFinish={handleSubmit} initialValues={{
-        password:__DEV__ ? 'admin':'',
-        username:store.get('username')
+        password: __DEV__ ? 'admin' : '',
+        username: store.get('username')
       }} >
         <FormItem hasFeedback name="username" >
 
@@ -167,7 +168,7 @@ const Login = (props: IProps) => {
     {/* footer */}
     <div className={styles.footer}>
       <>
-        <span>{config.copyright} V1.0.0.0</span>
+        <span>{config.copyright} V{__VERSION}</span>
         <Popconfirm
           placement="topRight"
           trigger="click"
