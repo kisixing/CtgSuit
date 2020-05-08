@@ -1,5 +1,5 @@
 import { readdir } from 'fs';
-const { ipcMain } = require('electron');
+import { ipcMain } from 'electron';
 
 readdir(__dirname, (e, files) => {
     !e && (

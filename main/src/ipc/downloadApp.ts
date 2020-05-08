@@ -20,7 +20,7 @@ function appDownload(e, url = '') {
 
     const writeStream = createWriteStream(filePath)
         .on('close', () => {
-            e.sender.send('\u0061\u0070\u0070\u0044\u006f\u0077\u006e\u006c\u006f\u0061\u0064\u0065\u0064')
+            e.sender.send('appDownloaded')
             dialog.showMessageBox({
                 message: '下载完成，是否进行安装？',
                 buttons: ['cancel', 'ok'],

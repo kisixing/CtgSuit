@@ -133,7 +133,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
       const d = res[0];
       if (!d.prenatalVisit) {
         console.error('未能正确取得prenatalVisit!');
-        return message.info('暂时无法停止改监护，请稍后再试。');
+        return message.info('暂时无法停止监护，请稍后再试。');
       }
       if (d && d.id) {
         const prenatalVisit = d['prenatalVisit'];

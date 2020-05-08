@@ -1,11 +1,11 @@
 import settingStore from "@/utils/SettingStore";
 import { uncompile } from '@/utils/utils';
 import { WsService } from "@lianmed/lmg";
-import VisitedPanel from "@lianmed/pages/lib/Remote/VisitedPanel";
+// import VisitedPanel from "@lianmed/pages/lib/Remote/VisitedPanel";
 import request from "@lianmed/request";
 import { Layout } from 'antd';
 import { connect } from 'dva';
-import { ipcRenderer, remote } from 'electron';
+import { ipcRenderer, remote, ipcMain } from 'electron';
 import React, { useEffect, useLayoutEffect } from 'react';
 import store from 'store';
 import { router } from 'umi';
@@ -31,7 +31,10 @@ const BasicLayout = (props: any) => {
       const r = remote.getGlobal('windows').remote
       r.send('token', { ...request.configure, prefix: `${settingData['remote_url']}/api` })
     })
+  console.log('ipcMain', ipcMain,ipcRenderer)
+
   }, [])
+
   useLayoutEffect(() => {
     const ws = new WsService(settingData)
       .on('explode', function (data) {

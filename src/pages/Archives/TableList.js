@@ -10,6 +10,7 @@ import PrintPreview from '../Workbench/PrintPreview';
 import Analysis from '../Workbench/Analysis';
 import ReportPreview from "./ReportPreview";
 import styles from './TableList.less';
+import { ipcRenderer } from "electron";
 import { event } from '@lianmed/utils';
 
 class TableList extends Component {
@@ -150,13 +151,38 @@ class TableList extends Component {
       },
     ]; // .map(_ => ({ ..._, align: 'center' }));
   }
+  play(docid, second = 0) {
+    console.log('play', docid)
+    if (docid) {
+      ipcRenderer.send('audioPlay', `load`, { second, docid })
+      ipcRenderer.send('audioPlay', `play`, { second, docid })
+    } else {
+      ipcRenderer.send('audioPlay', 'stop', { second })
 
+    }
+  }
   componentDidMount() {
     this.init()
-    event.on('signed', this.signed)
+    event
+      .on('signed', this.signed)
+      // 用户点击播放
+      .on('ctg:replay', this.play)
+    ipcRenderer.on('audioPlay', (e, text) => {
+      switch (text) {
+        case '开始播放':
+          event.emit('ctg:canReplay')
+          break;
+
+        default:
+          break;
+      }
+    })
   }
   componentWillUnmount() {
-    event.off('signed', this.signed)
+    event
+      .off('signed', this.signed)
+      .off('ctg:replay', this.play)
+
   }
   signed = (id) => {
     const { pagination } = this.props;
@@ -294,6 +320,7 @@ class TableList extends Component {
 
   // 单机行事件
   handleRow = (record, index) => {
+    console.log('record', record.ctgexam.note);
     const { dispatch } = this.props;
     // 当前点击的档案详情
     dispatch({

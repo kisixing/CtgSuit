@@ -21,6 +21,7 @@ const pkg = resolve(source, 'package.json')
 const unpackPath = isDev ? tmp : resources
 const runtimeJsPath = resolve(basePath, 'runtime/index.js')
 const publicPath = resolve(resources, 'app')
+const audioPlayerPath = resolve(assetsPath,'./AudioPlay.exe')
 export {
     profile,
     desktop,
@@ -38,5 +39,7 @@ export {
     basePath,
     runtimeJsPath,
     publicPath,
-    oldConfig
+    oldConfig,
+    audioPlayerPath,
+    assetsPath
 }
