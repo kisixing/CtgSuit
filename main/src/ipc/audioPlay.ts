@@ -1,5 +1,5 @@
 import { audioPlayerPath, assetsPath } from '../config/path';
-import { spawn, execFile } from "child_process";
+import { spawn, ChildProcessWithoutNullStreams } from "child_process";
 import { logErr } from '../utils/log';
 import { createConnection, Socket } from 'net';
 import { resolve } from "path";
@@ -8,18 +8,24 @@ import { resolve } from "path";
 const PIPE_NAME = "audiopipe";
 const PIPE_PATH = "\\\\.\\pipe\\" + PIPE_NAME;
 let client: Socket
+let child: ChildProcessWithoutNullStreams
 function init() {
-    let child = spawn(audioPlayerPath);
+    child = spawn(audioPlayerPath);
     if (child) {
         child
             .on('error', e => console.log('c err', e))
             .on('close', () => console.log('close'))
             .on('disconnect', () => console.log('disconnect'))
-        child.stdout && child.stdout.on('data', d => console.log(d.toString()))
+            .on('message', d => console.log(d.toString()))
+        child.stdout && child.stdout.on('data', d => console.log('data', d.toString()))
+        child.stdin && child.stdin.on('data', d => console.log('data', d.toString()))
 
     }
 }
-init()
+export function kill() {
+    child && child.kill()
+}
+// init()
 
 
 var stdin = process.openStdin();

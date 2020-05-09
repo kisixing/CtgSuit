@@ -1,6 +1,6 @@
 {
   "name": "ctgsuit-electron",
-  "version": "1.0.0.6",
+  "version": "1.0.0.15",
   "description": "host replace pack",
   "details": [],
   "main": "main/index.js",
@@ -13,9 +13,7 @@
     "electron-is": "^3.0.0",
     "electron-log": "^2.2.14",
     "original-fs": "^1.1.0",
-    "rimraf": "^3.0.0",
-    "speaker": "^0.5.1",
-    "wav": "1.0.2"
+    "rimraf": "^3.0.0"
   },
   "devDependencies": {}
 }

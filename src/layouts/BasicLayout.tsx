@@ -31,7 +31,7 @@ const BasicLayout = (props: any) => {
       const r = remote.getGlobal('windows').remote
       r.send('token', { ...request.configure, prefix: `${settingData['remote_url']}/api` })
     })
-  console.log('ipcMain', ipcMain,ipcRenderer)
+    remote.getCurrentWindow().setFullScreen(!!settingData.fullscreen)
 
   }, [])
 

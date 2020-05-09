@@ -152,6 +152,7 @@ class TableList extends Component {
     ]; // .map(_ => ({ ..._, align: 'center' }));
   }
   play(docid, second = 0) {
+    second = Math.ceil(second)
     console.log('play', docid)
     if (docid) {
       ipcRenderer.send('audioPlay', `load`, { second, docid })
@@ -182,6 +183,7 @@ class TableList extends Component {
     event
       .off('signed', this.signed)
       .off('ctg:replay', this.play)
+    ipcRenderer.send('audioPlay', 'stop', { second: 0 })
 
   }
   signed = (id) => {

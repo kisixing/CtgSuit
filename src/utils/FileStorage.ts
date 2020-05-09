@@ -94,7 +94,7 @@ export default class FileStorage {
         }
         const o = { ...obj }
         key.forEach((k, index) => {
-            const v = value[index] || ''
+            const v = value[index]
             o[k] = v
         })
 

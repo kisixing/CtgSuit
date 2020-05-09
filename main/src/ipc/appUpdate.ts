@@ -4,7 +4,7 @@ import { spawn } from "child_process";
 import { isDev } from "../utils/is";
 import { log, logErr } from '../utils/log'
 import { request } from "http";
-
+import { kill } from "./audioPlay";
 const { dialog, app } = require('electron');
 const { resolve } = require('path')
 
@@ -68,7 +68,13 @@ function appUpdate(e) {
                     },
                     _ => {
                       f = false;
-                      _ && run(tgzPath, tarPath)
+                      if (_) {
+                        kill()
+                        _ && run(tgzPath, tarPath)
+
+                      } else {
+                        reCall()
+                      }
                     },
                   );
               },

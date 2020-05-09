@@ -35,7 +35,7 @@ const settingMap = {
 }
 const Setting = () => {
 
-  const [current, setCurrent] = useState('alarm' || Object.keys(settingMap)[0])
+  const [current, setCurrent] = useState('Network' || Object.keys(settingMap)[0])
   const handleMenuClick = e => {
     const {
       key,
@@ -51,16 +51,16 @@ const Setting = () => {
         selectedKeys={[current]}
         onClick={handleMenuClick}
       >
-        <Menu.ItemGroup key="g1" title="报警">
-          <Menu.Item key="alarm">设置</Menu.Item>
-
-        </Menu.ItemGroup>
         <Menu.ItemGroup key="g2" title="常规">
           {
             Object.entries(settingMap).map(([k, v]) => {
               return v ? <Menu.Item key={k}>{v.displayName}</Menu.Item> : null
             })
           }
+
+        </Menu.ItemGroup>
+        <Menu.ItemGroup key="g1" title="报警">
+          <Menu.Item key="alarm">设置</Menu.Item>
 
         </Menu.ItemGroup>
 
