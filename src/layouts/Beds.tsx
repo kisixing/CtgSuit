@@ -1,10 +1,10 @@
-import React, { } from 'react';
-import { Button } from 'antd';
-import { router } from 'umi';
 import { mapStatusToColor } from '@/constant';
-import { BedStatus, ICache } from "@lianmed/lmg/lib/services/WsService";
 import { IBed } from '@/types';
+import { BedStatus, ICache } from "@lianmed/lmg/lib/services/WsService";
+import { Button } from 'antd';
 import { connect } from 'dva';
+import React from 'react';
+import { router } from 'umi';
 
 interface IProps {
   headData: IBed[]

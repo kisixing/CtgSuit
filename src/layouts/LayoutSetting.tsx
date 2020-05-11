@@ -1,8 +1,8 @@
 
+import { Button, Dropdown, Menu } from 'antd';
+import { connect } from 'dva';
 import React from 'react';
 
-import { Menu, Dropdown, Button } from 'antd';
-import { connect } from 'dva';
 
 const joinSymbol = ' x '
 

@@ -16,7 +16,7 @@ const ipcRenderer = new E()
     .on('printWindow', (url) => {
         window.open(url)
     })
-    .on('newWindow',()=>{
+    .on('newWindow', () => { 
         window.open('/handbook/index.html')
     })
 
@@ -31,9 +31,9 @@ const remote = {
 
         }
         return a[name]
+    },
+    getCurrentWindow() {
+        return { setFullScreen() { } }
     }
 }
-export {
-    ipcRenderer,
-    remote
-}
+export { ipcRenderer, remote };

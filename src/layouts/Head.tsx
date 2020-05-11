@@ -1,11 +1,10 @@
-import React, { memo } from 'react';
 import { Layout } from 'antd';
-import cx from 'classnames';
+import { connect } from 'dva';
+import React, { memo } from 'react';
 // import logo from '../assets/logo.png';
 import Beds from './Beds';
-import Tabs from './Tabs';
 import Menus from "./Menus";
-import { connect } from 'dva';
+import Tabs from './Tabs';
 const styles = require('./BasicLayout.less')
 
 const { Header } = Layout;

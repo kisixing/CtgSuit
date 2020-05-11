@@ -1,14 +1,14 @@
-import React, { useCallback } from 'react';
-
-import { Icon as LegacyIcon } from '@ant-design/compatible';
-
-import { Button } from 'antd';
-import { router } from 'umi';
-import withRouter from 'umi/withRouter';
-import { ipcRenderer } from 'electron';
 // import logo from '../assets/logo.png';
 import request from '@/utils/request';
+import { Icon as LegacyIcon } from '@ant-design/compatible';
+import { Button } from 'antd';
+import { ipcRenderer } from 'electron';
+import React, { useCallback } from 'react';
+import { router } from 'umi';
+import withRouter from 'umi/withRouter';
 import Account from "./Account";
+
+
 const styles = require('./BasicLayout.less')
 
 const M = (props: any) => {

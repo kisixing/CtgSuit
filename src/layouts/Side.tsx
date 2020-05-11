@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
 import { Icon as LegacyIcon } from '@ant-design/compatible';
-import { Layout, Menu, Button } from 'antd';
+import { Layout, Menu } from 'antd';
 import { connect } from 'dva';
+import React from 'react';
+import Link from 'umi/link';
 import withRouter from 'umi/withRouter';
 const styles = require('./BasicLayout.less')
-import Link from 'umi/link';
 
 
 const Side = (props: any) => {

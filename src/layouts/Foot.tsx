@@ -1,17 +1,17 @@
-import React, { memo, useRef, useState } from 'react';
-import { BgColorsOutlined, QuestionCircleOutlined, FileDoneOutlined } from '@ant-design/icons';
-import { Layout, Button, Popover, Modal, DatePicker, message } from 'antd';
-import { ipcRenderer } from 'electron';
-
-import { AntdThemeManipulator } from '@lianmed/components';
-import settingStore from "@/utils/SettingStore";
 import VersionModal from "@/components/VersionModal";
-import config from '@/utils/config';
-import LayoutSetting from './LayoutSetting';
 import { printPdf } from "@/utils";
-import store from 'store'
-import muted from "../assets/muted.png";
+import config from '@/utils/config';
+import settingStore from "@/utils/SettingStore";
+import { BgColorsOutlined, FileDoneOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import { AntdThemeManipulator } from '@lianmed/components';
+import { Button, DatePicker, Layout, message, Modal, Popover } from 'antd';
 import { connect } from "dva";
+import { ipcRenderer } from 'electron';
+import React, { memo, useRef, useState } from 'react';
+import store from 'store';
+import muted from "../assets/muted.png";
+import LayoutSetting from './LayoutSetting';
+
 const styles = require('./BasicLayout.less')
 
 const settingData = settingStore.cache

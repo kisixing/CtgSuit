@@ -5,7 +5,7 @@ import { WsService } from "@lianmed/lmg";
 import request from "@lianmed/request";
 import { Layout } from 'antd';
 import { connect } from 'dva';
-import { ipcRenderer, remote, ipcMain } from 'electron';
+import { ipcRenderer, remote } from 'electron';
 import React, { useEffect, useLayoutEffect } from 'react';
 import store from 'store';
 import { router } from 'umi';
