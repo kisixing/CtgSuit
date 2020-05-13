@@ -1,13 +1,13 @@
 /**
  * 建档
  */
-import React from 'react';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
-import { Button, Modal, Input, Row, Col, Select, DatePicker, InputNumber, message } from 'antd';
-import styles from './index.less';
+import { Button, Col, DatePicker, Input, InputNumber, message, Modal, Row, Select } from 'antd';
+import moment from 'moment';
+import React from 'react';
 import store from "store";
-
+import styles from './index.less';
 
 const width = '200px';
 const areaNO = store.get('ward') && store.get('ward').wardId
@@ -42,6 +42,8 @@ const EditModal = Form.create({
           telephone,
           gravidity,
           parity,
+          edd,
+          // birth,
           recordstate,
           bedNO,
         } = dataSource;
@@ -52,6 +54,8 @@ const EditModal = Form.create({
           telephone,
           gravidity,
           parity,
+          edd: edd ? moment(edd) : null,
+          // birth:moment(birth),
           bedNO,
           recordstate,
         });
@@ -212,13 +216,13 @@ const EditModal = Form.create({
                   })(<Input placeholder="请输入床号..." style={{ width }} />)}
                 </Form.Item>
               </Col>
-              <Col span={12}>
+              {/* <Col span={12}>
                 <Form.Item label="出生年月">
                   {getFieldDecorator('birth', {
                     rules: [{ required: false, message: '请填写出生日期!' }],
                   })(<DatePicker placeholder="输入出生日期..." style={{ width }} />)}
                 </Form.Item>
-              </Col>
+              </Col> */}
               <Col span={12}>
                 <Form.Item label="年龄">
                   {getFieldDecorator('age', {
@@ -265,6 +269,15 @@ const EditModal = Form.create({
                     rules: [{ required: false, message: '请输入产次!' }],
                   })(
                     <InputNumber min={0} max={10} placeholder="请输入产次..." style={{ width }} />,
+                  )}
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item label="预产期">
+                  {getFieldDecorator('edd', {
+                    rules: [{ required: false, message: '请输入预产期!' }],
+                  })(
+                    <DatePicker placeholder="请输入预产期..." style={{ width }} />,
                   )}
                 </Form.Item>
               </Col>

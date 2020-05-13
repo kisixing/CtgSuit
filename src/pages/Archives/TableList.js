@@ -1,17 +1,17 @@
-import React, { Component } from 'react';
-import { connect } from 'dva';
 import { Icon as LegacyIcon } from '@ant-design/compatible';
-import { Table, Divider, Button, Popconfirm, Input } from 'antd';
+import { event } from '@lianmed/utils';
+import { Button, Divider, Input, Table } from 'antd';
+import { connect } from 'dva';
+import { ipcRenderer } from "electron";
 import moment from 'moment';
-import store from 'store';
+import React, { Component } from 'react';
 import Highlighter from 'react-highlight-words';
-import CreateRecordModal from './CreateRecordModal';
-import PrintPreview from '../Workbench/PrintPreview';
+import store from 'store';
 import Analysis from '../Workbench/Analysis';
+import PrintPreview from '../Workbench/PrintPreview';
+import CreateRecordModal from './CreateRecordModal';
 import ReportPreview from "./ReportPreview";
 import styles from './TableList.less';
-import { ipcRenderer } from "electron";
-import { event } from '@lianmed/utils';
 
 class TableList extends Component {
   constructor(props) {

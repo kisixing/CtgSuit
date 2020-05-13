@@ -85,14 +85,14 @@ export default class FileStorage {
         })
         return result.length < 2 ? result[0] : result
     }
-    _handleWriteString(key, value) {
+    _handleWriteString(obj, key, value) {
         if (!Array.isArray(key)) {
             key = [key]
         }
         if (!Array.isArray(value)) {
             value = [value]
         }
-        const o = { ...this.cache }
+        const o = { ...obj }
         key.forEach((k, index) => {
             const v = value[index]
             o[k] = v
@@ -101,19 +101,27 @@ export default class FileStorage {
         return this.box(o)
     }
     setSync(key, value) {
-        const data = this._handleWriteString(key, value)
+        const obj = this.getObjSync()
+        const data = this._handleWriteString(obj, key, value)
         fs.writeFileSync(this.path, data, this.encoding)
     }
     set(key, value) {
         return new Promise((resolve, reject) => {
-            const result = this._handleWriteString(key, value)
-            fs.writeFile(this.path, result, this.encoding, err => {
-                if (err) {
-                    reject(err)
-                    throw err
-                } else {
-                    resolve(true)
-                }
+            this.getObj().then(obj => {
+                const result = this._handleWriteString(obj, key, value)
+                fs.writeFile(this.path, result, this.encoding, err => {
+                    if (err) {
+                        reject(err)
+                        throw err
+                    } else {
+                        resolve(true)
+                    }
+                })
+
+            }).catch(err => {
+                reject(err)
+                throw err
+
             })
         })
     }
@@ -125,6 +133,7 @@ export default class FileStorage {
             }).catch(err => {
                 reject(err)
                 throw err
+
             })
 
         })
