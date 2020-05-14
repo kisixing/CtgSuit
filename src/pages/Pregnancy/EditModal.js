@@ -29,14 +29,14 @@ const EditModal = Form.create({
       const ward = store.get('ward') || {}
       const isIn = ward.wardType === 'in'
       this.isIn = isIn
-
+      this.noLabel = isIn ? '住院号' : '卡号'
+      this.noKey = isIn ? 'inpatientNO' : 'cardNO';
     }
 
     componentDidMount() {
       const { form, dataSource } = this.props;
       if (dataSource) {
         const {
-          inpatientNO,
           name,
           age,
           telephone,
@@ -47,8 +47,8 @@ const EditModal = Form.create({
           recordstate,
           bedNO,
         } = dataSource;
-        form.setFieldsValue({
-          inpatientNO,
+        const base = {
+          [this.noKey]: dataSource[this.noKey],
           name,
           age,
           telephone,
@@ -56,9 +56,12 @@ const EditModal = Form.create({
           parity,
           edd: edd ? moment(edd) : null,
           // birth:moment(birth),
-          bedNO,
           recordstate,
-        });
+        }
+        if (this.isIn) {
+          base.bedNO = bedNO
+        }
+        form.setFieldsValue(base);
         this.setState({ required: true });
       }
     }
@@ -67,11 +70,11 @@ const EditModal = Form.create({
       const { form, dispatch } = this.props;
       form.validateFields((err, values) => {
         if (!err) {
-          const { inpatientNO, name } = values;
+          const { name } = values;
           dispatch({
             type: 'pregnancy/fetchPregnancies',
             payload: {
-              'inpatientNO.equals': inpatientNO,
+              [`${this.noKey}.equals`]: values[this.noKey],
               'name.equals': name,
             },
             callback: res => {
@@ -101,14 +104,14 @@ const EditModal = Form.create({
               onUpdate({ id: searchValues.id, ...values });
             } else {
               // 新建
-              const { inpatientNO, name, bedNO } = values;
-              if (!inpatientNO) {
-                return message.error('请输入住院号！');
+              const { name, bedNO } = values;
+              if (!values[this.noKey]) {
+                return message.error(`请输入${this.noLabel}！`);
               }
               if (!name) {
                 return message.error('请输入姓名！');
               }
-              if (!bedNO) {
+              if (!bedNO && this.isIn) {
                 return message.error('请输入床号！');
               }
               onCreate({ areaNO: areaNO, ...values });
@@ -177,15 +180,15 @@ const EditModal = Form.create({
             <Row gutter={24}>
               <Col span={12}>
                 <Form.Item
-                  label={required ? <span>住院号</span> : <span className="required">住院号</span>}
+                  label={<span className={required ? '' : 'required'}>{this.noLabel}</span>}
                 >
-                  {getFieldDecorator('inpatientNO', {
+                  {getFieldDecorator(this.noKey, {
                     rules: [
-                      { required: required, message: '请填写住院号!' },
-                      { max: 10, message: '住院号的最大长度为10' },
+                      { required: required, message: `请填写${this.noLabel}!` },
+                      { max: 10, message: `${this.noLabel}的最大长度为10` },
                     ],
                     getValueFromEvent: event => event.target.value.trim(),
-                  })(<Input placeholder="输入住院号" style={{ width }} />)}
+                  })(<Input style={{ width }} />)}
                 </Form.Item>
               </Col>
               <Col span={12}>
@@ -203,19 +206,23 @@ const EditModal = Form.create({
                   })(<Input placeholder="输入姓名" style={{ width }} />)}
                 </Form.Item>
               </Col>
-              <Col span={12}>
-                <Form.Item
-                  label={required ? <span>床号</span> : <span className="required">床号</span>}
-                >
-                  {getFieldDecorator('bedNO', {
-                    rules: [
-                      { required: required, message: '请填写床号!' },
-                      { max: 6, message: '姓名的最大长度为6' },
-                    ],
-                    getValueFromEvent: event => event.target.value.trim(),
-                  })(<Input placeholder="请输入床号..." style={{ width }} />)}
-                </Form.Item>
-              </Col>
+              {
+                this.isIn && (
+                  <Col span={12}>
+                    <Form.Item
+                      label={required ? <span>床号</span> : <span className="required">床号</span>}
+                    >
+                      {getFieldDecorator('bedNO', {
+                        rules: [
+                          { required: required, message: '请填写床号!' },
+                          { max: 6, message: '姓名的最大长度为6' },
+                        ],
+                        getValueFromEvent: event => event.target.value.trim(),
+                      })(<Input placeholder="请输入床号..." style={{ width }} />)}
+                    </Form.Item>
+                  </Col>
+                )
+              }
               {/* <Col span={12}>
                 <Form.Item label="出生年月">
                   {getFieldDecorator('birth', {
@@ -308,7 +315,7 @@ const EditModal = Form.create({
                 </Button>
               </Col>
             </Row>
-            {dataSource ? null : <div className={styles.tips}>只支持“住院号”、“姓名”搜索</div>}
+            {dataSource ? null : <div className={styles.tips}>只支持“{this.noLabel}”、“姓名”搜索</div>}
           </Form>
         </Modal>
       );

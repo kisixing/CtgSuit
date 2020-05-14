@@ -30,11 +30,11 @@ class TableList extends Component {
         title: this.noLabel,
         dataIndex: this.noKey,
         key: this.noKey,
-        width:200,
+        width: 200,
         sorter: (a, b) => a[this.noKey] - b[this.noKey],
         ...this.getColumnSearchProps(this.noKey),
       },
-      {
+      true && {
         title: '床号',
         dataIndex: 'bedNO',
         key: 'bedNO',
@@ -89,7 +89,7 @@ class TableList extends Component {
         title: '手机号码',
         dataIndex: 'telephone',
         key: 'telephone',
-        render: text => (text ? [...text].map((_,i)=>(i>2&&i<7)?'*':_).join('') : null),
+        render: text => (text ? [...text].map((_, i) => (i > 2 && i < 7) ? '*' : _).join('') : null),
 
       },
       // {

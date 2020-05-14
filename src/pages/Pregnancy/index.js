@@ -1,27 +1,23 @@
-import React, { Component } from 'react';
+import React, { useState, useRef } from 'react';
 import { Layout } from 'antd';
 import store from 'store';
 import SearchForm from './SearchForm';
 import TableList from './TableList';
 import styles from './index.less';
 
-export default class index extends Component {
-  constructor(props) {
-    super(props);
-    const ward = store.get('ward');
-    this.state = {
-      wardId: ward && ward.wardId ? ward.wardId : undefined,
-    };
-  }
+export default function Pregnancy(props) {
+  const ward = store.get('ward');
 
+  const [wardId, setWardId] = useState((ward && ward.wardId) ? ward.wardId : undefined)
+  const form = useRef()
   // 置空病区
-  clearWard = () => {
-    this.setState({ wardId: undefined });
+  const clearWard = () => {
+    setWardId(undefined)
   }
 
-  getFields = () => {
+  const getFields = () => {
     let v = {};
-    this.form.props.form.validateFields((err, values) => {
+    form.current.props.form.validateFields((err, values) => {
       if (err) {
         return;
       }
@@ -29,19 +25,17 @@ export default class index extends Component {
     });
     return v
   }
-  render() {
-    return (
-      <Layout className={styles.wrapper}>
-        <div>
-          <SearchForm
-            clearWard={this.clearWard}
-            wrappedComponentRef={form => (this.form = form)}
-          />
-        </div>
-        <Layout>
-          <TableList getFields={this.getFields} wardId={this.state.wardId} />
-        </Layout>
+  return (
+    <Layout className={styles.wrapper}>
+      <div>
+        <SearchForm
+          clearWard={clearWard}
+          wrappedComponentRef={rel => (form.current = rel)}
+        />
+      </div>
+      <Layout>
+        <TableList getFields={getFields} wardId={wardId} />
       </Layout>
-    );
-  }
+    </Layout>
+  );
 }
