@@ -54,16 +54,16 @@ function Hospital(props) {
     <Form form={form} layout="horizontal" {...formItemLayout} className={styles.form}>
       <div className={styles.subTitle}>医院信息</div>
       <Form.Item label="医院名称" name="hospital_name">
-        <Input placeholder="请输入医院名称!" disabled />
+        <Input disabled />
       </Form.Item>
       <Form.Item label="病区类型" name="wardType">
-        <Select placeholder="请输入病区类型!" disabled>
+        <Select  disabled>
           <Select.Option value="in">住院</Select.Option>
           <Select.Option value="out">门诊</Select.Option>
         </Select>
       </Form.Item>
       <Form.Item label="病区" name="wardName">
-        <Input placeholder="请输入区号!" disabled />
+        <Input disabled />
       </Form.Item>
       <Form.Item valuePropName="checked" label="默认全屏" name="fullscreen">
         <Switch />
