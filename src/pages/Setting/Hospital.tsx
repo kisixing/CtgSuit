@@ -1,14 +1,12 @@
-import React, { useEffect } from 'react';
-import { Form } from 'antd';
-import { Button, Input, message, Select, Switch } from 'antd';
-import { formItemLayout, tailFormItemLayout } from './utils';
 import SettingStore from '@/utils/SettingStore';
-import { remote } from "electron";
-// import { getDisplaySize } from '@/utils/utils';
-import styles from './style.less';
-import { connect } from 'dva';
-import store from 'store'
 import { get } from "@lianmed/request";
+import { Button, Form, Input, message, Select, Switch } from 'antd';
+import { connect } from 'dva';
+import React, { useEffect } from 'react';
+import store from 'store';
+// import { getDisplaySize } from '@/utils/utils';
+import { formItemLayout, tailFormItemLayout } from './utils';
+const styles = require('./style.less');
 // var config = require("../../../package.json");
 function Hospital(props) {
   const [form] = Form.useForm()

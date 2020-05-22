@@ -14,13 +14,15 @@ export default {
     },
     effects: {
         *setData({ note = '' }: IWard, { put }) {
-            const data = [...new Set(note.split(','))]
+            let data = [...new Set(note.split(','))]
+            if (__DEV__ && process.env._SONGJIAN) {
+                data = ['1']
+            }
             const str = data.join(',')
             settingStore.setSync('area_devices', str)
             // wardType && settingStore.setSync('area_type', wardType)
             // wardId && settingStore.setSync('areano', wardId)
-            yield put({ type: 'setState', payload: { data } })
-            yield put({ type: 'list/processListData' })
+
 
             WsService._this.send(JSON.stringify(
                 {
@@ -28,6 +30,8 @@ export default {
                     data: str
                 }
             ))
+            yield put({ type: 'setState', payload: { data } })
+            yield put({ type: 'list/processListData' })
         },
         *update(payload, { put }) {
             const ward = store.get('ward') || { id: '' }

@@ -5,6 +5,8 @@ import { join } from 'path';
 import slash from 'slash';
 import path from 'path';
 import pageRoutes from './routes';
+import { config } from "dotenv";
+config()
 // import pxToViewPort from 'postcss-px-to-viewport';
 const isRuntime = process.env.BROWSER !== 'none'
 const pkg = require(path.resolve(__dirname, '../app/package.json'))
@@ -62,7 +64,7 @@ export default {
   uglifyJSOptions: {
     uglifyOptions: {
       compress: {
-        drop_console: true,
+        // drop_console: true,
       }
     }
 
@@ -91,7 +93,11 @@ export default {
     TARGET: process.env.TARGET,
     __DEV__: process.env.NODE_ENV !== 'production',
     __VERSION: pkg.version,
-    __VERSION_MANIFEST: pkg.details
+    __VERSION_MANIFEST: pkg.details,
+    ...Object.entries(process.env).reduce((t, [k, v]) => {
+      k.startsWith('_') && (t[`process.env.${k}`] = v);
+      return t
+    }, {})
   },
 
   alias: {

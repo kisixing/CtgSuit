@@ -110,12 +110,14 @@ class TableList extends Component {
           const signable = true || !!ctgexam.signable;
           return (
             <span>
-              <span
-                className="primary-link"
-                onClick={e => this.showAnalysis(e, record)}
-              >
-                分析
+              {
+                !!process.env._SONGJIAN || <span
+                  className="primary-link"
+                  onClick={e => this.showAnalysis(e, record)}
+                >
+                  分析
               </span>
+              }
               {signable && (
                 <>
                   <Divider type="vertical" />
@@ -159,7 +161,6 @@ class TableList extends Component {
       ipcRenderer.send('audioPlay', `play`, { second, docid })
     } else {
       ipcRenderer.send('audioPlay', 'stop', { second })
-
     }
   }
   componentDidMount() {

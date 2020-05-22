@@ -3,6 +3,7 @@ import { getList } from '@/services/list';
 // import { BedStatus } from "@lianmed/lmg/lib/services/WsService";
 // const downStatus = [BedStatus.Working, BedStatus.Offline];
 import { IBed } from "@/types";
+import { WsService } from '@lianmed/lmg';
 function checkVisible(_: IBed, dirty: Set<string>, offline: Set<string>): boolean {
   return (!offline.has(_.unitId)) && (!dirty.has(_.unitId))
 };
@@ -150,6 +151,8 @@ export default {
       let { listData, dirty, page, offline } = list as IListState
       const pageItemsCount: number = listLayout[0] * listLayout[1];
       const pageItems = listData.slice(page * pageItemsCount, (page + 1) * pageItemsCount);
+      const ids = new Set(pageItems.map(_ => _.deviceno));
+      (process.env._SONGJIAN) && WsService._this.subscribe && WsService._this.subscribe([...ids])
       yield put({
         type: 'setState',
         payload: { pageItems }
@@ -261,7 +264,7 @@ interface IListState {
   listData: IBed[],
   rawData: IBed[],
   dirty: Set<string>,
-  pageData: any[],
+  pageData: IBed[],
   pageCount: number,
   page: number,
   pageItems: IBed[],

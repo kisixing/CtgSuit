@@ -60,7 +60,8 @@ function Beds({ dispatch, headData, wsData }: IProps) {
         borderRadius: 3,
         alignContent: ' flex-start',
         flexWrap: 'wrap',
-        overflow: 'scroll'
+        overflow: 'scroll',
+        maxHeight:70
       }}
     >
       {
