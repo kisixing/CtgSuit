@@ -16,7 +16,7 @@ export default {
         *setData({ note = '' }: IWard, { put }) {
             let data = [...new Set(note.split(','))]
             if (__DEV__ && process.env._SONGJIAN) {
-                data = ['1']
+                // data = ['1']
             }
             const str = data.join(',')
             settingStore.setSync('area_devices', str)

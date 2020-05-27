@@ -11,15 +11,16 @@ import ModalConfirm from './ModalConfirm';
 import SignModal from './SignModal';
 import SoundModal from './SoundModal';
 import { WsService } from '@lianmed/lmg';
-import { BedStatus } from '@lianmed/lmg/lib/services/WsService';
+import { BedStatus, ICacheItem } from '@lianmed/lmg/lib/services/WsService';
 import { FetalItem } from "../types";
 import { ButtonProps } from 'antd/lib/button';
 import Jb from "./Jb";
 import Event from "./Event";
+import Shell from "../Analysis/Shell";
+import { MultiParamDisplay } from "@lianmed/pages/lib/Ctg/MultiParamDisplay";
 const socket = WsService._this;
 
 function Toolbar(props: FetalItem.IToolbarProps) {
-  console.log('zzz 2')
 
   const [tocozeroLoading, setTocozeroLoading] = useState(false)
   const [volumeDataLoading, setVolumeDataLoading] = useState(false)
@@ -47,8 +48,8 @@ function Toolbar(props: FetalItem.IToolbarProps) {
 
 
 
-  const { data, bedname, prenatalVisit, bedno, isTodo, unitId } = itemData;
-
+  const { bedname, prenatalVisit, bedno, isTodo, unitId } = itemData;
+  const data: ICacheItem = itemData.data
   const safePregnancy = data.pregnancy || { pvId: null, age: null, name: null, inpatientNO: null, bedNO: null, id: null, GP: null, gestationalWeek: null }
   // const safePrenatalVisit = prenatalVisit || { gestationalWeek: null, }
   const docid = data.docid
@@ -60,6 +61,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
   const disableStartWork = data.disableStartWork
   const is_include_volume = data.is_include_volume
   const deviceno = itemData.deviceno
+
   const pregnancy = safePregnancy
 
   const {
@@ -228,6 +230,17 @@ function Toolbar(props: FetalItem.IToolbarProps) {
       </Button>
 
     {
+      data && data.ismulti && <Button
+        icon={<LegacyIcon type="printer" />}
+        type="link"
+        disabled={!docid}
+        onClick={() => setModalName('multiParamVisible')}
+      >
+        趋势图
+      </Button>
+    }
+
+    {
       !!is_include_tocozero && <B
         disabled={!is_include_tocozero}
         icon={<LegacyIcon type={tocozeroLoading ? 'loading' : 'control'} />}
@@ -291,6 +304,18 @@ function Toolbar(props: FetalItem.IToolbarProps) {
     // inpatientNO={pregnancy.inpatientNO}
     // name={}
     />
+    <Shell
+      visible={modalName === 'multiParamVisible'}
+      onCancel={handleCancel}
+      docid={docid}
+      inpatientNO={inpatientNO}
+      name={name}
+      age={age}
+      gestationalWeek={gestationalWeek}
+      startTime={startTime}
+    >
+      <MultiParamDisplay docid={docid} />
+    </Shell>
     <PrintPreview
       visible={modalName === 'printVisible'}
       onCancel={handleCancel}

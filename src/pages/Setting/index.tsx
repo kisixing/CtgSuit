@@ -33,7 +33,7 @@ const settingMap = {
   // Parameter,
   Print,
 }
-const Setting = () => {
+const Setting = ({ isAdmin }) => {
 
   const [current, setCurrent] = useState('Network' || Object.keys(settingMap)[0])
   const handleMenuClick = e => {
@@ -50,19 +50,19 @@ const Setting = () => {
         mode="inline"
         selectedKeys={[current]}
         onClick={handleMenuClick}
+        style={{ fontWeight: "bold" }}
       >
+
         <Menu.ItemGroup key="g2" title="常规">
           {
             Object.entries(settingMap).map(([k, v]) => {
-              return v ? <Menu.Item key={k}>{v.displayName}</Menu.Item> : null
+              return v ? <Menu.Item key={k} style={{ fontWeight: "normal" }}>{v.displayName}</Menu.Item> : null
             })
           }
 
         </Menu.ItemGroup>
-        <Menu.ItemGroup key="g1" title="报警">
-          <Menu.Item key="alarm">设置</Menu.Item>
+        <Menu.Item key="alarm" style={{ color: 'rgba(0, 0, 0, 0.45)', fontWeight: "bold" }}><span style={{ marginLeft: -12, }}>报警设置</span></Menu.Item>
 
-        </Menu.ItemGroup>
 
       </Menu>
     );
@@ -70,7 +70,7 @@ const Setting = () => {
 
   const switchComponent = () => {
     const T = settingMap[current] || (current === 'alarm' ? Alarm : () => null)
-    return <T />
+    return <T isAdmin={isAdmin} />
   }
 
 
@@ -92,7 +92,8 @@ const Setting = () => {
 
 const P = connect(
   ({ global }: any) => ({
-    account: global.account
+    account: global.account,
+    isAdmin: global.isAdmin
   }),
 )(Setting);
 

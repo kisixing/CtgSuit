@@ -9,6 +9,7 @@ import { formItemLayout, tailFormItemLayout } from './utils';
 const styles = require('./style.less');
 // var config = require("../../../package.json");
 function Hospital(props) {
+  const { isAdmin } = props
   const [form] = Form.useForm()
   useEffect(() => {
     // 获取显示器尺寸
@@ -55,7 +56,7 @@ function Hospital(props) {
         <Input disabled />
       </Form.Item>
       <Form.Item label="病区类型" name="wardType">
-        <Select  disabled>
+        <Select disabled>
           <Select.Option value="in">住院</Select.Option>
           <Select.Option value="out">门诊</Select.Option>
         </Select>
@@ -75,7 +76,7 @@ function Hospital(props) {
           {getFieldDecorator('display_size')(<Input disabled />)}
         </Form.Item> */}
       <Form.Item {...tailFormItemLayout}>
-        <Button type="primary" onClick={handleSubmit}>
+        <Button type="primary" onClick={handleSubmit} disabled={!isAdmin}>
           保存
           </Button>
       </Form.Item>

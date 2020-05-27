@@ -1,5 +1,6 @@
 import store from 'store'
 import settingStore from '@/utils/SettingStore';
+declare var __DEV__: boolean;
 
 const setting = {
   namespace: 'setting',
@@ -22,7 +23,7 @@ const setting = {
     fashionable: false,
     // layoutLock: store.get('headCollapsed') || true,
     layoutLock: true,
-    alarm_muted:settingStore.cache.alarm_muted
+    alarm_muted: settingStore.cache.alarm_muted
   },
   effects: {
     *setListLayout({ payload }, { put }) {
@@ -58,7 +59,7 @@ const setting = {
         const diff = _ - size >= 0 ? _ - size : Number.MAX_SAFE_INTEGER
         return (diff - (oldDiff) > 0) ? r : i
       }, 0)
-      yield put({ type: 'setState', payload: { listLayout: listLayoutOptions[t] } })
+      yield put({ type: 'setState', payload: { listLayout: listLayoutOptions[__DEV__ ? 0 : t] } })
 
     }
   },

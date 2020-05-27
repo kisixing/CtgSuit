@@ -8,10 +8,13 @@ import React, { Component } from 'react';
 import Highlighter from 'react-highlight-words';
 import store from 'store';
 import Analysis from '../Workbench/Analysis';
+import Shell from '../Workbench/Analysis/Shell';
 import PrintPreview from '../Workbench/PrintPreview';
 import CreateRecordModal from './CreateRecordModal';
 import ReportPreview from "./ReportPreview";
 import styles from './TableList.less';
+import { MultiParamDisplay } from "@lianmed/pages/lib/Ctg/MultiParamDisplay";
+import settingStore from "@/utils/SettingStore";
 
 class TableList extends Component {
   constructor(props) {
@@ -21,6 +24,7 @@ class TableList extends Component {
       printVisible: false,
       analysisVisible: false,
       reportVisible: false,
+      multiParamVisible: false,
       type: 'edit',
       current: {}, // 当前行
     };
@@ -108,10 +112,11 @@ class TableList extends Component {
           const ctgexam = record.ctgexam;
           const hasSigned = !!ctgexam.report;
           const signable = true || !!ctgexam.signable;
+          const isMother = ctgexam && (ctgexam.type === 'mother');
           return (
             <span>
               {
-                !!process.env._SONGJIAN || <span
+                (!!process.env._SONGJIAN || settingStore.cache.inspectable) || <span
                   className="primary-link"
                   onClick={e => this.showAnalysis(e, record)}
                 >
@@ -134,6 +139,16 @@ class TableList extends Component {
                     <Divider type="vertical" />
                     <span className="primary-link" onClick={(e) => this.showReport(e, record)}>
                       查看
+                    </span>
+                  </>
+                )
+              }
+              {
+                (
+                  isMother && <>
+                    <Divider type="vertical" />
+                    <span className="primary-link" onClick={(e) => this.showMultiParam(e, record)}>
+                      多参
                     </span>
                   </>
                 )
@@ -274,13 +289,21 @@ class TableList extends Component {
       this.handleRow(record);
     });
   };
+  showMultiParam = (e, record) => {
+    e.stopPropagation();
+    this.setState({ current: record }, () => {
+      this.setState({ multiParamVisible: true });
+      this.handleRow(record);
+    });
+  };
 
   handleCancel = () => {
     this.setState({
       visible: false,
       printVisible: false,
       analysisVisible: false,
-      reportVisible: false
+      reportVisible: false,
+      multiParamVisible: false
     });
   };
 
@@ -499,7 +522,7 @@ class TableList extends Component {
 
   render() {
     const { selected, dataSource, count, loading, pagination: { size, page } } = this.props;
-    const { visible, printVisible, analysisVisible, reportVisible, type, /* current */ } = this.state;
+    const { visible, printVisible, analysisVisible, reportVisible, type, multiParamVisible,/* current */ } = this.state;
 
     // 档案号
     const docID = selected.ctgexam && selected.ctgexam.note;
@@ -597,6 +620,21 @@ class TableList extends Component {
             gestationalWeek={gestationalWeek}
           />
         ) : null}
+        {!!multiParamVisible && (
+          <Shell
+            visible={multiParamVisible}
+            onCancel={this.handleCancel}
+            onCreate={this.handleCreate}
+            docid={docID}
+            startTime={startTime}
+            inpatientNO={inpatientNO}
+            name={name}
+            age={age}
+            gestationalWeek={gestationalWeek}>
+            <MultiParamDisplay docid={docID} />
+          </Shell>
+
+        )}
         {reportVisible ? (
           <ReportPreview
             visible={reportVisible}

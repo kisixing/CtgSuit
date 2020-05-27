@@ -16,6 +16,8 @@ export const useStomp = (visitedData: VisitedData) => {
         const s = stompService.current
         const k = '/topic/ordernotify'
         const cb = (aa) => {
+            console.log('stom', k, aa);
+
             const target = visitedData.find(_ => _.name === 'remote')
             target && ipcRenderer.send('open', target)
         }

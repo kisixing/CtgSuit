@@ -34,7 +34,8 @@ const data = [
     label: 'public_url地址',
   },
 ]
-const Network: FunctionComponent = (props) => {
+const Network: FunctionComponent<{ isAdmin: boolean }> = (props) => {
+  const { isAdmin } = props
   const [form] = Form.useForm()
   useEffect(() => {
 
@@ -74,7 +75,7 @@ const Network: FunctionComponent = (props) => {
   return (
     <Form form={form} layout="horizontal" {...formItemLayout} className={styles.form}>
       <div className={styles.subTitle}>网络设置</div>
- 
+
 
       {
         data.map(_ => (
@@ -87,13 +88,14 @@ const Network: FunctionComponent = (props) => {
         ))
       }
       <Form.Item {...tailFormItemLayout} required>
-        <Button type="primary" onClick={handleSubmit}>
+        <Button type="primary" onClick={handleSubmit} disabled={!isAdmin}>
           保存
           </Button>
         <Button
           type="default"
           onClick={reset}
           style={{ marginLeft: 10 }}
+          disabled={!isAdmin}
         >
           恢复默认
           </Button>

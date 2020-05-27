@@ -26,6 +26,7 @@ const colors = {
   // alarmcolor: '报警',
 };
 const Alarm = (props) => {
+  const { isAdmin } = props
   const [form] = Form.useForm()
   useEffect(() => {
     fetchData();
@@ -41,6 +42,12 @@ const Alarm = (props) => {
           // scale,
           // primarygrid,
           // secondarygrid,
+          alarm_delay,
+          alarm_volumn,
+          alarm_high,
+          alarm_low,
+          alarm_muted,
+
           fhrcolor1,
           fhrcolor2,
           fhrcolor3,
@@ -48,12 +55,7 @@ const Alarm = (props) => {
           alarmcolor,
           alarm_finished,
           alarm_enable,
-          alarm_high,
-          alarm_low,
           alarm_on_window,
-          alarm_muted,
-          alarm_delay,
-          alarm_volumn
         }) => {
           form.setFieldsValue({
             // normalarea,
@@ -62,6 +64,12 @@ const Alarm = (props) => {
             // scale,
             // primarygrid,
             // secondarygrid,
+            alarm_delay,
+            alarm_volumn,
+            alarm_high,
+            alarm_low,
+            alarm_muted,
+
             fhrcolor1,
             fhrcolor2,
             fhrcolor3,
@@ -69,12 +77,7 @@ const Alarm = (props) => {
             alarmcolor,
             alarm_finished,
             alarm_enable,
-            alarm_high,
-            alarm_low,
             alarm_on_window,
-            alarm_muted,
-            alarm_delay,
-            alarm_volumn
           });
         },
       );
@@ -102,14 +105,12 @@ const Alarm = (props) => {
   const reset = () => {
     store
       .reset([
+        'alarm_volumn',
+        'alarm_delay',
         'alarm_high',
         'alarm_low',
-        'alarm_on_window',
         'alarm_muted',
-        'alarm_enable',
-        'alarm_finished',
-        'alarm_delay',
-        ...Object.keys(colors),
+
       ])
       .then(status => {
         if (status) {
@@ -254,16 +255,17 @@ const Alarm = (props) => {
 
 
       <Form.Item {...tailFormItemLayout}>
-        <Button type="primary" onClick={handleSubmit}>
+        <Button type="primary" onClick={handleSubmit} disabled={!isAdmin}>
           保存
         </Button>
-        {/* <Button
+        <Button
+          disabled={!isAdmin}
           type="default"
-          onClick={reset.bind(this)}
+          onClick={reset}
           style={{ marginLeft: 10 }}
         >
           恢复默认
-        </Button> */}
+        </Button>
       </Form.Item>
     </Form>
   );

@@ -20,9 +20,12 @@
     "tococolor": "#0000ff",
     "alarmcolor": "#ff0000",
     "alarm_finished": "0",
-    "alarm_enable": "1",
-    "alarm_high": "160",
-    "alarm_low": "110",
     "alarm_on_window": "1",
-    "alarm_muted": false
+    "alarm_enable": "1",
+
+    "alarm_muted": false,
+    "alarm_volumn": 10,
+    "alarm_delay": 0,
+    "alarm_high": 160,
+    "alarm_low": 110
 }
