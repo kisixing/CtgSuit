@@ -19,7 +19,6 @@ function init() {
             .on('message', d => console.log(d.toString()))
         child.stdout && child.stdout.on('data', d => console.log('data', d.toString()))
         child.stdin && child.stdin.on('data', d => console.log('data', d.toString()))
-
     }
 }
 export function kill() {

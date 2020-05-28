@@ -17,7 +17,7 @@ interface IDataItem {
   note: string
   recorder: string
 }
-export const SignModal = (props: IProps) => {
+export const EventModal = (props: IProps) => {
   const { visible, onCancel, docid } = props;
   const [data, setData] = useState<IDataItem[]>([])
   const [note, setNote] = useState('')
@@ -82,6 +82,6 @@ export const SignModal = (props: IProps) => {
   );
 }
 
-export default SignModal;
+export default EventModal;
 
 

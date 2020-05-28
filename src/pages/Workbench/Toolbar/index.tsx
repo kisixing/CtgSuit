@@ -15,7 +15,7 @@ import { BedStatus, ICacheItem } from '@lianmed/lmg/lib/services/WsService';
 import { FetalItem } from "../types";
 import { ButtonProps } from 'antd/lib/button';
 import Jb from "./Jb";
-import Event from "./Event";
+import Event from "@/components/Modal/Event";
 import Shell from "../Analysis/Shell";
 import { MultiParamDisplay } from "@lianmed/pages/lib/Ctg/MultiParamDisplay";
 const socket = WsService._this;

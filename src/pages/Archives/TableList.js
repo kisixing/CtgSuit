@@ -15,7 +15,7 @@ import ReportPreview from "./ReportPreview";
 import styles from './TableList.less';
 import { MultiParamDisplay } from "@lianmed/pages/lib/Ctg/MultiParamDisplay";
 import settingStore from "@/utils/SettingStore";
-
+import Event from "@/components/Modal/Event";
 class TableList extends Component {
   constructor(props) {
     super(props);
@@ -25,6 +25,7 @@ class TableList extends Component {
       analysisVisible: false,
       reportVisible: false,
       multiParamVisible: false,
+      eventVisible: false,
       type: 'edit',
       current: {}, // 当前行
     };
@@ -106,7 +107,7 @@ class TableList extends Component {
         title: '操作',
         dataIndex: 'action',
         key: 'action',
-        width: 150,
+        width: 240,
         align: 'center',
         render: (text, record) => {
           const ctgexam = record.ctgexam;
@@ -149,6 +150,16 @@ class TableList extends Component {
                     <Divider type="vertical" />
                     <span className="primary-link" onClick={(e) => this.showMultiParam(e, record)}>
                       多参
+                    </span>
+                  </>
+                )
+              }
+              {
+                (
+                  true && <>
+                    <Divider type="vertical" />
+                    <span className="primary-link" onClick={(e) => this.showEventVisible(e, record)}>
+                      事件记录
                     </span>
                   </>
                 )
@@ -272,6 +283,7 @@ class TableList extends Component {
     this.setState({ current: record }, () => {
       this.setState({ printVisible: true });
       this.handleRow(record);
+
     });
   };
 
@@ -280,6 +292,14 @@ class TableList extends Component {
     this.setState({ current: record }, () => {
       this.setState({ reportVisible: true });
       this.handleRow(record);
+    });
+  };
+  showEventVisible = (e, record) => {
+    e.stopPropagation();
+    this.setState({ current: record }, () => {
+      this.setState({ eventVisible: true });
+      this.handleRow(record);
+
     });
   };
   showAnalysis = (e, record) => {
@@ -303,7 +323,8 @@ class TableList extends Component {
       printVisible: false,
       analysisVisible: false,
       reportVisible: false,
-      multiParamVisible: false
+      multiParamVisible: false,
+      eventVisible: false,
     });
   };
 
@@ -522,7 +543,7 @@ class TableList extends Component {
 
   render() {
     const { selected, dataSource, count, loading, pagination: { size, page } } = this.props;
-    const { visible, printVisible, analysisVisible, reportVisible, type, multiParamVisible,/* current */ } = this.state;
+    const { visible, printVisible, analysisVisible, reportVisible, type, multiParamVisible, eventVisible,/* current */ } = this.state;
 
     // 档案号
     const docID = selected.ctgexam && selected.ctgexam.note;
@@ -648,6 +669,8 @@ class TableList extends Component {
             gestationalWeek={gestationalWeek}
           />
         ) : null}
+        <Event docid={docID} visible={eventVisible} onCancel={this.handleCancel} disabled />
+
       </div>
     );
   }
