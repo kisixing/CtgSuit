@@ -31,6 +31,7 @@ class CurveChart extends Component {
       loading,
       isFullscreen,
     } = this.props;
+    // ctgexam && (ctgexam.audios = ['21_1_200524155151_1'])
     return (
       <div className={classnames([styles.wrapper], { [styles.fullscreen]: isFullscreen })}>
         {/* <h2>电脑胎儿监护图</h2> */}
@@ -69,7 +70,7 @@ class CurveChart extends Component {
           wrapperClassName={styles.chart}
           spinning={loading.effects['archives/fetchCTGrecordData'] || false}
         >
-          <L suitType={1} data={dataSource}></L>
+          <L audios={(ctgexam && ctgexam.audios && ctgexam.audios.length) ? ctgexam.audios : null} suitType={1} data={dataSource}></L>
         </Spin>
       </div>
     );

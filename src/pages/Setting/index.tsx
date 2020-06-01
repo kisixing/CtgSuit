@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Layout, Menu } from 'antd';
+import React, { useState, useEffect } from 'react'
+import { Layout, Menu, message } from 'antd';
 import { connect } from 'dva';
 import store from 'store';
 import { uncompile } from '@/utils/utils';
@@ -42,7 +42,9 @@ const Setting = ({ isAdmin }) => {
     } = e;
     setCurrent(key)
   };
-
+  useEffect(() => {
+    isAdmin || message.info('非管理员只能查看系统设置，如需修改请联系管理员')
+  }, [isAdmin])
   const menus = () => {
 
     return (

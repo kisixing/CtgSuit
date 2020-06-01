@@ -4,6 +4,8 @@ import { getList } from '@/services/list';
 // const downStatus = [BedStatus.Working, BedStatus.Offline];
 import { IBed } from "@/types";
 import { WsService } from '@lianmed/lmg';
+import settingStore from "@/utils/SettingStore";
+
 function checkVisible(_: IBed, dirty: Set<string>, offline: Set<string>): boolean {
   return (!offline.has(_.unitId)) && (!dirty.has(_.unitId))
 };
@@ -152,7 +154,7 @@ export default {
       const pageItemsCount: number = listLayout[0] * listLayout[1];
       const pageItems = listData.slice(page * pageItemsCount, (page + 1) * pageItemsCount);
       const ids = new Set(pageItems.map(_ => _.deviceno));
-      (process.env._SONGJIAN) && WsService._this.subscribe && WsService._this.subscribe([...ids])
+      (settingStore.cache.inspectable) && WsService._this.subscribe && WsService._this.subscribe([...ids])
       yield put({
         type: 'setState',
         payload: { pageItems }

@@ -1,16 +1,25 @@
-import { audioPlayerPath, assetsPath } from '../config/path';
+import { audioPlayerPath, assetsPath, tmp, config as configPath } from '../config/path';
 import { spawn, ChildProcessWithoutNullStreams } from "child_process";
-import { logErr } from '../utils/log';
+import { logErr, log } from '../utils/log';
 import { createConnection, Socket } from 'net';
 import { resolve } from "path";
+import { Parser, Builder } from 'xml2js'
 
+const c = require(configPath)
+const xhr_url = c.xhr_url
+const fs = require('fs')
+//xml2js默认会把子子节点的值变为一个数组, explicitArray设置为false
+var xmlParser = new Parser()
+//json->xml
+var jsonBuilder = new Builder();
 // const PIPE_NAME = "salamander_pipe";
 const PIPE_NAME = "audiopipe";
 const PIPE_PATH = "\\\\.\\pipe\\" + PIPE_NAME;
 let client: Socket
 let child: ChildProcessWithoutNullStreams
 function init() {
-    child = spawn(audioPlayerPath);
+    config()
+    child = spawn(audioPlayerPath, { cwd: tmp });
     if (child) {
         child
             .on('error', e => console.log('c err', e))
@@ -24,7 +33,7 @@ function init() {
 export function kill() {
     child && child.kill()
 }
-// init()
+init()
 
 
 var stdin = process.openStdin();
@@ -33,12 +42,12 @@ stdin.on('data', function (data) {
 });
 
 
-export default (e, mode: string, options = { second: 0, docid: '' }) => {
-    const { second = 0, docid = '' } = options
+export default (e, mode: string, options = { second: 0, audioId: '' }) => {
+    const { second = 0, audioId = '' } = options
     let action = mode ? `${mode}#${options.second || 0}\r\n` : ''
     if (mode === 'load') {
-        // action = `load#${docid}\r\n`
-        action = `load#${resolve(assetsPath, './1.wav')}\r\n`
+        // action = `load#${audioId}\r\n`
+        action = `load#${audioId}\r\n`
     }
     console.log('audioPlay', action)
     if (!client) {
@@ -73,4 +82,18 @@ export default (e, mode: string, options = { second: 0, docid: '' }) => {
 
         client.write(action)
     }
+}
+
+
+function config() {
+
+    const p = resolve(audioPlayerPath, '../ClientService.exe.config')
+    log(`config clientservice ${xhr_url}, ${p}` )
+    const res = xmlParser.parseStringPromise(fs.readFileSync(p))
+    res.then(r => {
+        const t = r.configuration.appSettings[0].add.find(_ => _['$'].key === 'baseurl')
+        t.$.value = `http://${xhr_url}/api/`
+        const s = jsonBuilder.buildObject(r)
+        fs.writeFileSync(p, s)
+    })
 }

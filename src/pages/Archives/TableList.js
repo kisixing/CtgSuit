@@ -117,7 +117,7 @@ class TableList extends Component {
           return (
             <span>
               {
-                (!!process.env._SONGJIAN || settingStore.cache.inspectable) || <span
+                (!!settingStore.cache.inspectable) || <span
                   className="primary-link"
                   onClick={e => this.showAnalysis(e, record)}
                 >
@@ -179,12 +179,18 @@ class TableList extends Component {
       },
     ]; // .map(_ => ({ ..._, align: 'center' }));
   }
-  play(docid, second = 0) {
+  play = (audioId, second = 0) => {
     second = Math.ceil(second)
-    console.log('play', docid)
-    if (docid) {
-      ipcRenderer.send('audioPlay', `load`, { second, docid })
-      ipcRenderer.send('audioPlay', `play`, { second, docid })
+    console.log('play', audioId)
+    if (audioId) {
+      // audioId = '21_1_200524155151_1'
+      this.audioId = audioId
+      ipcRenderer.send('audioPlay', `load`, { second, audioId })
+      if (this.ok) {
+        ipcRenderer.send('audioPlay', `play`, { second, audioId })
+      } else {
+        this.toPlay = () => ipcRenderer.send('audioPlay', `play`, { second, audioId })
+      }
     } else {
       ipcRenderer.send('audioPlay', 'stop', { second })
     }
@@ -196,9 +202,20 @@ class TableList extends Component {
       // 用户点击播放
       .on('ctg:replay', this.play)
     ipcRenderer.on('audioPlay', (e, text) => {
+      if (!this.state.current) return
+      console.log('___', text)
       switch (text) {
         case '开始播放':
-          event.emit('ctg:canReplay')
+          event.emit('ctg:canReplay', this.audioId)
+          break;
+        case '文件导入成功':
+          this.toPlay && this.toPlay()
+          this.toPlay = null
+          this.ok = true
+          break;
+        case '文件获取失败':
+          this.toPlay = null
+          this.ok = false
           break;
 
         default:

@@ -96,7 +96,7 @@ const BasicLayout = (props: any) => {
             <Content className={styles.main}>{children}</Content>
             {/* <RightFixed /> */}
             {
-              process.env._REMOTE &&<VisitedPanel remote_url="http://transfer.lian-med.com"/>
+              settingData.isRemote && <VisitedPanel remote_url="http://transfer.lian-med.com" />
             }
             {/* <div style={{position:'fixed',right:0,bottom:60,width:10,height:40,background:'var(--theme-color)',lineHeight:'40px',color:'#fff',textAlign:'center',cursor:'pointer'}}>||</div> */}
           </Layout>

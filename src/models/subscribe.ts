@@ -15,7 +15,7 @@ export default {
     effects: {
         *setData({ note = '' }: IWard, { put }) {
             let data = [...new Set(note.split(','))]
-            if (__DEV__ && process.env._SONGJIAN) {
+            if (__DEV__ && settingStore.cache.inspectable) {
                 // data = ['1']
             }
             const str = data.join(',')
