@@ -4,9 +4,8 @@ import moment from 'moment';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import { Row, Col, DatePicker, Input, Button } from 'antd';
-
+import store from 'store'
 import styles from './FieldForm.less';
-
 // 默认时间
 const ENDTIME = moment();
 const STARTTIME = moment().subtract(7, 'd');
@@ -16,6 +15,9 @@ class FieldForm extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+    this.isIn = (store.get('ward') || {}).wardType === 'in'
+    this.noLabel = this.isIn ? '住院号' : '卡号'
+    this.noKey = this.isIn ? 'inpatientNO' : 'cardNO';
   }
 
   componentDidMount() {
@@ -44,31 +46,33 @@ class FieldForm extends Component {
         // let eTime = ENDTIME.format('YYYY-MM-DD');
         let sTime = undefined;
         let eTime = undefined;
-        let { startTime, endTime } = values;
+        let { startTime, endTime, name, bedNO } = values;
         if (startTime) {
           sTime = moment(startTime).format('YYYY-MM-DD');
         }
         if (endTime) {
           eTime = moment(endTime).format('YYYY-MM-DD');
         }
+        const data = {
+          'pregnancyId.equals': pregnancyId,
+          'visitDate.greaterOrEqualThan': sTime,
+          'visitDate.lessOrEqualThan': eTime,
+          'name.equals': name,
+          [`${this.noKey}.equals`]: values[this.noKey],
+          ...(this.isIn ? { 'bedNO.equals': bedNO } : {})
+        }
         // TODO
         dispatch({
           type: 'archives/fetchRecords',
           payload: {
-            'pregnancyId.equals': pregnancyId,
-            'visitDate.greaterOrEqualThan': sTime,
-            'visitDate.lessOrEqualThan': eTime,
+            ...data,
             size,
             page: 0,
           },
         });
         dispatch({
           type: 'archives/fetchCount',
-          payload: {
-            'pregnancyId.equals': pregnancyId,
-            'visitDate.greaterOrEqualThan': sTime,
-            'visitDate.lessOrEqualThan': eTime,
-          },
+          payload: data,
         });
         // 检索与分页器相关关
         dispatch({
@@ -120,17 +124,34 @@ class FieldForm extends Component {
               />,
             )}
           </Form.Item>
-        {/* <Col span={4}>
           <Form.Item label="姓名">
             {getFieldDecorator('name')(
               <Input
-                disabled
                 allowClear
                 placeholder="请输入姓名"
               />,
             )}
           </Form.Item>
-        </Col> */}
+          <Form.Item label={this.noLabel}>
+            {getFieldDecorator(this.noKey)(
+              <Input
+                allowClear
+                placeholder={`请输入${this.noLabel}`}
+              />,
+            )}
+          </Form.Item>
+          {
+            this.isIn && (
+              <Form.Item label="床号">
+                {getFieldDecorator('bedNO')(
+                  <Input
+                    allowClear
+                    placeholder="请输入床号"
+                  />,
+                )}
+              </Form.Item>
+            )
+          }
           <Form.Item>
             <Button
               type="primary"

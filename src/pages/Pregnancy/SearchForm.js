@@ -170,8 +170,8 @@ class SearchForm extends Component {
             <Button type="primary" htmlType="submit">
               搜索
             </Button>
-            <Button onClick={this.handleReset}>重置</Button>
-            <Button onClick={this.show}>ADT</Button>
+            <Button onClick={this.handleReset} type="primary">重置</Button>
+            <Button onClick={this.show} type="primary">新增</Button>
           </Form.Item>
         </Row>
       </Form>

@@ -42,7 +42,7 @@ const Login = (props: IProps) => {
   const handleSubmit = () => {
     const { validateFields } = form;
     validateFields().then(({ id, username, password }) => {
-      dispatch({ type: 'login/login', payload: { username, password } })
+      dispatch({ type: 'login/login', payload: { username, password, remember: true, rememberMe: true } })
         .then(() => {
           // areano未旧的病区号
           store.set('ward', areaList.find(_ => _.id == id));
