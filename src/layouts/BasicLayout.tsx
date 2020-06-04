@@ -22,7 +22,7 @@ const settingData = settingStore.cache
 const { Content } = Layout;
 const { EWsEvents } = WsService
 const BasicLayout = (props: any) => {
-  const { dispatch, fashionable, children, wsStatus, listData, isLogin } = props;
+  const { dispatch, fashionable, children, wsStatus, listData } = props;
   const v = useContextValue()
   // useStomp(v.visitedData)
 

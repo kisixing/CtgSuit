@@ -13,7 +13,7 @@ declare var __VERSION: string;
 
 const styles = require('./Login.less');
 const FormItem = Form.Item;
-
+const cache = SettingStore.cache
 interface IProps {
   [x: string]: any
 }
@@ -168,7 +168,7 @@ const Login = (props: IProps) => {
     {/* footer */}
     <div className={styles.footer}>
       <>
-        <span>{config.copyright} V{__VERSION}</span>
+        <span>{config.copyright} V{cache.inspectable?'1.0.1.0':__VERSION}</span>
         <Popconfirm
           placement="topRight"
           trigger="click"

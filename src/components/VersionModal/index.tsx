@@ -2,19 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import { Modal, Checkbox } from 'antd';
-import { WrappedFormUtils } from 'antd/lib/form/Form';
-
+import SettingStore from '@/utils/SettingStore';
+const cache = SettingStore.cache
 declare var __VERSION: string;
 declare var __VERSION_MANIFEST: string[]
 interface IProps {
-    form: WrappedFormUtils
 }
-
+const v = cache.inspectable ? '1.0.1.0' : __VERSION
 export const VersionModal = (props: IProps) => {
     const [visible, setVisible] = useState(false)
     const [noAlert, setNoAlert] = useState(false)
     useEffect(() => {
-        const isNew = __VERSION !== localStorage.getItem('version')
+        const isNew = v !== localStorage.getItem('version')
         setVisible(isNew)
     }, [])
 
@@ -24,7 +23,7 @@ export const VersionModal = (props: IProps) => {
             maskClosable={false}
             destroyOnClose
             visible={visible}
-            title={`${__VERSION}版本更新说明`}
+            title={`${v}版本更新说明`}
             cancelText={null}
             onCancel={() => {
                 setVisible(false)
@@ -32,7 +31,7 @@ export const VersionModal = (props: IProps) => {
             }}
             onOk={() => {
                 setVisible(false)
-                noAlert && localStorage.setItem('version', __VERSION)
+                noAlert && localStorage.setItem('version', v)
             }}
         >
             <ol>
@@ -49,5 +48,5 @@ export const VersionModal = (props: IProps) => {
     )
 }
 
-export default Form.create<IProps>()(VersionModal);
+export default VersionModal;
 

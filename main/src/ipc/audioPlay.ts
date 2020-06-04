@@ -91,8 +91,11 @@ function config() {
     log(`config clientservice ${xhr_url}, ${p}` )
     const res = xmlParser.parseStringPromise(fs.readFileSync(p))
     res.then(r => {
-        const t = r.configuration.appSettings[0].add.find(_ => _['$'].key === 'baseurl')
-        t.$.value = `http://${xhr_url}/api/`
+        const adds = r.configuration.appSettings[0].add
+        const t1 = adds.find(_ => _['$'].key === 'baseurl')
+        t1.$.value = `http://${xhr_url}/api/`
+        const t2 = adds.find(_ => _['$'].key === 'storepath')
+        t2.$.value = tmp
         const s = jsonBuilder.buildObject(r)
         fs.writeFileSync(p, s)
     })

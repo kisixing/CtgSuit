@@ -14,11 +14,12 @@ import LayoutSetting from './LayoutSetting';
 
 const styles = require('./BasicLayout.less')
 
-const settingData = settingStore.cache
+const cache = settingStore.cache
 const colors = AntdThemeManipulator.colors
 const { Footer } = Layout;
 declare var __VERSION: string;
 
+const v = cache.inspectable ? '1.0.1.0' : __VERSION
 
 const PrintModal = ({ printCb, printVisible, setPrintVisible, setStartTime, setEndTime }) => {
   return (
@@ -37,7 +38,7 @@ const Foot = (props: any) => {
   const { alarm_muted } = props.setting
   const theme = useRef(null)
   const colorIndex = ~~(Math.random() * colors.length) >> 5;
-  const primaryColor = settingData.theme || colors[colorIndex];
+  const primaryColor = cache.theme || colors[colorIndex];
   const [printVisible, setPrintVisible] = useState(false)
   const [startTime, setStartTime] = useState<string>(null)
   const [endTime, setEndTime] = useState<string>(null)
@@ -107,7 +108,7 @@ const Foot = (props: any) => {
       <span>
         <span>{config.copyright}</span>
         <span style={{ padding: '0 4px 0 8px' }} title="当前版本">
-          v{__VERSION}
+          v{v}
         </span>
       </span>
       <span style={{ marginRight: 4 }}>
