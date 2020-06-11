@@ -42,12 +42,14 @@ stdin.on('data', function (data) {
 });
 
 
-export default (e, mode: string, options = { second: 0, audioId: '' }) => {
-    const { second = 0, audioId = '' } = options
+export default (e, mode: string, options: { second?: number, filePath?: string, audioId?: string } = { second: 0, audioId: '', filePath: '' }) => {
+    const { second = 0, audioId = '', filePath = '' } = options
     let action = mode ? `${mode}#${options.second || 0}\r\n` : ''
     if (mode === 'load') {
         // action = `load#${audioId}\r\n`
         action = `load#${audioId}\r\n`
+    } else if (mode === 'print') {
+        action = `print#${filePath}\r\n`
     }
     console.log('audioPlay', action)
     if (!client) {
@@ -88,7 +90,7 @@ export default (e, mode: string, options = { second: 0, audioId: '' }) => {
 function config() {
 
     const p = resolve(audioPlayerPath, '../ClientService.exe.config')
-    log(`config clientservice ${xhr_url}, ${p}` )
+    log(`config clientservice ${xhr_url}, ${p}`)
     const res = xmlParser.parseStringPromise(fs.readFileSync(p))
     res.then(r => {
         const adds = r.configuration.appSettings[0].add

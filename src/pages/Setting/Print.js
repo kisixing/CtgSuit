@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import '@ant-design/compatible/assets/index.css';
-import { InputNumber, Button, message, Radio, Form } from 'antd';
+import { InputNumber, Button, message, Form } from 'antd';
 import store from '@/utils/SettingStore';
 
 import { formItemLayout, tailFormItemLayout } from './utils';
@@ -18,14 +18,12 @@ const Print = ({ isAdmin }) => {
     fetchData()
   }, [form])
   const handleSubmit = () => {
-    form.validateFields((err, values) => {
-      if (!err) {
-        store.set(Object.keys(values), Object.values(values)).then(status => {
-          if (status) {
-            message.success('设置成功', 2)
-          }
-        })
-      }
+    form.validateFields().then((values) => {
+      store.set(Object.keys(values), Object.values(values)).then(status => {
+        if (status) {
+          message.success('设置成功', 2)
+        }
+      })
     });
   };
   // const reset = () => {

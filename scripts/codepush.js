@@ -60,6 +60,10 @@ function flash(target) {
         }
     };
     request(options, function (err, res, body) {
-        if (err) console.log('err', err);
+        if (err) {
+            console.log('err', err)
+        }else{
+            // console.log(res.toJSON(),body)
+        };
     });
 }

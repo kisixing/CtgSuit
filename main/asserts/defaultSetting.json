@@ -27,5 +27,7 @@
     "alarm_volumn": 10,
     "alarm_delay": 0,
     "alarm_high": 160,
-    "alarm_low": 110
+    "alarm_low": 110,
+
+    "analysable":true
 }

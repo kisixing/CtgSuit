@@ -41,7 +41,7 @@ const Network = ({ isAdmin }) => {
           fhrcolor2,
           fhrcolor3,
           tococolor,
-
+          alarm_finished
         }) => {
           form.setFieldsValue({
             // normalarea,
@@ -54,7 +54,7 @@ const Network = ({ isAdmin }) => {
             fhrcolor2,
             fhrcolor3,
             tococolor,
-
+            alarm_finished
           });
         },
       );
@@ -86,12 +86,7 @@ const Network = ({ isAdmin }) => {
       });
   }
 
-  const checkboxGroup = () => (
-    <Radio.Group>
-      <Radio value={'1'}>打开</Radio>
-      <Radio value={'0'}>关闭</Radio>
-    </Radio.Group>
-  );
+
 
   return (
     <Form

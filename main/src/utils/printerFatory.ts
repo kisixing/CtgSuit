@@ -1,6 +1,7 @@
 import { log } from "./log";
 import { get } from "http";
 import { tmp, config } from "../config/path";
+import clientServer from "../ipc/audioPlay";
 const fs = require('fs');
 const path = require('path')
 const execFile = require('child_process').execFile;
@@ -34,6 +35,7 @@ export const printerFatory = targetDir => {
             task.on('error', (err) => {
                 console.log(`write error: ${err}`);
             })
+            // clientServer(null, 'print', { filePath: tmpPath })
         })
         console.log('print', fileUrl)
         get(fileUrl, res => {

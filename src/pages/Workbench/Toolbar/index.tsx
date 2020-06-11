@@ -1,23 +1,25 @@
-import React, { useState, useEffect, useRef, memo, useCallback } from 'react';
-import { Icon as LegacyIcon } from '@ant-design/compatible';
-import { Button, message } from 'antd';
-import moment from 'moment';
-import { event } from "@lianmed/utils";
+import Event from "@/components/Modal/Event";
 import request from '@/utils/request';
-import CollectionCreateForm from './CollectionCreateForm';
+import { Icon as LegacyIcon } from '@ant-design/compatible';
+import { WsService } from '@lianmed/lmg';
+import { BedStatus, ICacheItem } from '@lianmed/lmg/lib/services/WsService';
+import { MultiParamDisplay } from "@lianmed/pages/lib/Ctg/MultiParamDisplay";
+import { event } from "@lianmed/utils";
+import { Button, message } from 'antd';
+import { ButtonProps } from 'antd/lib/button';
+import moment from 'moment';
+import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 import Analysis from '../Analysis';
+import Shell from "../Analysis/Shell";
 import PrintPreview from '../PrintPreview';
+import { FetalItem } from "../types";
+import CollectionCreateForm from './CollectionCreateForm';
+import Jb from "./Jb";
 import ModalConfirm from './ModalConfirm';
 import SignModal from './SignModal';
 import SoundModal from './SoundModal';
-import { WsService } from '@lianmed/lmg';
-import { BedStatus, ICacheItem } from '@lianmed/lmg/lib/services/WsService';
-import { FetalItem } from "../types";
-import { ButtonProps } from 'antd/lib/button';
-import Jb from "./Jb";
-import Event from "@/components/Modal/Event";
-import Shell from "../Analysis/Shell";
-import { MultiParamDisplay } from "@lianmed/pages/lib/Ctg/MultiParamDisplay";
+import SettingStore from '@/utils/SettingStore';
+const cache = SettingStore.cache
 const socket = WsService._this;
 
 function Toolbar(props: FetalItem.IToolbarProps) {
@@ -202,14 +204,18 @@ function Toolbar(props: FetalItem.IToolbarProps) {
     >
       胎位标记
       </B>
-    {/* <B
-        disabled={!isCreated}
-        icon="pie-chart"
-        type="link"
-        onClick={() => setModalName('analysisVisible')}
-      >
-        电脑分析
-      </B> */}
+    {
+      !!cache.analysable && (
+        <B
+          disabled={!isCreated}
+          icon={<LegacyIcon type="pie-chart" />}
+          type="link"
+          onClick={() => setModalName('analysisVisible')}
+        >
+          <span>电脑分析</span>
+        </B>
+      )
+    }
 
     {/* O */}
     <B

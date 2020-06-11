@@ -115,14 +115,29 @@ class TableList extends Component {
           const signable = true || !!ctgexam.signable;
           const isMother = ctgexam && (ctgexam.type === 'mother');
           return (
+
             <span>
               {
-                (!!settingStore.cache.inspectable) || <span
-                  className="primary-link"
-                  onClick={e => this.showAnalysis(e, record)}
-                >
-                  分析
-              </span>
+                (
+                  true && <>
+                    <span className="primary-link" onClick={(e) => this.showEventVisible(e, record)}>
+                      事件记录
+                    </span>
+                  </>
+                )
+              }
+              {
+                (!!settingStore.cache.analysable) && (
+                  <>
+                    <Divider type="vertical" />
+                    <span
+                      className="primary-link"
+                      onClick={e => this.showAnalysis(e, record)}
+                    >
+                      分析
+                    </span>
+                  </>
+                )
               }
               {signable && (
                 <>
@@ -154,16 +169,7 @@ class TableList extends Component {
                   </>
                 )
               }
-              {
-                (
-                  true && <>
-                    <Divider type="vertical" />
-                    <span className="primary-link" onClick={(e) => this.showEventVisible(e, record)}>
-                      事件记录
-                    </span>
-                  </>
-                )
-              }
+
 
               {/* <Divider type="vertical" /> */}
               {/* <span className="delete-link" onClick={() => this.switchFullscreen(record)}>

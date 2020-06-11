@@ -254,7 +254,7 @@ const EditModal = Form.create({
                       })(
                         <Select allowClear style={{ width }}>
                           <Select.Option value="10">住院中</Select.Option>
-                          <Select.Option value="11">已出院</Select.Option>
+                          <Select.Option value="20">已出院</Select.Option>
                         </Select>,
                       )}
                     </Form.Item>

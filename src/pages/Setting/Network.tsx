@@ -23,11 +23,11 @@ const data = [
     addonBefore: 'http://',
     label: '远程地址',
   },
-  {
-    name: 'stomp_url',
-    addonBefore: 'http://',
-    label: 'stomp地址',
-  },
+  // {
+  //   name: 'stomp_url',
+  //   addonBefore: 'http://',
+  //   label: 'stomp地址',
+  // },
   {
     name: 'public_url',
     addonBefore: 'http://',
