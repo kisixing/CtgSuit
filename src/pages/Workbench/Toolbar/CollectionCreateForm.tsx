@@ -425,7 +425,7 @@ const CollectionCreateForm = (props: IProps) => {
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item label={<span className="required">{noLabel}</span>}>
+            <Form.Item label={<span className={isIn?'required':''}>{noLabel}</span>}>
               {getFieldDecorator(noKey, {
                 rules: [
                   { required: false, message: `请填写${noLabel}!` },
