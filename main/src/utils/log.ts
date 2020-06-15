@@ -1,10 +1,10 @@
 import { logPath, errLogPath } from "../config/path";
-const fs = require('fs')
+import { appendFile,writeFile } from "fs";
 
 export const log = (str = '') => {
-    fs.appendFile(logPath, `${new Date().toLocaleString()}\r\n${str}\r\n\r\n`, () => { })
+    appendFile(logPath, `${new Date().toLocaleString()}\r\n${str}\r\n\r\n`, () => { })
 }
 export const logErr = (str = '') => {
-    fs.appendFile(errLogPath, `${new Date().toLocaleString()}\r\n${str}\r\n\r\n`, () => { })
+    appendFile(errLogPath, `${new Date().toLocaleString()}\r\n${str}\r\n\r\n`, () => { })
 }
 

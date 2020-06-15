@@ -1,4 +1,4 @@
-import React, { Component, FunctionComponent, useEffect } from 'react';
+import React, { FunctionComponent, useEffect } from 'react';
 
 import '@ant-design/compatible/assets/index.css';
 import { Input, Button, message, Form } from 'antd';

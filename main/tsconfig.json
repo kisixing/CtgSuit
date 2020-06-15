@@ -16,4 +16,10 @@
     "include": [
       "src/**/*.ts"
     ],
+    "paths": {
+      "exclude": ["node_modules"],
+      "@/*": [
+        "src/*"
+      ]
+    }
   }

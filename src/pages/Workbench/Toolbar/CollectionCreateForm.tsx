@@ -260,7 +260,7 @@ const CollectionCreateForm = (props: IProps) => {
         if (!values.name) {
           return message.error('请输入患者姓名！');
         }
-        if (!values[noKey]) {
+        if (!values[noKey] && isIn) {
           return message.error(`请输入患${noLabel}！`);
         }
         const old = selectedPregnancy;

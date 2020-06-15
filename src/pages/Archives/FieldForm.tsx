@@ -3,10 +3,8 @@ import { connect } from 'dva';
 import moment from 'moment';
 import React, { useEffect } from 'react';
 import store from 'store';
-import styles from './FieldForm.less';
-// 默认时间
-const ENDTIME = moment();
-const STARTTIME = moment().subtract(7, 'd');
+const styles = require('./FieldForm.less');
+
 
 const FieldForm = (props) => {
   const isIn = (store.get('ward') || {}).wardType === 'in'
@@ -17,8 +15,8 @@ const FieldForm = (props) => {
   useEffect(() => {
     form.setFieldsValue({
       // eslint-disable-next-line no-undef
-      startTime: __DEV__ ? moment('2019-1-1') : STARTTIME,
-      endTime: ENDTIME,
+      startTime: __DEV__ ? moment('2019-1-1') : moment().subtract(7, 'd'),
+      endTime: moment(),
     });
   }, [form])
 
@@ -33,8 +31,7 @@ const FieldForm = (props) => {
     }
     const { size, /* page */ } = pagination;
     form.validateFields().then((values) => {
-      // let sTime = STARTTIME.format('YYYY-MM-DD');
-      // let eTime = ENDTIME.format('YYYY-MM-DD');
+
       let sTime = undefined;
       let eTime = undefined;
       let { startTime, endTime, name, bedNO } = values;
@@ -144,7 +141,7 @@ const FieldForm = (props) => {
   );
 }
 
-export default connect(({ loading, archives, router }) => ({
+export default connect(({ loading, archives, router }: any) => ({
   loading: loading,
   pagination: archives.pagination,
   router,
