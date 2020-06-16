@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
-import { Icon as LegacyIcon } from '@ant-design/compatible';
-
+import { UserOutlined, LogoutOutlined, FormOutlined, StarFilled } from "@ant-design/icons";
 import { Menu, Modal, Avatar, Spin } from 'antd';
 import { connect } from 'dva';
 import { router } from 'umi';
@@ -14,7 +13,7 @@ import ChangePassword from "@/components/ChangePassword";
 const styles = require('./BasicLayout.less')
 
 const A = (props: any) => {
-  const { account, loading } = props;
+  const { account, loading, isAdmin } = props;
   const [changPassWordVisible, setChangPassWordVisible] = useState(false)
   const onMenuClick = e => {
     const { key } = e;
@@ -57,17 +56,20 @@ const A = (props: any) => {
 
   const menu = (
     <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
-      <Menu.Item key="signout">
-        <LegacyIcon type="user" />
-        <span>切换用户</span>
+      <Menu.Item disabled style={{color:'#555'}}>
+        {account.firstName}
       </Menu.Item>
       <Menu.Divider />
+      <Menu.Item key="signout">
+        <UserOutlined />
+        <span>切换用户</span>
+      </Menu.Item>
       <Menu.Item key="logout">
-        <LegacyIcon type="logout" />
+        <LogoutOutlined />
         <span>退出系统</span>
       </Menu.Item>
       <Menu.Item onClick={() => setChangPassWordVisible(true)}>
-        <LegacyIcon type="form" />
+        <FormOutlined />
         <span>修改密码</span>
       </Menu.Item>
     </Menu>
@@ -80,17 +82,21 @@ const A = (props: any) => {
     >
       <HeaderDropdown overlay={menu}>
         <span className={`${styles.action} ${styles.account}`}>
-          <Avatar
-            size="small"
-            className={styles.avatar}
-            src={account.imageUrl}
-            alt="avatar"
-          >
-            {account.firstName &&
+          {
+            <Avatar
+              size="small"
+              className={styles.avatar}
+              src={account.imageUrl}
+              alt="avatar"
+              // icon={<StarFilled />}
+            >
+              {account.firstName &&
               account.firstName.substr(0, 1).toUpperCase()}
-          </Avatar>
+
+            </Avatar>
+          }
           <span title={account.firstName} className={styles.name}>
-            {account.firstName}
+            {isAdmin ? '管理员' : '普通用户'}
           </span>
         </span>
       </HeaderDropdown>
@@ -105,5 +111,5 @@ const A = (props: any) => {
 export default connect(({ global, loading, }: any) => ({
   // loading: loading,
   account: global.account || {},
-
+  isAdmin: global.isAdmin
 }))(A);

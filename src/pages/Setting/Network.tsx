@@ -32,8 +32,9 @@ const data = [
     name: 'public_url',
     addonBefore: 'http://',
     label: 'public_url地址',
+    optional: true
   },
-]
+].map(_ => ({ ..._, optional: _.optional }))
 const Network: FunctionComponent<{ isAdmin: boolean }> = (props) => {
   const { isAdmin } = props
   const [form] = Form.useForm()
@@ -75,11 +76,9 @@ const Network: FunctionComponent<{ isAdmin: boolean }> = (props) => {
   return (
     <Form form={form} layout="horizontal" {...formItemLayout} className={styles.form}>
       <div className={styles.subTitle}>网络设置</div>
-
-
       {
         data.map(_ => (
-          <Form.Item label={_.label} name={_.name} key={_.name} required>
+          <Form.Item label={_.label} name={_.name} key={_.name} required={!_.optional}>
             <Input
               addonBefore={_.addonBefore}
               placeholder={`请输入!`}
@@ -87,18 +86,18 @@ const Network: FunctionComponent<{ isAdmin: boolean }> = (props) => {
           </Form.Item>
         ))
       }
-      <Form.Item {...tailFormItemLayout} required>
+      <Form.Item {...tailFormItemLayout} >
         <Button type="primary" onClick={handleSubmit} disabled={!isAdmin}>
-          保存
-          </Button>
+          <span>保存</span>
+        </Button>
         <Button
           type="default"
           onClick={reset}
           style={{ marginLeft: 10 }}
           disabled={!isAdmin}
         >
-          恢复默认
-          </Button>
+          <span>恢复默认</span>
+        </Button>
       </Form.Item>
     </Form>
   );
