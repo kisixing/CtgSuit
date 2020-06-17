@@ -22,6 +22,8 @@ const data = [
     name: 'remote_url',
     addonBefore: 'http://',
     label: '远程地址',
+    optional: true
+
   },
   // {
   //   name: 'stomp_url',

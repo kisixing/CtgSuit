@@ -56,7 +56,7 @@ const A = (props: any) => {
 
   const menu = (
     <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
-      <Menu.Item disabled style={{color:'#555'}}>
+      <Menu.Item disabled style={{ color: '#555' }}>
         {account.firstName}
       </Menu.Item>
       <Menu.Divider />
@@ -88,10 +88,11 @@ const A = (props: any) => {
               className={styles.avatar}
               src={account.imageUrl}
               alt="avatar"
-              // icon={<StarFilled />}
+            // icon={<StarFilled />}
             >
-              {account.firstName &&
-              account.firstName.substr(0, 1).toUpperCase()}
+              {
+                (account.firstName || '').substr(0, 1).toUpperCase()
+              }
 
             </Avatar>
           }
