@@ -1,9 +1,7 @@
-import { WsService } from '@lianmed/lmg/lib/services/WsService';
-import { Modal, Table, Input } from 'antd';
-import React, { useState, useEffect } from 'react';
-import { post, get } from "@lianmed/request";
-import { formatDate } from "@lianmed/utils";
+import { get, post } from "@lianmed/request";
+import { Button, Input, Modal, Table } from 'antd';
 import moment from "moment";
+import React, { useEffect, useState } from 'react';
 interface IProps {
     visible: boolean
     onCancel: () => void
@@ -48,9 +46,10 @@ export const EventModal = (props: IProps) => {
             onOk={() => {
 
             }}
+            title="事件记录"
             footer={null}
         >
-            <Table size="small" dataSource={data} columns={[
+            <Table size="small" bordered dataSource={data} columns={[
                 {
                     dataIndex: 'createDate',
                     title: '记录时间'
@@ -66,19 +65,26 @@ export const EventModal = (props: IProps) => {
 
                 }
             ]} />
+            <div style={{ position: 'relative' }}>
 
-            <Input.TextArea disabled={disabled} value={note} onChange={e => setNote(e.target.value)} onPressEnter={() => {
-                post('/events', {
-                    data: {
-                        docid,
-                        note
+                <Input.TextArea rows={4} disabled={disabled} value={note} onChange={e => setNote(e.target.value)} placeholder="请输入事件记录内容" />
+                <Button type="primary" size="small" style={{ position: 'absolute', right: 10, bottom: 10 }} onClick={
+                    () => {
+                        post('/events', {
+                            data: {
+                                docid,
+                                note
+                            }
+                        })
+                            .then(() => {
+                                fetchData()
+                                setNote('')
+                            })
                     }
-                })
-                    .then(() => {
-                        fetchData()
-                        setNote('')
-                    })
-            }} placeholder="按回车提交" />
+                }>
+                    <span>确认</span>
+                </Button>
+            </div>
         </Modal >
     );
 }

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { } from 'react';
 import { connect } from 'dva';
 import { Icon as LegacyIcon } from '@ant-design/compatible';
 import { Spin, Button } from 'antd';
@@ -10,7 +10,7 @@ import styles from './CurveChart.less';
 
 const CurveChart = (props) => {
   const {
-    selected: { id, visitType, ctgexam, ...rest },
+    selected: { ctgexam },
     dataSource,
     loading,
     isFullscreen,
@@ -48,10 +48,8 @@ const CurveChart = (props) => {
         <div>
           监护时间：
             <span style={{ display: 'inline-block', fontWeight: 600, marginRight: '24px' }}>
-            {ctgexam &&
-              ctgexam.startTime &&
-              moment(ctgexam.startTime).format('YYYY-MM-DD HH:mm:ss')}{' '}
-              ~{' '}
+            {ctgexam && ctgexam.startTime && moment(ctgexam.startTime).format('YYYY-MM-DD HH:mm:ss')}
+            {' ~ '}
             {ctgexam && ctgexam.endTime && moment(ctgexam.endTime).format('YYYY-MM-DD HH:mm:ss')}
           </span>
           <Button

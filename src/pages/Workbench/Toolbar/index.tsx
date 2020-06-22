@@ -1,6 +1,6 @@
 import Event from "@/components/Modal/Event";
 import request from '@/utils/request';
-import { Icon as LegacyIcon } from '@ant-design/compatible';
+import { PauseCircleOutlined, PlayCircleOutlined, UserAddOutlined, PushpinOutlined, PieChartOutlined, PrinterOutlined, LoadingOutlined, ControlOutlined, SoundOutlined, FormOutlined } from "@ant-design/icons";
 import { WsService } from '@lianmed/lmg';
 import { BedStatus, ICacheItem } from '@lianmed/lmg/lib/services/WsService';
 import { MultiParamDisplay } from "@lianmed/pages/lib/Ctg/MultiParamDisplay";
@@ -179,17 +179,17 @@ function Toolbar(props: FetalItem.IToolbarProps) {
   const B = (p: ButtonProps) => <Button style={{ padding: '0 8px' }} {...p} disabled={p.disabled || (isOfflineStopped && !pregnancyId)}>{p.children}</Button>
   return <>
     {isWorking || isOffline ? (
-      <B icon={<LegacyIcon type="pause-circle" />} type="link" onClick={() => setModalName('confirmVisible')}>
+      <B icon={<PauseCircleOutlined />} type="link" onClick={() => setModalName('confirmVisible')}>
         停止监护
       </B>
     ) : (
-        <B disabled={!isStopped || !!disableStartWork} icon={<LegacyIcon type="play-circle" />} type="link" onClick={start}>
+        <B disabled={!isStopped || !!disableStartWork} icon={<PlayCircleOutlined />} type="link" onClick={start}>
           开始监护
         </B>
       )}
     {/* 停止状态下不可以建档，监护、离线都是可以建档的 */}
 
-    <B icon={<LegacyIcon type={'user-add'} />} type="link" disabled={(isCreated && !pvId) || isStopped} onClick={() => {
+    <B icon={<UserAddOutlined />} type="link" disabled={(isCreated && !pvId) || isStopped} onClick={() => {
       isCreated ? setModalName('jbVisible') : setModalName('visible')
     }}>
       {isCreated ? '解绑' : '建档'}
@@ -198,7 +198,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
 
     <B
       disabled={!isCreated}
-      icon={<LegacyIcon type="pushpin" />}
+      icon={<PushpinOutlined />}
       type="link"
       onClick={() => setModalName('signVisible')}
     >
@@ -208,7 +208,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
       !!cache.analysable && (
         <B
           disabled={!isCreated}
-          icon={<LegacyIcon type="pie-chart" />}
+          icon={<PieChartOutlined />}
           type="link"
           onClick={() => setModalName('analysisVisible')}
         >
@@ -220,14 +220,14 @@ function Toolbar(props: FetalItem.IToolbarProps) {
     {/* O */}
     <B
       disabled={!isCreated}
-      icon={<LegacyIcon type="printer" />}
+      icon={<PrinterOutlined />}
       type="link"
       onClick={() => setModalName('printVisible')}
     >
       报告
       </B>
     <Button
-      icon={<LegacyIcon type="printer" />}
+      icon={<FormOutlined />}
       type="link"
       disabled={!docid}
       onClick={() => setModalName('eventVisible')}
@@ -237,7 +237,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
 
     {
       data && data.ismulti && <Button
-        icon={<LegacyIcon type="printer" />}
+        icon={<PieChartOutlined />}
         type="link"
         disabled={!docid}
         onClick={() => setModalName('multiParamVisible')}
@@ -249,7 +249,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
     {
       !!is_include_tocozero && <B
         disabled={!is_include_tocozero}
-        icon={<LegacyIcon type={tocozeroLoading ? 'loading' : 'control'} />}
+        icon={tocozeroLoading ? <LoadingOutlined /> : <ControlOutlined />}
         type="link"
         onClick={setTocozero}
       >
@@ -260,7 +260,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
       !!is_include_volume && <B
         // disabled={!isCreated}
 
-        icon={<LegacyIcon type={volumeDataLoading ? 'loading' : 'sound'} />}
+        icon={volumeDataLoading ? <Loading /> : <SoundOutlined />}
         type="link"
         onClick={() => {
           socket.getVolume(+deviceno, +bedno)

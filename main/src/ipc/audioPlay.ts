@@ -17,8 +17,8 @@ const PIPE_NAME = "audiopipe";
 const PIPE_PATH = "\\\\.\\pipe\\" + PIPE_NAME;
 let client: Socket
 let child: ChildProcessWithoutNullStreams
-function init() {
-    config()
+async function init() {
+    await config()
     child = spawn(audioPlayerPath, { cwd: tmp });
     if (child) {
         child
@@ -33,7 +33,7 @@ function init() {
 export function kill() {
     child && child.kill()
 }
-init()
+// init()
 
 
 var stdin = process.openStdin();
@@ -89,16 +89,19 @@ export default (e, mode: string, options: { second?: number, filePath?: string, 
 
 function config() {
 
-    const p = resolve(audioPlayerPath, '../ClientService.exe.config')
-    log(`config clientservice ${xhr_url}, ${p}`)
-    const res = xmlParser.parseStringPromise(fs.readFileSync(p))
-    res.then(r => {
-        const adds = r.configuration.appSettings[0].add
-        const t1 = adds.find(_ => _['$'].key === 'baseurl')
-        t1.$.value = `http://${xhr_url}/api/`
-        const t2 = adds.find(_ => _['$'].key === 'storepath')
-        t2.$.value = tmp
-        const s = jsonBuilder.buildObject(r)
-        fs.writeFileSync(p, s)
+    return new Promise(_ => {
+        const p = resolve(audioPlayerPath, '../ClientService.exe.config')
+        log(`config clientservice ${xhr_url}, ${p}`)
+        const res = xmlParser.parseStringPromise(fs.readFileSync(p))
+        res.then(r => {
+            const adds = r.configuration.appSettings[0].add
+            const t1 = adds.find(_ => _['$'].key === 'baseurl')
+            t1.$.value = `http://${xhr_url}/api/`
+            const t2 = adds.find(_ => _['$'].key === 'storepath')
+            t2.$.value = tmp
+            const s = jsonBuilder.buildObject(r)
+            fs.writeFileSync(p, s)
+        })
+        _()
     })
 }

@@ -117,60 +117,21 @@ class TableList extends Component {
           return (
 
             <span>
-              {
-                (
-                  true && <>
-                    <span className="primary-link" onClick={(e) => this.showEventVisible(e, record)}>
-                      事件记录
-                    </span>
-                  </>
-                )
-              }
-              {
-                (!!settingStore.cache.analysable) && (
-                  <>
-                    <Divider type="vertical" />
-                    <span
-                      className="primary-link"
-                      onClick={e => this.showAnalysis(e, record)}
-                    >
-                      分析
-                    </span>
-                  </>
-                )
-              }
-              {signable && (
-                <>
-                  <Divider type="vertical" />
-
-                  <span className="primary-link" onClick={(e) => this.showPrint(e, record)}>
-                    {hasSigned ? '重新生成' : '报告生成'}
-                  </span>
-                </>
-              )
-              }
-              {
-                hasSigned && (
-                  <>
-                    <Divider type="vertical" />
-                    <span className="primary-link" onClick={(e) => this.showReport(e, record)}>
-                      查看
-                    </span>
-                  </>
-                )
-              }
-              {
-                (
-                  isMother && <>
-                    <Divider type="vertical" />
-                    <span className="primary-link" onClick={(e) => this.showMultiParam(e, record)}>
-                      多参
-                    </span>
-                  </>
-                )
-              }
-
-
+              <Button type="link" size="small" onClick={(e) => this.showEventVisible(e, record)}>
+                <span>事件记录</span>
+              </Button>
+              <Button type="link" size="small" disabled={!settingStore.cache.analysable} onClick={e => this.showAnalysis(e, record)}>
+                <span>电脑分析</span>
+              </Button>
+              <Button type="link" size="small" disabled={!signable} onClick={(e) => this.showPrint(e, record)}>
+                <span>{hasSigned ? '重新生成' : '报告生成'}</span>
+              </Button>
+              <Button type="link" size="small" disabled={!hasSigned} onClick={(e) => this.showReport(e, record)}>
+                <span>查看</span>
+              </Button>
+              <Button type="link" size="small" onClick={(e) => this.showMultiParam(e, record)} disabled={!isMother}>
+                <span>多参</span>
+              </Button>
               {/* <Divider type="vertical" /> */}
               {/* <span className="delete-link" onClick={() => this.switchFullscreen(record)}>
                 详情

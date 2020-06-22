@@ -13,7 +13,7 @@ function EditModal(props) {
   const [form] = Form.useForm()
   const areaNO = store.get('ward') && store.get('ward').wardId
   const ward = store.get('ward') || {}
-  const isIn = false && ward.wardType === 'in'
+  const isIn = ward.wardType === 'in'
   const noLabel = isIn ? '住院号' : '卡号'
   const noKey = isIn ? 'inpatientNO' : 'cardNO';
   const { visible, onCancel, dataSource } = props;

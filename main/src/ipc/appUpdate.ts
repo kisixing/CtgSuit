@@ -33,9 +33,9 @@ const firePath = resolve(resources, 'fired')
 
 let f = false
 
-setInterval(() => {
-  log(`flg-----------${f}`)
-}, 6e4 / 2);
+// setInterval(() => {
+//   log(`flg-----------${f}`)
+// }, 6e4 / 2);
 
 function appUpdate(e) {
   log(`--------------version-update 开始-------------------${isDev}`)
