@@ -4,7 +4,7 @@ import config from "@/utils/config";
 
 const request = r.config({
   prefix: config.apiPrefix,
-  hideErr: false,
+  hideErr: true,
   errHandler({ status, errortext, url }) {
     if (status === 401) {
       // @HACK

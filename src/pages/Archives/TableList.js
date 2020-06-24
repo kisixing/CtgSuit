@@ -39,20 +39,6 @@ class TableList extends Component {
         ...this.getColumnSearchProps('name'),
       },
       {
-        title: '年龄',
-        dataIndex: 'age',
-        key: 'age',
-        width: 70,
-        render: (text, record) => record.pregnancy && record.pregnancy.age,
-        sorter: (a, b) => parseInt(a.age) - parseInt(b.age),
-      },
-      {
-        title: '孕周',
-        dataIndex: 'gestationalWeek',
-        key: 'gestationalWeek',
-        width: 70,
-      },
-      {
         title: '住院号',
         dataIndex: 'inpatientNO',
         key: 'inpatientNO',
@@ -69,6 +55,20 @@ class TableList extends Component {
         key: 'bedNumber',
         width: 100,
         render: (text, record) => record.pregnancy && record.pregnancy.bedNO,
+      },
+      {
+        title: '年龄',
+        dataIndex: 'age',
+        key: 'age',
+        width: 70,
+        render: (text, record) => record.pregnancy && record.pregnancy.age,
+        sorter: (a, b) => parseInt(a.age) - parseInt(b.age),
+      },
+      {
+        title: '孕周',
+        dataIndex: 'gestationalWeek',
+        key: 'gestationalWeek',
+        width: 70,
       },
       {
         title: '日期',

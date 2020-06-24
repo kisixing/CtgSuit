@@ -260,7 +260,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
       !!is_include_volume && <B
         // disabled={!isCreated}
 
-        icon={volumeDataLoading ? <Loading /> : <SoundOutlined />}
+        icon={volumeDataLoading ? <LoadingOutlined /> : <SoundOutlined />}
         type="link"
         onClick={() => {
           socket.getVolume(+deviceno, +bedno)

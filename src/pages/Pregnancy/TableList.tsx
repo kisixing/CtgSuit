@@ -86,6 +86,17 @@ const TableList = (props) => {
 
   const columns: any = [
     {
+      title: '姓名',
+      dataIndex: 'name',
+      key: 'name',
+      sorter: (a, b) => {
+        if (a.name && b.name) {
+          return a.name.length - b.name.length;
+        }
+      },
+      ...getColumnSearchProps('name'),
+    },
+    {
       title: noLabel,
       dataIndex: noKey,
       key: noKey,
@@ -107,17 +118,6 @@ const TableList = (props) => {
       dataIndex: 'recordstate',
       key: 'recordstate',
       render: text => statusMap[text] || '',
-    },
-    {
-      title: '姓名',
-      dataIndex: 'name',
-      key: 'name',
-      sorter: (a, b) => {
-        if (a.name && b.name) {
-          return a.name.length - b.name.length;
-        }
-      },
-      ...getColumnSearchProps('name'),
     },
     {
       title: '年龄',

@@ -82,7 +82,7 @@ export const EventModal = (props: IProps) => {
                             })
                     }
                 }>
-                    <span>确认</span>
+                    <span>保存</span>
                 </Button>
             </div>
         </Modal >

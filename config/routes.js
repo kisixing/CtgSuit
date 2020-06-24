@@ -70,13 +70,6 @@ export default [
         component: './Setting/index',
       },
       {
-        path: '/testCtg',
-        name: 'testCtg',
-        exact: true,
-        title: 'ObVue-系统设置',
-        component: './TestCtg',
-      },
-      {
         path: '/pregnancy',
         name: 'Pregnancy',
         exact: true,
