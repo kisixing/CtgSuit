@@ -1,5 +1,5 @@
 
-import React,{memo} from 'react';
+import React, { memo } from 'react';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import { Button, Modal, Radio } from 'antd';
@@ -16,11 +16,11 @@ interface IProps {
   visible: boolean
   onCancel: () => void
   suit: React.MutableRefObject<Suit>
+  fetal_num: number
 }
 
 export const SignModal = (props: IProps) => {
-  console.log('ggg', props.suit, (props as any).mutableSuit)
-  const { form, startTime, bedname, docid, visible, onCancel, suit } = props;
+  const { form, startTime, bedname, docid, visible, onCancel, suit, fetal_num } = props;
   const handleCreate = () => {
     form.validateFields(async (err, values) => {
       setTimeout(onCancel, 600);
@@ -61,21 +61,20 @@ export const SignModal = (props: IProps) => {
       onCancel={onCancel}
     >
       <Form {...formItemLayout} layout="horizontal">
-        <Form.Item label="FHR1">
-          {getFieldDecorator('fhr1', {
-            rules: [{ max: 2, message: '最大长度为2' }],
-          })(<RadioGroup />)}
-        </Form.Item>
-        <Form.Item label="FHR2">
-          {getFieldDecorator('fhr2', {
-            rules: [{ max: 2, message: '最大长度为2' }],
-          })(<RadioGroup />)}
-        </Form.Item>
-        <Form.Item label="FHR3">
-          {getFieldDecorator('fhr3', {
-            rules: [{ max: 2, message: '最大长度为2' }],
-          })(<RadioGroup />)}
-        </Form.Item>
+
+ 
+        {
+          Array(fetal_num || 0).fill(0).map((_, i) => {
+            i = i + 1
+            return (
+              <Form.Item key={i} label={`FHR${i}`}>
+                {getFieldDecorator(`fhr${i}`, {
+                  rules: [{ max: 2, message: '最大长度为2' }],
+                })(<RadioGroup />)}
+              </Form.Item>
+            )
+          })
+        }
         {/* <div>
             <Button block type="dashed" icon="plus">
               增加

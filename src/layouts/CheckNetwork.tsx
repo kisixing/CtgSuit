@@ -28,7 +28,7 @@ function CheckNetwork(props) {
                     style={{
                         cursor: 'pointer',
                         width: small ? '40vw' : '100vw',
-                        background: "red",
+                        background: "yellow",
                         color: "#fff",
                         display: 'flex',
                         justifyContent: 'center',

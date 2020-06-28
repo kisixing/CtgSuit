@@ -4,6 +4,7 @@ import { Button, Form, Input, message, Select, Switch } from 'antd';
 import { connect } from 'dva';
 import React, { useEffect } from 'react';
 import store from 'store';
+import { ipcRenderer } from 'electron';
 // import { getDisplaySize } from '@/utils/utils';
 import { formItemLayout, tailFormItemLayout } from './utils';
 const styles = require('./style.less');
@@ -66,6 +67,11 @@ function Hospital(props) {
       </Form.Item>
       <Form.Item valuePropName="checked" label="默认全屏" name="fullscreen">
         <Switch />
+      </Form.Item>
+      <Form.Item label="" name="" {...tailFormItemLayout}>
+        <Button onClick={() => {
+          ipcRenderer.send('appUpdate')
+        }}>检查更新</Button>
       </Form.Item>
       {/* <Form.Item label="版本时间">
           {getFieldDecorator('build_date', {

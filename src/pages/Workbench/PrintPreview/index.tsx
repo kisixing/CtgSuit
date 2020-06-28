@@ -4,7 +4,7 @@ import moment from 'moment';
 import { ipcRenderer } from 'electron';
 import config from '@/utils/config';
 import Shell from "../Analysis/Shell";
-
+import SettingStore from "@/utils/SettingStore";
 export const Context = React.createContext({});
 
 interface IProps {
@@ -42,7 +42,7 @@ const PrintPreview = (props: IProps) => {
     <Context.Provider value={v}>
 
       <Shell {...props}>
-        <Report docid={docid} onDownload={onDownload} {...getPreviewData()} print_interval={20} />
+        <Report docid={docid} onDownload={onDownload} {...getPreviewData()} print_interval={SettingStore.cache.print_interval} />
 
       </Shell>
     </Context.Provider>

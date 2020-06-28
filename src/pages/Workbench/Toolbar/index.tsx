@@ -49,7 +49,6 @@ function Toolbar(props: FetalItem.IToolbarProps) {
 
 
 
-
   const { bedname, prenatalVisit, bedno, isTodo, unitId } = itemData;
   const data: ICacheItem = itemData.data
   const safePregnancy = data.pregnancy || { pvId: null, age: null, name: null, inpatientNO: null, bedNO: null, id: null, GP: null, gestationalWeek: null }
@@ -352,6 +351,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
       bedname={bedname}
       docid={docid}
       suit={mutableSuit}
+      fetal_num={data.fetal_num}
     />
     <SoundModal
       deviceno={+deviceno}

@@ -62,7 +62,7 @@ class TableList extends Component {
         key: 'age',
         width: 70,
         render: (text, record) => record.pregnancy && record.pregnancy.age,
-        sorter: (a, b) => parseInt(a.age) - parseInt(b.age),
+        // sorter: (a, b) => parseInt(a.age) - parseInt(b.age),
       },
       {
         title: '孕周',
@@ -80,7 +80,7 @@ class TableList extends Component {
           const timeStr = moment(startTime).format('YYYY-MM-DD HH:mm:ss');
           return timeStr;
         },
-        sorter: (a, b) => moment(a.startTime) - moment(b.startTime),
+        // sorter: (a, b) => moment(a.startTime) - moment(b.startTime),
       },
       {
         title: 'GP',

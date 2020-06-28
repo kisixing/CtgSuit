@@ -46,6 +46,11 @@ const Home = (props: IProps) => {
       [BedStatus.Stopped, BedStatus.OfflineStopped].includes(status) ? cb() : event.emit(`bedClose:${unitId}`, cb)
     }
   }, [])
+  const onSelect = useCallback((unitId = '') => {
+
+    dispatch({ type: 'list/setState', payload: { borderedId: unitId } })
+  }, [])
+
   return (
     <Ctg_Layout
       themeColor='var(--theme-color)'
@@ -56,6 +61,7 @@ const Home = (props: IProps) => {
       fullScreenId={fullScreenId}
       contentHeight={contentHeight}
       borderedId={borderedId}
+      onSelect={onSelect}
     />
   );
 };
