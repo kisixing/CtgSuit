@@ -11,5 +11,5 @@ export const collecWebContentsId = (key: string, win: BrowserWindow) => {
     const id = win.webContents
     const wins = (global as any).windows || ((global as any).windows = {})
     wins[key] = id
-    console.log('webcontent id', key, id.id)
+    console.log('--------------打开窗口--------------', key)
 }

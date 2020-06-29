@@ -36,7 +36,7 @@ class TableList extends Component {
         dataIndex: 'name',
         key: 'name',
         width: 150,
-        ...this.getColumnSearchProps('name'),
+        // ...this.getColumnSearchProps('name'),
       },
       {
         title: '住院号',

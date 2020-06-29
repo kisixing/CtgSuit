@@ -94,7 +94,7 @@ const TableList = (props) => {
       //     return a.name.length - b.name.length;
       //   }
       // },
-      ...getColumnSearchProps('name'),
+      // ...getColumnSearchProps('name'),
     },
     {
       title: noLabel,
@@ -102,14 +102,14 @@ const TableList = (props) => {
       key: noKey,
       width: 200,
       // sorter: (a, b) => a[noKey] - b[noKey],
-      ...getColumnSearchProps(noKey),
+      // ...getColumnSearchProps(noKey),
     },
     true && {
       title: '床号',
       dataIndex: 'bedNO',
       key: 'bedNO',
       // sorter: (a, b) => a.bedNO - b.bedNO,
-      ...getColumnSearchProps('bedNO'),
+      // ...getColumnSearchProps('bedNO'),
     },
     {
       // TODO render 名称
