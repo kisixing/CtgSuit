@@ -1,17 +1,7 @@
-import store from 'store'
-import { ipcRenderer } from 'electron';
 import { message } from 'antd';
+import { ipcRenderer } from 'electron';
 
 
-
-import settingStore from "@/utils/SettingStore";
-import { WsService } from "@lianmed/lmg";
-import { router } from 'umi';
-
-
-const EWsStatus = WsService.wsStatus
-const settingData = settingStore.cache
-const { EWsEvents } = WsService
 
 
 

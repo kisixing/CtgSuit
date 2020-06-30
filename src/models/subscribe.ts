@@ -40,7 +40,7 @@ export default {
                 localStorage.removeItem(require('@lianmed/utils').TOKEN_KEY)
                 router.push('/user/login');
             })
-            const { note, wardType, wardId } = data || {}
+            const { note } = data || {}
             yield put({ type: 'setData', note })
         }
 
