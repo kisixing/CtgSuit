@@ -88,9 +88,8 @@ const SearchForm = (props: { [x: string]: any, form: FormInstance }) => {
     dispatch({
       type: 'pregnancy/create',
       payload: values,
-    }).then(() => {
-      reloadData();
-    });
+      callback:reloadData
+    })
   };
 
   const reloadData = () => {

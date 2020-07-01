@@ -4,8 +4,10 @@ import {
   updatePregnancy,
   newPregnancies
 } from '@/services/api';
-import { message } from 'antd';
-
+import { message, Modal } from 'antd';
+import request from '@lianmed/request';
+import { IPregnancy } from '../types'
+import SettingStore from "@/utils/SettingStore";
 export default {
   namespace: 'pregnancy',
   state: {
@@ -60,7 +62,29 @@ export default {
         message.error('修改失败，请稍后...');
       }
     },
-    *create({ payload, callback }, { call, put }) {
+    *create({ payload, callback }, { call, put, select }) {
+      const { isIn } = yield select(s => s.global)
+      const rawList: IPregnancy[] = yield call(getPregnancies, { 'bedNO.equals': payload.bedNO });
+      const existList = rawList.filter(_ => _.recordstate === '10')
+      if (existList.length) {
+        isIn && Modal.confirm({
+          centered: true,
+          okText: '确定',
+          cancelText: '放弃',
+          title: '提示',
+          content: `已存在相同床号的孕妇：${existList.map(_ => _.name).join('、')}等${existList.length}人，是否编辑为出院？`,
+          onOk() {
+            Promise
+              .all(existList.map(_ => {
+                return request.put('/pregnancies', { data: { ..._, recordstate: "20" } })
+              }))
+              .then(() => callback && callback(res))
+          },
+          onCancel() {
+
+          }
+        })
+      }
       const res = yield call(newPregnancies, payload);
       if (res && res.id) {
         message.success('孕册创建成功！');

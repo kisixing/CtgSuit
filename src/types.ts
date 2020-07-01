@@ -29,7 +29,11 @@ export interface IPrenatalVisit {
     ecgexam: any
     gynecologicalExam: any
 }
-
+export enum ERecordstate {
+    in = '10',
+    out = '20',
+    door = '30'
+}
 export interface IPregnancy {
     GP?: string
     gestationalWeek?: string
@@ -58,6 +62,7 @@ export interface IPregnancy {
     roomNO: any;
     sureEdd: any;
     telephone: any;
+    recordstate: ERecordstate
 }
 
 export interface IBed {

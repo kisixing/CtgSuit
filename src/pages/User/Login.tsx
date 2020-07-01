@@ -42,10 +42,10 @@ const Login = (props: IProps) => {
   const handleSubmit = () => {
     const { validateFields } = form;
     validateFields().then(({ id, username, password }) => {
-      dispatch({ type: 'login/login', payload: { username, password, remember: true, rememberMe: true } })
+      dispatch({ type: 'login/login', payload: { username, password, remember: true, rememberMe: true, ward: areaList.find(_ => _.id == id) } })
         .then(() => {
           // areano未旧的病区号
-          store.set('ward', areaList.find(_ => _.id == id));
+          // store.set('ward', areaList.find(_ => _.id == id));
           form.resetFields();
           store.set('username', username)
         })
@@ -168,7 +168,7 @@ const Login = (props: IProps) => {
     {/* footer */}
     <div className={styles.footer}>
       <>
-        <span>{config.copyright} V{cache.inspectable?'1.0.1.0':__VERSION}</span>
+        <span>{config.copyright} V{cache.inspectable ? '1.0.1.0' : __VERSION}</span>
         <Popconfirm
           placement="topRight"
           trigger="click"
@@ -193,7 +193,7 @@ const NetWork = forwardRef(
       SettingStore.get(['ws_url', 'xhr_url']).then(([ws_url, xhr_url]) => {
         form.setFieldsValue({ xhr_url, ws_url });
       });
-    }, [form])
+    }, [])
     return (
       <Form ref={ref} form={form} layout="inline" className={styles.netWork}>
         <div style={{ marginBottom: '12px' }}>网络设置</div>

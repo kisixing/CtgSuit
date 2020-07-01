@@ -1,9 +1,9 @@
 /**
  * 编辑/新增病人
  */
-import { Button, Col, DatePicker, Input, InputNumber, message, Modal, Row, Select, Form } from 'antd';
+import { Button, Col, DatePicker, Form, Input, InputNumber, message, Modal, Row, Select } from 'antd';
 import moment from 'moment';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import store from "store";
 const styles = require('./index.less')
 const width = '200px';

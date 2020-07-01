@@ -48,7 +48,7 @@ export default {
           level: 3,
         },
         title: 'ObVue',
-        dll: false,
+        dll: true,
         routes: {
           exclude: [
             /models\//,

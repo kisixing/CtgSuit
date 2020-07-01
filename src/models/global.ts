@@ -2,7 +2,7 @@ import store from 'store';
 import { TOKEN } from '@/utils/constant';
 import { getAccount } from '@/services/api';
 import { message, Modal } from 'antd';
-
+import { IWard } from "../types";
 export default {
   namespace: 'global',
   state: {
@@ -10,13 +10,14 @@ export default {
     layout: [1, 2], // 一行一列 一行两列
     account: {},
     isAdmin: false,
-    isIn: false
+    ward: store.get('ward') || {},
+    isIn: (store.get('ward') || {}).wardType === 'in'
   },
   effects: {
     *fetchAccount({ payload }, { call, put }) {
       let isAdmin = false
       const res = yield call(getAccount);
-      if (res.sysTime && Math.abs(new Date() - new Date(res.sysTime)) > 5 * 60 * 1000) {
+      if (res.sysTime && Math.abs(+new Date() - +new Date(res.sysTime)) > 5 * 60 * 1000) {
         Modal.warn({
           content: `客户端时间与服务器的时间（${new Date(res.sysTime).toLocaleTimeString()}）相差大于5分钟，请修改系统时间并重启客户端。`
         })
@@ -39,6 +40,15 @@ export default {
       yield put({
         type: 'updateState',
         payload: {},
+      });
+    },
+    *setWard({ payload }: { payload: { ward: IWard } }, { put, call }) {
+      const { ward } = payload
+      const isIn = ward.wardType === 'in'
+      store.set('ward', ward)
+      yield put({
+        type: 'updateState',
+        payload: { isIn, ward },
       });
     },
   },

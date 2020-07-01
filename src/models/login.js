@@ -20,7 +20,8 @@ export default {
     *login({ payload }, { put, call }) {
       const auth = yield call(request.authenticate, payload);
       if (auth) {
-        settingStore.setSync('Authorization',auth)
+        const { ward } = payload
+        settingStore.setSync('Authorization', auth)
         // 登录验证成功
         yield put({
           type: 'updateState',
@@ -56,6 +57,12 @@ export default {
         }
         const u = routerRedux.replace(redirect || '/')
         yield put(u);
+        yield put({
+          type: 'global/setWard',
+          payload: {
+            ward
+          }
+        })
       }
     },
     *verification({ payload }, { call, put }) {
