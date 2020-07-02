@@ -1,8 +1,8 @@
 // import logo from '../assets/logo.png';
-import request from '@/utils/request';
+// import request from '@/utils/request';
 import { Icon as LegacyIcon } from '@ant-design/compatible';
 import { Button } from 'antd';
-import { ipcRenderer } from 'electron';
+// import { ipcRenderer } from 'electron';
 import React, { useCallback } from 'react';
 import { router } from 'umi';
 import withRouter from 'umi/withRouter';
@@ -13,21 +13,11 @@ const styles = require('./BasicLayout.less')
 
 const M = (props: any) => {
     const handleMenuClick = useCallback(
-        key => {
-            request.get('/account')
+        path => {
+            // request.get('/account')
             // let timestamp = Date.parse(new Date());
-            if (key === '操作说明') {
-                ipcRenderer.send('newWindow', 'help');
-            }
-            if (key === '档案管理') {
-                router.push('/archives');
-            }
-            if (key === '系统设置') {
-                router.push('/setting');
-            }
-            if (key === '病人管理') {
-                router.push('/pregnancy');
-            }
+            router.push(path);
+
         },
         []
     )
@@ -36,7 +26,9 @@ const M = (props: any) => {
         <div className={styles.actionBar}>
 
             {[
-                ['档案管理', 'ordered-list', '/archives'],
+                ['主页', 'home', '/workbench'],
+                ['报表统计', 'ordered-list', '/statistics'],
+                ['档案管理', 'fileText', '/archives'],
                 ['系统设置', 'setting', '/setting'],
                 ['病人管理', 'usergroup-add', '/pregnancy'],
                 ['用户信息', 'user'],
@@ -48,7 +40,7 @@ const M = (props: any) => {
                     <Button
                         key={icon}
                         onClick={e => {
-                            handleMenuClick(title);
+                            handleMenuClick(path);
                         }}
                         icon={<LegacyIcon type={icon} />}
                         type={props.location.pathname === path ? 'default' : 'primary'}

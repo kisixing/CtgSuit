@@ -57,14 +57,14 @@ export default [
       },
       {
         path: '/archives',
-        name: 'workbench',
+        name: 'archives',
         exact: true,
         title: 'ObVue-档案管理',
         component: './Archives/index',
       },
       {
         path: '/setting',
-        name: 'workbench',
+        name: 'setting',
         exact: true,
         title: 'ObVue-系统设置',
         component: './Setting/index',
@@ -75,6 +75,13 @@ export default [
         exact: true,
         title: 'ObVue-病人管理',
         component: './Pregnancy',
+      },
+      {
+        path: '/statistics',
+        name: 'statistics',
+        exact: true,
+        title: 'ObVue-报表统计',
+        component: './Statistics',
       },
       // 异常处理页面
       {
