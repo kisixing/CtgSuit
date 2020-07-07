@@ -7,7 +7,6 @@ import {
 import { message, Modal } from 'antd';
 import request from '@lianmed/request';
 import { IPregnancy } from '../types'
-import SettingStore from "@/utils/SettingStore";
 export default {
   namespace: 'pregnancy',
   state: {
@@ -64,8 +63,7 @@ export default {
     },
     *create({ payload, callback }, { call, put, select }) {
       const { isIn } = yield select(s => s.global)
-      const rawList: IPregnancy[] = yield call(getPregnancies, { 'bedNO.equals': payload.bedNO });
-      const existList = rawList.filter(_ => _.recordstate === '10')
+      const existList: IPregnancy[] = yield call(getPregnancies, { 'bedNO.equals': payload.bedNO, 'recordstate.equls': '10', size: 999, page: 0 });
       if (existList.length) {
         isIn && Modal.confirm({
           centered: true,

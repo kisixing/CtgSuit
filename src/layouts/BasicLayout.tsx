@@ -32,7 +32,6 @@ const BasicLayout = (props: any) => {
       r.send('token', { ...request.configure, prefix: `${settingData['remote_url']}/api` })
     })
     remote.getCurrentWindow().setFullScreen(!!settingData.fullscreen)
-
   }, [])
 
   useLayoutEffect(() => {

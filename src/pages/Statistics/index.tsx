@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react'
-import { get } from '@lianmed/request'
-import { Table, DatePicker, Button } from 'antd'
-import moment, { Moment } from "moment";
-import { ipcRenderer } from 'electron';
-import { connect } from 'dva';
 import { printPdf } from "@/utils";
+import { get } from '@lianmed/request';
+import { Button, DatePicker, Table } from 'antd';
+import { connect } from 'dva';
+import moment, { Moment } from "moment";
+import React, { useEffect, useState } from 'react';
 
 moment.defaultFormat = 'YYYY-MM-DD'
 interface IItem { date: string, day: number, all: number }
@@ -37,11 +36,13 @@ export default connect((s: any) => s.global)(
                     <span style={{ marginLeft: 10 }}>结束日期</span> <DatePicker value={endTime} onChange={e => setEndTime(e)} />
                     <Button type="primary" onClick={printCb} style={{ float: 'right', }}>打印</Button>
                 </div>
-                <Table pagination={{pageSize:16}} title={() => <span>总计:{total && total.all}</span>} bordered dataSource={list} rowKey="date" size="small" columns={[
+                <Table pagination={{ pageSize: 16 }} title={() => <span>总计:{total && total.all}</span>} bordered dataSource={list} rowKey="date" size="small" columns={[
                     { title: '日期', dataIndex: 'date' },
                     { title: '白班', dataIndex: 'day' },
                     { title: '合计', dataIndex: 'all' },
-                ]}></Table>
+                ]}>
+
+                </Table>
             </div>
         )
     }
