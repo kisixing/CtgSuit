@@ -24,7 +24,7 @@ const ListLayout = (props: any) => {
     );
     return (
         <Dropdown overlay={menu}>
-            <Button type="primary">
+            <Button style={{border:'none'}} type="link">
                 ▲
                 <span> 窗口：</span>
                 {

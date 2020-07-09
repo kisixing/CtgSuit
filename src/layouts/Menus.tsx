@@ -26,8 +26,8 @@ const M = (props: any) => {
         <div className={styles.actionBar}>
 
             {[
-                ['主页', 'home', '/workbench'],
-                ['报表统计', 'ordered-list', '/statistics'],
+                // ['主页', 'home', '/workbench'],
+                // ['报表统计', 'ordered-list', '/statistics'],
                 ['档案管理', 'fileText', '/archives'],
                 ['系统设置', 'setting', '/setting'],
                 ['病人管理', 'usergroup-add', '/pregnancy'],
@@ -43,7 +43,7 @@ const M = (props: any) => {
                             handleMenuClick(path);
                         }}
                         icon={<LegacyIcon type={icon} />}
-                        type={props.location.pathname === path ? 'default' : 'primary'}
+                        type={props.location.pathname === path ? 'primary' : 'default'}
                     >
                         {title}
                     </Button>

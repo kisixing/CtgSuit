@@ -69,7 +69,7 @@ const Foot = (props: any) => {
             e && theme.current.click && theme.current.click()
           }
         >
-          <Button icon={<BgColorsOutlined />} type="primary" />
+          <Button icon={<BgColorsOutlined />} style={{border:'none'}} type="link"/>
         </Popover>
         <AntdThemeManipulator
           ref={theme}
@@ -86,12 +86,14 @@ const Foot = (props: any) => {
                 </QR> */}
         <Button
           icon={<QuestionCircleOutlined />}
-          type="primary"
+          style={{border:'none'}}
           onClick={() => ipcRenderer.send('newWindow', 'help')}
+          type="link"
         />
         <Button
           icon={<FileDoneOutlined />}
-          type="primary"
+          type="link"
+          style={{border:'none'}}
           onClick={() => {
             setPrintVisible(true)
             // request.post('/prenatal-visits-report', {

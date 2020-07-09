@@ -56,7 +56,7 @@ function Beds({ dispatch, headData, wsData }: IProps) {
       style={{
         flex: 1,
         display: 'flex',
-        backgroundColor: '#fff',
+        backgroundColor: 'var(--customed-bg)',
         borderRadius: 3,
         alignContent: ' flex-start',
         flexWrap: 'wrap',

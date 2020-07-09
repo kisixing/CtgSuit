@@ -16,7 +16,7 @@ const C = (props: any) => {
       okText="创建"
       cancelText="取消"
       footer={null}
-      bodyStyle={{ paddingRight: '48px', background: '#fff' }}
+      bodyStyle={{ paddingRight: '48px', background: 'var(--theme-bg)' }}
       // wrapClassName={modalStyles.modal}
       onCancel={onCancel}
     >

@@ -83,7 +83,7 @@ const C = (props: IProps) => {
                   right: 10,
                   bottom: 10,
                   background: '#999',
-                  color: '#fff',
+                  color: 'var(--theme-bg)',
                   padding: 6,
                   borderRadius: '100%',
                 }}

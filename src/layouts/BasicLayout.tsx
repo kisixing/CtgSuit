@@ -97,7 +97,7 @@ const BasicLayout = (props: any) => {
             {
               !!(settingData.public_url && settingData.remote_url) && <VisitedPanel remote_url={`http://${settingData.remote_url}`}  public_url={`http://${settingData.public_url}`}/>
             }
-            {/* <div style={{position:'fixed',right:0,bottom:60,width:10,height:40,background:'var(--theme-color)',lineHeight:'40px',color:'#fff',textAlign:'center',cursor:'pointer'}}>||</div> */}
+            {/* <div style={{position:'fixed',right:0,bottom:60,width:10,height:40,background:'var(--theme-color)',lineHeight:'40px',color:'var(--theme-bg)',textAlign:'center',cursor:'pointer'}}>||</div> */}
           </Layout>
         </Layout>
         <Foot />

@@ -9,7 +9,7 @@ export default {
     isLogin: store.get(TOKEN),
     layout: [1, 2], // 一行一列 一行两列
     account: {},
-    isAdmin: false,
+    isAdmin: true,
     ward: store.get('ward') || {},
     isIn: (store.get('ward') || {}).wardType === 'in'
   },

@@ -36,7 +36,7 @@ class TableList extends Component {
         dataIndex: 'name',
         key: 'name',
         width: 150,
-        // ...this.getColumnSearchProps('name'),
+        ...this.getColumnSearchProps('name'),
       },
       {
         title: '住院号',
@@ -382,52 +382,52 @@ class TableList extends Component {
   };
 
   getColumnSearchProps = dataIndex => ({
-    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
-      <div style={{ padding: 8 }}>
-        <Input
-          ref={node => {
-            this.searchInput = node;
-          }}
-          placeholder="输入搜索值..."
-          value={selectedKeys[0]}
-          onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-          onPressEnter={() => this.handleSearch(selectedKeys, confirm)}
-          style={{ marginBottom: 8, display: 'block' }}
-        />
-        <Button
-          type="primary"
-          onClick={() => this.handleSearch(selectedKeys, confirm)}
-          icon={<LegacyIcon type="search" />}
-          size="small"
-          style={{ width: 90, marginRight: 8 }}
-        >
-          搜索
-        </Button>
-        <Button onClick={() => this.handleReset(clearFilters)} size="small" style={{ width: 90 }}>
-          重置
-        </Button>
-      </div>
-    ),
-    filterIcon: filtered => (
-      <LegacyIcon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />
-    ),
-    onFilter: (value, record) => {
-      let attributeValue = record[dataIndex];
-      if (dataIndex === 'name' || dataIndex === 'age' || dataIndex === 'outpatientNO') {
-        attributeValue = record['pregnancy'][dataIndex];
-      }
-      if (attributeValue) {
-        return attributeValue
-          .toString()
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      }
-    },
-    onFilterDropdownVisibleChange: visible => {
-      if (visible) {
-        setTimeout(() => this.searchInput.select());
-      }
-    },
+    // filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+    //   <div style={{ padding: 8 }}>
+    //     <Input
+    //       ref={node => {
+    //         this.searchInput = node;
+    //       }}
+    //       placeholder="输入搜索值..."
+    //       value={selectedKeys[0]}
+    //       onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+    //       onPressEnter={() => this.handleSearch(selectedKeys, confirm)}
+    //       style={{ marginBottom: 8, display: 'block' }}
+    //     />
+    //     <Button
+    //       type="primary"
+    //       onClick={() => this.handleSearch(selectedKeys, confirm)}
+    //       icon={<LegacyIcon type="search" />}
+    //       size="small"
+    //       style={{ width: 90, marginRight: 8 }}
+    //     >
+    //       搜索
+    //     </Button>
+    //     <Button onClick={() => this.handleReset(clearFilters)} size="small" style={{ width: 90 }}>
+    //       重置
+    //     </Button>
+    //   </div>
+    // ),
+    // filterIcon: filtered => (
+    //   <LegacyIcon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />
+    // ),
+    // onFilter: (value, record) => {
+    //   let attributeValue = record[dataIndex];
+    //   if (dataIndex === 'name' || dataIndex === 'age' || dataIndex === 'outpatientNO') {
+    //     attributeValue = record['pregnancy'][dataIndex];
+    //   }
+    //   if (attributeValue) {
+    //     return attributeValue
+    //       .toString()
+    //       .toLowerCase()
+    //       .includes(value.toLowerCase());
+    //   }
+    // },
+    // onFilterDropdownVisibleChange: visible => {
+    //   if (visible) {
+    //     setTimeout(() => this.searchInput.select());
+    //   }
+    // },
     render: (text, record) => (
       <div style={{ width: '134px' }} className={styles.textOver}>
         <Highlighter
@@ -541,7 +541,8 @@ class TableList extends Component {
     const age = selected.pregnancy && selected.pregnancy.age;
     // 孕周
     const gestationalWeek = selected && selected.gestationalWeek;
-
+    console.log('ff',dataSource);
+    
     return (
       <div className={styles.tableList}>
         <Table

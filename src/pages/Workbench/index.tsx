@@ -53,10 +53,12 @@ const Home = (props: IProps) => {
 
   return (
     <Ctg_Layout
-      themeColor='var(--theme-color)'
+      backgroundColor='var(--customed-color)'
+      borderedColor='var(--customed-border)'
+      fontColor='var(--customed-font)'
       onClose={onClose}
       RenderIn={Toolbar}
-      items={items}
+      items={[...items, { data: {} }, { data: {} }, { data: {} },]}
       listLayout={listLayout}
       fullScreenId={fullScreenId}
       contentHeight={contentHeight}

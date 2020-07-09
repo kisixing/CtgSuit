@@ -43,7 +43,7 @@ const Bar: FunctionComponent = function (porps) {
         zIndex: 9,
         height: 32,
         width: showSetting ? `calc(100% - ${4 * fp}px - 36px)` : 0,
-        background: '#fff',
+        background: 'var(--theme-bg)',
         overflow: 'hidden',
         borderRadius: 3,
         boxShadow: '#aaa 3px 3px 5px 1px',

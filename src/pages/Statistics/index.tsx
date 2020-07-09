@@ -30,7 +30,7 @@ export default connect((s: any) => s.global)(
             })
         }, [q])
         return (
-            <div style={{ margin: 12, background: '#fff', padding: 18 }}>
+            <div style={{ margin: 12, background: 'var(--customed-color)', padding: 18 }}>
                 <div style={{ marginBottom: 8 }}>
                     <span>开始日期</span> <DatePicker value={startTime} onChange={e => setStartTime(e)} />
                     <span style={{ marginLeft: 10 }}>结束日期</span> <DatePicker value={endTime} onChange={e => setEndTime(e)} />

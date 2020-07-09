@@ -107,7 +107,7 @@ const Foot = (props: any) => {
                     height: 40,
                     background: 'var(--theme-color)',
                     lineHeight: '40px',
-                    color: '#fff',
+                    color: 'var(--theme-bg)',
                     textAlign: 'center',
                     cursor: 'pointer'
                 }}>||</div>

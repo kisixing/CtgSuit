@@ -29,7 +29,7 @@ function Tabs({ pageData, page, dispatch, showTodo, location, headCollapsed }: I
           }}
           style={{ margin: '0 4px' }}
           size="small"
-          type={(!showTodo && active) ? 'default' : 'primary'}
+          type={(!showTodo && active) ? 'primary' : 'default'}
         >
           {
             `第 ${index + 1} 组`
@@ -46,13 +46,13 @@ function Tabs({ pageData, page, dispatch, showTodo, location, headCollapsed }: I
           <B bednames={bednames} key={bednames.join(' ')} index={index} active={index === page} />
         );
       })}
-      <Button size="small" style={{ margin: '0 4px', marginLeft: pageData.length && 80, background: showTodo ? 'white' : 'var(--theme-hover-color)' }} onClick={() => {
+      <Button size="small" style={{ margin: '0 4px', marginLeft: pageData.length && 80,  }} onClick={() => {
         location.pathname.includes('workbench') || router.replace('/workbench');
         setTimeout(() => {
           dispatch({ type: 'list/setState', payload: { showTodo: true } })
         }, 0);
       }}
-        type={showTodo ? 'default' : 'primary'}
+        type={showTodo ? 'primary' : 'default'}
       >
         待处理
       </Button>
