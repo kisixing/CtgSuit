@@ -7,6 +7,7 @@ interface IProps {
     onCancel: () => void
     docid: string
     disabled?: boolean
+    readonly?: boolean
 }
 interface IDataItem {
     createDate: string
@@ -17,7 +18,7 @@ interface IDataItem {
     recorder: string
 }
 export const EventModal = (props: IProps) => {
-    const { visible, onCancel, docid, disabled } = props;
+    const { visible, onCancel, docid, disabled, readonly } = props;
     const [data, setData] = useState<IDataItem[]>([])
     const [note, setNote] = useState('')
     useEffect(() => {
@@ -65,26 +66,30 @@ export const EventModal = (props: IProps) => {
 
                 }
             ]} />
-            <div style={{ position: 'relative' }}>
+            {
+                !readonly && (
+                    <div style={{ position: 'relative' }}>
 
-                <Input.TextArea rows={4} disabled={disabled} value={note} onChange={e => setNote(e.target.value)} placeholder="请输入事件记录内容" />
-                <Button type="primary" size="small" style={{ position: 'absolute', right: 10, bottom: 10 }} onClick={
-                    () => {
-                        post('/events', {
-                            data: {
-                                docid,
-                                note
+                        <Input.TextArea rows={4} disabled={disabled} value={note} onChange={e => setNote(e.target.value)} placeholder="请输入事件记录内容" />
+                        <Button type="primary" size="small" style={{ position: 'absolute', right: 10, bottom: 10 }} onClick={
+                            () => {
+                                post('/events', {
+                                    data: {
+                                        docid,
+                                        note
+                                    }
+                                })
+                                    .then(() => {
+                                        fetchData()
+                                        setNote('')
+                                    })
                             }
-                        })
-                            .then(() => {
-                                fetchData()
-                                setNote('')
-                            })
-                    }
-                }>
-                    <span>保存</span>
-                </Button>
-            </div>
+                        }>
+                            <span>保存</span>
+                        </Button>
+                    </div>
+                )
+            }
         </Modal >
     );
 }
