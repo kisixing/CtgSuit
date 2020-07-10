@@ -29,7 +29,7 @@ function Tabs({ pageData, page, dispatch, showTodo, location, headCollapsed }: I
           }}
           style={{ margin: '0 4px' }}
           size="small"
-          type={(!showTodo && active) ? 'primary' : 'default'}
+          type={(!showTodo && active) ? 'primary' : 'link'}
         >
           {
             `第 ${index + 1} 组`
@@ -52,7 +52,7 @@ function Tabs({ pageData, page, dispatch, showTodo, location, headCollapsed }: I
           dispatch({ type: 'list/setState', payload: { showTodo: true } })
         }, 0);
       }}
-        type={showTodo ? 'primary' : 'default'}
+        type={showTodo ? 'primary' : 'link'}
       >
         待处理
       </Button>

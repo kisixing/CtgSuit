@@ -58,7 +58,7 @@ const Home = (props: IProps) => {
       fontColor='var(--customed-font)'
       onClose={onClose}
       RenderIn={Toolbar}
-      items={[...items, { data: {} }, { data: {} }, { data: {} },]}
+      items={[...items]}
       listLayout={listLayout}
       fullScreenId={fullScreenId}
       contentHeight={contentHeight}

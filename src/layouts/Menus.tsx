@@ -43,7 +43,7 @@ const M = (props: any) => {
                             handleMenuClick(path);
                         }}
                         icon={<LegacyIcon type={icon} />}
-                        type={props.location.pathname === path ? 'primary' : 'default'}
+                        type={props.location.pathname === path ? 'primary' : 'link'}
                     >
                         {title}
                     </Button>
