@@ -654,7 +654,7 @@ class TableList extends Component {
             gestationalWeek={gestationalWeek}
           />
         ) : null}
-        <Event docid={docID} visible={eventVisible} onCancel={this.handleCancel} disabled />
+        <Event docid={docID} visible={eventVisible} onCancel={this.handleCancel} disabled readonly />
 
       </div>
     );
