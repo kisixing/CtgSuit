@@ -63,7 +63,7 @@ const Setting = ({ isAdmin }) => {
           }
 
         </Menu.ItemGroup>
-        <Menu.Item key="alarm" style={{ color: 'rgba(0, 0, 0, 0.45)', fontWeight: "bold" }}><span style={{ marginLeft: -12, }}>报警设置</span></Menu.Item>
+        <Menu.Item key="alarm" style={{ color: 'var(--customed-font)', fontWeight: "bold" }}><span style={{ marginLeft: -12, }}>报警设置</span></Menu.Item>
 
 
       </Menu>

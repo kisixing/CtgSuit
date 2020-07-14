@@ -13,7 +13,7 @@ const pkg = require(path.resolve(__dirname, '../app/package.json'))
 
 export default {
   theme: {
-    'primary-color': '#004c8c',
+    'primary-color': '#007AFF',
   },
   // extraPostCSSPlugins: [
   //   pxToViewPort({

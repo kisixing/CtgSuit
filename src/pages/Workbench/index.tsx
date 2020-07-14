@@ -54,7 +54,7 @@ const Home = (props: IProps) => {
   return (
     <Ctg_Layout
       backgroundColor='var(--customed-color)'
-      borderedColor='var(--customed-border)'
+      borderedColor='var(--theme-border)'
       fontColor='var(--customed-font)'
       onClose={onClose}
       RenderIn={Toolbar}

@@ -27,9 +27,9 @@ function Tabs({ pageData, page, dispatch, showTodo, location, headCollapsed }: I
             dispatch({ type: 'list/setPage', page: index });
             location.pathname.includes('workbench') || router.replace('/workbench');
           }}
-          style={{ margin: '0 4px' }}
+          style={{ margin: '0 4px', borderBottom: '2px solid', borderBottomColor: (!showTodo && active) ? 'var(--cunstomed-font)' : '' }}
           size="small"
-          type={(!showTodo && active) ? 'primary' : 'link'}
+          type={(!showTodo && active) ? 'link' : 'link'}
         >
           {
             `第 ${index + 1} 组`
@@ -46,13 +46,13 @@ function Tabs({ pageData, page, dispatch, showTodo, location, headCollapsed }: I
           <B bednames={bednames} key={bednames.join(' ')} index={index} active={index === page} />
         );
       })}
-      <Button size="small" style={{ margin: '0 4px', marginLeft: pageData.length && 80,  }} onClick={() => {
+      <Button size="small" style={{ margin: '0 4px', borderBottom: '2px solid', borderBottomColor: showTodo ? 'var(--cunstomed-font)' : '', marginLeft: pageData.length && 80, }} onClick={() => {
         location.pathname.includes('workbench') || router.replace('/workbench');
         setTimeout(() => {
           dispatch({ type: 'list/setState', payload: { showTodo: true } })
         }, 0);
       }}
-        type={showTodo ? 'primary' : 'link'}
+        type={showTodo ? 'link' : 'link'}
       >
         待处理
       </Button>

@@ -175,7 +175,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
 
 
 
-  const B = (p: ButtonProps) => <Button style={{ padding: '0 8px' }} {...p} disabled={p.disabled || (isOfflineStopped && !pregnancyId)}>{p.children}</Button>
+  const B = (p: ButtonProps) => <Button style={{ padding: '0 8px', borderColor: 'transparent' }} {...p} disabled={p.disabled || (isOfflineStopped && !pregnancyId)}>{p.children}</Button>
   return <>
     {isWorking || isOffline ? (
       <B icon={<PauseCircleOutlined />} type="link" onClick={() => setModalName('confirmVisible')}>
@@ -225,24 +225,24 @@ function Toolbar(props: FetalItem.IToolbarProps) {
     >
       报告
       </B>
-    <Button
+    <B
       icon={<FormOutlined />}
       type="link"
       disabled={!docid}
       onClick={() => setModalName('eventVisible')}
     >
       事件记录
-      </Button>
+      </B>
 
     {
-      data && data.ismulti && <Button
+      data && data.ismulti && <B
         icon={<PieChartOutlined />}
         type="link"
         disabled={!docid}
         onClick={() => setModalName('multiParamVisible')}
       >
         趋势图
-      </Button>
+      </B>
     }
 
     {

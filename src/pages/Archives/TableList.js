@@ -548,7 +548,7 @@ class TableList extends Component {
         <Table
           bordered
           size="small"
-          scroll={{ x: 1280, y: 204 }}
+          scroll={{ x: 1280 }}
           columns={this.columns}
           dataSource={dataSource}
           onRow={record => {
