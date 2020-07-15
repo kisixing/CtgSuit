@@ -2,11 +2,8 @@
  * 胎监主页PDA建档/绑定弹窗
  */
 import React, { useState, memo } from 'react';
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
-import { Button, Modal, Input, Row, Col, InputNumber, message, Table } from 'antd';
+import { Button, Modal, Input, Row, Col, InputNumber, message, Table, Form } from 'antd';
 import _ from 'lodash';
-import { WrappedFormUtils } from 'antd/lib/form/Form';
 import moment from 'moment';
 // import { request } from '@lianmed/utils';
 import request from '@/utils/request';
@@ -16,7 +13,6 @@ import { IWard } from "@/types";
 
 import store from "store";
 interface IProps {
-  form: WrappedFormUtils
   starttime: string
   docid: string
   isTodo: boolean
@@ -58,7 +54,7 @@ const CollectionCreateForm = (props: IProps) => {
       width: '33.33%',
     },
   ].filter(_ => !!_);
-
+  const [form] = Form.useForm()
   const {
     starttime,
     docid,
@@ -66,12 +62,10 @@ const CollectionCreateForm = (props: IProps) => {
     bedname,
     visible,
     onCancel,
-    form,
     onCreated,
     isStopMonitorWhenCreated,
   } = props;
 
-  const { getFieldDecorator } = form;
 
   // 搜索值
   const [selectedPregnancy, setSelectedPregnancy] = useState({});
@@ -87,7 +81,7 @@ const CollectionCreateForm = (props: IProps) => {
 
   const reset = () => {
     // 清空form表单数据、输入框状态变为可输入状态
-    props.form.resetFields();
+    form.resetFields();
     setDisabled(false)
   };
 
@@ -101,7 +95,8 @@ const CollectionCreateForm = (props: IProps) => {
     }
     const d = {
       visitType: values.visitTime,
-      visitTime: moment(values.values).format(),
+      // visitTime: moment(values.values).format('YYYY-MM-DD HH:mm:ss'),
+      visitTime: new Date(),
       gestationalWeek: values.gestationalWeek,
       pregnancy: {
         id: '',
@@ -207,10 +202,8 @@ const CollectionCreateForm = (props: IProps) => {
   const handleSearch = () => {
     setErrorText('');
     // 判断门诊，住院
-    form.validateFields(async (err, values) => {
-      if (err) {
-        return;
-      }
+    form.validateFields().then(async (values) => {
+
       const res = await request.get(
         `/pregnancies?${stringify({
           // TODO
@@ -250,22 +243,19 @@ const CollectionCreateForm = (props: IProps) => {
   };
 
   const handleCreate = () => {
-    form.validateFields((err: any, values: any) => {
-      if (err) {
-        return null;
-      } else {
-        if (!values.bedNO && isIn) {
-          return message.error('请输入患者床号！');
-        }
-        if (!values.name) {
-          return message.error('请输入患者姓名！');
-        }
-        if (!values[noKey] && isIn) {
-          return message.error(`请输入患${noLabel}！`);
-        }
-        const old = selectedPregnancy;
-        return onCreate(values, old);
+    form.validateFields().then((values: any) => {
+
+      if (!values.bedNO && isIn) {
+        return message.error('请输入患者床号！');
       }
+      if (!values.name) {
+        return message.error('请输入患者姓名！');
+      }
+      if (!values[noKey] && isIn) {
+        return message.error(`请输入患${noLabel}！`);
+      }
+      const old = selectedPregnancy;
+      return onCreate(values, old);
     })
   };
 
@@ -376,71 +366,67 @@ const CollectionCreateForm = (props: IProps) => {
         id="Modal_Message_Container"
         layout="horizontal"
         {...formItemLayout}
+        form={form}
       >
         <Row gutter={24}>
           <Col span={0}>
-            <Form.Item label="">
-              {getFieldDecorator('id', {
-                rules: [{ required: false }],
-              })(<Input />)}
+            <Form.Item label="" name="id">
+              <Input />
             </Form.Item>
           </Col>
           {isIn && (
             <Col span={12}>
-              <Form.Item label={<span className="required">床号</span>}>
-                {getFieldDecorator('bedNO', {
-                  rules: [
-                    { required: false, message: '请填写床号!' },
-                    { max: 15, message: '床号的最大长度为15个字节' },
-                    // { validator: validateBedNo },
-                  ],
-                  getValueFromEvent: event =>
-                    event.target.value.replace(/\s+/g, ''),
-                })(
-                  <Input
-                    autoFocus
-                    disabled={disabled}
-                    placeholder="输入床号..."
-                    style={{ width }}
-                  />,
-                )}
+              <Form.Item name="bedNO" label={<span className="required">床号</span>}
+                rules={[
+                  { required: false, message: '请填写床号!' },
+                  { max: 15, message: '床号的最大长度为15个字节' },
+                  // { validator: validateBedNo },
+                ]}
+                getValueFromEvent={event => event.target.value.replace(/\s+/g, '')}
+              >
+                <Input
+                  autoFocus
+                  disabled={disabled}
+                  placeholder="输入床号..."
+                  style={{ width }}
+                />
               </Form.Item>
             </Col>
           )}
           <Col span={12}>
-            <Form.Item label={<span className="required">姓名</span>}>
-              {getFieldDecorator('name', {
-                rules: [
-                  { required: false, message: '请填写姓名!' },
-                  { max: 32, message: '姓名的最大长度为32' },
-                ],
-                getValueFromEvent: event => event.target.value.trim(),
-              })(
-                <Input
-                  disabled={disabled}
-                  placeholder="输入姓名..."
-                  style={{ width }}
-                />,
-              )}
+            <Form.Item name="name" label={<span className="required">姓名</span>}
+              rules={[
+                { required: false, message: '请填写姓名!' },
+                { max: 32, message: '姓名的最大长度为32' },
+              ]}
+              getValueFromEvent={event => event.target.value.trim()}
+            >
+
+              <Input
+                disabled={disabled}
+                placeholder="输入姓名..."
+                style={{ width }}
+              />
+
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item label={<span className={isIn?'required':''}>{noLabel}</span>}>
-              {getFieldDecorator(noKey, {
-                rules: [
+            <Form.Item name={noKey} label={<span className={isIn ? 'required' : ''}>{noLabel}</span>}
+              rules={
+                [
                   { required: false, message: `请填写${noLabel}!` },
                   { max: 15, message: `${noLabel}的最大长度为15` },
                   { validator: validateNoChinese },
-                ],
-                getValueFromEvent: event =>
-                  event.target.value.replace(/\s+/g, ''),
-              })(
-                <Input
-                  disabled={disabled}
-                  placeholder={`输入${noLabel}...`}
-                  style={{ width }}
-                />,
-              )}
+                ]
+              }
+              getValueFromEvent={event => event.target.value.replace(/\s+/g, '')}
+            >
+
+              <Input
+                disabled={disabled}
+                placeholder={`输入${noLabel}...`}
+                style={{ width }}
+              />
             </Form.Item>
           </Col>
           <Col span={12}>
@@ -448,63 +434,60 @@ const CollectionCreateForm = (props: IProps) => {
               hasFeedback
               label="年龄"
               validateStatus={ageWarning.status} // "warning"
-              help={ageWarning.help} // "年龄偏小..."
+              // help={ageWarning.help} // "年龄偏小..."
+              name="age"
             >
-              {getFieldDecorator('age', {
-                rules: [{ required: false, message: '请填写年龄!' }],
-              })(
-                <InputNumber
-                  min={1}
-                  max={99}
-                  // disabled={disabled}
-                  placeholder="输入年龄..."
-                  style={{ width }}
-                  onChange={validateAge}
-                />,
-              )}
+
+              <InputNumber
+                min={1}
+                max={99}
+                // disabled={disabled}
+                placeholder="输入年龄..."
+                style={{ width }}
+                onChange={validateAge}
+              />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item label="孕次">
-              {getFieldDecorator('gravidity', {
-                rules: [
+            <Form.Item label="孕次" name="gravidity"
+              rules={
+                [
                   { required: false, message: '请输入孕次!' },
                   { validator: validateMaxMin },
-                ],
-              })(
-                <InputNumber
-                  min={1}
-                  max={99}
-                  // disabled={disabled}
-                  placeholder="请输入孕次..."
-                  style={{ width }}
-                />,
-              )}
+                ]
+              }
+            >
+              <InputNumber
+                min={1}
+                max={99}
+                // disabled={disabled}
+                placeholder="请输入孕次..."
+                style={{ width }}
+              />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item label="产次">
-              {getFieldDecorator('parity', {
-                rules: [
+            <Form.Item label="产次" name="parity"
+              rules={
+                [
                   { required: false, message: '请输入产次!' },
                   { validator: validateMaxMin },
-                ],
-              })(
-                <InputNumber
-                  min={0}
-                  max={99}
-                  // disabled={disabled}
-                  placeholder="请输入产次..."
-                  style={{ width }}
-                />,
-              )}
+                ]
+              }
+            >
+
+              <InputNumber
+                min={0}
+                max={99}
+                // disabled={disabled}
+                placeholder="请输入产次..."
+                style={{ width }}
+              />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item label="孕周">
-              {getFieldDecorator('gestationalWeek', {
-                rules: [{ required: false, message: '请填写孕周!' }],
-              })(<Input style={{ width }} placeholder="请输入孕周..." />)}
+            <Form.Item label="孕周" name="gestationalWeek" rules={[{ required: false, message: '请填写孕周!' }]}>
+              <Input style={{ width }} placeholder="请输入孕周..." />
             </Form.Item>
           </Col>
         </Row>
@@ -583,4 +566,4 @@ const CollectionCreateForm = (props: IProps) => {
   );
 }
 
-export default memo(Form.create<IProps>()(CollectionCreateForm))
+export default memo(CollectionCreateForm)
