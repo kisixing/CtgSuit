@@ -101,7 +101,8 @@ const CollectionCreateForm = (props: IProps) => {
     }
     const d = {
       visitType: values.visitTime,
-      visitTime: moment(values.values).format(),
+      // visitTime: moment(values.values).format('YYYY-MM-DD HH:mm:ss'),
+      visitTime: new Date(),
       gestationalWeek: values.gestationalWeek,
       pregnancy: {
         id: '',
@@ -425,7 +426,7 @@ const CollectionCreateForm = (props: IProps) => {
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item label={<span className={isIn?'required':''}>{noLabel}</span>}>
+            <Form.Item label={<span className={isIn ? 'required' : ''}>{noLabel}</span>}>
               {getFieldDecorator(noKey, {
                 rules: [
                   { required: false, message: `请填写${noLabel}!` },
