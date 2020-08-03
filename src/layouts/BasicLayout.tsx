@@ -68,6 +68,7 @@ const BasicLayout = (props: any) => {
     }, 1000 * 60 * 60 * 2);
     return () => {
       clearInterval(interval);
+      
       // store.clearAll();
     }
   }, [])

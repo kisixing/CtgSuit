@@ -1,7 +1,7 @@
 import { get, post } from "@lianmed/request";
 import { Button, Input, Modal, Table } from 'antd';
-import moment from "moment";
 import React, { useEffect, useState } from 'react';
+import { formatTime } from "@lianmed/utils/lib/fn/moment";
 interface IProps {
     visible: boolean
     onCancel: () => void
@@ -31,7 +31,7 @@ export const EventModal = (props: IProps) => {
             params: {
                 'docid.equals': docid
             }
-        }).then((r: IDataItem[]) => r && setData(r.map(_ => ({ ..._, createDate: moment(_.createDate).format('YYYY-MM-DD mm:ss') }))))
+        }).then((r: IDataItem[]) => r && setData(r.map(_ => ({ ..._, createDate: formatTime(_.createDate) }))))
     }
     return (
         <Modal
