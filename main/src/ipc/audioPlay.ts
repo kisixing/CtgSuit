@@ -33,7 +33,7 @@ async function init() {
 export function kill() {
     child && child.kill()
 }
-// init()
+init()
 
 
 var stdin = process.openStdin();
@@ -60,7 +60,6 @@ export default (e, mode: string, options: { second?: number, filePath?: string, 
         })
             .on('data', d => {
                 d && e.sender.send('audioPlay', d.toString())
-
             })
             .on('error', e => {
                 console.log('client err', e)

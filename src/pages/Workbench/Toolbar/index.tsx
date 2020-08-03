@@ -158,6 +158,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
       // 未建档提示简单保存或者放弃保存
       await request.get(`/ctg-exams-nosaving/${docid}`);
     }
+    mutableSuit.current && mutableSuit.current.setfetalposition('', '', '');
 
     socket.endwork(deviceno, bedno);
 
