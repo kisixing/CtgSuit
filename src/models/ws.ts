@@ -22,7 +22,8 @@ export default {
 
       let data: ICache = yield call(wsService.getDatacache.bind(wsService));
       // const offline = [...data.entries()].filter(([k, v]) => v.status === BedStatus.Offline).map(([k, v]) => k)
-      const dirty = [...data.entries()].filter(([k, v]) => [BedStatus.Stopped, BedStatus.OfflineStopped].includes(v.status)).map(([k, v]) => k)
+      const dirty = [...data.entries()].filter(([k, v]) => !v.isF0Pro && [BedStatus.Stopped, BedStatus.OfflineStopped].includes(v.status)).map(([k, v]) => k)
+      console.log('dirty', dirty)
       yield put({ type: 'setState', payload: { data } });
       yield put({
         type: 'list/setState', payload: {

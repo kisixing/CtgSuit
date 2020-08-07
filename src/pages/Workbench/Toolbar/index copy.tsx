@@ -21,7 +21,6 @@ import SoundModal from './SoundModal';
 import SoundMultiModal from './SoundMultiModal';
 import SettingStore from '@/utils/SettingStore';
 import { WsService } from '@lianmed/lmg';
-export { RenderMaskIn } from './RenderMaskIn'
 const cache = SettingStore.cache
 const socket = WsService._this;
 
@@ -43,7 +42,6 @@ function Toolbar(props: FetalItem.IToolbarProps) {
 
     mutableSuit,
     itemData,
-    setMaskVisible
   } = props
 
 
@@ -113,17 +111,24 @@ function Toolbar(props: FetalItem.IToolbarProps) {
       endCb.current = null;
     }
   };
-
-
-
   useEffect(() => {
-    if (isUncreated || isWorking) {
-      setMaskVisible(false)
+    const onclose = cb => {
+      endCb.current = cb;
+      setModalName('confirmVisible');
     }
-    if (isStopped) {
-      setMaskVisible(true)
+    const closeKey = `item_close:${unitId}`
+
+
+    event
+      .on(closeKey, onclose)
+    return () => {
+      event
+        .off(closeKey, onclose)
     }
-  }, [isUncreated, isWorking, isStopped,])
+  }, [unitId])
+
+
+
 
 
   const handleCancel = useCallback(() => setModalName(''), []);
@@ -146,8 +151,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
     socket.alloc(deviceno, bedno).then(({ res, fetalnum = 1 }) => {
       if (!res) {
         setF0Pro_fetalnum(fetalnum)
-        // setModalName('soundMultiVisible')
-        setMaskVisible(true)
+        setModalName('soundMultiVisible')
       }
 
     })
@@ -180,155 +184,8 @@ function Toolbar(props: FetalItem.IToolbarProps) {
   };
 
 
-  useEffect(() => {
-    const onclose = cb => {
-      endCb.current = cb;
-      setModalName('confirmVisible');
-    }
-    const closeKey = `item_close:${unitId}`
-    const startKey = `item_start:${unitId}`
 
-
-    event
-      .on(closeKey, onclose)
-      .on(startKey, start)
-    return () => {
-      event
-        .off(closeKey, onclose)
-        .off(startKey, start)
-    }
-  }, [unitId, start])
-  const B = (p: ButtonProps) => <Button style={{ padding: '0 8px' }} {...p} disabled={p.disabled || (isOfflineStopped && !pregnancyId)}>{p.children}</Button>
   return <>
-    {
-      (isF0Pro) ? (
-        isStopped ? (
-          <B icon={<PauseCircleOutlined />} loading={f0Pro_cancelallocLoading} type="link" onClick={f0Pro_cancelalloc}>
-            取消监护
-          </B>
-        ) : (
-            isWorking || isOffline ? (
-              <B icon={<PauseCircleOutlined />} type="link" onClick={() => setModalName('confirmVisible')}>
-                停止监护
-              </B>
-            ) : (
-                <B disabled={false} icon={<PlayCircleOutlined />} type="link" onClick={f0Pro_alloc}>
-                  新建监护
-                </B>
-              )
-          )
-      ) : (
-          isWorking || isOffline ? (
-            <B icon={<PauseCircleOutlined />} type="link" onClick={() => setModalName('confirmVisible')}>
-              停止监护
-            </B>
-          ) : (
-              <B disabled={!isStopped || !!disableStartWork} icon={<PlayCircleOutlined />} type="link" onClick={start}>
-                {'开始监护'}
-              </B>
-            )
-        )
-
-
-    }
-    {/* 停止状态下不可以建档，监护、离线都是可以建档的 */}
-
-    <B icon={<UserAddOutlined />} type="link" disabled={(isCreated && !pvId) || isStopped || isUncreated} onClick={() => {
-      isCreated ? setModalName('jbVisible') : setModalName('visible')
-    }}>
-      {isCreated ? '解绑' : '建档'}
-    </B>
-
-
-    <B
-      disabled={!isCreated}
-      icon={<PushpinOutlined />}
-      type="link"
-      onClick={() => setModalName('signVisible')}
-    >
-      胎位标记
-      </B>
-    {
-      !!cache.analysable && (
-        <B
-          disabled={!isCreated}
-          icon={<PieChartOutlined />}
-          type="link"
-          onClick={() => setModalName('analysisVisible')}
-        >
-          <span>电脑分析</span>
-        </B>
-      )
-    }
-
-    {/* O */}
-    <B
-      disabled={!isCreated}
-      icon={<PrinterOutlined />}
-      type="link"
-      onClick={() => setModalName('printVisible')}
-    >
-      报告
-      </B>
-    <Button
-      icon={<FormOutlined />}
-      type="link"
-      disabled={!docid}
-      onClick={() => setModalName('eventVisible')}
-    >
-      事件记录
-      </Button>
-
-    {
-      data && data.ismulti && <Button
-        icon={<PieChartOutlined />}
-        type="link"
-        disabled={!docid}
-        onClick={() => setModalName('multiParamVisible')}
-      >
-        趋势图
-      </Button>
-    }
-
-    {
-      !!is_include_tocozero && (
-        <B
-          icon={tocozeroLoading ? <LoadingOutlined /> : <ControlOutlined />}
-          type="link"
-          onClick={(e) => setTocozero()}
-        >
-          {is_include_toco ? '宫缩调零' : '加入宫缩'}
-        </B>
-      )
-    }
-    {
-      !!is_include_volume && <B
-        // disabled={!isCreated}
-
-        icon={volumeDataLoading ? <LoadingOutlined /> : <SoundOutlined />}
-        type="link"
-        onClick={openVolumnModal}
-        disabled={!is_include_volume}
-      >
-        音量调节
-      </B>
-    }
-    {
-      isF0Pro && !hasToco && (
-        <>
-          <B
-            // disabled={!isCreated}
-
-            icon={volumeDataLoading ? <LoadingOutlined /> : <SoundOutlined />}
-            type="link"
-            onClick={openVolumnModal}
-            disabled={!is_include_volume}
-          >
-            <span>添加宫缩</span>
-          </B>
-        </>
-      )
-    }
 
 
     <CollectionCreateForm
@@ -428,12 +285,13 @@ function Toolbar(props: FetalItem.IToolbarProps) {
       bedname={bedname}
       docid={docid}
     />
-    {/* <SoundMultiModal
+    <SoundMultiModal
       fetel_num={f0Pro_fetalnum}
       deviceno={+deviceno}
       bedno={+bedno}
       volumeData={volumeData}
       visible={modalName === 'soundMultiVisible'}
+      isCreated={isCreated}
       cancelLoading={f0Pro_cancelallocLoading}
       okLoading={startLoading}
       start={start}
@@ -441,7 +299,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
       startTime={startTime}
       bedname={bedname}
       docid={docid}
-    /> */}
+    />
     <Jb pregnancyId={pregnancyId} pvId={pvId} onCancel={handleCancel} visible={modalName === 'jbVisible'} />
     <Event docid={docid} visible={modalName === 'eventVisible'} onCancel={handleCancel} />
   </>;

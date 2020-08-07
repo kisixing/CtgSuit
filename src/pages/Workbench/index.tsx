@@ -3,10 +3,11 @@ import React, { useRef, useEffect, useState, useMemo, useCallback } from 'react'
 import { connect } from 'react-redux';
 import { IBed } from '@/types';
 import useTodo, { IRemain } from "./useTodo";
+import useProbetip from "./useProbetip";
 import { event } from '@lianmed/utils';
 import { BedStatus } from '@lianmed/lmg/lib/services/types';
 import { Ctg_Layout } from "@lianmed/pages";
-import Toolbar from './Toolbar/index';
+import Toolbar, { RenderMaskIn } from './Toolbar/index';
 
 interface IProps {
   pageItems: IBed[],
@@ -16,7 +17,7 @@ const Home = (props: IProps) => {
   const { borderedId, listLayout = [], pageItems, fullScreenId, dispatch, showTodo, subscribeData, isOn, headCollapsed } = props;
 
   const [todo] = useTodo(showTodo, subscribeData)
-
+  useProbetip()
   const [contentHeight, setcontentHeight] = useState(document.querySelector('main').clientHeight)
 
   useEffect(() => {
@@ -43,7 +44,7 @@ const Home = (props: IProps) => {
       const cb = () => {
         dispatch({ type: `list/appendDirty`, unitId })
       }
-      [BedStatus.Stopped, BedStatus.OfflineStopped].includes(status) ? cb() : event.emit(`bedClose:${unitId}`, cb)
+      [BedStatus.Stopped, BedStatus.OfflineStopped].includes(status) ? cb() : event.emit(`item_close:${unitId}`, cb)
     }
   }, [])
   const onSelect = useCallback((unitId = '') => {
@@ -62,6 +63,7 @@ const Home = (props: IProps) => {
       contentHeight={contentHeight}
       borderedId={borderedId}
       onSelect={onSelect}
+      RenderMaskIn={RenderMaskIn}
     />
   );
 };

@@ -29,7 +29,7 @@ const setting = {
     *setListLayout({ payload }, { put }) {
       store.set('listLayout', payload.listLayout)
       yield put({ type: 'setState', payload })
-      yield put({ type: 'list/processListData' })
+      yield put({ type: 'list/markListData' })
     },
     *setHeadCollapsed({ payload }, { put }) {
       store.set('headCollapsed', payload.headCollapsed)
