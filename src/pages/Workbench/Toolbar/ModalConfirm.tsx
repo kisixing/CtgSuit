@@ -21,28 +21,20 @@ export default function ModalConfirm({
   }
 
   let content: any = '';
-  if (isMonitor) {
+  if (isMonitor || isOffine) {
     content = isCreated ? (
       `确认子机: ${bedname} 停止监护 ?`
     ) : (
         <span>
           子机: {bedname} 即将停止监护，但还
-        <span style={{ color: '#f00' }}>未建立档案</span>
+          <span style={{ color: '#f00' }}>未建立档案</span>
           ，建档请选择“建档”按钮，放弃请选择“放弃”按钮 ?
-      </span>
+        </span>
       );
+  } else {
+    onCancel()
   }
-  if (isOffine) {
-    content = isCreated ? (
-      `确认子机: ${bedname} 停止监护 ?`
-    ) : (
-        <span>
-          子机: {bedname} 即将停止监护，但还
-        <span style={{ color: '#f00' }}>未建立档案</span>
-          ，建档请选择“建档”按钮，放弃请选择“放弃”按钮 ?
-      </span>
-      );
-  }
+
   // const content = isMonitor ? (
   //   isCreated ? (
   //     `确认子机: ${bedname} 停止监护 ?`

@@ -76,7 +76,7 @@ const m = {
         .filter(_ => !!_.data)
         .map(_ => ({ ..._, tabKey: _.data.isF0Pro ? ETabKey.F0_PRO : _.tabKey, }))
         .sort((a, b) => (a.data.isF0Pro && b.data.isF0Pro) ? (a.bedname.localeCompare(b.bedname)) : (+a.data.isF0Pro - +b.data.isF0Pro))
-      yield put({ type: 'setState', payload: { listData, headData: listData.filter(_ => [BedStatus.Working, BedStatus.Stopped, BedStatus.Uncreated].includes(_.status)) } });
+      yield put({ type: 'setState', payload: { listData, tabKey: listData.some(_ => _.data && _.data.isF0Pro) ? ETabKey.F0_PRO : ETabKey.GENERAL, headData: listData.filter(_ => [BedStatus.Working, BedStatus.Stopped, BedStatus.Uncreated].includes(_.status)) } });
       yield put({ type: 'setting/computeLayout', size: listData.length })
 
       yield put({ type: 'markListData' });
@@ -159,6 +159,8 @@ const m = {
       const target = listData.find(_ => _.unitId === unitId)
       const page = target.pageIndex
       const tabKey = target.tabKey
+
+
       yield put({ type: 'removeDirty', unitId })
       yield put({ type: 'setState', payload: { showTodo: false, borderedId: unitId } })
       yield put({

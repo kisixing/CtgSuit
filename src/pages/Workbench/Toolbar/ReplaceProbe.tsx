@@ -4,58 +4,58 @@
 import React, { useEffect, useState, memo } from 'react';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
-import { Button, Modal, Input, Row, Col, InputNumber, message, Table } from 'antd';
+import { Button, Divider, Input, Row, Col, InputNumber, message, Table } from 'antd';
 import _ from 'lodash';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import moment from 'moment';
+import { WsService, IVolumeData, ICacheItem } from '@lianmed/lmg/lib/services/WsService';
+
 // import { request } from '@lianmed/utils';
 import { event } from '@lianmed/utils';
 
 
-import { WsService } from '@lianmed/lmg';
 const socket = WsService._this;
 interface IProps {
-  bedname: string
-  deviceno: string
-  bedno: string
-  end: () => void,
-  unitId: string
+
+  onCancel: () => void
+  data: ICacheItem
+
 }
-const ReplaceProbe = ({ bedname, unitId, end, deviceno, bedno }: IProps) => {
-  const [visible, setVisible] = useState(false)
-  useEffect(() => {
+const ReplaceProbe = ({ data, onCancel }: IProps) => {
+  const { device_no, bed_no, id, replaceProbeTipData } = data
+  const end = () => {
+    event.emit(`item_close:${id}`)
+    onCancel()
+  }
+  const replace = () => {
+    socket.replace_probe(device_no, bed_no, replaceProbeTipData as any);
+    onCancel()
+  }
+  // useEffect(() => {
 
 
-    const replace_probe_tip_key = `item_probetip:${unitId}`
-    const on_replace_probe_tip = data => {
-      setVisible(true)
-    }
-    event
-      .on(replace_probe_tip_key, on_replace_probe_tip)
-    return () => {
-      event
-        .off(replace_probe_tip_key, on_replace_probe_tip)
-    }
-  }, [unitId])
+  //   const replace_probe_tip_key = `item_probetip:${id}`
+  //   const on_replace_probe_tip = data => {
+  //   }
+  //   event
+  //     .on(replace_probe_tip_key, on_replace_probe_tip)
+  //   return () => {
+  //     event
+  //       .off(replace_probe_tip_key, on_replace_probe_tip)
+  //   }
+  // }, [unitId])
 
   return (
-    <Modal
-      getContainer={false}
-      centered
-      destroyOnClose
-      width={760}
-      visible={visible}
-      title={`【${bedname}】 更换探头`}
-      footer={null}
 
-      bodyStyle={{}}
-      onCancel={() => setVisible(false)}
-    >
-      <Button type="danger" onClick={() => { end(); setVisible(false) }}>结束监护</Button>
-      <Button type="primary" onClick={() => { socket.replace_probe(+deviceno, +bedno, data); setVisible(false) }}>更换探头</Button>
-      <Button onClick={() => setVisible(false)}>取消</Button>
-    </Modal>
+    <div style={{ background: '#fff', padding: 24 }}>
+      <div style={{ marginBottom: 24 }}>探头卡回基座，是否进行以下操作：</div>
+      <Button type="primary" onClick={end}>结束监护</Button>
+      <Divider type="vertical" />
+      <Button onClick={replace}>更换探头</Button>
+      <Divider type="vertical" />
+      <Button onClick={onCancel}>取消</Button>
+    </div>
   );
 }
 
-export default memo(Form.create<IProps>()(ReplaceProbe))
+export default (ReplaceProbe)

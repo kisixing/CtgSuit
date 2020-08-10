@@ -1,10 +1,12 @@
 import Event from "@/components/Modal/Event";
 import request from '@/utils/request';
-import { PauseCircleOutlined, PlayCircleOutlined, UserAddOutlined, PushpinOutlined, PieChartOutlined, PrinterOutlined, LoadingOutlined, ControlOutlined, SoundOutlined, FormOutlined } from "@ant-design/icons";
+import SettingStore from '@/utils/SettingStore';
+import { ControlOutlined, FormOutlined, LoadingOutlined, PauseCircleOutlined, PieChartOutlined, PlayCircleOutlined, PrinterOutlined, PushpinOutlined, SoundOutlined, UserAddOutlined } from "@ant-design/icons";
+import { WsService } from '@lianmed/lmg';
 import { BedStatus, ICacheItem } from '@lianmed/lmg/lib/services/WsService';
 import { MultiParamDisplay } from "@lianmed/pages/lib/Ctg/MultiParamDisplay";
 import { event } from "@lianmed/utils";
-import { Button, message, Modal } from 'antd';
+import { Button, message } from 'antd';
 import { ButtonProps } from 'antd/lib/button';
 import moment from 'moment';
 import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
@@ -13,15 +15,13 @@ import Shell from "../Analysis/Shell";
 import PrintPreview from '../PrintPreview';
 import { FetalItem } from "../types";
 import CollectionCreateForm from './CollectionCreateForm';
-import ReplaceProbe from './ReplaceProbe';
 import Jb from "./Jb";
 import ModalConfirm from './ModalConfirm';
+import ReplaceProbe from './ReplaceProbe';
 import SignModal from './SignModal';
 import SoundModal from './SoundModal';
-import SoundMultiModal from './SoundMultiModal';
-import SettingStore from '@/utils/SettingStore';
-import { WsService } from '@lianmed/lmg';
-export { RenderMaskIn } from './RenderMaskIn'
+import { getItemCbs } from "@/utils";
+export { RenderMaskIn } from './RenderMaskIn';
 const cache = SettingStore.cache
 const socket = WsService._this;
 
@@ -80,7 +80,13 @@ function Toolbar(props: FetalItem.IToolbarProps) {
 
 
 
-
+  useEffect(() => {
+    const cb = getItemCbs(unitId)
+    if (cb) {
+      console.log('toolbar itemcb setMaskVisible')
+      setMaskVisible(true)
+    }
+  }, [unitId])
 
 
 
@@ -117,9 +123,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
 
 
   useEffect(() => {
-    if (isUncreated || isWorking) {
-      setMaskVisible(false)
-    }
+
     if (isStopped) {
       setMaskVisible(true)
     }
@@ -352,14 +356,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
         }
       }}
     />
-    <ReplaceProbe
-      unitId={unitId}
-      bedname={bedname}
-      deviceno={deviceno}
-      bedno={bedno}
-      end={end}
 
-    />
     <Analysis
       visible={modalName === 'analysisVisible'}
       onCancel={handleCancel}

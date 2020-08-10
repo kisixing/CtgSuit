@@ -17,7 +17,7 @@ const Home = (props: IProps) => {
   const { borderedId, listLayout = [], pageItems, fullScreenId, dispatch, showTodo, subscribeData, isOn, headCollapsed } = props;
 
   const [todo] = useTodo(showTodo, subscribeData)
-  useProbetip()
+  useProbetip(dispatch)
   const [contentHeight, setcontentHeight] = useState(document.querySelector('main').clientHeight)
 
   useEffect(() => {
