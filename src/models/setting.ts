@@ -59,7 +59,7 @@ const setting = {
         const diff = _ - size >= 0 ? _ - size : Number.MAX_SAFE_INTEGER
         return (diff - (oldDiff) > 0) ? r : i
       }, 0)
-      yield put({ type: 'setState', payload: { listLayout: listLayoutOptions[__DEV__ ? 1 : t] } })
+      yield put({ type: 'setState', payload: { listLayout: listLayoutOptions[__DEV__ ? 6 : t] } })
 
     }
   },

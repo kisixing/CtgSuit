@@ -31,23 +31,10 @@ const ReplaceProbe = ({ data, onCancel }: IProps) => {
     socket.replace_probe(device_no, bed_no, replaceProbeTipData as any);
     onCancel()
   }
-  // useEffect(() => {
-
-
-  //   const replace_probe_tip_key = `item_probetip:${id}`
-  //   const on_replace_probe_tip = data => {
-  //   }
-  //   event
-  //     .on(replace_probe_tip_key, on_replace_probe_tip)
-  //   return () => {
-  //     event
-  //       .off(replace_probe_tip_key, on_replace_probe_tip)
-  //   }
-  // }, [unitId])
 
   return (
 
-    <div style={{ background: '#fff', padding: 24 }}>
+    <div >
       <div style={{ marginBottom: 24 }}>探头卡回基座，是否进行以下操作：</div>
       <Button type="primary" onClick={end}>结束监护</Button>
       <Divider type="vertical" />

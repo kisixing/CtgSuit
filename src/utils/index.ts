@@ -8,8 +8,7 @@ export const printPdf = (url: string) => {
 
 export function getItemCbs(id: string) {
     const cbs = window['ITEM_CBS'] = window['ITEM_CBS'] || {}
-    const cb = typeof cbs[id] === 'function' ? cbs[id] : () => { }
-    return cb
+    return cbs[id]
 }
 export function setItemCbs(id: string, cb = () => { }) {
     const cbs = window['ITEM_CBS'] = window['ITEM_CBS'] || {}

@@ -46,8 +46,8 @@ export const SoundMultiModal = (props: IProps) => {
   };
   return (
 
-    <div style={{ display: 'flex', minWidth: 420, background: '#fff', padding: 6 }}>
-      <div style={{ flex: 1, padding: '0 10px' }}>
+    <div style={{ display: 'flex', minWidth: 400, position: 'relative' }}>
+      <div style={{ flex: 1 }}>
 
 
         <div style={{ display: 'flex' }}>
@@ -75,16 +75,19 @@ export const SoundMultiModal = (props: IProps) => {
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', padding: '10px 0' }}>
-          <span style={{ width: 80, fontSize: 18 }}>音量：</span>
+          <span style={{ width: 120, fontSize: 18 }}>音量：</span>
           <Slider onAfterChange={v => {
             socket.change_volume(device_no, bed_no, v as number)
           }} />
+          <Button type="primary" onClick={start} style={{margin:'0 12px'}}>确定</Button>
+
+          <Button onClick={cancel}>取消</Button>
         </div>
 
 
 
       </div>
-      <div>
+      <div style={{ position: 'absolute', top: 0, right: 0 }}>
 
         <Radio onClick={e => radioClick(2)} style={radioStyle} checked={radioValue === 2}>
           <span style={{ fontSize: 18 }}>双胎</span>
@@ -92,10 +95,7 @@ export const SoundMultiModal = (props: IProps) => {
         <Radio onClick={e => radioClick(3)} style={radioStyle} checked={radioValue === 3}>
           <span style={{ fontSize: 18 }}>三胎</span>
         </Radio>
-        <Button size="small" type="primary" onClick={start}>确定</Button>
-        <br />
 
-        <Button size="small" onClick={cancel}>取消</Button>
       </div>
     </div>
   );

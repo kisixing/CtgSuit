@@ -1,10 +1,6 @@
-import React, { useEffect, useCallback, useRef, MutableRefObject } from "react";
-import ReactDOM from 'react-dom';
-import { event } from "@lianmed/utils";
-import { _end } from './Toolbar/index';
-import { Button, Modal } from "antd";
-import { setItemCbs } from "@/utils";
 import { WsService } from '@lianmed/lmg';
+import { event } from "@lianmed/utils";
+import { useEffect } from "react";
 const socket = WsService._this;
 
 
@@ -13,14 +9,9 @@ export default (dispatch: any) => {
 
     useEffect(() => {
 
-        const on_replace_probe_tip = (unitId, docid, data) => {
+        const on_replace_probe_tip = (unitId) => {
 
             // item cbs
-
-            setItemCbs(unitId, () => {
-                event.emit(`item_probetip:${unitId}`)
-                setItemCbs(unitId, null)
-            })
             dispatch({
                 type: 'list/setPageByUnitId', unitId,
             });
@@ -36,7 +27,7 @@ export default (dispatch: any) => {
             //     ),
             // });
         }
-        const replace_probe_tip_key = `item_probetip`
+        const replace_probe_tip_key = `item_probetip_wait_to_call`
 
         event
             .on(replace_probe_tip_key, on_replace_probe_tip)

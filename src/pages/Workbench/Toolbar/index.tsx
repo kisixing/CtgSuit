@@ -17,10 +17,8 @@ import { FetalItem } from "../types";
 import CollectionCreateForm from './CollectionCreateForm';
 import Jb from "./Jb";
 import ModalConfirm from './ModalConfirm';
-import ReplaceProbe from './ReplaceProbe';
 import SignModal from './SignModal';
 import SoundModal from './SoundModal';
-import { getItemCbs } from "@/utils";
 export { RenderMaskIn } from './RenderMaskIn';
 const cache = SettingStore.cache
 const socket = WsService._this;
@@ -80,13 +78,16 @@ function Toolbar(props: FetalItem.IToolbarProps) {
 
 
 
-  useEffect(() => {
-    const cb = getItemCbs(unitId)
-    if (cb) {
-      console.log('toolbar itemcb setMaskVisible')
-      setMaskVisible(true)
-    }
-  }, [unitId])
+  // useEffect(() => {
+  //   const cb = getItemCbs(unitId)
+  //   console.log('toolbar itemcb setMaskVisible', unitId, cb)
+
+  //   if (cb) {
+  //     console.log('toolbar itemcb setMaskVisible  ------------')
+
+  //     setMaskVisible(true)
+  //   }
+  // }, [unitId])
 
 
 
@@ -189,17 +190,29 @@ function Toolbar(props: FetalItem.IToolbarProps) {
       endCb.current = cb;
       setModalName('confirmVisible');
     }
+    const fn = () => {
+      event.emit(`item_probetip_to_call:${unitId}`, () => {
+        setMaskVisible(true)
+      })
+    }
+    const openProbetip = (id) => {
+      if (id === unitId) {
+        fn()
+      }
+    }
     const closeKey = `item_close:${unitId}`
     const startKey = `item_start:${unitId}`
+    const probetipKey = `item_probetip_wait_to_call`
 
-
+    fn()
     event
       .on(closeKey, onclose)
       .on(startKey, start)
+      .on(probetipKey, openProbetip)
     return () => {
       event
         .off(closeKey, onclose)
-        .off(startKey, start)
+        .off(probetipKey, openProbetip)
     }
   }, [unitId, start])
   const B = (p: ButtonProps) => <Button style={{ padding: '0 8px' }} {...p} disabled={p.disabled || (isOfflineStopped && !pregnancyId)}>{p.children}</Button>
@@ -277,7 +290,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
     <Button
       icon={<FormOutlined />}
       type="link"
-      disabled={!docid}
+      disabled={!docid || isUncreated}
       onClick={() => setModalName('eventVisible')}
     >
       事件记录
@@ -287,7 +300,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
       data && data.ismulti && <Button
         icon={<PieChartOutlined />}
         type="link"
-        disabled={!docid}
+        disabled={!docid || isUncreated}
         onClick={() => setModalName('multiParamVisible')}
       >
         趋势图
@@ -300,6 +313,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
           icon={tocozeroLoading ? <LoadingOutlined /> : <ControlOutlined />}
           type="link"
           onClick={(e) => setTocozero()}
+          disabled={isUncreated}
         >
           {is_include_toco ? '宫缩调零' : '加入宫缩'}
         </B>
@@ -312,7 +326,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
         icon={volumeDataLoading ? <LoadingOutlined /> : <SoundOutlined />}
         type="link"
         onClick={openVolumnModal}
-        disabled={!is_include_volume}
+        disabled={!is_include_volume || isUncreated}
       >
         音量调节
       </B>
