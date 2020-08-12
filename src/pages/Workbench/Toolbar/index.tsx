@@ -202,20 +202,23 @@ function Toolbar(props: FetalItem.IToolbarProps) {
     }
     const closeKey = `item_close:${unitId}`
     const startKey = `item_start:${unitId}`
+    const zeroKey = `item_zero:${unitId}`
     const probetipKey = `item_probetip_wait_to_call`
 
     fn()
     event
       .on(closeKey, onclose)
       .on(startKey, start)
+      .on(zeroKey, setTocozero)
       .on(probetipKey, openProbetip)
     return () => {
       event
         .off(closeKey, onclose)
         .off(startKey, start)
+        .off(zeroKey, setTocozero)
         .off(probetipKey, openProbetip)
     }
-  }, [unitId, start])
+  }, [unitId, start,setTocozero])
   const B = (p: ButtonProps) => <Button style={{ padding: '0 8px' }} {...p} disabled={p.disabled || (isOfflineStopped && !pregnancyId)}>{p.children}</Button>
   return <>
     {

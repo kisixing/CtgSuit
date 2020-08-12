@@ -8,6 +8,7 @@ import { event } from '@lianmed/utils';
 import { BedStatus } from '@lianmed/lmg/lib/services/types';
 import { Ctg_Layout } from "@lianmed/pages";
 import Toolbar, { RenderMaskIn } from './Toolbar/index';
+import { WsService } from "@lianmed/lmg";
 
 interface IProps {
   pageItems: IBed[],
@@ -48,7 +49,7 @@ const Home = (props: IProps) => {
     }
   }, [])
   const onSelect = useCallback((unitId = '') => {
-
+    WsService._this.sendFocus(unitId)
     dispatch({ type: 'list/setState', payload: { borderedId: unitId } })
   }, [])
 
