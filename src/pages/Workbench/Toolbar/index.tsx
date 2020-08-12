@@ -212,6 +212,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
     return () => {
       event
         .off(closeKey, onclose)
+        .off(startKey, start)
         .off(probetipKey, openProbetip)
     }
   }, [unitId, start])

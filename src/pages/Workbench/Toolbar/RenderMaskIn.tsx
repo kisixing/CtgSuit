@@ -22,20 +22,22 @@ export const RenderMaskIn = (props: IProps) => {
 
     }
     useEffect(() => {
-        event.on('item_probetip_wait_to_call', _id => {
+        const fn = _id => {
             if (id === _id) {
                 visibleArr[1] = true
                 setVisibleArr([...visibleArr])
             }
-        })
+        }
+        event.on('item_probetip_wait_to_call', fn)
+        return () => {
+            event.off('item_probetip_wait_to_call', fn)
+        }
     }, [id, visibleArr])
     const cancel = (n: number) => {
         visibleArr[n] = false
         setVisibleArr([...visibleArr])
     }
-    const start = () => {
-        event.emit(`item_start:${id}`,)
-    }
+
     const contentArr = [
         <SoundMultiModal onCancel={() => cancel(0)} data={data} fetel_num={1} />,
         <ReplaceProbe onCancel={() => {
