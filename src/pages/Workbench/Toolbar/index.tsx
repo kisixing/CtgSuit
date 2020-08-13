@@ -233,7 +233,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
                 停止监护
               </B>
             ) : (
-                <B disabled={false} icon={<PlayCircleOutlined />} type="link" onClick={f0Pro_alloc}>
+                <B disabled={disableStartWork} icon={<PlayCircleOutlined />}  type="link" onClick={f0Pro_alloc}>
                   新建监护
                 </B>
               )

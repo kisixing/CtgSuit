@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Modal, Radio, Slider, Switch, Form, message } from 'antd';
 import { SoundOutlined, VerticalAlignMiddleOutlined } from "@ant-design/icons";
+import { BedStatus, ICacheItem, WsService } from '@lianmed/lmg/lib/services/WsService';
 // import { request } from '@lianmed/utils';
 import { event } from '@lianmed/utils';
+import { Button, Slider } from 'antd';
+import React, { useState } from 'react';
 
-import { WsService, ICacheItem, BedStatus } from '@lianmed/lmg/lib/services/WsService';
 const socket = WsService._this;
 
 interface IProps {
@@ -15,7 +15,7 @@ interface IProps {
 
 export const SoundMultiModal = (props: IProps) => {
   let { onCancel, fetel_num, data } = props;
-  const { id, device_no, bed_no, status, fetal_num } = data
+  const { id, device_no, bed_no, status, fetal_num, batterylowArr,disableStartWork } = data
   fetel_num = 1
   const [muteSet, setMuteSet] = useState(new Set<number>())
   // const [radioValue, setRadioValue] = useState(1)
@@ -56,6 +56,7 @@ export const SoundMultiModal = (props: IProps) => {
         <div style={{ display: 'flex' }}>
           {
             Array(fetal_num).fill(0).map((_, i) => {
+              const islow = !!batterylowArr[i]
               i = i + 1
               const isMute = muteSet.has(i)
               return (
@@ -70,7 +71,13 @@ export const SoundMultiModal = (props: IProps) => {
                   setMuteSet(new Set(muteSet))
                 }} key={i} style={{ marginRight: 10, width: 80, height: 80, cursor: 'pointer', border: '1px solid #ccc', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                   <SoundOutlined style={{ fontSize: 38, color: isMute ? '#666' : 'blue' }} />
-                  <span>FHR{i}</span>
+                  <div style={{ fontSize: 12, marginTop: 4, color: islow ? 'red' : '#333' }}>
+                    <span>FHR{i}</span>
+                    {
+                      islow && <span>电量不足</span>
+                    }
+                  </div>
+
                 </div>
               )
             })
@@ -82,7 +89,7 @@ export const SoundMultiModal = (props: IProps) => {
           <Slider onAfterChange={v => {
             socket.change_volume(device_no, bed_no, v as number)
           }} />
-          <Button type="primary" onClick={start} style={{ margin: '0 12px' }}>开始</Button>
+          <Button type="primary" onClick={start} disabled={disableStartWork} style={{ margin: '0 12px' }}>开始</Button>
 
           <Button onClick={cancel}>取消</Button>
         </div>
@@ -90,7 +97,7 @@ export const SoundMultiModal = (props: IProps) => {
 
 
       </div>
-      <div onClick={zero} style={{cursor:'pointer', background:'#eee',position: 'absolute', top: 0, right: 0, width: 80, height: 80, display: 'flex',flexDirection:'column' ,justifyContent: 'center', alignItems: 'center' }}>
+      <div onClick={zero} style={{ cursor: 'pointer', background: '#eee', position: 'absolute', top: 0, right: 0, width: 80, height: 80, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
         {/* 
         <Radio onClick={e => radioClick(2)} style={radioStyle} checked={radioValue === 2}>
           <span style={{ fontSize: 18 }}>双胎</span>
@@ -98,8 +105,8 @@ export const SoundMultiModal = (props: IProps) => {
         <Radio onClick={e => radioClick(3)} style={radioStyle} checked={radioValue === 3}>
           <span style={{ fontSize: 18 }}>三胎</span>
         </Radio> */}
-        <VerticalAlignMiddleOutlined style={{fontSize:40}}/>
-        <div style={{marginTop:4}}>宫缩调零</div>
+        <VerticalAlignMiddleOutlined style={{ fontSize: 40 }} />
+        <div style={{ marginTop: 4 }}>宫缩调零</div>
       </div>
     </div>
   );
