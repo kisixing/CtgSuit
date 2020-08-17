@@ -56,49 +56,49 @@ img {
 `
 
 const Foot = (props: any) => {
-    const [visible, setVisible] = useState(false)
-    const toggleVisible = useCallback(() => setVisible(!visible), [visible])
+    // const [visible, setVisible] = useState(false)
+    // const toggleVisible = useCallback(() => setVisible(!visible), [visible])
 
-    const { visitedData } = useContext(context)
+    // const { visitedData } = useContext(context)
 
-
-
-
+    // console.log('visitedData',visitedData)
 
 
 
-    const B = ({ iconUrl = '', title = '', name = '', url = '', ...o }) => {
-        return (
-            <div title={title} className="b" onClick={() => ipcRenderer.send('open', { ...o, url, title, name })}>
-                <div style={{ display: 'flex', alignItems: 'center', flexFlow: 'column nowrap' }}>
-                    <img src={iconUrl} />
-                    <div className="title">
-                        {title}
-                    </div>
-                </div>
-                <MoreOutlined className="more" onClick={e => {
-                    e.stopPropagation();
-                    toggleVisible()
-                }} />
-            </div>
-        )
-    }
 
 
-    const Title = () => {
-        return (
-            <Wrapper style={{ display: 'flex', width: 340, flexWrap: 'wrap' }}>
-                {
-                    visitedData.map(_ => (
-                        <B {..._} key={_.name} />
-                    ))
-                }
-            </Wrapper>
-        )
-    }
+    // const B = ({ iconUrl = '', title = '', name = '', url = '', ...o }) => {
+    //     return (
+    //         <div title={title} className="b" onClick={() => ipcRenderer.send('open', { ...o, url, title, name })}>
+    //             <div style={{ display: 'flex', alignItems: 'center', flexFlow: 'column nowrap' }}>
+    //                 <img src={iconUrl} />
+    //                 <div className="title">
+    //                     {title}
+    //                 </div>
+    //             </div>
+    //             <MoreOutlined className="more" onClick={e => {
+    //                 e.stopPropagation();
+    //                 toggleVisible()
+    //             }} />
+    //         </div>
+    //     )
+    // }
+
+
+    // const Title = () => {
+    //     return (
+    //         <Wrapper style={{ display: 'flex', width: 340, flexWrap: 'wrap' }}>
+    //             {
+    //                 visitedData.map(_ => (
+    //                     <B {..._} key={_.name} />
+    //                 ))
+    //             }
+    //         </Wrapper>
+    //     )
+    // }
     return (
         <>
-            <Tooltip placement="rightBottom" title={<Title />} >
+            {/* <Tooltip placement="rightBottom" title={<Title />} >
                 <div style={{
                     position: 'fixed',
                     right: 0,
@@ -121,7 +121,7 @@ const Foot = (props: any) => {
                         <Input />
                     </Form.Item>
                 </Form>
-            </Modal>
+            </Modal> */}
         </>
     );
 }

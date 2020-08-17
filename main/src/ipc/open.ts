@@ -14,8 +14,8 @@ export default (event, { title, url, name, reload = false }) => {
         const mainWindow = getMainWindow();
         let newWindow = new BrowserWindow({
             title,
-            width: 1280,
-            height: 720,
+            width: 1700,
+            height: 960,
             resizable: true, // 窗口大小是否可变
             frame: true, // 是否带边框
             parent: mainWindow, // mainWindow是主窗口 父窗口

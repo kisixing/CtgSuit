@@ -48,12 +48,10 @@ const BasicLayout = (props: any) => {
       })
     try {
       ws.connect().catch(err => {
-      debugger
         
         router.push('/setting')
       })
     } catch (e) {
-      debugger
       router.push('/setting')
     }
     dispatch({ type: 'main/init' })
