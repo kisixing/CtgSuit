@@ -15,7 +15,7 @@ interface IProps {
 
 export const SoundMultiModal = (props: IProps) => {
   let { onCancel, fetel_num, data } = props;
-  const { id, device_no, bed_no, status, fetal_num, batterylowArr,disableStartWork } = data
+  const { id, device_no, bed_no, status, fetal_num, batterylowArr, disableStartWork, is_include_toco } = data
   fetel_num = 1
   const [muteSet, setMuteSet] = useState(new Set<number>())
   // const [radioValue, setRadioValue] = useState(1)
@@ -97,17 +97,19 @@ export const SoundMultiModal = (props: IProps) => {
 
 
       </div>
-      <div onClick={zero} style={{ cursor: 'pointer', background: '#eee', position: 'absolute', top: 0, right: 0, width: 80, height: 80, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-        {/* 
+      {
+        !!is_include_toco && <div onClick={zero} style={{ cursor: 'pointer', background: '#eee', position: 'absolute', top: 0, right: 0, width: 80, height: 80, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+          {/* 
         <Radio onClick={e => radioClick(2)} style={radioStyle} checked={radioValue === 2}>
           <span style={{ fontSize: 18 }}>双胎</span>
         </Radio>
         <Radio onClick={e => radioClick(3)} style={radioStyle} checked={radioValue === 3}>
           <span style={{ fontSize: 18 }}>三胎</span>
         </Radio> */}
-        <VerticalAlignMiddleOutlined style={{ fontSize: 40 }} />
-        <div style={{ marginTop: 4 }}>宫缩调零</div>
-      </div>
+          <VerticalAlignMiddleOutlined style={{ fontSize: 40 }} />
+          <div style={{ marginTop: 4 }}>宫缩调零</div>
+        </div>
+      }
     </div>
   );
 }

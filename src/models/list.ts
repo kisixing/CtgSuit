@@ -155,17 +155,19 @@ const m = {
     *setPageByUnitId({ unitId }, { put, select }) {
       const list: TListModel = yield select(state => state.list);
 
-      let { listData } = list
+      let { listData,borderedId,page } = list
+
       const target = listData.find(_ => _.unitId === unitId)
-      const page = target.pageIndex
+      const newPage = target.pageIndex
       const tabKey = target.tabKey
 
+      if(borderedId === unitId && newPage === page)return
 
       yield put({ type: 'removeDirty', unitId })
       yield put({ type: 'setState', payload: { showTodo: false, borderedId: unitId } })
       yield put({
         type: 'setPage',
-        page,
+        page: newPage,
         tabKey,
       });
     },
