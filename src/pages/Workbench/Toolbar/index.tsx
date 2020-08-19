@@ -61,6 +61,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
   const is_include_tocozero = data.is_include_tocozero
   const is_include_toco = data.is_include_toco
   const disableStartWork = data.disableStartWork
+  const disableCreate = data.disableCreate
   const is_include_volume = data.is_include_volume
   const deviceno = itemData.deviceno
 
@@ -218,7 +219,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
         .off(zeroKey, setTocozero)
         .off(probetipKey, openProbetip)
     }
-  }, [unitId, start,setTocozero])
+  }, [unitId, start, setTocozero])
   const B = (p: ButtonProps) => <Button style={{ padding: '0 8px' }} {...p} disabled={p.disabled || (isOfflineStopped && !pregnancyId)}>{p.children}</Button>
   return <>
     {
@@ -233,8 +234,8 @@ function Toolbar(props: FetalItem.IToolbarProps) {
                 停止监护
               </B>
             ) : (
-                <B disabled={disableStartWork} icon={<PlayCircleOutlined />}  type="link" onClick={f0Pro_alloc}>
-                  新建监护
+                <B disabled={disableCreate} icon={<PlayCircleOutlined />} type="link" onClick={f0Pro_alloc}>
+                  <span>新建监护</span>
                 </B>
               )
           )

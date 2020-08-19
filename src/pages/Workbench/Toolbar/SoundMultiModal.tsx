@@ -53,7 +53,7 @@ export const SoundMultiModal = (props: IProps) => {
       <div style={{ flex: 1 }}>
 
 
-        <div style={{ display: 'flex' }}>
+        <div style={{ display: 'flex', height: 80 }}>
           {
             Array(fetal_num).fill(0).map((_, i) => {
               const islow = !!batterylowArr[i]
