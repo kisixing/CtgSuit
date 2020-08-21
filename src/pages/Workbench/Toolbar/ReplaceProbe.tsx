@@ -22,7 +22,10 @@ interface IProps {
 
 }
 const ReplaceProbe = ({ data, onCancel }: IProps) => {
-  const { device_no, bed_no, id, replaceProbeTipData } = data
+  const { device_no, bed_no, id, replaceProbeTipData,isUncreated } = data
+  if(isUncreated){
+    onCancel()
+  }
   const end = () => {
     event.emit(`item_close:${id}`)
     onCancel()

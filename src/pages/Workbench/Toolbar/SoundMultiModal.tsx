@@ -9,15 +9,13 @@ const socket = WsService._this;
 
 interface IProps {
   onCancel: () => void
-  fetel_num: number
   data: ICacheItem
 }
 
 export const SoundMultiModal = (props: IProps) => {
-  let { onCancel, fetel_num, data } = props;
-  const { id, device_no, bed_no, status, fetal_num, batterylowArr, disableStartWork, is_include_toco } = data
-  fetel_num = 1
-  const [muteSet, setMuteSet] = useState(new Set<number>())
+  let { onCancel, data } = props;
+  const { id, device_no, bed_no, status, fetal_num, batterylowArr, disableStartWork, is_include_toco, vol, MuteArr } = data
+  // const [muteSet, setMuteSet] = useState(MuteArr)
   // const [radioValue, setRadioValue] = useState(1)
   const start = () => {
     event.emit(`item_start:${id}`,)
@@ -56,23 +54,17 @@ export const SoundMultiModal = (props: IProps) => {
         <div style={{ display: 'flex', height: 80 }}>
           {
             Array(fetal_num).fill(0).map((_, i) => {
-              const islow = !!batterylowArr[i]
-              i = i + 1
-              const isMute = muteSet.has(i)
+              const islow = batterylowArr[i]
+              const isMute = MuteArr[i]
               return (
                 <div onClick={() => {
-                  if (isMute) {
-                    muteSet.delete(i)
-                  } else {
-                    muteSet.add(i)
-                  }
-                  socket.mute_volume(device_no, bed_no, i, +!isMute)
+         
+                  socket.mute_volume(device_no, bed_no, i+1, +!isMute)
 
-                  setMuteSet(new Set(muteSet))
                 }} key={i} style={{ marginRight: 10, width: 80, height: 80, cursor: 'pointer', border: '1px solid #ccc', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                  <SoundOutlined style={{ fontSize: 38, color: isMute ? '#666' : 'blue' }} />
+                  <SoundOutlined style={{ fontSize: 38, color: isMute ? 'blue' : '#666' }} />
                   <div style={{ fontSize: 12, marginTop: 4, color: islow ? 'red' : '#333' }}>
-                    <span>FHR{i}</span>
+                    <span>FHR{i + 1}</span>
                     {
                       islow && <span>电量不足</span>
                     }
@@ -86,7 +78,7 @@ export const SoundMultiModal = (props: IProps) => {
 
         <div style={{ display: 'flex', alignItems: 'center', padding: '10px 0' }}>
           <span style={{ width: 120, fontSize: 18 }}>音量：</span>
-          <Slider onAfterChange={v => {
+          <Slider defaultValue={vol} onAfterChange={v => {
             socket.change_volume(device_no, bed_no, v as number)
           }} />
           <Button type="primary" onClick={start} disabled={disableStartWork} style={{ margin: '0 12px' }}>开始</Button>

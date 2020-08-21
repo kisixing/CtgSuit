@@ -39,7 +39,7 @@ export const RenderMaskIn = (props: IProps) => {
     }
 
     const contentArr = [
-        <SoundMultiModal onCancel={() => cancel(0)} data={data} fetel_num={1} />,
+        <SoundMultiModal onCancel={() => cancel(0)} data={data} />,
         <ReplaceProbe onCancel={() => {
             cancel(1);
             data.replaceProbeTipData = null

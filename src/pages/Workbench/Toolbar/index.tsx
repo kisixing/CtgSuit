@@ -174,7 +174,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
     setVolumeDataLoading(true)
     setTimeout(() => {
       setVolumeDataLoading(false)
-      setModalName(isF0Pro ? 'soundMultiVisible' : 'soundVisible')
+      setModalName('soundVisible')
     }, 1200);
   }
 
@@ -336,7 +336,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
         音量调节
       </B>
     }
-    {
+    {/* {
       isF0Pro && !hasToco && (
         <>
           <B
@@ -351,7 +351,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
           </B>
         </>
       )
-    }
+    } */}
 
 
     <CollectionCreateForm

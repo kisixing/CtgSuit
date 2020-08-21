@@ -68,7 +68,7 @@ const m = {
       const subscribeData: string[] = subscribe.data
       listData = listData
         .filter(_ => subscribeData.includes(_.deviceno))
-        .filter(_ => checkVisible(_, dirty, offline))
+
         .map(_ => {
           const data: ICacheItem = (datacache as Map<any, any>).get(_.unitId)
           return { ..._, data, status: data && data.status, tabKey: ETabKey.GENERAL };
@@ -76,7 +76,9 @@ const m = {
         .filter(_ => !!_.data)
         .map(_ => ({ ..._, tabKey: _.data.isF0Pro ? ETabKey.F0_PRO : _.tabKey, }))
         .sort((a, b) => (a.data.isF0Pro && b.data.isF0Pro) ? (a.bedname.localeCompare(b.bedname)) : (+a.data.isF0Pro - +b.data.isF0Pro))
-      yield put({ type: 'setState', payload: { listData, tabKey: listData.some(_ => _.data && _.data.isF0Pro) ? ETabKey.F0_PRO : ETabKey.GENERAL, headData: listData.filter(_ => [BedStatus.Working, BedStatus.Stopped, BedStatus.Uncreated].includes(_.status)) } });
+      yield put({ type: 'setState', payload: { headData: listData.filter(_ => [BedStatus.Working, BedStatus.Stopped, BedStatus.Uncreated].includes(_.status)) } });
+      listData = listData.filter(_ => checkVisible(_, dirty, offline))
+      yield put({ type: 'setState', payload: { listData, tabKey: listData.some(_ => _.data && _.data.isF0Pro) ? ETabKey.F0_PRO : ETabKey.GENERAL } });
       yield put({ type: 'setting/computeLayout', size: listData.length })
 
       yield put({ type: 'markListData' });
@@ -155,15 +157,15 @@ const m = {
     *setPageByUnitId({ unitId }, { put, select }) {
       const list: TListModel = yield select(state => state.list);
 
-      let { listData,borderedId,page } = list
+      let { listData, borderedId, page } = list
 
       const target = listData.find(_ => _.unitId === unitId)
       const newPage = target.pageIndex
       const tabKey = target.tabKey
 
-      if(borderedId === unitId && newPage === page)return
+      if (borderedId === unitId && newPage === page) return
 
-      yield put({ type: 'removeDirty', unitId })
+      // yield put({ type: 'removeDirty', unitId })
       yield put({ type: 'setState', payload: { showTodo: false, borderedId: unitId } })
       yield put({
         type: 'setPage',
@@ -206,11 +208,12 @@ const m = {
     },
 
     *removeDirty({ unitId }, { call, put, select }) {
-      const state = yield select();
+      const state: IState = yield select();
       let {
         list: { dirty },
       } = state;
       dirty = new Set(dirty)
+      if (!dirty.has(unitId)) return
       dirty.delete(unitId)
       yield put({
         type: 'setState', payload: {

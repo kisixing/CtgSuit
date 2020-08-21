@@ -12,6 +12,8 @@ export default (dispatch: any) => {
         const on_replace_probe_tip = (unitId) => {
 
             // item cbs
+            dispatch({ type: 'list/removeDirty', unitId })
+
             dispatch({
                 type: 'list/setPageByUnitId', unitId,
             });
