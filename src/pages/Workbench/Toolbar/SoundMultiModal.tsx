@@ -10,10 +10,11 @@ const socket = WsService._this;
 interface IProps {
   onCancel: () => void
   data: ICacheItem
+  simple?: boolean
 }
 
 export const SoundMultiModal = (props: IProps) => {
-  let { onCancel, data } = props;
+  let { onCancel, data, simple } = props;
   const { id, device_no, bed_no, status, fetal_num, batterylowArr, disableStartWork, is_include_toco, vol, MuteArr } = data
   // const [muteSet, setMuteSet] = useState(MuteArr)
   // const [radioValue, setRadioValue] = useState(1)
@@ -38,6 +39,8 @@ export const SoundMultiModal = (props: IProps) => {
   // }
 
   if ([BedStatus.Working, BedStatus.Uncreated].includes(status)) {
+    console.log('item_probetip_to_call cancel sound int');
+
     onCancel()
   }
   // const radioStyle = {
@@ -58,8 +61,8 @@ export const SoundMultiModal = (props: IProps) => {
               const isMute = MuteArr[i]
               return (
                 <div onClick={() => {
-         
-                  socket.mute_volume(device_no, bed_no, i+1, +!isMute)
+
+                  socket.mute_volume(device_no, bed_no, i + 1, +!isMute)
 
                 }} key={i} style={{ marginRight: 10, width: 80, height: 80, cursor: 'pointer', border: '1px solid #ccc', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                   <SoundOutlined style={{ fontSize: 38, color: isMute ? 'blue' : '#666' }} />
@@ -81,16 +84,22 @@ export const SoundMultiModal = (props: IProps) => {
           <Slider defaultValue={vol} onAfterChange={v => {
             socket.change_volume(device_no, bed_no, v as number)
           }} />
-          <Button type="primary" onClick={start} disabled={disableStartWork} style={{ margin: '0 12px' }}>开始</Button>
+          {
+            !!simple || (
+              <>
+                <Button type="primary" onClick={start} disabled={disableStartWork} style={{ margin: '0 12px' }}>开始</Button>
 
-          <Button onClick={cancel}>取消</Button>
+                <Button onClick={cancel}>取消</Button>
+              </>
+            )
+          }
         </div>
 
 
 
       </div>
       {
-        !!is_include_toco && <div onClick={zero} style={{ cursor: 'pointer', background: '#eee', position: 'absolute', top: 0, right: 0, width: 80, height: 80, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+        !!is_include_toco && !simple && <div onClick={zero} style={{ cursor: 'pointer', background: '#fff', position: 'absolute',border: '1px solid #ccc', top: 0, right: 0, width: 80, height: 80, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
           {/* 
         <Radio onClick={e => radioClick(2)} style={radioStyle} checked={radioValue === 2}>
           <span style={{ fontSize: 18 }}>双胎</span>
@@ -98,7 +107,7 @@ export const SoundMultiModal = (props: IProps) => {
         <Radio onClick={e => radioClick(3)} style={radioStyle} checked={radioValue === 3}>
           <span style={{ fontSize: 18 }}>三胎</span>
         </Radio> */}
-          <VerticalAlignMiddleOutlined style={{ fontSize: 40 }} />
+          <VerticalAlignMiddleOutlined style={{ fontSize: 40,color:'blue' }} />
           <div style={{ marginTop: 4 }}>宫缩调零</div>
         </div>
       }

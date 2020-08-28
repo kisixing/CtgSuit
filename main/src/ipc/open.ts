@@ -16,7 +16,7 @@ export default (event, { title, url, name, reload = false }) => {
             title,
             width: 1700,
             height: 960,
-            resizable: false, // 窗口大小是否可变
+            // resizable: false, // 窗口大小是否可变
             show:false,
             frame: true, // 是否带边框
             parent: mainWindow, // mainWindow是主窗口 父窗口

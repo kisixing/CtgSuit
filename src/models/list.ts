@@ -37,7 +37,7 @@ const m = {
     borderedId: null,
     pregnancy: {}, // 初始化，暂无使用
     showTodo: false,
-    tabKey: ETabKey.GENERAL,
+    tabKey: null,
     pageCountMap: {} as tabKeyMap
   },
   effects: {
@@ -64,7 +64,7 @@ const m = {
     *processListData(_, { put, select }) {
       const state: IState = yield select();
       let { list, ws: { data: datacache }, subscribe } = state;
-      let { rawData: listData, dirty, offline } = list
+      let { rawData: listData, dirty, offline, tabKey } = list
       const subscribeData: string[] = subscribe.data
       listData = listData
         .filter(_ => subscribeData.includes(_.deviceno))
@@ -78,7 +78,8 @@ const m = {
         .sort((a, b) => (a.data.isF0Pro && b.data.isF0Pro) ? (a.bedname.localeCompare(b.bedname)) : (+a.data.isF0Pro - +b.data.isF0Pro))
       yield put({ type: 'setState', payload: { headData: listData.filter(_ => [BedStatus.Working, BedStatus.Stopped, BedStatus.Uncreated].includes(_.status)) } });
       listData = listData.filter(_ => checkVisible(_, dirty, offline))
-      yield put({ type: 'setState', payload: { listData, tabKey: listData.some(_ => _.data && _.data.isF0Pro) ? ETabKey.F0_PRO : ETabKey.GENERAL } });
+      const _tabKey = listData.length ? (tabKey ? tabKey : (listData.some(_ => _.data && _.data.isF0Pro) ? ETabKey.F0_PRO : ETabKey.GENERAL)) : null
+      yield put({ type: 'setState', payload: { listData, tabKey: _tabKey } });
       yield put({ type: 'setting/computeLayout', size: listData.length })
 
       yield put({ type: 'markListData' });

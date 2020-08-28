@@ -1,5 +1,5 @@
 import { get, post } from "@lianmed/request";
-import { Button, Input, Modal, Table } from 'antd';
+import { Button, Input, Modal, Table, message } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { formatTime } from "@lianmed/utils/lib/fn/moment";
 interface IProps {
@@ -70,19 +70,23 @@ export const EventModal = (props: IProps) => {
                 !readonly && (
                     <div style={{ position: 'relative' }}>
 
-                        <Input.TextArea rows={4} disabled={disabled} value={note} onChange={e => setNote(e.target.value)} placeholder="请输入事件记录内容" />
+                        <Input.TextArea maxLength={50} rows={4} disabled={disabled} value={note} onChange={e => setNote(e.target.value)} placeholder="请输入事件记录内容" />
                         <Button type="primary" size="small" style={{ position: 'absolute', right: 10, bottom: 10 }} onClick={
                             () => {
-                                post('/events', {
-                                    data: {
-                                        docid,
-                                        note
-                                    }
-                                })
-                                    .then(() => {
-                                        fetchData()
-                                        setNote('')
+                                if (!note) {
+                                    message.warning({ content: '事件记录为空！' })
+                                } else {
+                                    post('/events', {
+                                        data: {
+                                            docid,
+                                            note
+                                        }
                                     })
+                                        .then(() => {
+                                            fetchData()
+                                            setNote('')
+                                        })
+                                }
                             }
                         }>
                             <span>保存</span>

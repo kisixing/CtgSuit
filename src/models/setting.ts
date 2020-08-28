@@ -50,7 +50,7 @@ const setting = {
     },
     *computeLayout({ size }: { size: number }, { put, select }) {
 
-      const { listLayoutOptions, layoutLock }: typeof setting.state = yield select(state => state.setting);
+      const { listLayoutOptions, layoutLock }: TSettingModel = yield select(state => state.setting);
       if (!layoutLock) return
 
       const listLayoutOptionsV = listLayoutOptions.map(_ => _.reduce((s, i) => s * i, 1))
@@ -74,5 +74,5 @@ const setting = {
     }
   },
 };
-
+export type TSettingModel = typeof setting.state
 export default setting

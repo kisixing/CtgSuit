@@ -6,6 +6,7 @@ export const dva = {
     onError(err) {
       err.preventDefault();
       console.log('app', err);
+      ipcRenderer.send('catch', 'error', 'appOnError', err && err.toString && err.toString())
     },
   },
 };

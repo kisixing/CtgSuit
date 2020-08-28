@@ -170,12 +170,14 @@ function Toolbar(props: FetalItem.IToolbarProps) {
   };
 
   const openVolumnModal = () => {
-    socket.getVolume(+deviceno, +bedno)
-    setVolumeDataLoading(true)
-    setTimeout(() => {
-      setVolumeDataLoading(false)
-      setModalName('soundVisible')
-    }, 1200);
+    // socket.getVolume(+deviceno, +bedno)
+    // setVolumeDataLoading(true)
+    // setTimeout(() => {
+    //   setVolumeDataLoading(false)
+    // }, 1200);
+
+    setModalName('soundVisible')
+
   }
 
 
@@ -193,6 +195,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
     }
     const fn = () => {
       event.emit(`item_probetip_to_call:${unitId}`, () => {
+
         setMaskVisible(true)
       })
     }
@@ -220,33 +223,33 @@ function Toolbar(props: FetalItem.IToolbarProps) {
         .off(probetipKey, openProbetip)
     }
   }, [unitId, start, setTocozero])
-  const B = (p: ButtonProps) => <Button style={{ padding: '0 8px' }} {...p} disabled={p.disabled || (isOfflineStopped && !pregnancyId)}>{p.children}</Button>
+  const B = (p: ButtonProps) => <Button style={{ padding: '0 6px' }} {...p} disabled={p.disabled || (isOfflineStopped && !pregnancyId)}>{p.children}</Button>
   return <>
     {
       (isF0Pro) ? (
         isStopped ? (
           <B icon={<PauseCircleOutlined />} loading={f0Pro_cancelallocLoading} type="link" onClick={f0Pro_cancelalloc}>
-            取消监护
+            取消
           </B>
         ) : (
             isWorking || isOffline ? (
               <B icon={<PauseCircleOutlined />} type="link" onClick={() => setModalName('confirmVisible')}>
-                停止监护
+                停止
               </B>
             ) : (
                 <B disabled={disableCreate} icon={<PlayCircleOutlined />} type="link" onClick={f0Pro_alloc}>
-                  <span>新建监护</span>
+                  <span>新建</span>
                 </B>
               )
           )
       ) : (
           isWorking || isOffline ? (
             <B icon={<PauseCircleOutlined />} type="link" onClick={() => setModalName('confirmVisible')}>
-              停止监护
+              停止
             </B>
           ) : (
               <B disabled={!isStopped || !!disableStartWork} icon={<PlayCircleOutlined />} type="link" onClick={start}>
-                {'开始监护'}
+                {'开始'}
               </B>
             )
         )
@@ -268,7 +271,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
       type="link"
       onClick={() => setModalName('signVisible')}
     >
-      胎位标记
+      胎位
       </B>
     {
       !!cache.analysable && (
@@ -278,7 +281,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
           type="link"
           onClick={() => setModalName('analysisVisible')}
         >
-          <span>电脑分析</span>
+          <span>分析</span>
         </B>
       )
     }
@@ -298,7 +301,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
       disabled={!docid || isUncreated}
       onClick={() => setModalName('eventVisible')}
     >
-      事件记录
+      事件
       </Button>
 
     {
@@ -320,7 +323,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
           onClick={(e) => setTocozero()}
           disabled={isUncreated}
         >
-          {is_include_toco ? '宫缩调零' : '加入宫缩'}
+          {is_include_toco ? '调零' : '加入宫缩'}
         </B>
       )
     }
@@ -333,7 +336,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
         onClick={openVolumnModal}
         disabled={!is_include_volume || isUncreated}
       >
-        音量调节
+        音量
       </B>
     }
     {/* {
@@ -437,12 +440,11 @@ function Toolbar(props: FetalItem.IToolbarProps) {
       bedno={+bedno}
       volumeData={volumeData}
       visible={modalName === 'soundVisible'}
-      isCreated={isCreated}
-      isMonitor={isWorking}
       onCancel={handleCancel}
       startTime={startTime}
       bedname={bedname}
       docid={docid}
+      data={data}
     />
     {/* <SoundMultiModal
       fetel_num={f0Pro_fetalnum}
@@ -468,7 +470,6 @@ export default memo(Toolbar)
 export async function _end(device_no: string, bed_no: string, docid: string) {
   const socket = WsService._this
   const item = socket.getCacheItem({ device_no, bed_no })
-  console.log('end', item)
   const isCreated = item && item.hasPregnancy
   if (isCreated) {
     // 已经建档 ,修改结束时间

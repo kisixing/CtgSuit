@@ -1,11 +1,9 @@
-import request from '@/utils/request';
 import '@ant-design/compatible/assets/index.css';
-import { WsService, ICacheItem } from '@lianmed/lmg/lib/services/WsService';
-import { Modal } from 'antd';
-import React, { useEffect, useState } from 'react';
-import SoundMultiModal from './SoundMultiModal'
-import ReplaceProbe from './ReplaceProbe'
+import { ICacheItem, WsService } from '@lianmed/lmg/lib/services/WsService';
 import { event } from '@lianmed/utils';
+import React, { useEffect, useState } from 'react';
+import ReplaceProbe from './ReplaceProbe';
+import SoundMultiModal from './SoundMultiModal';
 const socket = WsService._this;
 
 interface IProps {
@@ -15,15 +13,14 @@ interface IProps {
 
 export const RenderMaskIn = (props: IProps) => {
     const { data, setMaskVisible } = props
-    const [visibleArr, setVisibleArr] = useState([true, !!data.replaceProbeTipData])
+    const [visibleArr, setVisibleArr] = useState([true, !!(data.replaceProbeTipData || data.addProbeTipData)])
     const { device_no, bed_no, id } = data
-    console.log('RenderMaskIn', props)
-    const fn = () => {
 
-    }
     useEffect(() => {
         const fn = _id => {
+
             if (id === _id) {
+
                 visibleArr[1] = true
                 setVisibleArr([...visibleArr])
             }
@@ -42,13 +39,11 @@ export const RenderMaskIn = (props: IProps) => {
         <SoundMultiModal onCancel={() => cancel(0)} data={data} />,
         <ReplaceProbe onCancel={() => {
             cancel(1);
-            data.replaceProbeTipData = null
         }} data={data} />
     ]
     useEffect(() => {
         if (!visibleArr.some(_ => _)) {
             setMaskVisible(false)
-            console.log('renderItem sb')
         }
     }, [visibleArr])
     return (

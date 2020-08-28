@@ -23,10 +23,10 @@ export default {
     },
   },
   effects: {
-    *fetchRecords({ payload }, { call, put }) {
+    *fetchRecords({ payload }, { call, put, select }) {
+      const { pagination } = yield select(s => s.archives)
       const params = {
-        size: 5,
-        page: 0,
+        ...pagination,
         sort: 'visitDate,asc',
         ...payload,
       };

@@ -16,6 +16,9 @@ import styles from './TableList.less';
 import { MultiParamDisplay } from "@lianmed/pages/lib/Ctg/MultiParamDisplay";
 import settingStore from "@/utils/SettingStore";
 import Event from "@/components/Modal/Event";
+
+
+
 class TableList extends Component {
   constructor(props) {
     super(props);
@@ -29,6 +32,10 @@ class TableList extends Component {
       type: 'edit',
       current: {}, // 当前行
     };
+    const isIn = this.isIn = (store.get('ward') || {}).wardType === 'in'
+    const noLabel = this.noLabel = isIn ? '住院号' : '卡号'
+    const noKey = this.noKey = isIn ? 'inpatientNO' : 'cardNO';
+
     this.ward = store.get('ward') || {};
     this.columns = [
       {
@@ -39,17 +46,17 @@ class TableList extends Component {
         ...this.getColumnSearchProps('name'),
       },
       {
-        title: '住院号',
-        dataIndex: 'inpatientNO',
-        key: 'inpatientNO',
+        title: noLabel,
+        dataIndex: noKey,
+        key: noKey,
         width: 100,
         render: (text, record) => (
           <div style={{ width: '84px' }} className={styles.textOver}>
-            {record.pregnancy && record.pregnancy.inpatientNO}
+            {record.pregnancy && record.pregnancy[noKey]}
           </div>
         ),
       },
-      {
+      isIn && {
         title: '床号',
         dataIndex: 'bedNumber',
         key: 'bedNumber',
@@ -144,7 +151,7 @@ class TableList extends Component {
           );
         },
       },
-    ]; // .map(_ => ({ ..._, align: 'center' }));
+    ].filter(_ => !!_); // .map(_ => ({ ..._, align: 'center' }));
   }
   play = (audioId, second = 0) => {
     second = Math.ceil(second)
@@ -332,7 +339,7 @@ class TableList extends Component {
           ...item.pregnancy,
           name: values.name,
           age: values.age,
-          inpatientNO: values.inpatientNO,
+          [this.noKey]: values[this.noKey],
           gravidity: values.gravidity,
           parity: values.parity,
           telephone: values.telephone,
@@ -534,7 +541,7 @@ class TableList extends Component {
     // 监护开始时间
     const startTime = selected.ctgexam && selected.ctgexam.startTime;
     // 住院号
-    const inpatientNO = selected.pregnancy && selected.pregnancy.inpatientNO;
+    const inpatientNO = selected.pregnancy && selected.pregnancy[this.noKey];
     // 姓名
     const name = selected.pregnancy && selected.pregnancy.name;
     // 年龄

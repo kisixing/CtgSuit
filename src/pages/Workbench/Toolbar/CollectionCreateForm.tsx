@@ -1,7 +1,7 @@
 /**
  * 胎监主页PDA建档/绑定弹窗
  */
-import React, { useState, memo } from 'react';
+import React, { useState, memo, useEffect } from 'react';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import { Button, Modal, Input, Row, Col, InputNumber, message, Table } from 'antd';
@@ -89,6 +89,8 @@ const CollectionCreateForm = (props: IProps) => {
     // 清空form表单数据、输入框状态变为可输入状态
     props.form.resetFields();
     setDisabled(false)
+    setAgeWarning({ status: '', help: '' });
+
   };
 
   const onCreate = async (values, oldValues) => {
@@ -169,7 +171,7 @@ const CollectionCreateForm = (props: IProps) => {
         newArchive(data);
       } else {
         // 孕册存在，取到孕册信息
-        message.info('该患者信息已存在！');
+        message.info('新建孕册失败！');
       }
     }
   };
@@ -226,7 +228,8 @@ const CollectionCreateForm = (props: IProps) => {
       // 成功调入孕妇信息后，禁止修改。
       // 重新选择调入、新建孕妇信息 --> '取消'后再重复操作
       if (!res.length) {
-        setErrorText(`没有${noLabel}为 ${values[noKey]} 的孕册，请新建孕册。`);
+        setErrorText(values[noKey] ? `没有${noLabel}为 ${values[noKey]} 的孕册，请新建孕册。` : '没有找到相关孕册，请新建孕册。');
+        setPregnancyList([])
       } else if (res.length === 1) {
         // 搜索结果只有一个，默认赋值
         setDisabled(true);
@@ -358,7 +361,11 @@ const CollectionCreateForm = (props: IProps) => {
       sm: { span: 16 },
     },
   };
-
+  useEffect(() => {
+    if (!visible) {
+      setErrorText('')
+    }
+  }, [visible])
   return (
     <Modal
       getContainer={false}

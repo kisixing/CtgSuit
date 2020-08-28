@@ -14,7 +14,7 @@ interface IProps {
   pageItems: IBed[],
   [x: string]: any
 }
-const Home = (props: IProps) => {
+function Workbench(props: IProps) {
   const { borderedId, listLayout = [], pageItems, fullScreenId, dispatch, showTodo, subscribeData, isOn, headCollapsed } = props;
 
   const [todo] = useTodo(showTodo, subscribeData)
@@ -22,10 +22,11 @@ const Home = (props: IProps) => {
   const [contentHeight, setcontentHeight] = useState(document.querySelector('main').clientHeight)
 
   useEffect(() => {
+  
     setcontentHeight(document.querySelector('main').clientHeight)
   }, [headCollapsed])
 
-  const items: any[] = useMemo(() => (showTodo ? todo : pageItems), [pageItems, todo, isOn]);
+  const items: any[] = useMemo(() => (showTodo ? todo : pageItems), [pageItems, todo, isOn, showTodo]);
 
   useEffect(() => {
     console.log('jjj', '-------')
@@ -80,4 +81,4 @@ export default connect(({ ws, setting, list, subscribe }: any) => {
     isOn: ws.isOn,
     headCollapsed: setting.headCollapsed
   };
-})(Home);
+})(Workbench);
