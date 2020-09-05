@@ -68,7 +68,7 @@
     "umi": "^2.7.7",
     "umi-plugin-react": "^1.8.4",
     "webpack-chain": "^6.0.0",
-    "yargs-parser": "^16.1.0"
+    "yargs-parser": "^19.0.4"
   },
   "build": {
     "productName": "ctg-suit",
