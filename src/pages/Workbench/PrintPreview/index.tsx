@@ -49,7 +49,7 @@ const PrintPreview = (props: IProps) => {
   );
 }
 PrintPreview.printPdf = (docid: string) => {
-  const filePath = `${config.apiPrefix}/ctg-exams-pdfurl/${docid}`
+  const filePath = `${config.apiPrefix}/ctg-exams-pdfurl/${docid}?show_fetalmovement=${window['obvue'] ? !!window['obvue'].setting.show_fetalmovement : false}`
   ipcRenderer.send('printWindow', filePath)
 }
 export default PrintPreview;

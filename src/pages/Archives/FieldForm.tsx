@@ -45,7 +45,7 @@ const FieldForm = (props) => {
         'pregnancyId.equals': pregnancyId,
         'visitDate.greaterOrEqualThan': sTime,
         'visitDate.lessOrEqualThan': eTime,
-        'name.equals': name || undefined,
+        'name.contains': name || undefined,
         [`${noKey}.equals`]: values[noKey] || undefined,
         ...(isIn ? { 'bedNO.equals': bedNO || undefined } : {})
       }

@@ -1,6 +1,5 @@
 import store from 'store'
 import settingStore from '@/utils/SettingStore';
-declare var __DEV__: boolean;
 
 const setting = {
   namespace: 'setting',

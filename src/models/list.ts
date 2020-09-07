@@ -291,6 +291,9 @@ const m = {
   },
   reducers: {
     setState(state, { payload }) {
+      if (payload.borderedId) {
+        WsService._this.sendFocus(payload.borderedId)
+      }
       return {
         ...state,
         ...payload,

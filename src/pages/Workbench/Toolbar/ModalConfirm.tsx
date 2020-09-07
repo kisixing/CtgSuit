@@ -12,6 +12,7 @@ export default function ModalConfirm({
   bedname,
   isOffine
 }) {
+  if (!visible) return null
 
 
   // 放弃建档

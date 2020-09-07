@@ -1,14 +1,13 @@
-import React, { useRef, useEffect, useState, useMemo, useCallback } from 'react';
-
-import { connect } from 'react-redux';
 import { IBed } from '@/types';
-import useTodo, { IRemain } from "./useTodo";
-import useProbetip from "./useProbetip";
-import { event } from '@lianmed/utils';
 import { BedStatus } from '@lianmed/lmg/lib/services/types';
 import { Ctg_Layout } from "@lianmed/pages";
+import { event } from '@lianmed/utils';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { connect } from 'react-redux';
 import Toolbar, { RenderMaskIn } from './Toolbar/index';
-import { WsService } from "@lianmed/lmg";
+import useProbetip from "./useProbetip";
+import useTodo from "./useTodo";
+
 
 interface IProps {
   pageItems: IBed[],
@@ -28,9 +27,6 @@ function Workbench(props: IProps) {
 
   const items: any[] = useMemo(() => (showTodo ? todo : pageItems), [pageItems, todo, isOn, showTodo]);
 
-  useEffect(() => {
-    console.log('jjj', '-------')
-  }, [pageItems])
 
   useEffect(() => {
     const endCb = (unitId, status, isCreated) => status === BedStatus.Offline && dispatch({ type: 'list/appendOffline', unitId, })
@@ -50,7 +46,6 @@ function Workbench(props: IProps) {
     }
   }, [])
   const onSelect = useCallback((unitId = '') => {
-    WsService._this.sendFocus(unitId)
     dispatch({ type: 'list/setState', payload: { borderedId: unitId } })
   }, [])
 

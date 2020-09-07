@@ -1,7 +1,9 @@
 import { log } from "./log";
 import { get } from "http";
-import { tmp, config } from "../config/path";
+import { tmp, config as configPath } from "../config/path";
 import clientServer from "../ipc/audioPlay";
+
+const config = require(configPath)
 const fs = require('fs');
 const path = require('path')
 const execFile = require('child_process').execFile;
@@ -25,17 +27,13 @@ export const printerFatory = targetDir => {
         const tmpName = url.parse(fileUrl).pathname.slice(1).split('/').join('_')
         const tmpPath = path.resolve(dateTimeDir, `${tmpName}${tmpName.endsWith('.pdf') ? '' : '.pdf'}`)
         const writeStream = fs.createWriteStream(tmpPath).on('close', () => {
-            const task = execFile(printerPath, [tmpPath]);
-            task.stdout.on('data', (data) => {
-                console.log(`stdout: ${data}`);
-            });
-            task.on('close', (code) => {
-                console.log(`write clonse: ${code}`);
-            })
-            task.on('error', (err) => {
-                console.log(`write error: ${err}`);
-            })
-            // clientServer(null, 'print', { filePath: tmpPath })
+
+            if (config && config.printDirect) {
+                clientServer(null, 'print', { filePath: tmpPath })
+            } else {
+                execFile(printerPath, [tmpPath]);
+
+            }
         })
         console.log('print', fileUrl)
         get(fileUrl, res => {

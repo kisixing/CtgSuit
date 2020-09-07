@@ -9,6 +9,9 @@ if (existsSync(config)) {
     if (!c.hasOwnProperty('analysable')) {
         c.analysable = true
     }
+    if (!c.hasOwnProperty('show_fetalmovement')) {
+        c.show_fetalmovement = true
+    }
     writeFileSync(config, JSON.stringify(c, null, 2))
 
 } else {

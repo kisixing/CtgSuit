@@ -3,7 +3,7 @@ import request from '@/utils/request';
 import SettingStore from '@/utils/SettingStore';
 import { ControlOutlined, FormOutlined, LoadingOutlined, PauseCircleOutlined, PieChartOutlined, PlayCircleOutlined, PrinterOutlined, PushpinOutlined, SoundOutlined, UserAddOutlined } from "@ant-design/icons";
 import { WsService } from '@lianmed/lmg';
-import { BedStatus, ICacheItem } from '@lianmed/lmg/lib/services/WsService';
+import { ICacheItem } from '@lianmed/lmg/lib/services/WsService';
 import { MultiParamDisplay } from "@lianmed/pages/lib/Ctg/MultiParamDisplay";
 import { event } from "@lianmed/utils";
 import { Button, message } from 'antd';
@@ -53,7 +53,9 @@ function Toolbar(props: FetalItem.IToolbarProps) {
   // const safePrenatalVisit = prenatalVisit || { gestationalWeek: null, }
   const docid = data.docid
   const startTime = data.starttime
-  const status = data.status
+  const timeEndworkTipData = data.timeEndworkTipData
+  const replaceProbeTipData = data.replaceProbeTipData
+  const addProbeTipData = data.addProbeTipData
   const isF0Pro = data.isF0Pro
   const hasToco = data.hasToco
 
@@ -64,6 +66,13 @@ function Toolbar(props: FetalItem.IToolbarProps) {
   const disableCreate = data.disableCreate
   const is_include_volume = data.is_include_volume
   const deviceno = itemData.deviceno
+
+
+  const isWorking = data.isWorking
+  const isOffline = data.isOffline
+  const isStopped = data.isStopped
+  const isOfflineStopped = data.isOfflineStopped
+  const isUncreated = data.isUncreated
 
   const pregnancy = safePregnancy
 
@@ -76,6 +85,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
     pvId
   } = pregnancy
 
+  const isCreated = !!pregnancyId;
 
 
 
@@ -94,12 +104,6 @@ function Toolbar(props: FetalItem.IToolbarProps) {
 
 
 
-  const isWorking = status === BedStatus.Working;
-  const isOffline = status === BedStatus.Offline;
-  const isStopped = status === BedStatus.Stopped
-  const isOfflineStopped = status === BedStatus.OfflineStopped;
-  const isUncreated = status === BedStatus.Uncreated;
-  const isCreated = !!pregnancyId;
 
   function setTocozero(isAutoCall = false) {
     setTocozeroLoading(true)
@@ -126,10 +130,11 @@ function Toolbar(props: FetalItem.IToolbarProps) {
 
   useEffect(() => {
 
-    if (isStopped) {
+    if (isStopped || timeEndworkTipData || replaceProbeTipData || addProbeTipData) {
+      console.log('oook')
       setMaskVisible(true)
     }
-  }, [isUncreated, isWorking, isStopped,])
+  }, [isStopped, timeEndworkTipData, replaceProbeTipData, addProbeTipData])
 
 
   const handleCancel = useCallback(() => setModalName(''), []);
@@ -258,7 +263,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
     }
     {/* 停止状态下不可以建档，监护、离线都是可以建档的 */}
 
-    <B icon={<UserAddOutlined />} type="link" disabled={(isCreated && !pvId) || isStopped || isUncreated} onClick={() => {
+    <B icon={<UserAddOutlined />} type="link" disabled={(isCreated && !pvId) || isStopped || isUncreated|| isOfflineStopped} onClick={() => {
       isCreated ? setModalName('jbVisible') : setModalName('visible')
     }}>
       {isCreated ? '解绑' : '建档'}
@@ -266,7 +271,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
 
 
     <B
-      disabled={!isCreated}
+      disabled={!isCreated || !isWorking || isStopped || isOfflineStopped}
       icon={<PushpinOutlined />}
       type="link"
       onClick={() => setModalName('signVisible')}
@@ -298,7 +303,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
     <Button
       icon={<FormOutlined />}
       type="link"
-      disabled={!docid || isUncreated}
+      disabled={!docid || isUncreated || isStopped|| isOfflineStopped}
       onClick={() => setModalName('eventVisible')}
     >
       事件
@@ -308,7 +313,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
       data && data.ismulti && <Button
         icon={<PieChartOutlined />}
         type="link"
-        disabled={!docid || isUncreated}
+        disabled={!docid || isUncreated || isStopped|| isOfflineStopped}
         onClick={() => setModalName('multiParamVisible')}
       >
         趋势图
@@ -321,7 +326,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
           icon={tocozeroLoading ? <LoadingOutlined /> : <ControlOutlined />}
           type="link"
           onClick={(e) => setTocozero()}
-          disabled={isUncreated}
+          disabled={isUncreated || isStopped|| isOfflineStopped}
         >
           {is_include_toco ? '调零' : '加入宫缩'}
         </B>
@@ -334,7 +339,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
         icon={volumeDataLoading ? <LoadingOutlined /> : <SoundOutlined />}
         type="link"
         onClick={openVolumnModal}
-        disabled={!is_include_volume || isUncreated}
+        disabled={!is_include_volume || isUncreated || isStopped|| isOfflineStopped}
       >
         音量
       </B>

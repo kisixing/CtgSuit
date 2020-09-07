@@ -4,7 +4,6 @@ import { notification } from "antd";
 import { IBed } from '@/types';
 import store from "store";
 import SettingStore from "@/utils/SettingStore";
-declare var __DEV__: boolean;
 
 
 export default (listData: IBed[]) => {

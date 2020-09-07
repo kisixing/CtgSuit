@@ -38,11 +38,16 @@ export const SoundMultiModal = (props: IProps) => {
   //   setMuteSet(new Set(Array.from(muteSet).filter(_ => _ <= v)))
   // }
 
+
+
   if ([BedStatus.Working, BedStatus.Uncreated].includes(status)) {
     console.log('item_probetip_to_call cancel sound int');
 
     onCancel()
   }
+
+
+
   // const radioStyle = {
   //   display: 'block',
   //   height: '30px',
@@ -60,7 +65,7 @@ export const SoundMultiModal = (props: IProps) => {
               const islow = batterylowArr[i]
               const isMute = MuteArr[i]
               return (
-                <div onClick={() => {
+                <Button onClick={() => {
 
                   socket.mute_volume(device_no, bed_no, i + 1, +!isMute)
 
@@ -73,7 +78,7 @@ export const SoundMultiModal = (props: IProps) => {
                     }
                   </div>
 
-                </div>
+                </Button>
               )
             })
           }
@@ -99,7 +104,7 @@ export const SoundMultiModal = (props: IProps) => {
 
       </div>
       {
-        !!is_include_toco && !simple && <div onClick={zero} style={{ cursor: 'pointer', background: '#fff', position: 'absolute',border: '1px solid #ccc', top: 0, right: 0, width: 80, height: 80, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+        !!is_include_toco && !simple && <Button onClick={zero} style={{ cursor: 'pointer', background: '#fff', position: 'absolute', border: '1px solid #ccc', top: 0, right: 0, width: 80, height: 80, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
           {/* 
         <Radio onClick={e => radioClick(2)} style={radioStyle} checked={radioValue === 2}>
           <span style={{ fontSize: 18 }}>双胎</span>
@@ -107,9 +112,9 @@ export const SoundMultiModal = (props: IProps) => {
         <Radio onClick={e => radioClick(3)} style={radioStyle} checked={radioValue === 3}>
           <span style={{ fontSize: 18 }}>三胎</span>
         </Radio> */}
-          <VerticalAlignMiddleOutlined style={{ fontSize: 40,color:'blue' }} />
+          <VerticalAlignMiddleOutlined style={{ fontSize: 40, color: 'blue' }} />
           <div style={{ marginTop: 4 }}>宫缩调零</div>
-        </div>
+        </Button>
       }
     </div>
   );

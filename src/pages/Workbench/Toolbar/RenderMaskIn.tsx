@@ -1,10 +1,9 @@
 import '@ant-design/compatible/assets/index.css';
-import { ICacheItem, WsService } from '@lianmed/lmg/lib/services/WsService';
+import { ICacheItem } from '@lianmed/lmg/lib/services/WsService';
 import { event } from '@lianmed/utils';
 import React, { useEffect, useState } from 'react';
 import ReplaceProbe from './ReplaceProbe';
 import SoundMultiModal from './SoundMultiModal';
-const socket = WsService._this;
 
 interface IProps {
     data: ICacheItem
@@ -13,8 +12,8 @@ interface IProps {
 
 export const RenderMaskIn = (props: IProps) => {
     const { data, setMaskVisible } = props
-    const [visibleArr, setVisibleArr] = useState([true, !!(data.replaceProbeTipData || data.addProbeTipData)])
-    const { device_no, bed_no, id } = data
+    const [visibleArr, setVisibleArr] = useState([data.isF0Pro, !!(data.replaceProbeTipData || data.addProbeTipData || data.timeEndworkTipData)])
+    const { id } = data
 
     useEffect(() => {
         const fn = _id => {

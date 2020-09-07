@@ -1,20 +1,25 @@
-import React, { useState } from 'react';
-
-import { UserOutlined, LogoutOutlined, FormOutlined, StarFilled } from "@ant-design/icons";
-import { Menu, Modal, Avatar, Spin } from 'antd';
-import { connect } from 'dva';
-import { router } from 'umi';
-
-import { ipcRenderer } from 'electron';
-import HeaderDropdown from '@/components/HeaderDropdown';
 // import logo from '../assets/logo.png';
 import ChangePassword from "@/components/ChangePassword";
+import HeaderDropdown from '@/components/HeaderDropdown';
+import settingStore from "@/utils/SettingStore";
+
+import { IBed } from "@/types";
+import { FormOutlined, LogoutOutlined, UserOutlined } from "@ant-design/icons";
+import { Avatar, Menu, Modal, Spin } from 'antd';
+import { connect } from 'dva';
+import { ipcRenderer } from 'electron';
+import React, { useState } from 'react';
+import { router } from 'umi';
+
+
+const settingData = settingStore.cache
 
 const styles = require('./BasicLayout.less')
 
-const A = (props: any) => {
-  const { account, loading, isAdmin } = props;
+const A = (props: { [x: string]: any, listData: IBed[] }) => {
+  const { account, isAdmin } = props;
   const [changPassWordVisible, setChangPassWordVisible] = useState(false)
+  const isF0Pro = !!settingData.shutdownable
   const onMenuClick = e => {
     const { key } = e;
 
@@ -23,14 +28,14 @@ const A = (props: any) => {
       Modal.confirm({
         centered: true,
         title: '警告',
-        content: '确认退出系统？',
+        content: `确认${isF0Pro ? '关机' : '退出系统'}？`,
         okText: '确认',
         cancelText: '取消',
         onOk: function () {
           // 清除sessionStorage
           localStorage.removeItem(require('@lianmed/utils').TOKEN_KEY)
           // 退出登录，关闭应用
-          ipcRenderer.send('closeMainWindow');
+          ipcRenderer.send(isF0Pro ? 'shutdown' : 'closeMainWindow');
         },
       });
     }
@@ -66,7 +71,7 @@ const A = (props: any) => {
       </Menu.Item>
       <Menu.Item key="logout">
         <LogoutOutlined />
-        <span>退出系统</span>
+        <span>{isF0Pro ? '关机' : '退出系统'}</span>
       </Menu.Item>
       <Menu.Item onClick={() => setChangPassWordVisible(true)}>
         <FormOutlined />
@@ -109,8 +114,9 @@ const A = (props: any) => {
   );
 };
 
-export default connect(({ global, loading, }: any) => ({
+export default connect(({ global, loading, list }: any) => ({
   // loading: loading,
   account: global.account || {},
-  isAdmin: global.isAdmin
+  isAdmin: global.isAdmin,
+  listData: list.listData || []
 }))(A);
