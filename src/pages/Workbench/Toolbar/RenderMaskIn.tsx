@@ -47,7 +47,7 @@ export const RenderMaskIn = (props: IProps) => {
     }, [visibleArr])
     return (
         <div style={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <div style={{ background: '#fff', padding: 12, boxShadow: '0 0 6px 2px #777', borderRadius: 2, overflow: 'hidden' }}>
+            <div style={{ background: '#fff', padding: 12, boxShadow: '0 0 6px 2px #777', borderRadius: 2, }}>
                 {
                     visibleArr.reduceRight((pre, cur, idx) => {
                         if (pre) {

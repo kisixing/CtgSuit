@@ -4,10 +4,15 @@
 import React, { useEffect } from 'react';
 import moment from 'moment';
 import { Modal, Input, Row, Col, DatePicker, InputNumber, Form } from 'antd';
+import request from '@/utils/request';
+import store from 'store';
 
 const CreateRecordModal = (props) => {
   const { visible, onCancel, onOk, type, dataSource } = props;
-
+  const ward = store.get('ward');
+  const isIn = (ward || {}).wardType === 'in'
+  const noLabel = isIn ? '住院号' : '卡号'
+  const noKey = isIn ? 'inpatientNO' : 'cardNO';
   const [form] = Form.useForm()
   useEffect(() => {
     if (type === 'update' && dataSource.pregnancy) {
@@ -24,7 +29,7 @@ const CreateRecordModal = (props) => {
         name: dataSource.pregnancy.name,
       });
     }
-  }, [])
+  }, [dataSource])
 
 
   const formItemLayout = {
@@ -49,7 +54,32 @@ const CreateRecordModal = (props) => {
       cancelText="取消"
       bodyStyle={{ paddingRight: '48px' }}
       onCancel={onCancel}
-      onOk={() => onOk(dataSource)}
+      onOk={() => {
+        form.validateFields().then((values) => {
+
+          const data = {
+            ...dataSource,
+            visitTime: moment(values.visitTime),
+            gestationalWeek: values.gestationalWeek,
+            pregnancy: {
+              ...dataSource.pregnancy,
+              name: values.name,
+              age: values.age,
+              [noKey]: values[noKey],
+              gravidity: values.gravidity,
+              parity: values.parity,
+              telephone: values.telephone,
+            },
+          };
+          request.put(`/prenatal-visits`, {
+            data,
+          });
+          form.resetFields();
+          onOk(data)
+
+        });
+      }
+      }
     >
       <Form layout="horizontal" {...formItemLayout} form={form}>
         <Row gutter={24}>

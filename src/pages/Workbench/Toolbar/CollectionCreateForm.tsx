@@ -314,20 +314,20 @@ const CollectionCreateForm = (props: IProps) => {
     if (value && !reg.test(value)) {
       callback('请输入不小于0的整数');
     }
-    if (field === 'gravidity') {
-      // 孕次
-      const target = form.getFieldValue('parity');
-      if (value < target && target) {
-        callback('孕次小于产次，请检查数据合理性');
-      }
-    }
-    if (field === 'parity') {
-      // 产次
-      const target = form.getFieldValue('gravidity');
-      if (value > target && target) {
-        callback('产次大于孕次，请检查数据合理性');
-      }
-    }
+    // if (field === 'gravidity') {
+    //   // 孕次
+    //   const target = form.getFieldValue('parity');
+    //   if (value < target && target) {
+    //     callback('孕次小于产次，请检查数据合理性');
+    //   }
+    // }
+    // if (field === 'parity') {
+    //   // 产次
+    //   const target = form.getFieldValue('gravidity');
+    //   if (value > target && target) {
+    //     callback('产次大于孕次，请检查数据合理性');
+    //   }
+    // }
     callback();
   };
 

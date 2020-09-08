@@ -5,12 +5,13 @@ import '@ant-design/compatible/assets/index.css';
 import { ICacheItem, WsService } from '@lianmed/lmg/lib/services/WsService';
 // import { request } from '@lianmed/utils';
 import { event } from '@lianmed/utils';
-import { Button, Divider, InputNumber, Modal } from 'antd';
-import React, { useState } from 'react';
+import { Button, Divider, InputNumber, Modal, Tag } from 'antd';
+import React, { useState, useEffect } from 'react';
 import store from "store";
 import { Ctg } from '@lianmed/lmg';
 import { useCtgData } from '@lianmed/pages/lib/Ctg/Analyse';
-
+import { post } from "@lianmed/request";
+import { obvue } from "@lianmed/f_types";
 
 const socket = WsService._this;
 interface IProps {
@@ -23,6 +24,7 @@ const DELAY_TIME_KEY = 'DELAY_TIME_KEY'
 const ReplaceProbe = ({ data, onCancel }: IProps) => {
   const { device_no, bed_no, id, replaceProbeTipData, addProbeTipData, timeEndworkTipData, isUncreated, docid } = data
   const [time, setTime] = useState((store.get(DELAY_TIME_KEY) || 10) as number)
+  const [info, setInfo] = useState('')
   function cancel() {
     onCancel()
     data.addProbeTipData = null
@@ -32,6 +34,20 @@ const ReplaceProbe = ({ data, onCancel }: IProps) => {
   const { ctgData } = useCtgData(docid)
   ctgData.selectBarHidden = true
   const [visible, setVisible] = useState(false)
+  useEffect(() => {
+    if (timeEndworkTipData) {
+      post(`/ctg-exams-analyse`, {
+        data: { docid, mark: 'Sogc', start: 0, end: data.index / 2, fetal: 1 },
+      }).then((r: obvue.ctg_exams_analyse) => {
+        const { analysis: { ltv, acc } } = r
+
+        if (ltv <= 5 || acc.filter(_ => _.reliability >= 50).length < 2) {
+          setInfo('温馨提示：建议延长监护时间。')
+        }
+
+      }).catch(() => setInfo('温馨提示：建议延长监护时间。'))
+    }
+  }, [timeEndworkTipData, docid])
   if (isUncreated) {
     cancel()
   }
@@ -75,6 +91,11 @@ const ReplaceProbe = ({ data, onCancel }: IProps) => {
     ),
     !!timeEndworkTipData && (
       <>
+        {info && (
+          <div style={{ position: 'relative', height: 0 }}>
+            <Tag color="blue" style={{ position: 'absolute', margin: '0 auto', left: 0, right: 0, width: 180, bottom: 20 }}>{info}</Tag>
+          </div>
+        )}
         <div style={{ marginBottom: 24 }}>监护时间到，请操作：<Button style={{ float: 'right' }} onClick={() => setVisible(true)}>查看曲线</Button></div>
         <Button type="primary" onClick={end}>结束监护</Button>
         <Divider type="vertical" />
