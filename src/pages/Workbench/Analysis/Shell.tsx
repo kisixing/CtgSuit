@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal } from 'antd';
 import moment from 'moment';
-
+import store from 'store'
 interface IProps extends React.Props<any> {
     docid: string
     visible: boolean
@@ -14,6 +14,9 @@ interface IProps extends React.Props<any> {
 }
 function Shell({ visible, onCancel, docid = '', name = '', age = '0', startTime = '', inpatientNO = '', gestationalWeek = '', children }: IProps) {
     const S = props => <span style={{ marginRight: 6 }} {...props}>{props.children}</span>
+    const isIn = (store.get('ward') || {}).wardType === 'in'
+    const noLabel = isIn ? '住院号' : '卡号'
+
     return (
         <Modal
             maskClosable={false}
@@ -28,7 +31,7 @@ function Shell({ visible, onCancel, docid = '', name = '', age = '0', startTime 
                 <div >
                     <S>档案号：{docid}</S>
                     {/* <span>档案号：{(dataSource.ctgexam && dataSource.ctgexam.note) || dataSource.documentno}</span> */}
-                    <S>住院号：{inpatientNO}</S>
+                    <S>{noLabel}：{inpatientNO}</S>
                     {/* <span>住院号：{(dataSource.pregnancy && dataSource.pregnancy.inpatientNO)}</span> */}
                     <S>姓名：{name}</S>
                     {/* <span>姓名：{dataSource.pregnancy && dataSource.pregnancy.name}</span> */}

@@ -41,7 +41,8 @@ const Network = ({ isAdmin }) => {
           fhrcolor2,
           fhrcolor3,
           tococolor,
-          alarm_finished
+          alarm_finished,
+          show_fetalmovement
         }) => {
           form.setFieldsValue({
             // normalarea,
@@ -54,7 +55,8 @@ const Network = ({ isAdmin }) => {
             fhrcolor2,
             fhrcolor3,
             tococolor,
-            alarm_finished
+            alarm_finished,
+            show_fetalmovement
           });
         },
       );
@@ -68,23 +70,23 @@ const Network = ({ isAdmin }) => {
       });
     });
   };
-  const reset = () => {
-    store
-      .reset([
-        'alarm_high',
-        'alarm_low',
-        'alarm_on_window',
-        'alarm_enable',
-        'alarm_finished',
-        ...Object.keys(colors),
-      ])
-      .then(status => {
-        if (status) {
-          message.success('恢复成功', 2);
-          fetchData();
-        }
-      });
-  }
+  // const reset = () => {
+  //   store
+  //     .reset([
+  //       'alarm_high',
+  //       'alarm_low',
+  //       'alarm_on_window',
+  //       'alarm_enable',
+  //       'alarm_finished',
+  //       ...Object.keys(colors),
+  //     ])
+  //     .then(status => {
+  //       if (status) {
+  //         message.success('恢复成功', 2);
+  //         fetchData();
+  //       }
+  //     });
+  // }
 
 
 
@@ -109,6 +111,20 @@ const Network = ({ isAdmin }) => {
             <Radio.Group>
               <Radio value={'1'}>打开</Radio>
               <Radio value={'0'}>关闭</Radio>
+            </Radio.Group>
+          </Form.Item>
+        </Col>
+      </Row>
+      <Row>
+        <Col span={8}>
+          <Form.Item
+            label="显示胎儿活动图"
+            name="show_fetalmovement"
+            rules={[{ required: false, message: '请选择!' }]}
+          >
+            <Radio.Group>
+              <Radio value={1}>打开</Radio>
+              <Radio value={0}>关闭</Radio>
             </Radio.Group>
           </Form.Item>
         </Col>

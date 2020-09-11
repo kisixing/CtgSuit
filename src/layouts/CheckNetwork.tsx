@@ -3,6 +3,7 @@ import { useCheckNetwork } from "@lianmed/lmg";
 import { connect } from 'dva';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import settingStore from "@/utils/SettingStore";
+const settingData = settingStore.cache
 
 function CheckNetwork(props) {
     const { dispatch, isOn } = props
@@ -12,7 +13,7 @@ function CheckNetwork(props) {
     useCheckNetwork(isOn => dispatch({ type: 'ws/setState', payload: { isOn } }))
 
     return (
-        (isOn || !!settingStore.cache.isRemote) || (
+        (isOn || !!(settingData.public_url && settingData.remote_url)) || (
             <div style={{
                 display: 'flex', justifyContent: 'center',
                 position: "absolute",

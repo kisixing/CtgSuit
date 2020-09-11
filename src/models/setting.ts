@@ -1,6 +1,5 @@
 import store from 'store'
 import settingStore from '@/utils/SettingStore';
-declare var __DEV__: boolean;
 
 const setting = {
   namespace: 'setting',
@@ -29,7 +28,7 @@ const setting = {
     *setListLayout({ payload }, { put }) {
       store.set('listLayout', payload.listLayout)
       yield put({ type: 'setState', payload })
-      yield put({ type: 'list/processListData' })
+      yield put({ type: 'list/markListData' })
     },
     *setHeadCollapsed({ payload }, { put }) {
       store.set('headCollapsed', payload.headCollapsed)
@@ -50,7 +49,7 @@ const setting = {
     },
     *computeLayout({ size }: { size: number }, { put, select }) {
 
-      const { listLayoutOptions, layoutLock }: typeof setting.state = yield select(state => state.setting);
+      const { listLayoutOptions, layoutLock }: TSettingModel = yield select(state => state.setting);
       if (!layoutLock) return
 
       const listLayoutOptionsV = listLayoutOptions.map(_ => _.reduce((s, i) => s * i, 1))
@@ -74,5 +73,5 @@ const setting = {
     }
   },
 };
-
+export type TSettingModel = typeof setting.state
 export default setting

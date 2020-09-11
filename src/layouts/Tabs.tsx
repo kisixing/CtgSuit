@@ -9,41 +9,43 @@ import { Location } from 'history';
 let styles = require('./Tabs.less')
 
 interface IProps {
-  pageData: string[][]
+  pageData: any[]
   page: number
   dispatch: Dispatch
   showTodo: boolean
   headCollapsed: boolean
   location: Location
+  t: string
 }
 
-function Tabs({ pageData, page, dispatch, showTodo, location, headCollapsed }: IProps) {
+function Tabs({ pageData, page, t, dispatch, showTodo, location, headCollapsed }: IProps) {
   const B = useCallback(
-    ({ index, active }) => {
+    ({ index, title, tabKey }) => {
       return (
         <Button
           onClick={e => {
             dispatch({ type: 'list/setState', payload: { showTodo: false } })
-            dispatch({ type: 'list/setPage', page: index });
+            dispatch({ type: 'list/setPage', page: index, tabKey });
             location.pathname.includes('workbench') || router.replace('/workbench');
           }}
-          style={{ margin: '0 4px', borderBottom: '2px solid', borderBottomColor: (!showTodo && active) ? 'var(--cunstomed-font)' : '' }}
+          style={{ margin: '0 4px', borderBottom: '2px solid', borderBottomColor: (!showTodo) ? 'var(--cunstomed-font)' : '' }}
           size="small"
-          type={(!showTodo && active) ? 'link' : 'link'}
+          type={(!showTodo && index === page && t === tabKey) ? 'default' : 'primary'}
         >
           {
-            `第 ${index + 1} 组`
+            title
           }
+
         </Button>
       );
     },
-    [dispatch, location.pathname, showTodo],
+    [dispatch, location.pathname, showTodo, t, page],
   )
   return (
     <div className={styles.tabs} >
-      {pageData.map((bednames: string[], index) => {
+      {pageData.map(({ title, index, tabKey }) => {
         return (
-          <B bednames={bednames} key={bednames.join(' ')} index={index} active={index === page} />
+          <B title={title} key={title} index={index} tabKey={tabKey} />
         );
       })}
       <Button size="small" style={{ margin: '0 4px', borderBottom: '2px solid', borderBottomColor: showTodo ? 'var(--cunstomed-font)' : '', marginLeft: pageData.length && 80, }} onClick={() => {
@@ -67,6 +69,7 @@ function Tabs({ pageData, page, dispatch, showTodo, location, headCollapsed }: I
 export default connect(({ list, setting }: any) => {
   return {
     showTodo: list.showTodo,
+    t: list.tabKey,
     pageData: list.pageData,
     page: list.page,
     headCollapsed: setting.headCollapsed

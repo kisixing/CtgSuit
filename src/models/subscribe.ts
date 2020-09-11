@@ -4,7 +4,6 @@ import { IWard } from "@/types";
 import request from "@lianmed/request";
 import store from 'store'
 import { router } from 'umi';
-declare var __DEV__: boolean;
 
 export default {
     namespace: 'subscribe',

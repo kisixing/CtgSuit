@@ -14,12 +14,14 @@ export default (event, { title, url, name, reload = false }) => {
         const mainWindow = getMainWindow();
         let newWindow = new BrowserWindow({
             title,
-            width: 1280,
-            height: 720,
-            resizable: true, // 窗口大小是否可变
+            width: 1700,
+            height: 960,
+            // resizable: false, // 窗口大小是否可变
+            show:false,
             frame: true, // 是否带边框
             parent: mainWindow, // mainWindow是主窗口 父窗口
             modal: false, // 是否模态窗口
+            fullscreen:false,
             webPreferences: {
                 javascript: true,
                 plugins: true,
@@ -29,6 +31,8 @@ export default (event, { title, url, name, reload = false }) => {
         });
 
         newWindow.loadURL(url); // new.html是新开窗口的渲染进程
+        newWindow.maximize();
+        newWindow.show();
         cache[name] = newWindow
         newWindow.on('close', () => {
             delete cache[name]

@@ -17,7 +17,6 @@ const styles = require('./BasicLayout.less')
 const cache = settingStore.cache
 const colors = AntdThemeManipulator.colors
 const { Footer } = Layout;
-declare var __VERSION: string;
 
 const v = cache.inspectable ? '1.0.1.0' : __VERSION
 

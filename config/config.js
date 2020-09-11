@@ -15,6 +15,7 @@ export default {
   theme: {
     'primary-color': '#007AFF',
   },
+
   // extraPostCSSPlugins: [
   //   pxToViewPort({
   //     viewportWidth: 1920,
@@ -64,8 +65,10 @@ export default {
   uglifyJSOptions: {
     uglifyOptions: {
       compress: {
-        // drop_console: true,
-      }
+        drop_console: true,
+      },
+      keep_fnames: true,
+      mangle: false,
     }
 
   },

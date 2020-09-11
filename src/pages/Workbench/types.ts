@@ -1,5 +1,5 @@
 import { BedStatus, ICacheItem, IVolumeData, ICacheItemPregnancy } from "@lianmed/lmg/lib/services/WsService";
-import { Suit } from "@lianmed/lmg/lib/Ctg/Suit";
+import { IBed } from "@/types";
 
 export namespace FetalItem {
 
@@ -44,7 +44,7 @@ export namespace FetalItem {
 
     }
     export interface IToolbarProps {
-        itemData:any
+        itemData: IBed
         is_include_tocozero: boolean
         is_include_volume: boolean
         volumeData?: IVolumeData
@@ -58,5 +58,7 @@ export namespace FetalItem {
         status: BedStatus
         pregnancy: ICacheItemPregnancy
         mutableSuit?: any
+        setMaskVisible: React.Dispatch<React.SetStateAction<boolean>>
+
     }
 }  

@@ -19,6 +19,7 @@ let client: Socket
 let child: ChildProcessWithoutNullStreams
 async function init() {
     await config()
+    kill()
     child = spawn(audioPlayerPath, { cwd: tmp });
     if (child) {
         child
@@ -65,6 +66,7 @@ export default (e, mode: string, options: { second?: number, filePath?: string, 
                 console.log('client err', e)
                 //@ts-ignore
                 client = null
+                init()
             })
             .on('end', () => {
                 console.log('client end');

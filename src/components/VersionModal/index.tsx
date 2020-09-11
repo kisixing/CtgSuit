@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
-import { Modal, Checkbox } from 'antd';
 import SettingStore from '@/utils/SettingStore';
+import '@ant-design/compatible/assets/index.css';
+import { Checkbox, Modal } from 'antd';
+import React, { useEffect, useState } from 'react';
 const cache = SettingStore.cache
-declare var __VERSION: string;
 declare var __VERSION_MANIFEST: string[]
 interface IProps {
 }

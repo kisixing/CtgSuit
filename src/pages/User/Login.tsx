@@ -8,8 +8,6 @@ import request from '@/utils/request';
 // import { TOKEN } from '@/utils/constant';
 import SettingStore from '@/utils/SettingStore';
 import store from "store";
-declare var __DEV__: boolean;
-declare var __VERSION: string;
 
 const styles = require('./Login.less');
 const FormItem = Form.Item;
@@ -210,6 +208,22 @@ const NetWork = forwardRef(
             placeholder="请输入web service服务地址!"
           />
         </Form.Item>
+        {
+          __DEV__ && (
+            <>
+              <Button
+                onClick={() => form.setFieldsValue({
+                  xhr_url: '192.168.123.10:9987', ws_url: '192.168.123.10:9986'
+                })}
+              >天河东</Button>
+              <Button
+                onClick={() => form.setFieldsValue({
+                  xhr_url: '30345es543.qicp.vip:52901', ws_url: '30345es543.qicp.vip:31453'
+                })}
+              >工厂</Button>
+            </>
+          )
+        }
       </Form>
     );
   }

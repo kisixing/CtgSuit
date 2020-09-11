@@ -1,6 +1,6 @@
-import { mapStatusToColor } from '@/constant';
 import { IBed } from '@/types';
 import { BedStatus, ICache } from "@lianmed/lmg/lib/services/WsService";
+import { mapStatusToColor } from "@lianmed/lmg/lib/services/utils";
 import { Button } from 'antd';
 import { connect } from 'dva';
 import React from 'react';
@@ -44,7 +44,7 @@ function Beds({ dispatch, headData, wsData }: IProps) {
       // dispatch({ type: 'list/appendDirty', unitId });
       // dispatch({ type: 'list/processListData' });
       dispatch({ type: 'list/removeDirty', unitId })
-      dispatch({ type: 'list/setState', payload: { showTodo: false, borderedId: unitId } })
+      // dispatch({ type: 'list/setState', payload: { showTodo: false, borderedId: unitId } })
       dispatch({ type: 'list/setPageByUnitId', unitId });
 
       router.replace('/workbench');
@@ -61,17 +61,12 @@ function Beds({ dispatch, headData, wsData }: IProps) {
         alignContent: ' flex-start',
         flexWrap: 'wrap',
         overflow: 'scroll',
-        maxHeight:70
+        maxHeight: 70
       }}
     >
       {
-        headData.filter(({ unitId }) => {
-          const status = wsData.get(unitId) && wsData.get(unitId).status
-          return [BedStatus.Working, BedStatus.Stopped].includes(status)
-          // return true
-        })
-          .map(({ bedname, id, pageIndex, unitId }) => {
-            const status = wsData.get(unitId) && wsData.get(unitId).status
+        headData
+          .map(({ bedname, id, pageIndex, unitId, status }) => {
             return (
               <Button
                 key={id}

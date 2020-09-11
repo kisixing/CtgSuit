@@ -31,7 +31,7 @@
     "dist:ia32": "electron-builder --ia32",
     "precommit": "lint-staged",
     "update:lianmed": "yarn upgrade @lianmed/lmg @lianmed/components @lianmed/utils @lianmed/request",
-    "link:lianmed": "npm link @lianmed/lmg @lianmed/components @lianmed/utils @lianmed/request @lianmed/pages",
+    "link:lianmed": "npm link @lianmed/lmg @lianmed/components @lianmed/utils @lianmed/request @lianmed/pages @lianmed/f_types",
     "vh": "ts-node --project ./main/tsconfig.json ./scripts/versionHandler "
   },
   "main": "./app/main/index.js",

@@ -1,5 +1,10 @@
-import { ICacheItem } from "@lianmed/lmg/lib/services/types";
-
+import { ICacheItem, BedStatus } from "@lianmed/lmg/lib/services/types";
+import { TListModel } from "./models/list";
+export enum ETabKey {
+    GENERAL = 'GENERAL',
+    // REMAIN,
+    F0_PRO = 'F0_PRO'
+}
 export interface ICtgexam {
     diagnosis: any;
     endTime: any;
@@ -12,7 +17,10 @@ export interface ICtgexam {
     sign: any;
     startTime: string;
 }
-
+export interface IState {
+    list: TListModel
+    [x: string]: any
+}
 export interface IPrenatalVisit {
     ctgexam: ICtgexam;
     doctor: any;
@@ -74,16 +82,18 @@ export interface IBed {
     id: number;
     pregnancy: IPregnancy;
     prenatalVisit: IPrenatalVisit;
-    status: string;
+    status: BedStatus;
     subdevice: string;
     type: string;
     updateTime: any;
     areaname: string;
     areano: string;
-
+    tabKey: ETabKey
+    pageCount: number
     unitId?: string;
     pageIndex?: number;
     data?: ICacheItem;
+    isTodo: boolean
 }
 
 export interface IWard {

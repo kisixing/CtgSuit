@@ -11,7 +11,7 @@ import styles from './CurveChart.less';
 const CurveChart = (props) => {
   const {
     selected: { ctgexam },
-    dataSource,
+    CTGData,
     loading,
     isFullscreen,
     dispatch
@@ -63,9 +63,9 @@ const CurveChart = (props) => {
       </div>
       <Spin
         wrapperClassName={styles.chart}
-        spinning={loading.effects['archives/fetchCTGrecordData'] || false}
+        spinning={false}
       >
-        <L audios={(ctgexam && ctgexam.audios && ctgexam.audios.length) ? ctgexam.audios : null} suitType={1} data={dataSource}></L>
+        <L audios={(ctgexam && ctgexam.audios && ctgexam.audios.length) ? ctgexam.audios : null} suitType={1} data={CTGData}></L>
       </Spin>
     </div>
   );
@@ -73,7 +73,7 @@ const CurveChart = (props) => {
 
 export default connect(({ loading, archives }: any) => ({
   loading: loading,
-  selected: archives.current,
+  // selected: archives.current,
   isFullscreen: archives.isFullscreen,
-  dataSource: archives.CTGData,
+
 }))(CurveChart);

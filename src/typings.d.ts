@@ -31,5 +31,6 @@ interface Window {
 
 declare let ga: Function;
 declare let __DEV__: boolean;
+declare var __VERSION: string;
 
 
