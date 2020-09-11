@@ -73,7 +73,7 @@ const CurveChart = (props) => {
 
 export default connect(({ loading, archives }: any) => ({
   loading: loading,
-  selected: archives.current,
+  // selected: archives.current,
   isFullscreen: archives.isFullscreen,
 
 }))(CurveChart);

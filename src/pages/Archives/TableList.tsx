@@ -189,7 +189,7 @@ function TableList(props) {
     }
     function signed(id) {
       fetchRecords()
-      setSelected({})
+      // setSelected({})
     }
     init()
     event
@@ -322,10 +322,10 @@ function TableList(props) {
     const docid = record.ctgexam.note
     if ((selected.ctgexam && selected.ctgexam.note) !== docid) {
       // 当前点击的档案详情
-      setSelected(record)
       // 获取监护图曲线信息
-      fetchCtgData(docid)
+      fetchCtgData(record)
     }
+    setSelected(record)
 
 
   };
@@ -448,8 +448,8 @@ function TableList(props) {
       'areaNO.equals': wardId, // 病区
       'pregnancyId.equals': query.pregnancyId || undefined,
       'name.contains': name || undefined,
-      [`${noKey}.equals`]: values[noKey] || undefined,
-      ...(isIn ? { 'bedNO.equals': bedNO || undefined } : {})
+      [`${noKey}.contains`]: values[noKey] || undefined,
+      ...(isIn ? { 'bedNO.contains': bedNO || undefined } : {})
     };
 
     return params;
