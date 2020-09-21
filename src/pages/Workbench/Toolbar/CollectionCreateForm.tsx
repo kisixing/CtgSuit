@@ -258,6 +258,13 @@ const CollectionCreateForm = (props: IProps) => {
       if (err) {
         return null;
       } else {
+
+        const gravidity = form.getFieldValue('gravidity');
+        const parity = form.getFieldValue('parity');
+
+        if (gravidity < parity) {
+          return message.error('产次大于孕次！');
+        }
         if (!values.bedNO && isIn) {
           return message.error('请输入患者床号！');
         }

@@ -75,7 +75,7 @@ const m = {
         })
         .filter(_ => !!_.data)
         .map(_ => ({ ..._, tabKey: _.data.isF0Pro ? ETabKey.F0_PRO : _.tabKey, }))
-        .sort((a, b) => (a.data.isF0Pro && b.data.isF0Pro) ? (a.bedname.localeCompare(b.bedname)) : (+a.data.isF0Pro - +b.data.isF0Pro))
+        .sort((a, b) => (a.data.isF0Pro !== b.data.isF0Pro) ? (+a.data.isF0Pro - +b.data.isF0Pro) : (a.bedname.localeCompare(b.bedname)))
       yield put({ type: 'setState', payload: { headData: listData.filter(_ => [BedStatus.Working, BedStatus.Stopped, BedStatus.Uncreated].includes(_.status)) } });
       listData = listData.filter(_ => checkVisible(_, dirty, offline))
       const _tabKey = listData.length ? (tabKey ? tabKey : (listData.some(_ => _.data && _.data.isF0Pro) ? ETabKey.F0_PRO : ETabKey.GENERAL)) : null

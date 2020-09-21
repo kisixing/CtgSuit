@@ -191,7 +191,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
     setIsStopMonitorWhenCreated(true)
     setModalName('visible')
   };
-
+  console.log('(isCreated && !pvId) ', isCreated, pvId, data, data.pregnancy, pregnancy)
 
   useEffect(() => {
     const onclose = cb => {
@@ -263,7 +263,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
     }
     {/* 停止状态下不可以建档，监护、离线都是可以建档的 */}
 
-    <B icon={<UserAddOutlined />} type="link" disabled={(isCreated && !pvId) || isStopped || isUncreated|| isOfflineStopped} onClick={() => {
+    <B icon={<UserAddOutlined />} type="link" disabled={(isCreated && !pvId) || isStopped || isUncreated || isOfflineStopped} onClick={() => {
       isCreated ? setModalName('jbVisible') : setModalName('visible')
     }}>
       {isCreated ? '解绑' : '建档'}
@@ -281,7 +281,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
     {
       !!cache.analysable && (
         <B
-          disabled={!isCreated}
+          disabled={!isCreated || isTodo}
           icon={<PieChartOutlined />}
           type="link"
           onClick={() => setModalName('analysisVisible')}
@@ -293,7 +293,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
 
     {/* O */}
     <B
-      disabled={!isCreated}
+      disabled={!isCreated || isTodo}
       icon={<PrinterOutlined />}
       type="link"
       onClick={() => setModalName('printVisible')}
@@ -303,7 +303,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
     <Button
       icon={<FormOutlined />}
       type="link"
-      disabled={!docid || isUncreated || isStopped|| isOfflineStopped}
+      disabled={!docid || isUncreated || isStopped || isOfflineStopped || !isCreated || isTodo}
       onClick={() => setModalName('eventVisible')}
     >
       事件
@@ -313,7 +313,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
       data && data.ismulti && <Button
         icon={<PieChartOutlined />}
         type="link"
-        disabled={!docid || isUncreated || isStopped|| isOfflineStopped}
+        disabled={!docid || isUncreated || isStopped || isOfflineStopped}
         onClick={() => setModalName('multiParamVisible')}
       >
         趋势图
@@ -326,7 +326,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
           icon={tocozeroLoading ? <LoadingOutlined /> : <ControlOutlined />}
           type="link"
           onClick={(e) => setTocozero()}
-          disabled={isUncreated || isStopped|| isOfflineStopped}
+          disabled={isUncreated || isStopped || isOfflineStopped}
         >
           {is_include_toco ? '调零' : '加入宫缩'}
         </B>
@@ -339,7 +339,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
         icon={volumeDataLoading ? <LoadingOutlined /> : <SoundOutlined />}
         type="link"
         onClick={openVolumnModal}
-        disabled={!is_include_volume || isUncreated || isStopped|| isOfflineStopped}
+        disabled={!is_include_volume || isUncreated || isStopped || isOfflineStopped}
       >
         音量
       </B>
