@@ -3,19 +3,22 @@ import { useCallback, useState, useEffect } from "react";
 import request from '@/utils/request';
 import { event } from "@lianmed/utils";
 import { Modal } from "antd";
-import {  IPrenatalVisit } from "@/types";
+import { IPrenatalVisit } from "@/types";
 import { IVolumeData, ICacheItemPregnancy } from "@lianmed/lmg";
+import { IPregnancy } from "@lianmed/f_types";
 
 export default function useTodo(showTodo: boolean, subscribeData: string[]): [IRemain[], boolean] {
     const [todo, setTodo] = useState<IRemain[]>([])
     const [todoLoading, setTodoLoading] = useState(false)
     const cb = useCallback(
         (value: INewArchive) => {
-            const target = todo.find(_ => _.note === value.ctgexam.note)
-            if (target) {
+            const index = todo.findIndex(_ => _.note === value.ctgexam.note)
+            if (index > -1) {
+                const target = { ...todo[index] }
                 const { pregnancy } = value
                 target.data.pregnancy = pregnancy
                 target.prenatalVisit = value as any
+                todo[index] = target
                 setTodo([...todo])
             }
         },

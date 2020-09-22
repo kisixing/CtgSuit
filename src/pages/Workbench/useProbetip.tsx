@@ -13,10 +13,11 @@ export default (dispatch: any) => {
 
             // item cbs
             dispatch({ type: 'list/removeDirty', unitId })
+            
+            // dispatch({
+            //     type: 'list/setPageByUnitId', unitId,
+            // });
 
-            dispatch({
-                type: 'list/setPageByUnitId', unitId,
-            });
             // item cbs
             // Modal.success({
             //     content: (
