@@ -29,8 +29,8 @@ const M = (props: any) => {
             {[
                 ['主页', <HomeFilled />, '/workbench'],
                 ['报表统计', <FundFilled />, '/statistics'],
-                ['档案管理', <FolderFilled />, '/archives'],
                 ['系统设置', <SettingFilled />, '/setting'],
+                ['档案管理', <FolderFilled />, '/archives'],
                 ['病人管理', <MedicineBoxFilled />, '/pregnancy'],
                 ['用户信息', <></>, 'user'],
                 // ['主页', 'home', '/workbench'],
@@ -51,7 +51,7 @@ const M = (props: any) => {
                         }}
                         icon={icon}
                         type={props.location.pathname === path ? 'link' : 'link'}
-                        style={{ color: props.location.pathname === path ? 'var(--customed-base-color)' : 'var(--customed-font)' }}
+                        style={{ color: props.location.pathname === path ? 'var(--theme-color)' : 'var(--customed-font)' }}
                     >
                         {title}
                     </Button>

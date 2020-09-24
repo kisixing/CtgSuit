@@ -28,9 +28,11 @@ function Tabs({ pageData, page, t, dispatch, showTodo, location, headCollapsed }
             dispatch({ type: 'list/setPage', page: index, tabKey });
             location.pathname.includes('workbench') || router.replace('/workbench');
           }}
-          style={{ margin: '0 4px', borderBottom: '2px solid', borderBottomColor: (!showTodo) ? 'var(--cunstomed-font)' : '' }}
+          style={{ margin: '0 4px', borderBottom: '2px solid', borderBottomColor: (!showTodo && index === page && t === tabKey) ? 'var(--cunstomed-font)' : '' }}
           size="small"
-          type={(!showTodo && index === page && t === tabKey) ? 'default' : 'primary'}
+          type="link"
+          // type={(!showTodo && index === page && t === tabKey) ? 'default' : 'primary'}
+
         >
           {
             title

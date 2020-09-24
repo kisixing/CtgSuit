@@ -247,7 +247,12 @@ const CollectionCreateForm = (props: IProps) => {
 
   const handleCreate = () => {
     form.validateFields().then((values: any) => {
+      const gravidity = form.getFieldValue('gravidity');
+      const parity = form.getFieldValue('parity');
 
+      if (gravidity < parity) {
+        return message.error('产次大于孕次！');
+      }
       if (!values.bedNO && isIn) {
         return message.error('请输入患者床号！');
       }
@@ -303,6 +308,7 @@ const CollectionCreateForm = (props: IProps) => {
     if (value && !reg.test(value)) {
       callback('请输入不小于0的整数');
     }
+
     // if (field === 'gravidity') {
     //   // 孕次
     //   const target = form.getFieldValue('parity');

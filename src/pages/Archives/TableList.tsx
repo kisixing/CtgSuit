@@ -168,7 +168,7 @@ function TableList(props) {
       },
     },
   ].filter(_ => !!_); // .map(_ => ({ ..._, align: 'center' }));
-
+console.log('columns',columns)
   useEffect(() => {
 
     function play(id, second = 0) {
@@ -550,7 +550,7 @@ function TableList(props) {
       <Table
         bordered
         size="small"
-        scroll={{ x: 1280, y: 204 }}
+        scroll={{ x: 1280, y: 220 }}
         columns={columns}
         dataSource={dataSource}
         onRow={record => {
