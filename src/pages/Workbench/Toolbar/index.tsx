@@ -19,6 +19,7 @@ import Jb from "./Jb";
 import ModalConfirm from './ModalConfirm';
 import SignModal from './SignModal';
 import SoundModal from './SoundModal';
+import BloodPressure from './Modals/BloodPressure'
 export { RenderMaskIn } from './RenderMaskIn';
 const cache = SettingStore.cache
 const socket = WsService._this;
@@ -53,26 +54,28 @@ function Toolbar(props: FetalItem.IToolbarProps) {
   // const safePrenatalVisit = prenatalVisit || { gestationalWeek: null, }
   const docid = data.docid
   const startTime = data.starttime
-  const timeEndworkTipData = data.timeEndworkTipData
-  const replaceProbeTipData = data.replaceProbeTipData
-  const addProbeTipData = data.addProbeTipData
-  const isF0Pro = data.isF0Pro
-  const hasToco = data.hasToco
+  const {
+    timeEndworkTipData,
+    replaceProbeTipData,
+    addProbeTipData,
+    isF0Pro,
+    isV3,
+    hasToco,
+    volumeData,
+    is_include_tocozero,
+    is_include_toco,
+    disableStartWork,
+    disableCreate,
+    is_include_volume,
+    isWorking,
+    isOffline,
+    isStopped,
+    isOfflineStopped,
+    isUncreated,
+  } = data
 
-  const volumeData = data.volumeData
-  const is_include_tocozero = data.is_include_tocozero
-  const is_include_toco = data.is_include_toco
-  const disableStartWork = data.disableStartWork
-  const disableCreate = data.disableCreate
-  const is_include_volume = data.is_include_volume
   const deviceno = itemData.deviceno
 
-
-  const isWorking = data.isWorking
-  const isOffline = data.isOffline
-  const isStopped = data.isStopped
-  const isOfflineStopped = data.isOfflineStopped
-  const isUncreated = data.isUncreated
 
   const pregnancy = safePregnancy
 
@@ -344,6 +347,18 @@ function Toolbar(props: FetalItem.IToolbarProps) {
         音量
       </B>
     }
+    {
+      true && <B
+        // disabled={!isCreated}
+
+        icon={volumeDataLoading ? <LoadingOutlined /> : <SoundOutlined />}
+        type="link"
+        onClick={() => setModalName(('bloodVisible'))}
+        disabled={!isWorking}
+      >
+        血压
+      </B>
+    }
     {/* {
       isF0Pro && !hasToco && (
         <>
@@ -467,6 +482,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
     /> */}
     <Jb pregnancyId={pregnancyId} pvId={pvId} onCancel={handleCancel} visible={modalName === 'jbVisible'} />
     <Event docid={docid} visible={modalName === 'eventVisible'} onCancel={handleCancel} />
+    <BloodPressure visible={modalName === 'bloodVisible'} onCancel={handleCancel} data={data} />
   </>;
 }
 

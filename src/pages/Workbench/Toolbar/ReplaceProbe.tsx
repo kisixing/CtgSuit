@@ -31,6 +31,9 @@ const ReplaceProbe = ({ data, onCancel }: IProps) => {
     data.replaceProbeTipData = null
     data.timeEndworkTipData = null
   }
+  if (!(data.addProbeTipData || data.replaceProbeTipData || data.timeEndworkTipData)) {
+    onCancel()
+  }
   const { ctgData } = useCtgData(docid)
   ctgData.selectBarHidden = true
   const [visible, setVisible] = useState(false)

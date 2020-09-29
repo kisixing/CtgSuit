@@ -2,8 +2,8 @@
     "ws_url": "30345es543.qicp.vip:31453",
     "xhr_url": "30345es543.qicp.vip:52901",
     "stomp_url": "hdrm.lian-med.com:9989",
-    "remote_url":"hdrm.lian-med.com:9989",
-    "public_url":"hdrm.lian-med.com/obvue",
+    "remote_url": "hdrm.lian-med.com:9989",
+    "public_url": "hdrm.lian-med.com/obvue",
     "print_interval": "20",
     "theme": "#4a148c",
     "hospital_name": "xxx医院",
@@ -23,12 +23,11 @@
     "alarm_finished": "0",
     "alarm_on_window": "1",
     "alarm_enable": "1",
-
     "alarm_muted": false,
     "alarm_volumn": 10,
     "alarm_delay": 0,
     "alarm_high": 160,
     "alarm_low": 110,
-
-    "analysable":true
+    "analysable": true,
+    "f0pro": true
 }

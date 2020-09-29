@@ -19,6 +19,7 @@ interface IProps {
 }
 
 function Tabs({ pageData, page, t, dispatch, showTodo, location, headCollapsed }: IProps) {
+  console.log('pageData', pageData)
   const B = useCallback(
     ({ index, title, tabKey }) => {
       return (
@@ -31,7 +32,7 @@ function Tabs({ pageData, page, t, dispatch, showTodo, location, headCollapsed }
           style={{ margin: '0 4px', borderBottom: '2px solid', borderBottomColor: (!showTodo && index === page && t === tabKey) ? 'var(--cunstomed-font)' : '' }}
           size="small"
           type="link"
-          // type={(!showTodo && index === page && t === tabKey) ? 'default' : 'primary'}
+        // type={(!showTodo && index === page && t === tabKey) ? 'default' : 'primary'}
 
         >
           {
@@ -62,7 +63,6 @@ function Tabs({ pageData, page, t, dispatch, showTodo, location, headCollapsed }
       </Button>
       <Button title={`${headCollapsed ? '显示' : '隐藏'}子机列表`} size="small" icon={<LegacyIcon type={`vertical-align-${headCollapsed ? 'bottom' : 'top'}`} />} style={{ position: 'absolute', bottom: 0, right: 6 }} onClick={e => {
         dispatch({ type: 'setting/setHeadCollapsed', payload: { headCollapsed: !headCollapsed } })
-
       }} />
     </div>
   );

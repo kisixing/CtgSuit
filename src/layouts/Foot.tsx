@@ -89,7 +89,7 @@ const Foot = (props: any) => {
           onClick={() => ipcRenderer.send('newWindow', 'help')}
           type="link"
         />
-        <Button
+        {/* <Button
           icon={<FileDoneOutlined />}
           type="link"
           style={{border:'none'}}
@@ -104,7 +104,7 @@ const Foot = (props: any) => {
             //   }
             // })
           }}
-        />
+        /> */}
       </span>
       <span>
         <span>{config.copyright}</span>
