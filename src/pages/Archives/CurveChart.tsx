@@ -65,14 +65,13 @@ const CurveChart = (props) => {
         wrapperClassName={styles.chart}
         spinning={false}
       >
-        <L audios={(ctgexam && ctgexam.audios && ctgexam.audios.length) ? ctgexam.audios : null} suitType={1} data={CTGData}></L>
+        <L loading={loading} audios={(ctgexam && ctgexam.audios && ctgexam.audios.length) ? ctgexam.audios : null} suitType={1} data={CTGData}></L>
       </Spin>
     </div>
   );
 }
 
-export default connect(({ loading, archives }: any) => ({
-  loading: loading,
+export default connect(({ archives }: any) => ({
   // selected: archives.current,
   isFullscreen: archives.isFullscreen,
 

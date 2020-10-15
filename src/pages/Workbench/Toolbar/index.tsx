@@ -1,7 +1,7 @@
 import Event from "@/components/Modal/Event";
 import request from '@/utils/request';
 import SettingStore from '@/utils/SettingStore';
-import { ControlOutlined, FormOutlined, LoadingOutlined, PauseCircleOutlined, PieChartOutlined, PlayCircleOutlined, PrinterOutlined, PushpinOutlined, SoundOutlined, UserAddOutlined } from "@ant-design/icons";
+import { VerticalAlignMiddleOutlined, FormOutlined, LoadingOutlined, PauseCircleOutlined, PieChartOutlined, PlayCircleOutlined, PrinterOutlined, PushpinOutlined, SoundOutlined, UserAddOutlined } from "@ant-design/icons";
 import { WsService } from '@lianmed/lmg';
 import { ICacheItem } from '@lianmed/lmg/lib/services/WsService';
 import { MultiParamDisplay } from "@lianmed/pages/lib/Ctg/MultiParamDisplay";
@@ -67,6 +67,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
     disableStartWork,
     disableCreate,
     is_include_volume,
+    is_include_blood_pressure,
     isWorking,
     isOffline,
     isStopped,
@@ -236,27 +237,37 @@ function Toolbar(props: FetalItem.IToolbarProps) {
     {
       (isF0Pro) ? (
         isStopped ? (
-          <B icon={<PauseCircleOutlined />} loading={f0Pro_cancelallocLoading} type="link" onClick={f0Pro_cancelalloc}>
+          <B
+            icon={<PauseCircleOutlined />}
+            loading={f0Pro_cancelallocLoading} type="link" onClick={f0Pro_cancelalloc}>
             取消
           </B>
         ) : (
             isWorking || isOffline ? (
-              <B icon={<PauseCircleOutlined />} type="link" onClick={() => setModalName('confirmVisible')}>
+              <B
+                icon={<PauseCircleOutlined />}
+                type="link" onClick={() => setModalName('confirmVisible')}>
                 停止
               </B>
             ) : (
-                <B disabled={disableCreate} icon={<PlayCircleOutlined />} type="link" onClick={f0Pro_alloc}>
+                <B disabled={disableCreate}
+                  icon={<PlayCircleOutlined />}
+                  type="link" onClick={f0Pro_alloc}>
                   <span>新建</span>
                 </B>
               )
           )
       ) : (
           isWorking || isOffline ? (
-            <B icon={<PauseCircleOutlined />} type="link" onClick={() => setModalName('confirmVisible')}>
+            <B
+              icon={<PauseCircleOutlined />}
+              type="link" onClick={() => setModalName('confirmVisible')}>
               停止
             </B>
           ) : (
-              <B disabled={!isStopped || !!disableStartWork} icon={<PlayCircleOutlined />} type="link" onClick={start}>
+              <B disabled={!isStopped || !!disableStartWork}
+                icon={<PlayCircleOutlined />}
+                type="link" onClick={start}>
                 {'开始'}
               </B>
             )
@@ -266,9 +277,11 @@ function Toolbar(props: FetalItem.IToolbarProps) {
     }
     {/* 停止状态下不可以建档，监护、离线都是可以建档的 */}
 
-    <B icon={<UserAddOutlined />} type="link" disabled={(isCreated && !pvId) || isStopped || isUncreated || isOfflineStopped} onClick={() => {
-      isCreated ? setModalName('jbVisible') : setModalName('visible')
-    }}>
+    <B
+      icon={<UserAddOutlined />}
+      type="link" disabled={(isCreated && !pvId) || isStopped || isUncreated || isOfflineStopped} onClick={() => {
+        isCreated ? setModalName('jbVisible') : setModalName('visible')
+      }}>
       {isCreated ? '解绑' : '建档'}
     </B>
 
@@ -326,7 +339,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
     {
       !!is_include_tocozero && (
         <B
-          icon={tocozeroLoading ? <LoadingOutlined /> : <ControlOutlined />}
+          icon={tocozeroLoading ? <LoadingOutlined /> : <VerticalAlignMiddleOutlined />}
           type="link"
           onClick={(e) => setTocozero()}
           disabled={isUncreated || isStopped || isOfflineStopped}
@@ -348,10 +361,11 @@ function Toolbar(props: FetalItem.IToolbarProps) {
       </B>
     }
     {
-      true && <B
+      !!is_include_blood_pressure && <B
         // disabled={!isCreated}
 
-        icon={volumeDataLoading ? <LoadingOutlined /> : <SoundOutlined />}
+        // icon={volumeDataLoading ? <LoadingOutlined /> : <SoundOutlined />}
+        icon={<svg fill="currentColor" className="anticon " viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="14424" width="1em" height="1em"><path d="M388.096 437.248l48.128 27.648c7.168 4.096 17.408 2.048 21.504-6.144l20.48-34.816 1.024-1.024c40.96-4.096 86.016-36.864 114.688-87.04 29.696-50.176 34.816-105.472 18.432-143.36l14.336-25.6c4.096-7.168 2.048-17.408-6.144-21.504l-48.128-27.648c-7.168-4.096-17.408-2.048-21.504 6.144l-14.336 25.6c-40.96 4.096-86.016 36.864-114.688 87.04-29.696 50.176-34.816 105.472-18.432 143.36l-1.024 1.024-20.48 34.816c-4.096 7.168-2.048 17.408 6.144 21.504zM144.384 111.616c-16.384 0-22.528-4.096-34.816-16.384l-10.24-10.24c-6.144-7.168-19.456 6.144-12.288 12.288l10.24 10.24c14.336 14.336 16.384 18.432 15.36 35.84 0 17.408 14.336 31.744 31.744 31.744s31.744-14.336 31.744-31.744c0-18.432-14.336-31.744-31.744-31.744z m850.944 131.072c-17.408-17.408-40.96-27.648-67.584-27.648H660.48c3.072 15.36 4.096 31.744 2.048 48.128h265.216c13.312 0 25.6 5.12 33.792 14.336s14.336 20.48 14.336 33.792v8.192c0 13.312-5.12 25.6-14.336 33.792-9.216 9.216-20.48 14.336-33.792 14.336h-56.32v-23.552c0-11.264-4.096-21.504-12.288-28.672-7.168-7.168-17.408-11.264-28.672-11.264H655.36c-6.144 20.48-14.336 38.912-23.552 56.32-16.384 29.696-41.984 58.368-71.68 77.824V522.24c0 18.432 7.168 35.84 20.48 48.128 12.288 12.288 29.696 19.456 48.128 19.456h100.352v19.456c0 11.264 4.096 21.504 12.288 28.672 7.168 7.168 17.408 11.264 28.672 11.264h3.072c-5.12 57.344-36.864 103.424-83.968 138.24-59.392 41.984-142.336 65.536-231.424 65.536-78.848 0-153.6-35.84-206.848-119.808-20.48-31.744-36.864-70.656-50.176-116.736 33.792-22.528 74.752-38.912 111.616-54.272 9.216-3.072 16.384-6.144 17.408-7.168 16.384-7.168 32.768-14.336 48.128-24.576s28.672-23.552 39.936-40.96l-41.984-23.552c-7.168 11.264-16.384 19.456-25.6 26.624-11.264 8.192-24.576 14.336-37.888 19.456-12.288 5.12-14.336 6.144-17.408 7.168-34.816 13.312-72.704 28.672-105.472 48.128-10.24-51.2-15.36-109.568-15.36-176.128v-59.392h4.096c9.216 0 16.384-7.168 16.384-16.384v-35.84c20.48-7.168 38.912-18.432 54.272-33.792 25.6-25.6 41.984-62.464 41.984-101.376 0-39.936-16.384-75.776-41.984-101.376C219.136 16.384 183.296 0 144.384 0c-39.936 0-75.776 16.384-101.376 41.984C16.384 68.608 0 104.448 0 143.36c0 39.936 16.384 75.776 41.984 101.376 15.36 15.36 33.792 26.624 54.272 33.792v35.84c0 9.216 7.168 16.384 16.384 16.384h12.288v59.392c0 78.848 7.168 147.456 20.48 206.848-39.936 34.816-65.536 81.92-58.368 151.552 7.168 70.656 57.344 148.48 128 197.632 68.608 48.128 158.72 78.848 246.784 76.8 9.216 0 18.432-1.024 25.6-1.024 101.376-7.168 199.68-45.056 273.408-108.544 72.704-61.44 119.808-158.72 119.808-263.168h47.104c26.624 0 50.176-11.264 67.584-27.648 17.408-17.408 28.672-40.96 28.672-67.584V311.296c0-26.624-11.264-51.2-28.672-68.608z m-850.944-3.072c-26.624 0-50.176-10.24-67.584-27.648s-27.648-40.96-27.648-67.584 10.24-50.176 27.648-67.584 40.96-27.648 67.584-27.648 50.176 10.24 67.584 27.648 27.648 40.96 27.648 67.584-10.24 50.176-27.648 67.584c-17.408 16.384-40.96 27.648-67.584 27.648z m583.68 638.976c-65.536 56.32-153.6 90.112-244.736 96.256-8.192 1.024-16.384 1.024-23.552 1.024-77.824 1.024-157.696-26.624-219.136-68.608-59.392-41.984-101.376-107.52-107.52-162.816-4.096-37.888 7.168-67.584 26.624-91.136 13.312 40.96 29.696 76.8 49.152 106.496 63.488 99.328 153.6 142.336 247.808 142.336 98.304 0 191.488-26.624 259.072-74.752 59.392-43.008 99.328-103.424 104.448-177.152h13.312c0 89.088-41.984 174.08-105.472 228.352z m191.488-432.128h-92.16c-9.216 0-16.384 7.168-16.384 16.384v107.52c0 17.408-14.336 31.744-31.744 31.744h-4.096V460.8c1.024-25.6 21.504-46.08 47.104-47.104h104.448c17.408 0 33.792-5.12 48.128-13.312 0 18.432-8.192 46.08-55.296 46.08z" p-id="14425"></path></svg>}
         type="link"
         onClick={() => setModalName(('bloodVisible'))}
         disabled={!isWorking}

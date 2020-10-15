@@ -29,7 +29,7 @@ function Tabs({ pageData, page, t, dispatch, showTodo, location, headCollapsed }
             dispatch({ type: 'list/setPage', page: index, tabKey });
             location.pathname.includes('workbench') || router.replace('/workbench');
           }}
-          style={{ margin: '0 4px', borderBottom: '2px solid', borderBottomColor: (!showTodo && index === page && t === tabKey) ? 'var(--cunstomed-font)' : '' }}
+          style={{ margin: '0 4px', borderBottom: '2px solid',color:'var(--customed-base-font)', borderBottomColor: (!showTodo && index === page && t === tabKey) ? 'var(--customed-base-font)' : '' }}
           size="small"
           type="link"
         // type={(!showTodo && index === page && t === tabKey) ? 'default' : 'primary'}
@@ -51,7 +51,7 @@ function Tabs({ pageData, page, t, dispatch, showTodo, location, headCollapsed }
           <B title={title} key={title} index={index} tabKey={tabKey} />
         );
       })}
-      <Button size="small" style={{ margin: '0 4px', borderBottom: '2px solid', borderBottomColor: showTodo ? 'var(--cunstomed-font)' : '', marginLeft: pageData.length && 80, }} onClick={() => {
+      <Button size="small" style={{ margin: '0 4px', borderBottom: '2px solid',color:'var(--customed-base-font)', borderBottomColor: showTodo ? 'var(--customed-base-font)' : '', marginLeft: pageData.length && 80, }} onClick={() => {
         location.pathname.includes('workbench') || router.replace('/workbench');
         setTimeout(() => {
           dispatch({ type: 'list/setState', payload: { showTodo: true } })
@@ -61,7 +61,7 @@ function Tabs({ pageData, page, t, dispatch, showTodo, location, headCollapsed }
       >
         待处理
       </Button>
-      <Button title={`${headCollapsed ? '显示' : '隐藏'}子机列表`} size="small" icon={<LegacyIcon type={`vertical-align-${headCollapsed ? 'bottom' : 'top'}`} />} style={{ position: 'absolute', bottom: 0, right: 6 }} onClick={e => {
+      <Button title={`${headCollapsed ? '显示' : '隐藏'}子机列表`} size="small" icon={<LegacyIcon type={`vertical-align-${headCollapsed ? 'bottom' : 'top'}`} />} style={{ position: 'absolute', bottom: 0, right: 6 ,}} onClick={e => {
         dispatch({ type: 'setting/setHeadCollapsed', payload: { headCollapsed: !headCollapsed } })
       }} />
     </div>

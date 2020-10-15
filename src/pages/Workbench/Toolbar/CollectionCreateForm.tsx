@@ -189,12 +189,14 @@ const CollectionCreateForm = (props: IProps) => {
           setLoading(false);
           handleCancel();
           message.success('建档成功！');
+
         }, 3000);
       } else {
         setLoading(false);
         handleCancel();
         onCreated(res);
       }
+      form.resetFields()
     } else {
       message.error('建档异常，请稍后再试！', 3);
     }

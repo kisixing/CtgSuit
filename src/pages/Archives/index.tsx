@@ -11,9 +11,13 @@ const Archives = props => {
 
   const [CTGData, setCTGData] = useState(null)
   const [selected, setSelected] = useState({})
-  async function fetchCtgData(item:IPrenatalVisit) {
+  const [loading, setLoading] = useState(false)
+  async function fetchCtgData(item: IPrenatalVisit) {
     setSelected(item)
     const data = await request.get(`/ctg-exams-data/${item.ctgexam.note}`)
+    if(!data.fhr1){
+      data.fhr1 = '00'
+    }
     setCTGData(data)
   }
   return (
@@ -25,7 +29,7 @@ const Archives = props => {
         <TableList fetchCtgData={fetchCtgData} />
       </div>
       <Layout className={styles.chart}>
-        <CurveChart CTGData={CTGData} selected={selected}/>
+        <CurveChart loading={loading} CTGData={CTGData} selected={selected} />
       </Layout>
     </Layout>
   );

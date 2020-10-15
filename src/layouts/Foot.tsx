@@ -68,7 +68,7 @@ const Foot = (props: any) => {
             e && theme.current.click && theme.current.click()
           }
         >
-          <Button icon={<BgColorsOutlined />} style={{border:'none'}} type="link"/>
+          <Button icon={<BgColorsOutlined />} style={{border:'none',color:'#fff'}} type="link"/>
         </Popover>
         <AntdThemeManipulator
           ref={theme}
@@ -85,7 +85,7 @@ const Foot = (props: any) => {
                 </QR> */}
         <Button
           icon={<QuestionCircleOutlined />}
-          style={{border:'none'}}
+          style={{border:'none',color:'#fff'}}
           onClick={() => ipcRenderer.send('newWindow', 'help')}
           type="link"
         />

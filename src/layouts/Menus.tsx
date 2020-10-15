@@ -50,8 +50,9 @@ const M = (props: any) => {
                             handleMenuClick(path);
                         }}
                         icon={icon}
-                        type={props.location.pathname === path ? 'link' : 'link'}
-                        style={{ color: props.location.pathname === path ? 'var(--theme-color)' : 'var(--customed-font)' }}
+                        type={props.location.pathname === path ? 'default' : 'link'}
+                        // style={{color:'var(--customed-base-font)'}}
+                        style={{ color: props.location.pathname === path ? '' : '#fff' }}
                     >
                         {title}
                     </Button>
