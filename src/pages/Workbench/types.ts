@@ -1,5 +1,6 @@
 import { BedStatus, ICacheItem, IVolumeData, ICacheItemPregnancy } from "@lianmed/lmg/lib/services/WsService";
 import { IBed } from "@/types";
+import { Suit } from "@lianmed/lmg/lib/Ctg/Suit";
 
 export namespace FetalItem {
 
@@ -57,7 +58,7 @@ export namespace FetalItem {
         docid: string
         status: BedStatus
         pregnancy: ICacheItemPregnancy
-        mutableSuit?: any
+        mutableSuit?: React.MutableRefObject<Promise<Suit>>
         setMaskVisible: React.Dispatch<React.SetStateAction<boolean>>
 
     }

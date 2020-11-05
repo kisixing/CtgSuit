@@ -121,7 +121,7 @@ function Toolbar(props: FetalItem.IToolbarProps) {
     _end(deviceno, bedno, docid)
 
 
-    mutableSuit.current && mutableSuit.current.setfetalposition('', '', '');
+    mutableSuit.current.then(s => s.setfetalposition('', '', ''))
 
 
     if (endCb.current) {
@@ -286,16 +286,18 @@ function Toolbar(props: FetalItem.IToolbarProps) {
     </B>
 
 
-    <B
-      disabled={!isCreated || !isWorking || isStopped || isOfflineStopped}
-      icon={<PushpinOutlined />}
-      type="link"
-      onClick={() => setModalName('signVisible')}
-    >
-      胎位
-      </B>
     {
-      !!cache.analysable && (
+      !!isV3 || <B
+        disabled={!isCreated || !isWorking || isStopped || isOfflineStopped}
+        icon={<PushpinOutlined />}
+        type="link"
+        onClick={() => setModalName('signVisible')}
+      >
+        胎位
+      </B>
+    }
+    {
+      (!!cache.analysable && !isV3) && (
         <B
           disabled={!isCreated || isTodo}
           icon={<PieChartOutlined />}

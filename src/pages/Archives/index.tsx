@@ -15,7 +15,7 @@ const Archives = props => {
   async function fetchCtgData(item: IPrenatalVisit) {
     setSelected(item)
     const data = await request.get(`/ctg-exams-data/${item.ctgexam.note}`)
-    if(!data.fhr1){
+    if (!data.fhr1) {
       data.fhr1 = '00'
     }
     setCTGData(data)

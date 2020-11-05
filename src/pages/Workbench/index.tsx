@@ -51,7 +51,7 @@ function Workbench(props: IProps) {
 
   return (
     <Ctg_Layout
-      themeColor='var(--customed-color)'
+      themeColor='var(--theme-color)'
       borderedColor='var(--theme-color)'
       // fontColor='var(--customed-font)'
       onClose={onClose}

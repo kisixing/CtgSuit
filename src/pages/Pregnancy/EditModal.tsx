@@ -1,8 +1,8 @@
 /**
  * 编辑/新增病人
  */
+import { getMomentObj } from "@lianmed/utils";
 import { Button, Col, DatePicker, Form, Input, InputNumber, message, Modal, Row, Select } from 'antd';
-import moment from 'moment';
 import React, { useEffect } from 'react';
 import store from "store";
 const styles = require('./index.less')
@@ -10,13 +10,11 @@ const width = '200px';
 function EditModal(props) {
   // const [required, setRequired] = useState(false)
   // const [searchValues, setSearchValues] = useState<any>({})
+  const { visible, onCancel, dataSource, isOut } = props;
   const [form] = Form.useForm()
   const areaNO = store.get('ward') && store.get('ward').wardId
-  const ward = store.get('ward') || {}
-  const isIn = ward.wardType === 'in'
-  const noLabel = isIn ? '住院号' : '卡号'
-  const noKey = isIn ? 'inpatientNO' : 'cardNO';
-  const { visible, onCancel, dataSource } = props;
+  const noLabel = isOut ? '卡号' : '住院号'
+  const noKey = isOut ? 'cardNO' : 'inpatientNO';
   console.log('data', dataSource)
   useEffect(() => {
     if (dataSource) {
@@ -38,10 +36,10 @@ function EditModal(props) {
         telephone,
         gravidity,
         parity,
-        edd: edd ? moment(edd) : null,
+        edd: edd ? getMomentObj(edd) : null,
         // birth:moment(birth),
         recordstate,
-        bedNO: isIn ? bedNO : undefined
+        bedNO: isOut ? bedNO : undefined
       }
 
       form.setFieldsValue(base);
@@ -49,26 +47,7 @@ function EditModal(props) {
     }
   }, [dataSource])
 
-  // const handleSearch = () => {
-  //   const { dispatch } = props;
-  //   form.validateFields().then((values) => {
-  //     const { name } = values;
-  //     dispatch({
-  //       type: 'pregnancy/fetchPregnancies',
-  //       payload: {
-  //         [`${noKey}.equals`]: values[noKey],
-  //         'name.equals': name,
-  //       },
-  //       callback: res => {
-  //         const data = res[0];
-  //         if (data && data.id) {
-  //           form.setFieldsValue({ ...data });
-  //           setSearchValues(data)
-  //         }
-  //       },
-  //     });
-  //   });
-  // };
+
 
   const handleOk = () => {
     const { onCreate, onCancel, onUpdate, dataSource } = props;
@@ -90,7 +69,7 @@ function EditModal(props) {
         if (!name) {
           return message.error('请输入姓名！');
         }
-        if (!bedNO && isIn) {
+        if (!bedNO && !isOut) {
           return message.error('请输入床号！');
         }
         onCreate({ areaNO, ...values });
@@ -148,7 +127,7 @@ function EditModal(props) {
       bodyStyle={{ paddingRight: '48px' }}
       onCancel={onCancel}
     >
-      <Form form={form} initialValues={{ recordstate: isIn ? '10' : '30' }} className={styles.modalForm} layout="horizontal" {...formItemLayout}>
+      <Form form={form} initialValues={{ recordstate: isOut ? '30' : '10' }} className={styles.modalForm} layout="horizontal" {...formItemLayout}>
         <Row gutter={24}>
           <Col span={12}>
             <Form.Item
@@ -156,7 +135,7 @@ function EditModal(props) {
               label={noLabel}
               rules={
                 [
-                  { required: isIn ? true : false, message: `请填写${noLabel}!` },
+                  { required: !isOut, message: `请填写${noLabel}!` },
                   { max: 10, message: `${noLabel}的最大长度为10` },
                 ]
               }
@@ -182,7 +161,7 @@ function EditModal(props) {
             </Form.Item>
           </Col>
           {
-            isIn && (
+            isOut || (
               <Col span={12}>
                 <Form.Item
                   getValueFromEvent={event => event.target.value.trim()}
@@ -219,7 +198,7 @@ function EditModal(props) {
           </Col>
           {
             (
-              <Col span={12} hidden={!isIn}>
+              <Col span={12} hidden={isOut}>
                 <Form.Item label="住院状态"
                   name="recordstate"
                   rules={[{ required: false, message: '请选择住院状态!' }]}

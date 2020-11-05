@@ -1,13 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { connect } from 'dva';
-import { router } from 'umi';
 import { SearchOutlined } from '@ant-design/icons';
-import { Table, Divider, /* Popconfirm, */ Input, Button } from 'antd';
+import { Button, Divider, /* Popconfirm, */ Input, Table } from 'antd';
+import moment from 'moment';
+import React, { useRef, useState } from 'react';
 import Highlighter from 'react-highlight-words';
+import { router } from 'umi';
 import EditModal from './EditModal';
 import styles from './TableList.less';
-import moment from 'moment';
-import store from "store";
 const statusMap = {
   10: '住院',
   20: '出院',
@@ -16,14 +14,13 @@ const statusMap = {
 
 
 const TableList = (props) => {
+  const { loading, pregnancies, pagination, fetchData, updateItem, isOut } = props;
   const [visible, setVisible] = useState(false)
   const [current, setCurrent] = useState<any>({})
   const [searchText, setsearchText] = useState('')
   const searchInput = useRef<Input>()
-  const ward = store.get('ward') || {}
-  const isIn = ward.wardType === 'in'
-  const noKey = isIn ? 'inpatientNO' : 'cardNO';
-  const noLabel = isIn ? '住院号' : '卡号';
+  const noKey = isOut ? 'cardNO' : 'inpatientNO';
+  const noLabel = isOut ? '卡号' : '住院号';
 
 
 
@@ -190,39 +187,7 @@ const TableList = (props) => {
     },
   ].filter(_ => !!_);
 
-  useEffect(() => {
-    fetchCount({});
-    fetchData({});
-  }, [])
 
-  const fetchData = (params = {}) => {
-    const { dispatch, wardId } = props;
-    dispatch({
-      type: 'pregnancy/fetchPregnancies',
-      payload: {
-        // 住院状态
-        'recordstate.equals': isIn ? '10' : undefined,
-        // 默认进来只显示本病区,条件查询就不限制本病区
-        'areaNO.equals': wardId,
-        ...params,
-      },
-    });
-  };
-
-  const fetchCount = (params = {}) => {
-    const { dispatch, wardId } = props;
-    let data = {
-      'recordstate.equals': isIn ? '10' : undefined,
-      ...params,
-    };
-    if (wardId) {
-      data['areaNO.equals'] = wardId;
-    }
-    dispatch({
-      type: 'pregnancy/fetchCount',
-      payload: data,
-    });
-  };
 
   const hideEdit = () => {
     setVisible(false)
@@ -247,64 +212,47 @@ const TableList = (props) => {
   };
 
   const handleUpdate = values => {
-    const { dispatch } = props;
-    dispatch({
-      type: 'pregnancy/update',
-      payload: values,
-    }).then(() => {
-      fetchData();
-      fetchCount();
-    });
+    updateItem(values)
   };
 
   // 分页器onchange
-  const onChange = (page, pageSize) => {
-    const { wardId } = props;
-    const values = getValues();
+  const onChange = (current, pageSize) => {
     // 以是否有pageSize区分触发区域
     if (pageSize) {
       // console.log('onChange --> params', page, pageSize);
       let params = {
-        size: pageSize,
-        page: page - 1,
-        ...values,
+        pageSize,
+        current,
       };
-      if (wardId) {
-        params['areaNO.equals'] = wardId;
-      }
+
       fetchData(params);
-      fetchCount(params);
+      // fetchCount(params);
     }
   };
 
-  const onShowSizeChange = (current, size) => {
+  const onShowSizeChange = (current, pageSize) => {
     // console.log('TCL: TableList -> onShowSizeChange -> current, size', current, size);
-    const { wardId } = props;
-    const values = getValues();
     let params = {
-      size,
-      page: current - 1,
-      ...values,
+      pageSize,
+      current,
     };
-    if (wardId) {
-      params['areaNO.equals'] = wardId;
-    }
+
     fetchData(params);
-    fetchCount(params);
+    // fetchCount(params);
   };
 
-  const getValues = () => {
-    const { getFields } = props;
-    const values = getFields();
-    const { inpatientNO, name, recordstate, edd } = values;
-    const params = {
-      'inpatientNO.contains': inpatientNO,
-      'name.contains': name,
-      'recordstate.equals': recordstate || undefined,
-      'edd.equals': edd ? moment(edd).format('YYYY-MM-DD') : edd,
-    };
-    return params;
-  }
+  // const getValues = () => {
+  //   const { getFields } = props;
+  //   const values = getFields();
+  //   const { inpatientNO, name, recordstate, edd } = values;
+  //   const params = {
+  //     'inpatientNO.contains': inpatientNO,
+  //     'name.contains': name,
+  //     'recordstate.equals': recordstate || undefined,
+  //     'edd.equals': edd ? moment(edd).format('YYYY-MM-DD') : edd,
+  //   };
+  //   return params;
+  // }
 
 
 
@@ -319,7 +267,6 @@ const TableList = (props) => {
     setsearchText('')
   };
 
-  const { loading, count, pregnancies, pagination: { page } } = props;
 
   return (
     <div className={styles.tableList}>
@@ -327,14 +274,14 @@ const TableList = (props) => {
         bordered
         size="small"
         rowKey="id"
-        loading={loading.effects['pregnancy/fetchPregnancies']}
+        loading={loading}
         dataSource={pregnancies}
         columns={columns}
         // onChange={onChange}
         pagination={{
+          // current: page + 1,
+          ...pagination,
           hideOnSinglePage: false,
-          total: count,
-          current: page + 1,
           showQuickJumper: true,
           showSizeChanger: true,
           showTotal: (total, range) => `共 ${total} 条`,
@@ -354,9 +301,4 @@ const TableList = (props) => {
   );
 }
 
-export default connect(({ loading, pregnancy }: any) => ({
-  pagination: pregnancy.pagination,
-  count: pregnancy.count,
-  pregnancies: pregnancy.pregnancies,
-  loading: loading,
-}))(TableList);
+export default TableList

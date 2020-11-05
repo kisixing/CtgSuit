@@ -15,7 +15,7 @@ interface IProps {
   docid: string
   visible: boolean
   onCancel: () => void
-  suit: React.MutableRefObject<Suit>
+  suit: React.MutableRefObject<Promise<Suit>>
   fetal_num: number
 }
 
@@ -32,7 +32,9 @@ export const SignModal = (props: IProps) => {
         }
       });
       const position = { ...values }; // JSON.parse(values.fetalposition);
-      suit.current.setfetalposition(position.fhr1, position.fhr2, position.fhr3);
+      suit.current.then(s => {
+        s.setfetalposition(position.fhr1, position.fhr2, position.fhr3);
+      })
     });
   };
 
@@ -62,7 +64,7 @@ export const SignModal = (props: IProps) => {
     >
       <Form {...formItemLayout} layout="horizontal">
 
- 
+
         {
           Array(fetal_num || 0).fill(0).map((_, i) => {
             i = i + 1

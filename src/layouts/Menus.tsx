@@ -52,7 +52,7 @@ const M = (props: any) => {
                         icon={icon}
                         type={props.location.pathname === path ? 'default' : 'link'}
                         // style={{color:'var(--customed-base-font)'}}
-                        style={{ color: props.location.pathname === path ? '' : '#fff' }}
+                        style={{ color: props.location.pathname === path ? 'var(--theme-color)' : '#fff' }}
                     >
                         {title}
                     </Button>
